@@ -61,7 +61,16 @@ return [
     |
     */
 
-    'home' => RouteServiceProvider::HOME,
+    // 'home' => RouteServiceProvider::HOME,
+
+    'home' => function(){
+        $role = Auth::user()->role->name;
+        if($role == 'admin'){
+            return route('dashboard');
+        }else{
+            return route('student.registration');
+        }
+    },
 
     /*
     |--------------------------------------------------------------------------
