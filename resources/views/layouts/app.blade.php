@@ -12,40 +12,71 @@
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-        <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" data-auto-replace-svg="nest"></script>
+        <link rel="stylesheet" href="{{ asset('css/main.css') }}">
         @livewireStyles
 
         <!-- Scripts -->
         <script src="{{ mix('js/app.js') }}" defer></script>
+        {{-- <script src="{{ asset('js/main.js') }}"></script> --}}
+        <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" data-auto-replace-svg="nest"></script>
+        
     </head>
     <body class="font-sans antialiased">
         <x-jet-banner />
 
-        <div class="h-screen flex flex-col bg-gray-100">
-            @livewire('navigation-menu')
+        {{-- <div class="min-h-screen max-w-8xl flex flex-col bg-gray-100">
+            <header class="top-0 left-0 fixed w-full z-40">
+                @livewire('navigation-menu')
+            </header>
 
             <!-- Page Heading -->
             @if (isset($header))
                 <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
+                    <div class="w-full mx-auto px-4 flex flex-row items-center">
+                        <div class="relative mr-3 cursor-pointer px-3 py-2 rounded-full text-gray-500 hover:bg-gray-200 " title="back">
+                            <i class="fas fa-arrow-left" title="back"></i>
+                            <a href="{{ route('admin.dashboard')}}" class="absolute w-full h-full top-0 left-0"></a>
+                        </div>
+                        <div class="py-4">
+                            {{ $header }}
+                        </div>
                     </div>
                 </header>
             @endif
 
             <!-- Page Content -->
-            <main class="flex-grow overflow-hidden flex flex-row">
-                    <div x-data="{sidebarBtn: true}" :class="{'w-64': sidebarBtn, 'w-16 border-r-2 border-indigo-100': ! sidebarBtn}" class="h-full hidden md:block bg-gray-100 shadow-md relative transition-width transition-slowest ease">
-                        @include('sidebar')
-                    </div>
+            <main class="w-full">
+                    @if (request()->is('admin/*') || request()->is('student/*'))
+                        <div class="fixed left-0 top-12 overflow-hidden bg-black w-48 m-5 hidden lg:block rounded-md shadow-md h-full">
+                            @include('sidebar')
+                        </div>
+                    @endif
+
                     {{ $slot }}
             </main>
-            <div class="absolute bottom-0 w-full bg-transparent md:py-4 md:px-4" wire:offline>
-                <div class="p-2 bg-indigo-800 items-center text-indigo-100 leading-none md:rounded-full flex md:inline-flex" role="alert">
-                  <span class="flex rounded-full bg-indigo-500 uppercase px-1 py-1 text-md font-bold mr-3"><i class="fas fa-exclamation-circle"></i></span>
-                  <span class="font-semibold mr-2 text-left flex-auto">You're in offline mode.</span>
+
+            @include('partials.offline')
+        </div>  --}}
+        
+        <div class="h-full max-w-8xl flex flex-col bg-gray-100">
+            @livewire('navigation-menu')
+
+            <main class="pt-12">
+                <!-- Page Heading -->
+                @if (isset($header))
+                    <header class="bg-white shadow pl-0 lg:pl-14 pt-1">
+                        <div class="w-full mx-auto px-4 flex flex-row items-center">
+                            <div class="py-4">
+                                {{ $header }}
+                            </div>
+                        </div>
+                    </header>
+                @endif
+
+                <div class="pl-0 lg:pl-16 pr-2">
+                    {{ $slot }}
                 </div>
-            </div>
+            </main>
         </div>
 
         @stack('modals')

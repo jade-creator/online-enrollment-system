@@ -9,4 +9,7 @@
             {{ $content }}
         </div>
     </div>
+    
+    @include('partials.loading')
+
 </div>

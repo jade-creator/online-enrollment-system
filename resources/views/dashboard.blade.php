@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="p-5 h-full w-full overflow-y-auto scrolling-touch">
+    <div class="pt-5 pl-5 lg:pl-0 w-full h-full overflow-y-auto scrolling-touch flex-1">
         <div x-data="{component: 'index'}" class="w-full mb-6 pt-3">
              <div x-show.transition.in.opacity.duration.750ms="component === 'index'">
                  <div class="flex flex-row items-center justify-between mb-4">
@@ -466,6 +466,5 @@
                 <button @click="component = 'index'">close</button>
              </div>
         </div>
-       
      </div>
 </x-app-layout>
