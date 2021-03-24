@@ -15,10 +15,13 @@
 
         <!-- Scripts -->
         <script src="{{ mix('js/app.js') }}" defer></script>
+        <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" data-auto-replace-svg="nest"></script>
     </head>
     <body>
         <div class="font-sans text-gray-900 antialiased">
-            {{ $slot }}
+            <div class="mt-2">
+                {{ $slot }}
+            </div>
             {{-- <p>this is student</p> --}}
         </div>
     </body>

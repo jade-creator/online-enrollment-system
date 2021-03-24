@@ -19,6 +19,9 @@
                     {{ $actions }}
                 </div>
             @endif
+
+            @include('partials.loading')
         </form>
     </div>
 </div>
+
