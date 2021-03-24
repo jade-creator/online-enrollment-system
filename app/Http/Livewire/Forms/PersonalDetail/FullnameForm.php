@@ -2,7 +2,9 @@
 
 namespace App\Http\Livewire\Forms\PersonalDetail;
 
+use App\Models\Person;
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
 
 class FullnameForm extends Component
 {
@@ -26,6 +28,7 @@ class FullnameForm extends Component
 
     public function mount()
     {
+        $this->person = Auth::user()->person;
         if($this->person){
             $this->firstname = $this->person->firstname;
             $this->middlename = $this->person->middlename;
@@ -34,16 +37,30 @@ class FullnameForm extends Component
         }
     }
 
-    public function updateFullname()
+    public function updateOrCreateFullname()
     {
         $this->validate();
         empty(trim($this->suffix)) ? $this->suffix = null : $this->suffix;
-        $this->person->update([
-            'firstname' => $this->firstname,
-            'middlename' => $this->middlename,
-            'lastname' => $this->lastname,
-            'suffix' => $this->suffix,
-        ]);
+        
+        if(!Auth::user()->person_id){
+            $this->person = Person::create([
+                'firstname' => $this->firstname,
+                'middlename' => $this->middlename,
+                'lastname' => $this->lastname,
+                'suffix' => $this->suffix,
+                'isCompleteDetail' => false,
+            ]);
+            Auth::user()->update([ 'person_id' => $this->person->id]);
+        }else{
+            Auth::user()->person()->update([
+                'firstname' => $this->firstname,
+                'middlename' => $this->middlename,
+                'lastname' => $this->lastname,
+                'suffix' => $this->suffix,
+            ]);
+        }
+        
         $this->emit('saved');
+        $this->emit('proceed', 2);
     }
 }

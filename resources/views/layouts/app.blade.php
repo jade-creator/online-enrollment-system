@@ -73,7 +73,7 @@
                     </header>
                 @endif
 
-                <div class="pl-0 lg:pl-16 pr-2">
+                <div class="pl-0 lg:pl-16">
                     {{ $slot }}
                 </div>
             </main>

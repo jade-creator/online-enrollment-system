@@ -13,11 +13,13 @@ class Guardian extends Model
         return $this->belongsTo(Person::class);
     }
 
+    public function student(){
+        return $this->belongsTo(Student::class);
+    }
+
     protected $fillable = [
-        'fullname',
         'relationship',
-        'address',
-        'mobile_number',
         'person_id',
+        'student_id',
     ];
 }

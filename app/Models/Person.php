@@ -10,7 +10,7 @@ class Person extends Model
     use HasFactory;
     
     public function user(){
-        return $this->belongsTo(User::class);
+        return $this->hasOne(User::class);
     }
 
     public function contact(){
@@ -19,6 +19,10 @@ class Person extends Model
 
     public function guardian(){
         return $this->hasOne(Guardian::class);
+    }
+
+    public function detail(){
+        return $this->hasOne(Detail::class);
     }
     /**
      * The attributes that are mass assignable.
@@ -30,12 +34,13 @@ class Person extends Model
         'middlename',
         'lastname',
         'suffix',
-        'gender',
-        'civil_status',
-        'religion',
-        'nationality',
-        'birthdate',
-        'birthplace',
-        'user_id',
+        'isCompleteDetail',
+        // 'gender',
+        // 'civil_status',
+        // 'religion',
+        // 'nationality',
+        // 'birthdate',
+        // 'birthplace',
+        // 'user_id',
     ];
 }

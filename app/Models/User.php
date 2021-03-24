@@ -23,7 +23,11 @@ class User extends Authenticatable
     }
 
     public function person(){
-        return $this->hasOne(Person::class);
+        return $this->belongsTo(Person::class);
+    }
+
+    public function student(){
+        return $this->hasOne(Student::class);
     }
     /**
      * The attributes that are mass assignable.
@@ -35,6 +39,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role_id',
+        'person_id',
     ];
 
     /**
