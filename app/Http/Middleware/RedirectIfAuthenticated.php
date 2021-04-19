@@ -23,7 +23,22 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
+
+                $role = Auth::user()->role->name;
+
+                switch ($role) {
+                    case 'admin':
+                        return redirect('/admin/dashboard');
+                        break;
+
+                    case 'student':
+                        return redirect('/student/registration');
+                        break;
+                    
+                    default:
+                        return redirect(RouteServiceProvider::HOME);
+                        break;
+                }
             }
         }
 

@@ -45,7 +45,7 @@
             </div>
 
             <div class="block mt-4 text-center">
-                <x-jet-button class="w-full" onclick="this.disabled=true;this.form.submit();" >
+                <x-jet-button class="w-full bg-indigo-700 hover:bg-indigo-800" onclick="this.disabled=true;this.form.submit();" >
                     {{ __('Log in') }}
                 </x-jet-button>
             </div>

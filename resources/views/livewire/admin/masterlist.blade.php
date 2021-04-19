@@ -1,4 +1,4 @@
-<div class="pt-5 pl-5 lg:pl-0 w-full h-full overflow-y-auto scrolling-touch flex-1">
+<div class="w-full h-full pt-5 pl-5 lg:pl-0 overflow-y-auto scrolling-touch flex-1">
     <div class="w-full mb-6 pt-3">
         @if($view == 'table')
             <div>
@@ -363,5 +363,4 @@
 
         @include('partials.loading')
     </div>
-   
  </div>

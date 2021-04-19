@@ -19,7 +19,7 @@
                 @csrf
 
                 <div>
-                    <x-jet-button type="submit">
+                    <x-jet-button type="submit" class="bg-indigo-700 hover:bg-indigo-800">
                         {{ __('Resend Verification Email') }}
                     </x-jet-button>
                 </div>

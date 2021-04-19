@@ -23,13 +23,16 @@ class UserDetailMiddleware
         }
 
         $role = Auth::user()->role->name;
-        if(!Auth::user()->person_id){
+
+        if (!Auth::user()->person_id) {
             return redirect('user/personal-details/'.$role);
-        }else{
-            $person = Person::where('id', Auth::user()->person_id)->first();
-            if(!$person->isCompleteDetail){
-                return redirect('user/personal-details/'.$role);
-            }
+        }
+        
+        // $person = Person::select('isCompleteDetail')->where('id', Auth::user()->person_id)->first();
+        $isCompleteDetail = Auth::user()->person->isCompleteDetail;
+
+        if(!$sCompleteDetail){
+            return redirect('user/personal-details/'.$role);
         }
 
         return $next($request);

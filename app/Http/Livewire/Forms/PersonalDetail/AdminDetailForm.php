@@ -11,20 +11,22 @@ class AdminDetailForm extends Component
     public $step = 1;
     protected $listeners = ['proceed', 'completed'];
 
-    public function render()
+    public function render() 
     {
         return view('livewire.forms.personal-detail.admin-detail-form');
     }
 
-    public function proceed($step){
+    public function proceed($step) 
+    {
         $this->step = $step;
     }
 
-    public function completed(){
-        $person = Person::find(Auth::user()->person_id);
-        if($person){
+    public function completed() 
+    { 
+        if ($person = Person::find(Auth::user()->person_id)) {
             $person->update(['isCompleteDetail' => true]);            
         }
-        return redirect('user/personal-details');
+        
+        return redirect('user/profile');
     }
 }

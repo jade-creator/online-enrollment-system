@@ -64,11 +64,21 @@ return [
     // 'home' => RouteServiceProvider::HOME,
 
     'home' => function(){
+        
         $role = Auth::user()->role->name;
-        if($role == 'admin'){
-            return route('admin.dashboard');
-        }else{
-            return route('student.registration');
+
+        switch ($role) {
+            case 'admin':
+                return route('admin.dashboard');
+                break;
+
+            case 'student':
+                return route('student.registration');
+                break;
+            
+            default:
+                return RouteServiceProvider::HOME;
+                break;
         }
     },
 

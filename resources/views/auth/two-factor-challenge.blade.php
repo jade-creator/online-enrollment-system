@@ -29,7 +29,7 @@
                 </div>
 
                 <div class="flex items-center justify-end mt-4">
-                    <button type="button" class="text-sm text-gray-600 hover:text-gray-900 underline cursor-pointer"
+                    <button type="button" class="text-sm text-indigo-500 hover:text-gray-900 cursor-pointer"
                                     x-show="! recovery"
                                     x-on:click="
                                         recovery = true;
@@ -38,7 +38,7 @@
                         {{ __('Use a recovery code') }}
                     </button>
 
-                    <button type="button" class="text-sm text-gray-600 hover:text-gray-900 underline cursor-pointer"
+                    <button type="button" class="text-sm text-indigo-500 hover:text-gray-900 cursor-pointer"
                                     x-show="recovery"
                                     x-on:click="
                                         recovery = false;
@@ -47,7 +47,7 @@
                         {{ __('Use an authentication code') }}
                     </button>
 
-                    <x-jet-button class="ml-4">
+                    <x-jet-button class="ml-4 bg-indigo-700 hover:bg-indigo-800">
                         {{ __('Log in') }}
                     </x-jet-button>
                 </div>

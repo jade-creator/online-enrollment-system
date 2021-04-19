@@ -3,7 +3,7 @@
         <div>
             <div class="flex flex-row items-top justify-between mb-4">
                 <div class="flex flex-col">
-                    <div class="text-xs uppercase font-light text-gramy-500">{{ __('OVERVIEW') }}</div>
+                    <div class="transition text-xs uppercase font-light text-gramy-500">{{ __('OVERVIEW') }}</div>
                     <div class="text-xl font-bold">{{ __('Dashboard') }}</div>
                 </div>
             </div>

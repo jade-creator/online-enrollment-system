@@ -9,12 +9,11 @@ use Livewire\Component;
 
 class OtherInfoForm extends Component
 {
-    public $person_id;
-    public $detail;
-    public $gender = null;
-    public $civil_status = null;
-    public $religion = null;
-    public $nationality = 170;
+    public $detail = null;
+    public $gender;
+    public $civil_status;
+    public $religion;
+    public $nationality;
     public $birthdate;
     public $birthplace;
     public $countries;
@@ -28,45 +27,52 @@ class OtherInfoForm extends Component
         'birthplace' => [ 'required', 'max:255'],
     ];
 
-    public function render()
+    public function render() 
     {
-        return view('livewire.forms.personal-detail.other-info-form', ['countries' => $this->countries]);
+        return view('livewire.forms.personal-detail.other-info-form');
     }
 
-    public function mount(){
-        $this->person_id = Auth::user()->person_id;
-        
-        if($this->person_id){
-            $this->detail = Auth::user()->person->detail;
-        }
-
-        if($this->detail){
-            $this->gender = $this->detail->gender;
-            $this->civil_status = $this->detail->civil_status;
-            $this->religion = $this->detail->religion;
-            $this->nationality = $this->detail->country_id;
-            $this->birthdate = $this->detail->birthdate;
-            $this->birthplace = $this->detail->birthplace;
-        }
-
+    public function mount() 
+    {
         $this->countries = Country::get(['id', 'name']);
+        
+        $this->detail = Detail::select([
+                'id',
+                'gender',
+                'civil_status',
+                'religion',
+                'country_id',
+                'birthdate',
+                'birthplace',
+            ])
+            ->where('person_id', Auth::user()->person_id)
+            ->first();
+        
+        if (!is_null($this->detail)) {
+            $this->gender = $this->detail->gender ?? '';
+            $this->civil_status = $this->detail->civil_status ?? '';
+            $this->religion = $this->detail->religion ?? '';
+            $this->nationality = $this->detail->country_id ?? '';
+            $this->birthdate = $this->detail->birthdate ?? '';
+            $this->birthplace = $this->detail->birthplace ?? '';
+        }
     }
 
-    public function updateOtherInfo()
+    public function updateOtherInfo() 
     {
         $this->validate();
 
-        if(!$this->detail){
-            $this->detail = Detail::create([
+        if (is_null($this->detail)) {
+            Detail::create([
                 'gender' => $this->gender,
                 'civil_status' => $this->civil_status,
                 'religion' => $this->religion,
                 'birthdate' => $this->birthdate,
                 'birthplace' => $this->birthplace,
-                'person_id' => $this->person_id,
+                'person_id' => Auth::user()->person_id,
                 'country_id' => $this->nationality,
             ]);
-        }else{
+        } else {
             $this->detail->update([
                 'gender' => $this->gender,
                 'civil_status' => $this->civil_status,
@@ -78,6 +84,7 @@ class OtherInfoForm extends Component
         }
 
         $this->emit('saved');
+        
         $this->emit('proceed', 3);
     }
 }

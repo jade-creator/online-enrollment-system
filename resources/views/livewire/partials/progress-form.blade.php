@@ -1,4 +1,4 @@
-<div class="w-full xl:w-56 mt-5">
+<div class="w-full xl:w-56 mt-7">
     <div class="hidden xl:block">
         <div class="flex">
             <svg class="{{ $step > 1 ? 'm-3 h-6 bg-green-400 p-1 rounded-xl' : 'm-3 h-6 bg-gray-300 p-1 rounded-xl'}}" viewBox="0 0 20 20">
@@ -44,7 +44,6 @@
             </div>
         @endif
     </div>
-
     <div class="block xl:hidden px-4 sm:px-4 lg:px-8 w-full">
         <div class="font-bold flex flex-row justify-between">
             <p>Progress:</p>
