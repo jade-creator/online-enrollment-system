@@ -12,6 +12,7 @@
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+        @livewireStyles
 
         <!-- Scripts -->
         <script src="{{ mix('js/app.js') }}" defer></script>
@@ -24,5 +25,6 @@
             </div>
             {{-- <p>this is student</p> --}}
         </div>
+        @livewireScripts
     </body>
 </html>

@@ -12,7 +12,7 @@
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+        {{-- <link rel="stylesheet" href="{{ asset('css/main.css') }}"> --}}
         @livewireStyles
 
         <!-- Scripts -->
@@ -58,7 +58,7 @@
             @include('partials.offline')
         </div>  --}}
         
-        <div class="h-full max-w-8xl flex flex-col bg-gray-100">
+        <div class="min-h-screen max-w-8xl flex flex-col bg-anti-flash">
             @livewire('navigation-menu')
 
             <main class="pt-12">
@@ -73,11 +73,12 @@
                     </header>
                 @endif
 
-                <div class="pl-0 lg:pl-16">
+                <div class="pl-0 lg:pl-12">
                     {{ $slot }}
                 </div>
             </main>
         </div>
+        @include('partials.alerts')
 
         @stack('modals')
         @livewireScripts

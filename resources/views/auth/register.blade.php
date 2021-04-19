@@ -53,7 +53,7 @@
             @endif
 
             <div class="block mt-4 text-center">
-                <x-jet-button class="w-full mt-2" onclick="this.disabled=true;this.form.submit();">
+                <x-jet-button class="w-full mt-2 w-full bg-indigo-700 hover:bg-indigo-800" onclick="this.disabled=true;this.form.submit();">
                     {{ __('Register')}}
                 </x-jet-button>
             </div>

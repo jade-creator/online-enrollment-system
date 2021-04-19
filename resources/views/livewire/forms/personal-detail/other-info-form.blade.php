@@ -72,12 +72,12 @@
     </x-slot>
 
     <x-slot name="actions">
-        <x-jet-action-message class="mr-3 p-2 text-green-500 font-bold" on="saved">
-            {{ __('Saved.') }}
+        <x-jet-action-message class="mr-3 text-green-500 font-bold" on="saved">
+            {{ __('Saved successfuly!') }}
         </x-jet-action-message>
 
-        <x-jet-button wire:loading.attr="disabled">
-            {{ __('Save') }}
+        <x-jet-button class="bg-indigo-700 hover:bg-indigo-800" wire:loading.attr="disabled">
+            {{ __('Save Info') }}
         </x-jet-button>
     </x-slot>
 </x-jet-form-section>

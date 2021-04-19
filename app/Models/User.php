@@ -29,6 +29,11 @@ class User extends Authenticatable
     public function student(){
         return $this->hasOne(Student::class);
     }
+
+    public function studentGuardian(){
+        return $this->hasOneThrough(Guardian::class, Student::class);
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -71,4 +76,16 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public static function search($search)
+    {
+        $search = '%'.$search.'%';
+
+        return empty($search) ? static::query()
+            : static::where(function ($query) use ($search){
+                return $query
+                ->where('name', 'LIKE', $search)
+                ->orWhere('email', 'LIKE', $search);
+            });
+    }
 }

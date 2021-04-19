@@ -2,28 +2,22 @@
 
 namespace App\Http\Livewire\Forms\PersonalDetail;
 
-use App\Models\Student;
-use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
 
 class PersonalDetailShow extends Component
 {
-    public $student;
-    public $person;
-    public $detail;
+    public $student = null;
 
-    public function render()
+    public function render() 
     {
         return view('livewire.forms.personal-detail.personal-detail-show');
     }
 
-     /*
-        check if user has person record.
-    */
-    public function mount()
+    public function mount() 
     {
-        if(Auth::user()->role->name == 'student'){
-            $this->student = Student::where('user_id', Auth::user()->id)->first();
+        if (Auth::user()->role->name == 'student') {
+            $this->student = Auth::user()->student;
         }
     }
 }

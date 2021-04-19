@@ -22,7 +22,7 @@ class RedirectIfDetailed
             return redirect('/login');
         }
 
-        $person = Person::where('id', Auth::user()->person_id)->first();
+        $person = Person::select('isCompleteDetail')->where('id', Auth::user()->person_id)->first();
         
         if(Auth::user()->person_id && $person->isCompleteDetail){
             return redirect('user/personal-details');

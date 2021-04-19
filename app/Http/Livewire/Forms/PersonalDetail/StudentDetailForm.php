@@ -9,45 +9,42 @@ use Illuminate\Support\Facades\Auth;
 
 class StudentDetailForm extends Component
 {
-    public $student;
+    public $student = null;
     public $step = 1;
     protected $listeners = ['proceed', 'completed'];
 
-    public function render()
+    public function render() 
     {
-        return view('livewire.forms.personal-detail.student-detail-form', ['student_id' => $this->student->id]);
+        return view('livewire.forms.personal-detail.student-detail-form');
     }
 
-    public function mount(){
-        $this->create();
+    public function mount() 
+    {
+        $this->student = Auth::user()->student()
+            ->firstOr(function () {
+                $this->student = Student::create([
+                    'user_id' => Auth::user()->id,
+                ]);
+
+                $this->student->update([
+                    'custom_id' => date("Y"). '-' . $this->student->id,
+                ]);
+
+                return $this->student;
+            });
     }
 
-    private function create(){
-        $this->student = Student::where('user_id', Auth::user()->id)->first();
-
-        if(!$this->student){
-            $this->student = Student::create([
-                'user_id' => Auth::user()->id,
-            ]);
-
-            $custom_id = date("Y"). '-' . $this->student->id;
-
-            $this->student->update([
-                'custom_id' => $custom_id,
-            ]);
-        }
-    }
-
-    public function proceed($step){
+    public function proceed($step) 
+    {
         $this->step = $step;
     }   
 
-    public function completed(){
-        $person = Person::find(Auth::user()->person_id);
-        if($person){
+    public function completed() 
+    {
+        if ($person = Auth::user()->person) {
             $person->update(['isCompleteDetail' => true]);            
         }
-        return redirect('user/personal-details');
+        
+        return redirect('user/profile');
     }   
-
 }

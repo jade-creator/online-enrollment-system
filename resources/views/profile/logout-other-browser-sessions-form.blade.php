@@ -52,7 +52,7 @@
         @endif
 
         <div class="flex items-center mt-5">
-            <x-jet-button wire:click="confirmLogout" wire:loading.attr="disabled">
+            <x-jet-button class="bg-indigo-700 hover:bg-indigo-800" wire:click="confirmLogout" wire:loading.attr="disabled">
                 {{ __('Log Out Other Browser Sessions') }}
             </x-jet-button>
 
@@ -86,7 +86,7 @@
                     {{ __('Cancel') }}
                 </x-jet-secondary-button>
 
-                <x-jet-button class="ml-2"
+                <x-jet-button class="ml-2 bg-indigo-700 hover:bg-indigo-800"
                             wire:click="logoutOtherBrowserSessions"
                             wire:loading.attr="disabled">
                     {{ __('Log Out Other Browser Sessions') }}

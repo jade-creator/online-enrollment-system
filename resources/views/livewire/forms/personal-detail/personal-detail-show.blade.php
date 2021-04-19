@@ -1,36 +1,19 @@
-<x-slot name="header">
-    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ __('Personal Details') }}
-    </h2>
-</x-slot>
+<div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
+    @include('partials.view-profile-button')
 
-<div class="w-full">
-    <div class="max-w-5xl mx-auto py-10 sm:px-6 lg:px-8">
-        <div>
-            @livewire('forms.personal-detail.fullname-form')
-            <x-jet-section-border/>
-        </div>
+    <div class="flex flex-col md:flex-row">
+        @include('partials.account-navigation')
 
-         <div class="mt-10 sm:mt-0">
-            @livewire('forms.personal-detail.other-info-form')
-            <x-jet-section-border/>
-        </div>
-
-        <div class="mt-10 sm:mt-0">
-            @livewire('forms.personal-detail.contact-form')
-            <x-jet-section-border/>
-        </div>
-
-        @if (Auth::user()->role->name == 'student')
-            <div class="mt-10 sm:mt-0">
-                @livewire('forms.personal-detail.guardian-info-form', ['student' => $this->student])   
+        <div class="w-full pl-0 md:pl-8">
+            <div>
+                @livewire('forms.personal-detail.fullname-form')
                 <x-jet-section-border/>
             </div>
-
+    
             <div class="mt-10 sm:mt-0">
-                @livewire('forms.personal-detail.education-info-form', ['student' => $this->student])
-            </div> 
-        @endif
-
+                @livewire('forms.personal-detail.other-info-form')
+                <x-jet-section-border/>
+            </div>
+        </div>
     </div>
 </div>
