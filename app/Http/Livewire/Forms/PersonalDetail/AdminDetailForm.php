@@ -8,7 +8,7 @@ use Livewire\Component;
 
 class AdminDetailForm extends Component
 {
-    public $step = 1;
+    public int $step = 1;
     protected $listeners = ['proceed', 'completed'];
 
     public function render() 
@@ -16,7 +16,7 @@ class AdminDetailForm extends Component
         return view('livewire.forms.personal-detail.admin-detail-form');
     }
 
-    public function proceed($step) 
+    public function proceed(int $step) 
     {
         $this->step = $step;
     }

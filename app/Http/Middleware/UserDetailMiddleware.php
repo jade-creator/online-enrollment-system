@@ -31,7 +31,7 @@ class UserDetailMiddleware
         // $person = Person::select('isCompleteDetail')->where('id', Auth::user()->person_id)->first();
         $isCompleteDetail = Auth::user()->person->isCompleteDetail;
 
-        if(!$sCompleteDetail){
+        if(!$isCompleteDetail){
             return redirect('user/personal-details/'.$role);
         }
 

@@ -6,7 +6,7 @@ use Livewire\Component;
 
 class ProgressForm extends Component
 {
-    public $step = 1;
+    public int $step = 1;
     protected $listeners = ['proceed'];
 
     public function render()
@@ -14,7 +14,7 @@ class ProgressForm extends Component
         return view('livewire.partials.progress-form');
     }
 
-    public function proceed($step){
+    public function proceed(int $step){
         $this->step = $step;
     }
 }

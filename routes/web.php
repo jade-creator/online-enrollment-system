@@ -13,6 +13,14 @@ use App\Http\Livewire\Forms\PersonalDetail\AdminDetailForm;
 use App\Http\Livewire\Admin\UserComponent\UserViewComponent;
 use App\Http\Livewire\Forms\PersonalDetail\StudentDetailForm;
 use App\Http\Livewire\Forms\PersonalDetail\PersonalDetailShow;
+use App\Http\Livewire\Admin\SchoolManagement\SchoolTypeComponent;
+
+/*
+|--------------------------------------------------------------------------
+| Jetstream Routes
+|--------------------------------------------------------------------------
+*/
+require_once __DIR__ . '/jetstream.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -61,7 +69,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
             Route::get('/dashboard', Dashboard::class)->name('dashboard'); //renamecomponent
             Route::get('/masterlist', Masterlist::class)->name('masterlist'); //renamecomponent
 
-            Route::group([ 'prefix' => 'users', 'as' => 'users.'], function (){
+            Route::group(['prefix' => 'school-management', 'as' => 'school.'], function (){
+                Route::get('/types', SchoolTypeComponent::class)->name('type.view');
+            });
+
+            Route::group(['prefix' => 'users', 'as' => 'users.'], function (){
                 Route::get('', UserViewComponent::class)->name('view');
                 Route::get('/create', UserAddComponent::class)->name('create');
             });          

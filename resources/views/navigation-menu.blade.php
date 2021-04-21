@@ -163,12 +163,30 @@
                             </a>
                         </li>
                         
+                        <li title="school management">
+                            <a href="{{route('admin.school.type.view')}}" class="{{ request()->is('admin/school-management/types*') || request()->is('admin/school-management/types') ? 'text-indigo-500' : 'text-gray-800'}} h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700">
+                                <span class="inline-flex justify-center items-center ml-3 pl-0.5">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" width="22" height="24" stroke="currentColor" id="library"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path></svg>
+                                </span>
+                                <div class="flex flex-row items-center justify-between w-full ml-4 pr-4" @mouseover="subnav = 'school'" @click.away="subnav = 'none'">
+                                    <span class="mt-1 text-sm tracking-wide truncate">{{ __('School Management') }}</span>
+                                    <svg class="h-3 text-gray-400" fill="none" stroke="currentColor" fill-rule="evenodd" viewBox="0 0 7 12"><path fill-rule="nonzero" d="M5.569 5.994L0 .726.687 0l6.336 5.994-6.335 6.002L0 11.27z"></path></svg>    
+                                </div>
+                            </a>
+                        </li>
+
+                        <li x-show="subnav == 'school'">
+                            <a href="{{route('admin.school.type.view')}}" class="pl-9 relative flex flex-row items-center h-11 hover:bg-gray-100 text-gray-500 hover:text-gray-700">
+                                <span class="ml-4 mt-1 text-xs tracking-wide truncate">{{ __('Types')}}</span>
+                            </a>
+                        </li>
+                        
                         <li title="users">
                             <a href="{{route('admin.users.view')}}" class="{{ request()->is('admin/users/*') || request()->is('admin/users') ? 'text-indigo-500' : 'text-gray-800'}} h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700">
                                 <span class="inline-flex justify-center items-center ml-3 pl-0.5">
                                     <svg class="w-5 h-5" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                                 </span>
-                                <div class="flex flex-row items-center justify-between w-full ml-5 pr-4" @mouseover="subnav = 'users'" @click.away="subnav = 'none'">
+                                <div class="flex flex-row items-center justify-between w-full ml-4 pr-4" @mouseover="subnav = 'users'" @click.away="subnav = 'none'">
                                     <span class="mt-1 text-sm tracking-wide truncate">{{ __('Users') }}</span>
                                     <svg class="h-3 text-gray-400" fill="none" stroke="currentColor" fill-rule="evenodd" viewBox="0 0 7 12"><path fill-rule="nonzero" d="M5.569 5.994L0 .726.687 0l6.336 5.994-6.335 6.002L0 11.27z"></path></svg>    
                                 </div>

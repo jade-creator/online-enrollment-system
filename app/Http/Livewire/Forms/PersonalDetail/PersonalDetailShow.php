@@ -7,7 +7,7 @@ use Livewire\Component;
 
 class PersonalDetailShow extends Component
 {
-    public $student = null;
+    public ?object $student = null;
 
     public function render() 
     {

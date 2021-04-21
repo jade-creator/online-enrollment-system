@@ -1,7 +1,7 @@
 <div class="w-full flex flex-1 scrolling-touch">
     <x-table.filter>
         <div name='slot'>
-            <fieldset class="border-b border-gray-200 pb-3 my-6" id="role" class="mt-6" wire:model="role">
+            <fieldset class="border-b border-gray-200 pb-3 px-5 my-6" id="role" class="mt-6" wire:model="role">
                 <h3 class="mb-2 font-bold text-md">{{ __('Role')}}</h3>
                 <div class="flex items-center justify-between py-2 pr-3">
                     <div class="flex items-center">

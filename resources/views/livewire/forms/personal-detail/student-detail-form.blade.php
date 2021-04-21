@@ -20,12 +20,12 @@
             <x-jet-section-border/> 
         @endif
         @if ($step == 4)
-            {{-- @livewire('forms.personal-detail.guardian-info-form', ['student' => $student]) --}}
-            @livewire('forms.guardian.guardian-form', ['student' => $student])
+            @livewire('forms.guardian.guardian-form', ['studentId' => $student->id])
             <x-jet-section-border/> 
         @endif
         @if ($step == 5)
-            @livewire('forms.education.education-form', ['student' => $student])
+            {{-- @livewire('forms.education.education-form', ['student' => $student]) --}}
+            @livewire('forms.education.education-form', ['studentId' => $student->id])
             <x-jet-section-border/> 
         @endif
     </div>
