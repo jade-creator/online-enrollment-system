@@ -13,23 +13,17 @@ class EducationForm extends Component
 {
     use AuthorizesRequests;
 
-    public $student = null;
-    public $student_id = null;
-    public $attended_school = null;
-    public $types;
-    public $levels;
-    public $school_name;
-    public $prog_track_spec;
-    public $date_of_grad;
-    public $selectedType = null;
-    public $selectedLevel = null;
+    public ?int $studentId = null;
+    public ?iterable $types = null;
+    public ?iterable $levels = null;
+    public AttendedSchool $attended;
 
     protected $rules = [
-        'selectedType' => ['required', 'max:255'],
-        'selectedLevel' => ['required', 'max:255'],
-        'school_name' => ['required', 'max:255'],
-        'prog_track_spec' => ['max:255'],
-        'date_of_grad' => ['required', 'date'],
+        'attended.school_type_id' => ['required', 'integer', 'max:255'],
+        'attended.level_id' => ['required', 'integer', 'max:255'],
+        'attended.name' => ['required', 'string', 'max:255'],
+        'attended.program' => ['required', 'string', 'max:255'],
+        'attended.date_graduated' => ['required', 'string', 'date'],
     ];
 
     public function render()
@@ -39,17 +33,13 @@ class EducationForm extends Component
 
     public function mount()
     {
-        if (is_null($this->student)) {
-            $this->student_id = Auth::user()->student->id;
-        } else {
-            $this->student_id =  $this->student->id;
-        }
+        $this->studentId ??= Auth::user()->student->id;
 
         $this->types = SchoolType::all();
 
         $this->levels = collect();
 
-        $this->attended_school = AttendedSchool::select([
+        $attended = AttendedSchool::select([
                 'id',
                 'name',
                 'date_graduated',
@@ -57,51 +47,35 @@ class EducationForm extends Component
                 'school_type_id',
                 'level_id',
             ])
-            ->where('student_id', $this->student_id)
+            ->where('student_id', $this->studentId)
             ->first();
 
-        if(!is_null($this->attended_school)){
-            $this->school_name = $this->attended_school->name ?? '';
-            $this->date_of_grad = $this->attended_school->date_graduated ?? '';
-            $this->prog_track_spec = $this->attended_school->program ?? '';
-            $this->selectedType = $this->attended_school->school_type_id ?? '';
-            $this->levels =  Level::where('school_type_id', $this->attended_school->school_type_id)->get();
-            $this->selectedLevel = $this->attended_school->level_id ?? '';
+        if(!is_null($attended)){
+            $this->attended = $attended;
+            $this->levels =  Level::where('school_type_id', $this->attended->school_type_id)->get();
+        }else {
+            $this->attended = new AttendedSchool();
         }
     }
     
-    public function updatedSelectedType($type)
+    public function updatedAttendedSchoolTypeId($type)
     {
         $this->levels = Level::where('school_type_id', $type)->get();
 
-        $this->selectedLevel = null;
+        $this->attended->level_id = null;
     }
 
     public function updateEducationInfo()
     {
         $this->validate();
 
-        if (is_null($this->attended_school)) {
-            $this->authorize('create', AttendedSchool::class);
-            $this->attended_school = AttendedSchool::create([
-                'name' => $this->school_name,
-                'date_graduated' => $this->date_of_grad,
-                'program' => $this->prog_track_spec,
-                'school_type_id' => $this->selectedType,
-                'level_id' => $this->selectedLevel,
-                'student_id' => $this->student_id,
-            ]);
+        if (!$this->attended->exists) {
+            $this->attended->student_id = $this->studentId;
+            $this->attended->save();
         } else {
-            $this->authorize('update', $this->attended_school);
-            $this->attended_school->update([
-                'name' => $this->school_name,
-                'date_graduated' => $this->date_of_grad,
-                'program' => $this->prog_track_spec,
-                'school_type_id' => $this->selectedType,
-                'level_id' => $this->selectedLevel,
-            ]);
+            $this->attended->update();
         }
-
+        
         $this->emit('saved');
 
         $this->emit('proceed', 6);

@@ -9,15 +9,13 @@ use Livewire\Component;
 
 class ContactForm extends Component
 {
-    public $contact = null;
-    public $address;
-    public $mobile_number;
+    public Contact $contact;
 
     public function rules() 
     {
         return [
-            'address' => [ 'required', 'max:255' ],
-            'mobile_number' => [ 'required', new MobileNumber],
+            'contact.address' => [ 'required', 'string', 'max:255' ],
+            'contact.mobile_number' => [ 'required', 'string', new MobileNumber],
         ];
     }
 
@@ -26,33 +24,24 @@ class ContactForm extends Component
         return view('livewire.forms.contact.contact-form');
     }
 
-    public function mount() 
+    public function mount()
     {
-        $this->contact = Contact::select('id','address', 'mobile_number')
+        $contact = Contact::select('id','address', 'mobile_number')
             ->where('person_id', Auth::user()->person_id)
             ->first();
 
-        if (!is_null($this->contact)) {
-            $this->address = $this->contact->address ?? '';
-            $this->mobile_number = $this->contact->mobile_number ?? '';   
-        }
+        $this->contact = $contact ?? new Contact();
     }
 
     public function updateContact() 
     {
         $this->validate();
 
-        if (is_null($this->contact)) {
-            Contact::create([
-                'address' => $this->address,
-                'mobile_number' => $this->mobile_number,
-                'person_id' => Auth::user()->person_id,
-            ]);
+        if (!$this->contact->exists) {
+            $this->contact->person_id = Auth::user()->person_id;
+            $this->contact->save();
         } else {
-            $this->contact->update([
-                'address' => $this->address,
-                'mobile_number' => $this->mobile_number,
-            ]);
+            $this->contact->update();
         }
 
         $this->emit('saved');

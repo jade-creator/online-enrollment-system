@@ -11,30 +11,30 @@
         <!-- fName -->
         <div class="col-span-6">
             <x-jet-label for="firstname" value="{{ __('First Name') }}" />
-            <x-jet-input id="firstname" type="text" class="mt-1 block w-full" autocomplete="firstname" required wire:model.defer="firstname" wire:loading.attr="disabled"/>
-            <x-jet-input-error for="firstname" class="mt-2"/>
+            <x-jet-input id="firstname" type="text" class="mt-1 block w-full" autocomplete="firstname" required wire:model.defer="person.firstname" wire:loading.attr="disabled"/>
+            <x-jet-input-error for="person.firstname" class="mt-2"/>
         </div>
 
         <!-- mname -->
         <div class="col-span-6">
             <x-jet-label for="middlename" value="{{ __('Middle Name') }}"/>
-            <x-jet-input id="middlename" type="text" class="mt-1 block w-full" autocomplete="middlename" required wire:model.defer="middlename" wire:loading.attr="disabled"/>
-            <x-jet-input-error for="middlename" class="mt-2"/>
+            <x-jet-input id="middlename" type="text" class="mt-1 block w-full" autocomplete="middlename" required wire:model.defer="person.middlename" wire:loading.attr="disabled"/>
+            <x-jet-input-error for="person.middlename" class="mt-2"/>
         </div>
 
         <!-- lname -->
         <div class="col-span-6">
             <x-jet-label for="lastname" value="{{ __('Last Name') }}" />
-            <x-jet-input id="lastname" type="text" class="mt-1 block w-full" autocomplete="lastname" required wire:model.defer="lastname" wire:loading.attr="disabled"/>
-            <x-jet-input-error for="lastname" class="mt-2"/>
+            <x-jet-input id="lastname" type="text" class="mt-1 block w-full" autocomplete="lastname" required wire:model.defer="person.lastname" wire:loading.attr="disabled"/>
+            <x-jet-input-error for="person.lastname" class="mt-2"/>
         </div>
 
         <!-- suffix -->
         <div class="col-span-6">
             <x-jet-label for="suffix" value="{{ __('Suffix (Optional)') }}" />
-            <x-jet-input id="suffix" type="text" class="mt-1 block w-full" autocomplete="suffix" wire:model.defer="suffix" wire:loading.attr="disabled"/>
+            <x-jet-input id="suffix" type="text" class="mt-1 block w-full" autocomplete="suffix" wire:model.defer="person.suffix" wire:loading.attr="disabled"/>
             <p class="mt-3 text-xs text-gray-500 font-semibold">{{ __('"Suffix" is optional you can leave it blank if not applicable.')}}</p>
-            <x-jet-input-error for="suffix" class="mt-2"/>
+            <x-jet-input-error for="person.suffix" class="mt-2"/>
         </div>
     </x-slot>
 

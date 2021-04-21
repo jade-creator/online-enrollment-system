@@ -11,16 +11,15 @@ class UserViewComponent extends Component
 {
     use WithPagination;
     
-    public $search = '';
-    public $role = '';
-    public $paginateValue = 10;
-    public $sortField = null;
-    public $sortAsc = false;
-    public $usersList;
-    public $selectPage = false;
-    public $selectAll = false;
-    public $checkedUsers = [];
-    public $confirmingExport = false;
+    public ?string $sortField = null;
+    public string $search = '';
+    public string $role = '';
+    public int $paginateValue = 10;
+    public bool $sortAsc = false;
+    public bool $selectPage = false;
+    public bool $selectAll = false;
+    public bool $confirmingExport = false;
+    public array $checkedUsers = [];
 
     protected $listeners = ['sortFieldSelected', 'fileExport', 'DeselectPage' =>'updatedSelectPage'];
 
@@ -36,16 +35,12 @@ class UserViewComponent extends Component
 
     public function getUsersQueryProperty()
     {
-        $role = $this->role;
-
-        $sortField = $this->sortField;
-
         return User::search($this->search)->select(['id','name', 'email', 'role_id', 'profile_photo_path'])
                 ->with('role')
-                ->when(!empty($role), function ($query) use ($role) {
-                    return $query->where('role_id', $role);
+                ->when(!empty($this->role), function ($query) {
+                    return $query->where('role_id', $this->role);
                 })
-                ->when(!is_null($sortField), function ($query) use ($sortField) {
+                ->when(!is_null($this->sortField), function ($query) {
                     return $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
                 }, function ($query) {
                     return $query->latest();
@@ -74,7 +69,7 @@ class UserViewComponent extends Component
         $this->selectAll = false;
     }
 
-    public function updatedSelectPage($value)
+    public function updatedSelectPage(bool $value)
     {
         if ($value) {
             $this->selectAll = false;
@@ -89,7 +84,7 @@ class UserViewComponent extends Component
         }
     }
 
-    public function sortFieldSelected($field)
+    public function sortFieldSelected(?string $field)
     {
         $this->sortField = $field;
 
@@ -98,7 +93,7 @@ class UserViewComponent extends Component
         $this->resetPage();
     }
 
-    public function isSelected($value)
+    public function isSelected(int $value)
     {
         return in_array($value, $this->checkedUsers);
     }
