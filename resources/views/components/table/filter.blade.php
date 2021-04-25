@@ -1,6 +1,6 @@
-<div class="flex-grow bg-white shadow-md pt-8 text-gray-500">
-    <h3 class="mb-8 px-5 font-bold text-lg">{{ __('Filters')}}</h3>
-    <div class="px-5">
+<div class="flex-grow bg-white shadow-md px-5 pt-8 text-gray-500">
+    <h3 class="font-bold text-lg">{{ __('Filters')}}</h3>
+    <div class="my-4">
         <div class="relative border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
             <div class="absolute inset-y-0 left-0 flex items-center pointer-events-none">
                 <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-4">
@@ -11,8 +11,24 @@
         </div>
     </div>
     {{ $slot }}
-    <div class="px-5">
-        <h3 class="mb-2 font-bold text-md">{{ __('Result')}}</h3>
+    <div class="my-4">
+        <div class="pb-4 flex items-center justify-between">
+            <h3 class="font-bold text-md">{{ __('Date')}}</h3>
+            @if (isset($this->dateMin))
+                <a wire:click="resetDates" class="cursor-pointer text-blue-500 hover:underline">{{ __('reset')}}</a>
+            @endif
+        </div>
+        <h3 class="font-bold text-md">{{ __('From')}}</h3>
+        <div class="relative w-full bg-white pb-3 transition-all duration-500 focus-within:border-gray-300">
+            <input wire:model.debounce.300ms="dateMin" id="dateMin" type="date" class="block w-52 bg-white border-0 focus:outline-none focus:ring focus:ring-gray-100 focus:ring-opacity-0">            
+        </div>
+        <h3 class=" font-bold text-md">{{ __('To')}}</h3>
+        <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
+            <input wire:model.debounce.300ms="dateMax" type="date" class="block w-52 bg-white border-0 focus:outline-none focus:ring focus:ring-gray-100 focus:ring-opacity-0">            
+        </div>
+    </div>
+    <div class="my-4">
+        <h3 class="font-bold text-md">{{ __('Result')}}</h3>
         <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
             <select wire:model="paginateValue" id="result" aria-label="Result per page" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
                 <option value="10">10</option>                                        

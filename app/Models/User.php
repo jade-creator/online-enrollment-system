@@ -77,7 +77,7 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public static function search($search)
+    public static function search(?string $search)
     {
         $search = '%'.$search.'%';
 

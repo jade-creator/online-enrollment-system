@@ -4,118 +4,70 @@ namespace App\Http\Livewire\Admin\UserComponent;
 
 use App\Models\User;
 use Livewire\Component;
+use App\Traits\WithSorting;
 use App\Exports\UsersExport;
 use Livewire\WithPagination;
+use App\Traits\WithBulkActions;
+use App\Traits\WithFilters;
 
 class UserViewComponent extends Component
 {
-    use WithPagination;
+    use WithBulkActions, WithSorting, WithPagination, WithFilters;
     
-    public ?string $sortField = null;
-    public string $search = '';
-    public string $role = '';
     public int $paginateValue = 10;
-    public bool $sortAsc = false;
-    public bool $selectPage = false;
-    public bool $selectAll = false;
+    public string $role = '';
     public bool $confirmingExport = false;
-    public array $checkedUsers = [];
+ 
+    protected $queryString = [
+        'search' => [ 'except' => '' ],
+        'dateMin' => [ 'except' => null ],
+        'dateMax',
+        'sortBy' => [ 'except' => 'created_at' ],
+        'sortDirection' => [ 'except' => 'desc' ],
+        'role' => [ 'except' => '' ],
+    ];
 
-    protected $listeners = ['sortFieldSelected', 'fileExport', 'DeselectPage' =>'updatedSelectPage'];
+    protected $updatesQueryString = [
+        'search',
+        'role',
+    ];
+
+    protected array $allowedSorts = [
+        'name',
+        'email',
+        'created_at',
+    ];
+
+    protected $listeners = ['DeselectPage' =>'updatedSelectPage'];
 
     public function render()
     {       
-        return view('livewire.admin.user-component.user-view-component', [ 'users' => $this->users ]);
+        return view('livewire.admin.user-component.user-view-component', [ 'users' => $this->rows ]);
     }
 
-    public function getUsersProperty()
-    {
-        return $this->usersQuery->paginate($this->paginateValue);
-    }
+    public function getRowsProperty() { return $this->rowsQuery->paginate($this->paginateValue); }
 
-    public function getUsersQueryProperty()
+    public function getRowsQueryProperty()
     {
-        return User::search($this->search)->select(['id','name', 'email', 'role_id', 'profile_photo_path'])
+        return User::search($this->search)
+                ->select(['id','name', 'email', 'role_id', 'profile_photo_path'])
                 ->with('role')
-                ->when(!empty($this->role), function ($query) {
-                    return $query->where('role_id', $this->role);
-                })
-                ->when(!is_null($this->sortField), function ($query) {
-                    return $query->orderBy($this->sortField, $this->sortAsc ? 'asc' : 'desc');
-                }, function ($query) {
-                    return $query->latest();
-                });
+                ->when(!empty($this->role), 
+                    fn ($query) => $query->where('role_id', $this->role))
+                ->orderBy($this->sortBy, $this->sortDirection)
+                ->when(!is_null($this->dateMin),
+                    fn ($query) => $query->whereBetween('created_at', [$this->dateMin, $this->dateMax]));
     }
 
-    public function updatingSearch()
-    {
-        $this->resetPage();
-    }
+    public function updatingRole() { $this->resetPage(); } 
 
-    public function updatingPaginateValue()
-    {
-        $this->resetPage();
-    }
-
-    public function updatingRole()
-    {
-        $this->resetPage();
-    }
-
-    public function updatedCheckedUsers()
-    {
-        $this->selectPage = false;
-
-        $this->selectAll = false;
-    }
-
-    public function updatedSelectPage(bool $value)
-    {
-        if ($value) {
-            $this->selectAll = false;
-
-            $this->checkedUsers = $this->users->pluck('id')->map(fn ($item) => (string) $item)->toArray();
-        } else {
-            $this->checkedUsers = [];
-
-            $this->selectPage = false;
-
-            $this->selectAll = false;
-        }
-    }
-
-    public function sortFieldSelected(?string $field)
-    {
-        $this->sortField = $field;
-
-        $this->sortAsc = !$this->sortAsc;
-
-        $this->resetPage();
-    }
-
-    public function isSelected(int $value)
-    {
-        return in_array($value, $this->checkedUsers);
-    }
-
-    public function selectAll()
-    {
-        $this->selectPage = false;
-
-        $this->selectAll = true;
-
-        $this->checkedUsers = $this->usersQuery->pluck('id')->map(fn ($item) => (string) $item)->toArray();
-    }
+    public function updatingPaginateValue() { $this->resetPage(); }
 
     public function fileExport() 
     {
         $this->confirmingExport = false;
-
-        return (new UsersExport($this->checkedUsers))->download('users-collection.xlsx');
+        return (new UsersExport($this->selected))->download('users-collection.xlsx');
     }    
 
-    public function paginationView()
-    {
-        return 'partials.pagination-link';
-    }
+    public function paginationView() { return 'partials.pagination-link'; }
 }
