@@ -16,7 +16,7 @@ class OtherInfoForm extends Component
         'detail.gender' => [ 'required', 'string', 'max:255', 'in:Other,Male,Female,Prefer not to say'],
         'detail.civil_status' => [ 'required', 'string', 'max:255', 'in:Single,Married,Divorced,Widowed,Prefer not to say'],
         'detail.religion' => [ 'required', 'string', 'max:255', 'in:Other,Catholic Christianity,Protestant Christianity,Islam,Tribal,None'],
-        'detail.country_id' => [ 'required', 'integer', 'max:255'],
+        'detail.country_id' => [ 'required', 'integer'],
         'detail.birthdate' => [ 'required', 'string', 'date'],
         'detail.birthplace' => [ 'required', 'string', 'max:255'],
     ];

@@ -40,12 +40,13 @@ class UserViewComponent extends Component
 
     protected $listeners = ['DeselectPage' =>'updatedSelectPage'];
 
-    public function render()
-    {       
-        return view('livewire.admin.user-component.user-view-component', [ 'users' => $this->rows ]);
+    public function render() { return 
+        view('livewire.admin.user-component.user-view-component', [ 'users' => $this->rows ]);
     }
 
-    public function getRowsProperty() { return $this->rowsQuery->paginate($this->paginateValue); }
+    public function getRowsProperty() { return 
+        $this->rowsQuery->paginate($this->paginateValue); 
+    }
 
     public function getRowsQueryProperty()
     {
@@ -69,5 +70,7 @@ class UserViewComponent extends Component
         return (new UsersExport($this->selected))->download('users-collection.xlsx');
     }    
 
-    public function paginationView() { return 'partials.pagination-link'; }
+    public function paginationView() { return 
+        'partials.pagination-link'; 
+    }
 }

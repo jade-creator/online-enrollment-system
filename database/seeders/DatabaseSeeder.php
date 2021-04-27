@@ -17,6 +17,9 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserSeeder::class,
             CountrySeeder::class,
+            SchoolTypeSeeder::class,
+            LevelSeeder::class,
+            SchoolYearSeeder::class,
         ]);
     }
 }
