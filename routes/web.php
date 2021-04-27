@@ -13,7 +13,7 @@ use App\Http\Livewire\Forms\PersonalDetail\AdminDetailForm;
 use App\Http\Livewire\Admin\UserComponent\UserViewComponent;
 use App\Http\Livewire\Forms\PersonalDetail\StudentDetailForm;
 use App\Http\Livewire\Forms\PersonalDetail\PersonalDetailShow;
-use App\Http\Livewire\Admin\SchoolManagement\SchoolTypeComponent;
+use App\Http\Livewire\Admin\SchoolYearComponent\SchoolYearViewComponent;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,7 +70,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
             Route::get('/masterlist', Masterlist::class)->name('masterlist'); //renamecomponent
 
             Route::group(['prefix' => 'school-management', 'as' => 'school.'], function (){
-                Route::get('/types', SchoolTypeComponent::class)->name('type.view');
+                Route::get('/years', SchoolYearViewComponent::class)->name('year.view');
             });
 
             Route::group(['prefix' => 'users', 'as' => 'users.'], function (){
