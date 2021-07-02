@@ -2,6 +2,7 @@
     <div class="grid grid-cols-3 gap-6">
         <div class="mt-3 col-span-4 lg:col-start-2 lg:col-end-3">
             <div class="mt-4">
+                
                 <x-jet-label for="role" value="{{ __('Role') }}" />
                 <select name="role" id="role" class="w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" required wire:model.defer="role" wire:loading.attr="disabled">
                     <option value="">Choose a role</option>

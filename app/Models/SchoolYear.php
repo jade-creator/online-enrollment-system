@@ -31,8 +31,8 @@ class SchoolYear extends Model
         return empty($search) ? static::query()
             : static::where(function ($query) use ($search){
                 return $query
-                ->where('from_date', 'LIKE', $search)
-                ->orWhere('to_date', 'LIKE', $search);
+                    ->where('from_date', 'LIKE', $search)
+                    ->orWhere('to_date', 'LIKE', $search);
             });
     }
 }

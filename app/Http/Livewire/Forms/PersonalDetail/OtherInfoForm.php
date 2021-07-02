@@ -2,10 +2,10 @@
 
 namespace App\Http\Livewire\Forms\PersonalDetail;
 
-use App\Models\Country;
 use App\Models\Detail;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Country;
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
 
 class OtherInfoForm extends Component
 {
