@@ -20,15 +20,4 @@ class SchoolType extends Model
     protected $fillable = [
         'type',
     ];
-
-    public static function search($search)
-    {
-        $search = '%'.$search.'%';
-
-        return empty($search) ? static::query()
-            : static::where(function ($query) use ($search){
-                return $query
-                ->where('type', 'LIKE', $search);
-            });
-    }
 }

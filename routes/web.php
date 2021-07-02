@@ -1,19 +1,24 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Livewire\Admin\Dashboard;
 use App\Http\Livewire\Admin\Masterlist;
-use App\Http\Livewire\Student\Registration;
+use App\Http\Livewire\Admin\UserComponent\UserAddComponent;
+use App\Http\Livewire\Admin\UserComponent\UserViewComponent;
+use App\Http\Livewire\Admin\ProgramComponent\ProgramViewComponent;
+use App\Http\Livewire\Admin\SchoolYearComponent\SchoolYearViewComponent;
+use App\Http\Livewire\Admin\SpecializationComponent\SpecializationViewComponent;
 use App\Http\Livewire\Forms\Contact\ContactShow;
 use App\Http\Livewire\Forms\Guardian\GuardianShow;
 use App\Http\Livewire\Forms\Education\EducationShow;
-use App\Http\Livewire\Forms\Profile\SecuritySettingShow;
-use App\Http\Livewire\Admin\UserComponent\UserAddComponent;
 use App\Http\Livewire\Forms\PersonalDetail\AdminDetailForm;
-use App\Http\Livewire\Admin\UserComponent\UserViewComponent;
 use App\Http\Livewire\Forms\PersonalDetail\StudentDetailForm;
 use App\Http\Livewire\Forms\PersonalDetail\PersonalDetailShow;
-use App\Http\Livewire\Admin\SchoolYearComponent\SchoolYearViewComponent;
+use App\Http\Livewire\Forms\Profile\SecuritySettingShow;
+use App\Http\Livewire\Forms\Program\ProgramCreateForm;
+use App\Http\Livewire\Forms\Program\ProgramUpdateForm;
+use App\Http\Livewire\Forms\Specialization\SpecializationCreateForm;
+use App\Http\Livewire\Student\Registration;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,6 +76,17 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
 
             Route::group(['prefix' => 'school-management', 'as' => 'school.'], function (){
                 Route::get('/years', SchoolYearViewComponent::class)->name('year.view');
+            });
+
+            Route::group(['prefix' => 'programs', 'as' => 'programs.'], function (){
+                Route::get('', ProgramViewComponent::class)->name('view');
+                Route::get('/create', ProgramCreateForm::class)->name('create');
+                Route::get('/update/{program}', ProgramUpdateForm::class)->name('update');
+            });
+
+            Route::group(['prefix' => 'specializations', 'as' => 'specializations.'], function (){
+                Route::get('', SpecializationViewComponent::class)->name('view');
+                Route::get('/create', SpecializationCreateForm::class)->name('create');
             });
 
             Route::group(['prefix' => 'users', 'as' => 'users.'], function (){
