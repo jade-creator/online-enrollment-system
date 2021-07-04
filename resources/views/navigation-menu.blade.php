@@ -163,6 +163,15 @@
                             </a>
                         </li>
 
+                        <li title="Subjects">
+                            <a href="{{route('admin.subjects.view')}}" class="{{ request()->is('admin/subjects/*') || request()->is('admin/subjects') ? 'text-indigo-500' : 'text-gray-800'}} h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700">
+                                <span class="inline-flex justify-center items-center ml-3 pl-0.5">
+                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" width="22" height="24" stroke="currentColor" id="library"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path></svg>
+                                </span>
+                                <span class="ml-4 mt-1 text-sm tracking-wide truncate">{{ __('Subjects') }}</span>
+                            </a>
+                        </li>
+
                         <li title="Specializations">
                             <a href="{{route('admin.specializations.view')}}" class="{{ request()->is('admin/specializations/*') || request()->is('admin/specializations') ? 'text-indigo-500' : 'text-gray-800'}} h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700">
                                 <span class="inline-flex justify-center items-center ml-3 pl-0.5">

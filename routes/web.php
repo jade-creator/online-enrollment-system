@@ -7,6 +7,7 @@ use App\Http\Livewire\Admin\UserComponent\UserViewComponent;
 use App\Http\Livewire\Admin\ProgramComponent\ProgramViewComponent;
 use App\Http\Livewire\Admin\SchoolYearComponent\SchoolYearViewComponent;
 use App\Http\Livewire\Admin\SpecializationComponent\SpecializationViewComponent;
+use App\Http\Livewire\Admin\SubjectComponent;
 use App\Http\Livewire\Forms\Contact\ContactShow;
 use App\Http\Livewire\Forms\Guardian\GuardianShow;
 use App\Http\Livewire\Forms\Education\EducationShow;
@@ -56,16 +57,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
     });
     // end guard
 
-    // start student
-    Route::middleware(['role:student'])->group(function (){
-        Route::get('/user/personal-details/student', StudentDetailForm::class)->middleware(['detail'])->name('user.personal-details.student');
-
-        Route::group(['middleware' => 'user.detail', 'prefix' => 'student', 'as' => 'student.'], function (){
-            Route::get('/registration', Registration::class)->name('registration'); //renamecomponent
-        });
-    });
-    // end student
-
     // start admin
     Route::middleware(['role:admin'])->group(function () {
         Route::get('/user/personal-details/admin', AdminDetailForm::class)->middleware(['detail'])->name('user.personal-details.admin');
@@ -73,6 +64,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
         Route::group(['middleware' => 'user.detail', 'prefix' => 'admin', 'as' => 'admin.'], function (){
             Route::get('/dashboard', Dashboard::class)->name('dashboard'); //renamecomponent
             Route::get('/masterlist', Masterlist::class)->name('masterlist'); //renamecomponent
+
+            Route::group(['prefix' => 'subjects', 'as' => 'subjects.'], function (){
+                Route::get('', SubjectComponent\SubjectViewComponent::class)->name('view');
+                Route::get('/create', SubjectComponent\SubjectAddComponent::class)->name('create');
+            });
 
             Route::group(['prefix' => 'school-management', 'as' => 'school.'], function (){
                 Route::get('/years', SchoolYearViewComponent::class)->name('year.view');
@@ -96,4 +92,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
         });
     });
     // end admin
+
+    // start student
+    Route::middleware(['role:student'])->group(function (){
+        Route::get('/user/personal-details/student', StudentDetailForm::class)->middleware(['detail'])->name('user.personal-details.student');
+
+        Route::group(['middleware' => 'user.detail', 'prefix' => 'student', 'as' => 'student.'], function (){
+            Route::get('/registration', Registration::class)->name('registration'); //renamecomponent
+        });
+    });
+    // end student
 });
