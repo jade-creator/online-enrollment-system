@@ -14,7 +14,6 @@ class LevelSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('countries')->delete();
         $levels = [
             [ 'level' => 'Kindergarten', 'school_type_id' => 1, 'created_at' => now(), 'updated_at' => now()],
             [ 'level' => 'Grade 1', 'school_type_id' => 1, 'created_at' => now(), 'updated_at' => now()],

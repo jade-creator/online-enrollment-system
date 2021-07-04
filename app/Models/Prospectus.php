@@ -1,0 +1,39 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Prospectus extends Model
+{
+    use HasFactory, SoftDeletes;
+
+    protected $fillable = [
+        'level_id',
+        'program_id',
+        'strand_id',
+        'term_id',
+    ];  
+
+    public function subjects() { return
+        $this->belongsToMany(Subject::class)->withTimestamps();
+    }
+
+    public function level() { return 
+        $this->belongsTo(Level::class);
+    }
+
+    public function program() { return 
+        $this->belongsTo(Program::class);
+    }
+
+    public function strand() { return 
+        $this->belongsTo(Strand::class);
+    }
+
+    public function term() { return 
+        $this->belongsTo(Term::class);
+    }
+}

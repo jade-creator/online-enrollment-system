@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             StrandSeeder::class,
             TermSeeder::class, 
             SpecializationSeeder::class,
+            SubjectSeeder::class,
         ]);
     }
 }
