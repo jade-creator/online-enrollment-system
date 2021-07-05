@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Prospectus;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -26,6 +27,7 @@ class DatabaseSeeder extends Seeder
             StrandSeeder::class,
             TermSeeder::class, 
             SpecializationSeeder::class,
+            ProspectusSeeder::class,
             SubjectSeeder::class,
         ]);
     }
