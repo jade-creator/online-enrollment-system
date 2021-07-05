@@ -17,6 +17,7 @@ use App\Http\Livewire\Forms\PersonalDetail\PersonalDetailShow;
 use App\Http\Livewire\Forms\Profile\SecuritySettingShow;
 use App\Http\Livewire\Forms\Program\ProgramCreateForm;
 use App\Http\Livewire\Forms\Program\ProgramUpdateForm;
+use App\Http\Livewire\Admin\ProspectusComponent;
 use App\Http\Livewire\Forms\Specialization\SpecializationCreateForm;
 use App\Http\Livewire\Student\Registration;
 use Illuminate\Support\Facades\Route;
@@ -64,6 +65,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
         Route::group(['middleware' => 'user.detail', 'prefix' => 'admin', 'as' => 'admin.'], function (){
             Route::get('/dashboard', Dashboard::class)->name('dashboard'); //renamecomponent
             Route::get('/masterlist', Masterlist::class)->name('masterlist'); //renamecomponent
+
+            Route::group(['prefix' => 'prospectuses', 'as' => 'prospectuses.'], function (){
+                Route::get('', ProspectusComponent\ProspectusViewComponent::class)->name('view');
+                // Route::get('/create', SubjectComponent\SubjectAddComponent::class)->name('create');
+            });
 
             Route::group(['prefix' => 'subjects', 'as' => 'subjects.'], function (){
                 Route::get('', SubjectComponent\SubjectViewComponent::class)->name('view');
