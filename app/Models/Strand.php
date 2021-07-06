@@ -9,10 +9,6 @@ class Strand extends Model
 {
     use HasFactory;
 
-    public function specialization() { return
-        $this->hasMany(Specialization::class);
-    }
-
     public function track() { return
         $this->belongsTo(Track::class);
     }

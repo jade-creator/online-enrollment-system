@@ -14,6 +14,8 @@ class CountrySeeder extends Seeder
      */
     public function run()
     {
+        DB::table('countries')->delete();
+
         $countries = [
             ['name' => 'United States', 'created_at' => now(), 'updated_at' => now()],
 			['name' => 'Canada', 'created_at' => now(), 'updated_at' => now()],

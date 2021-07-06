@@ -3,6 +3,9 @@
 namespace App\Http\Livewire\Admin\ProgramComponent;
 
 use App\Models\Program;
+use App\Models\Level;
+use App\Models\Term;
+use App\Models\Prospectus;
 use App\Traits\WithBulkActions;
 use App\Traits\WithFilters;
 use App\Traits\WithSorting;
@@ -13,8 +16,9 @@ class ProgramViewComponent extends Component
 {
     use WithBulkActions, WithSorting, WithPagination, WithFilters;
 
+    public Program $program;
     public int $paginateValue = 10;
-    public bool $confirmingExport = false;
+    public bool $confirmingExport = false, $addingProgram = false;
 
     protected $queryString = [
         'search' => [ 'except' => '' ],
@@ -35,6 +39,18 @@ class ProgramViewComponent extends Component
 
     protected $listeners = ['DeselectPage' => 'updatedSelectPage'];
 
+    protected $rules = [
+        'program.code' => ['required', 'string', 'max:255'],
+        'program.program' => ['required', 'string', 'max:255'],
+        'program.description' => ['required', 'string'],
+        'program.year' => ['required', 'integer', 'min:1'],
+    ];
+
+    public function mount() 
+    {
+        $this->program = new Program();
+    }
+
     public function render() { return 
         view('livewire.admin.program-component.program-view-component', ['programs' => $this->rows]);
     }
@@ -50,6 +66,35 @@ class ProgramViewComponent extends Component
             ->orderBy($this->sortBy, $this->sortDirection)
             ->when(!is_null($this->dateMin),
                 fn ($query) => $query->whereBetween('created_at', [$this->dateMin, $this->dateMax]));
+    }
+
+    public function save() 
+    {
+        $this->validate();
+        $this->program->save();
+
+        $collegeLevels = Level::orderBy('id', 'DESC')->take(4)->get();
+        $terms = Term::get(['id']);
+
+        $levelIds = $collegeLevels->pluck('id')->toArray();
+        sort($levelIds);
+
+        foreach ($levelIds as $key => $levelId) {
+
+            if ($key >= $this->program->year) {
+                break;
+            }
+
+            $terms->map(function ($term) use ($levelId) {
+                Prospectus::create([
+                    'level_id' => $levelId,
+                    'program_id' => $this->program->id,
+                    'term_id' => $term->id,
+                ]);
+            });
+        }
+
+        $this->fill([ 'addingProgram' => false ]);
     }
 
     public function updatingPaginateValue() { $this->resetPage(); }

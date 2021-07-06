@@ -26,7 +26,6 @@ class DatabaseSeeder extends Seeder
             TrackSeeder::class,
             StrandSeeder::class,
             TermSeeder::class, 
-            SpecializationSeeder::class,
             ProspectusSeeder::class,
             SubjectSeeder::class,
         ]);

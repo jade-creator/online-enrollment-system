@@ -14,6 +14,8 @@ class StrandSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('strands')->delete();
+
         $strands = [
             ['code' => 'ABM', 'strand' => 'Accountancy, Business and Management', 'track_id' => 1, 'created_at' => now(), 'updated_at' => now()],
             ['code' => 'HUMSS', 'strand' => 'Humanities and Social Sciences', 'track_id' => 1, 'created_at' => now(), 'updated_at' => now()],

@@ -2,21 +2,22 @@
 
 namespace App\Models;
 
-use App\Models\Strand;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Specialization extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'specialization',
-        'strand_id',
+        'title',
+        'description',
+        'program_id',
     ];
 
-    public function strand() { return
-        $this->belongsTo(Strand::class);
+    public function program() { return
+        $this->belongsTo(Program::class);
     }
 
     public static function search($search)
@@ -26,7 +27,8 @@ class Specialization extends Model
         return empty($search) ? static::query()
             : static::where(function ($query) use ($search){
                 return $query
-                ->where('specialization', 'LIKE', $search);
+                ->where('title', 'LIKE', $search)
+                ->orWhere('description', 'LIKE', $search);
             });
     }
 }

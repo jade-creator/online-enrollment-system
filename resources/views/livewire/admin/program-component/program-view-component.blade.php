@@ -1,18 +1,35 @@
 <div class="w-full flex flex-1 scrolling-touch">
     <x-table.filter>
         <div name='slot'>
-            <p>programs</p>
         </div>
     </x-table.filter>
 
     <!-- Module -->
     <div class="min-h-screen w-full py-8 px-8">
+
+        <div class="mb-4 pb-3 border-b border-gray-200">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center justify-between">
+                    <div class="text-2xl font-bold text-gray-500">Programs</div>
         
-        <x-table.title tableTitle="Programs"
-            :isSelectedAll="$this->selectAll"
-            :count="count($this->selected)"
-            :route="route('admin.programs.create')"
-            routeTitle="Add Programs"/>
+                    @if ( count($this->selected) > 0 && !$this->selectAll )
+                        <div class="px-2 text-green-600 font-bold">{{ __('[')}}
+                            <span>{{ count($this->selected) }}</span>
+                            <span>{{ __('selected ]')}}</span>
+                        </div>
+                    @endif
+        
+                    @if ( $this->selectAll )
+                        <div class="px-2 text-green-600 font-bold">{{ __('[')}}
+                            <span>{{ __('selected all ')}}</span>
+                            <span>{{ count($this->selected) }}</span>
+                            <span>{{ __(' records ]')}}</span>
+                        </div>
+                    @endif
+                </div>
+                <button wire:click="$toggle('addingProgram')" wire:loading.attr="disabled" class="focus:ring-2 focus:bg-blue-500 focus:ring-opacity-50 bg-blue-500 hover:bg-blue-600 text-white py-2.5 px-4 font-bold text-xs rounded-lg border border-white">Add Program</button>
+            </div>
+        </div>
 
         <x-table.main>
             <x-slot name="paginationLink">
@@ -45,8 +62,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex items-center justify-start col-span-12 md:col-span-3 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $program->program }}</div>
-                            <div class="flex items-center justify-start col-span-12 md:col-span-6 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $program->description }}</div>
+                            <div class="flex items-center justify-start col-span-12 md:col-span-3 truncate md:border-0 border-t border-gray-300 font-bold text-xs"><p class="truncate">{{ $program->program }}</p></div>
+                            <div class="flex items-center justify-start col-span-12 md:col-span-6 md:border-0 border-t border-gray-300 font-bold text-xs"><p class="truncate">{{ $program->description }}</p></div>
                             <div class="flex items-center justify-center col-span-12 md:col-span-1 md:border-0 border-t border-gray-300">
                                 @if ( !count($selected) > 0)
                                     <x-jet-dropdown align="right" width="60" dropdownClasses="z-10 shadow-2xl">
@@ -178,6 +195,57 @@
 
             <x-jet-button class="ml-2 bg-blue-500 hover:blue-700" wire:click="fileExport" wire:loading.attr="disabled">
                 {{ __('Export') }}
+            </x-jet-button>
+        </x-slot>
+    </x-jet-dialog-modal>
+
+    <!-- Adding Program's Modal -->
+    <x-jet-dialog-modal wire:model="addingProgram">
+        <x-slot name="title">
+            {{ __('Program Maintenance') }}
+        </x-slot>
+
+        <x-slot name="content">
+            <form>
+                <div class="grid grid-cols-8 gap-6">
+                    <div class="mt-3 col-span-8">
+                        <div class="grid grid-cols-8 gap-6">
+                            <div class="mt-4 col-span-4">
+                                <x-jet-label for="code" value="{{ __('Code') }}" />
+                                <x-jet-input wire:model.lazy="program.code" id="code" class="block mt-1 w-full" type="text" name="code" autofocus required/>
+                                <x-jet-input-error for="program.code" class="mt-2"/>
+                            </div>
+                            
+                            <div class="mt-4 col-span-4">
+                                <x-jet-label for="year" value="{{ __('Year') }}" />
+                                <x-jet-input wire:model.lazy="program.year" id="year" class="block mt-1 w-full" type="number" name="year" autofocus required/>
+                                <x-jet-input-error for="program.year" class="mt-2"/>
+                            </div>
+                        </div>
+                
+                        <div class="mt-4">
+                            <x-jet-label for="program" value="{{ __('Program') }}" />
+                            <x-jet-input wire:model.lazy="program.program" id="program" class="block mt-1 w-full" type="text" name="program" :value="old('program')" required/>
+                            <x-jet-input-error for="program.program" class="mt-2"/>
+                        </div>
+                
+                        <div class="mt-4">
+                            <x-jet-label for="description" value="{{ __('Description') }}" />
+                            <textarea wire:model.lazy="program.description" id="description" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" type="text" name="description" required></textarea>
+                            <x-jet-input-error for="program.description" class="mt-2"/>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </x-slot>
+
+        <x-slot name="footer">
+            <x-jet-secondary-button wire:click="$toggle('addingProgram')" wire:loading.attr="disabled">
+                {{ __('Cancel') }}
+            </x-jet-secondary-button>
+
+            <x-jet-button class="ml-2 bg-blue-500 hover:blue-700" wire:click="save" wire:loading.attr="disabled">
+                {{ __('Add') }}
             </x-jet-button>
         </x-slot>
     </x-jet-dialog-modal>

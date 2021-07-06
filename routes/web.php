@@ -6,7 +6,7 @@ use App\Http\Livewire\Admin\UserComponent\UserAddComponent;
 use App\Http\Livewire\Admin\UserComponent\UserViewComponent;
 use App\Http\Livewire\Admin\ProgramComponent\ProgramViewComponent;
 use App\Http\Livewire\Admin\SchoolYearComponent\SchoolYearViewComponent;
-use App\Http\Livewire\Admin\SpecializationComponent\SpecializationViewComponent;
+use App\Http\Livewire\Admin\SpecializationComponent;
 use App\Http\Livewire\Admin\SubjectComponent;
 use App\Http\Livewire\Forms\Contact\ContactShow;
 use App\Http\Livewire\Forms\Guardian\GuardianShow;
@@ -87,8 +87,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
             });
 
             Route::group(['prefix' => 'specializations', 'as' => 'specializations.'], function (){
-                Route::get('', SpecializationViewComponent::class)->name('view');
-                Route::get('/create', SpecializationCreateForm::class)->name('create');
+                Route::get('', SpecializationComponent\SpecializationViewComponent::class)->name('view');
             });
 
             Route::group(['prefix' => 'users', 'as' => 'users.'], function (){

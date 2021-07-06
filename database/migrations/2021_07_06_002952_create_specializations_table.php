@@ -15,10 +15,12 @@ class CreateSpecializationsTable extends Migration
     {
         Schema::create('specializations', function (Blueprint $table) {
             $table->id();
-            $table->string('specialization');
-            $table->foreignId('strand_id')->constrained();
+            $table->string('title', 100);
+            $table->text('description');
+            $table->foreignId('program_id')->constrained();
             $table->timestamps();
-        });
+            $table->softDeletes();
+        }); 
     }
 
     /**

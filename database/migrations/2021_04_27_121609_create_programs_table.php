@@ -18,6 +18,7 @@ class CreateProgramsTable extends Migration
             $table->string('code', 100);
             $table->string('program', 100);
             $table->text('description');
+            $table->integer('year');
             $table->timestamps();
         });
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\SpecializationComponent;
 
+use App\Models\Program;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Specialization;
@@ -13,10 +14,10 @@ class SpecializationViewComponent extends Component
 {
     use WithBulkActions, WithSorting, WithPagination, WithFilters;
 
+    public Specialization $specialization;
     public int $paginateValue = 10;
-    public bool $confirmingExport = false;
-    public string $trackId = '';
-    public string $strandId = '';
+    public bool $confirmingExport = false, $addingSpecialization = false;
+    public $programId = '';
 
     protected $queryString = [
         'search' => [ 'except' => '' ],
@@ -24,44 +25,72 @@ class SpecializationViewComponent extends Component
         'dateMax',
         'sortBy' => [ 'except' => 'created_at' ],
         'sortDirection' => [ 'except' => 'desc' ],
-        'trackId' => [ 'except' => '' ],
-        'strandId' => [ 'except' => '' ],
+        'programId' => [ 'except' => '' ],
     ];
 
     protected $updatesQueryString = [
         'search',
-        'trackId',
-        'strandId',
+        'programId',
     ];
 
     protected array $allowedSorts = [
-        'specialization',
+        'title',
     ];
 
     protected $listeners = ['DeselectPage' => 'updatedSelectPage'];
 
+    public function rules() 
+    {
+        return [
+            'specialization.title' => ['required', 'string'],
+            'specialization.description' => ['required', 'string'],
+        ];
+    }
+
+    public function mount() 
+    {
+        $this->fill([ 'specialization' => new Specialization() ]);
+    }
+
     public function render() { return 
         view('livewire.admin.specialization-component.specialization-view-component', ['specializations' => $this->rows]);
-    }
+    }    
 
     public function getRowsProperty() { return
         $this->rowsQuery->paginate($this->paginateValue);
-    }    
+    }
 
     public function getRowsQueryProperty() 
     {
         return Specialization::search($this->search)
-            ->select(['id', 'specialization', 'strand_id', 'created_at'])
-            ->with(['strand', 'strand.track'])
-            ->whereHas('strand', function ($query) {
-                return $query->when(!empty($this->trackId), 
-                    fn ($query) => $query->where('track_id', $this->trackId));
+            ->select(['id', 'title', 'description', 'program_id', 'created_at'])
+            ->with(['program:id,code'])
+            ->when(!empty($this->programId), function($query) {
+                return $query->where('program_id', $this->programId);
             })
-            ->when(!empty($this->strandId), 
-                    fn ($query) => $query->where('strand_id', $this->strandId))
             ->orderBy($this->sortBy, $this->sortDirection)
-            ->when(!is_null($this->dateMin),
-                fn ($query) => $query->whereBetween('created_at', [$this->dateMin, $this->dateMax]));
+            ->when(!is_null($this->dateMin), function($query) {
+                return $query->whereBetween('created_at', [$this->dateMin, $this->dateMax]);
+            });
+    }
+
+    public function getProgramsProperty() { return
+        Program::get(['id', 'code']);
+    }
+
+    public function save() 
+    {
+        $this->validate();
+
+        $this->specialization->program_id = $this->programId;
+        $this->specialization->save();
+
+        $this->fill([ 'addingSpecialization' => false ]);
+    }
+
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
     }
 
     public function updatingPaginateValue() { $this->resetPage(); }
