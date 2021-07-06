@@ -16,7 +16,9 @@ class CreateTracksTable extends Migration
         Schema::create('tracks', function (Blueprint $table) {
             $table->id();
             $table->string('track', 100);
+            $table->text('description');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

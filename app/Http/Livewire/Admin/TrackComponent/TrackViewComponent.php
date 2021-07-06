@@ -1,23 +1,21 @@
 <?php
 
-namespace App\Http\Livewire\Admin\SpecializationComponent;
+namespace App\Http\Livewire\Admin\TrackComponent;
 
-use App\Models\Program;
-use App\Models\Specialization;
+use App\Models\Track;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Traits\WithFilters;
 use App\Traits\WithBulkActions;
 use App\Traits\WithSorting;
 
-class SpecializationViewComponent extends Component
+class TrackViewComponent extends Component
 {
     use WithBulkActions, WithSorting, WithPagination, WithFilters;
 
-    public Specialization $specialization;
+    public Track $track;
     public int $paginateValue = 10;
-    public bool $confirmingExport = false, $addingSpecialization = false;
-    public $programId = '';
+    public bool $confirmingExport = false, $addingTrack = false;
 
     protected $queryString = [
         'search' => [ 'except' => '' ],
@@ -25,16 +23,14 @@ class SpecializationViewComponent extends Component
         'dateMax',
         'sortBy' => [ 'except' => 'created_at' ],
         'sortDirection' => [ 'except' => 'desc' ],
-        'programId' => [ 'except' => '' ],
     ];
 
     protected $updatesQueryString = [
         'search',
-        'programId',
     ];
 
     protected array $allowedSorts = [
-        'title',
+        'track',
     ];
 
     protected $listeners = ['DeselectPage' => 'updatedSelectPage'];
@@ -42,19 +38,19 @@ class SpecializationViewComponent extends Component
     public function rules() 
     {
         return [
-            'specialization.title' => ['required', 'string'],
-            'specialization.description' => ['required', 'string'],
+            'track.track' => ['required', 'string'],
+            'track.description' => ['required', 'string'],
         ];
     }
 
     public function mount() 
     {
-        $this->fill([ 'specialization' => new Specialization() ]);
+        $this->fill([ 'track' => new Track() ]);
     }
 
     public function render() { return 
-        view('livewire.admin.specialization-component.specialization-view-component', ['specializations' => $this->rows]);
-    }    
+        view('livewire.admin.track-component.track-view-component', ['tracks' => $this->rows]);
+    }
 
     public function getRowsProperty() { return
         $this->rowsQuery->paginate($this->paginateValue);
@@ -62,30 +58,20 @@ class SpecializationViewComponent extends Component
 
     public function getRowsQueryProperty() 
     {
-        return Specialization::search($this->search)
-            ->select(['id', 'title', 'description', 'program_id', 'created_at'])
-            ->with(['program:id,code'])
-            ->when(!empty($this->programId), function($query) {
-                return $query->where('program_id', $this->programId);
-            })
+        return Track::search($this->search)
+            ->select(['id', 'track', 'description', 'created_at'])
             ->orderBy($this->sortBy, $this->sortDirection)
             ->when(!is_null($this->dateMin), function($query) {
                 return $query->whereBetween('created_at', [$this->dateMin, $this->dateMax]);
             });
     }
 
-    public function getProgramsProperty() { return
-        Program::get(['id', 'code']);
-    }
-
     public function save() 
     {
         $this->validate();
+        $this->track->save();
 
-        $this->specialization->program_id = $this->programId;
-        $this->specialization->save();
-
-        $this->fill([ 'addingSpecialization' => false ]);
+        $this->fill([ 'addingTrack' => false ]);
     }
 
     public function updated($propertyName)

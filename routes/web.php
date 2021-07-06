@@ -8,6 +8,8 @@ use App\Http\Livewire\Admin\ProgramComponent\ProgramViewComponent;
 use App\Http\Livewire\Admin\SchoolYearComponent\SchoolYearViewComponent;
 use App\Http\Livewire\Admin\SpecializationComponent;
 use App\Http\Livewire\Admin\SubjectComponent;
+use App\Http\Livewire\Admin\StrandComponent;
+use App\Http\Livewire\Admin\TrackComponent;
 use App\Http\Livewire\Forms\Contact\ContactShow;
 use App\Http\Livewire\Forms\Guardian\GuardianShow;
 use App\Http\Livewire\Forms\Education\EducationShow;
@@ -18,7 +20,6 @@ use App\Http\Livewire\Forms\Profile\SecuritySettingShow;
 use App\Http\Livewire\Forms\Program\ProgramCreateForm;
 use App\Http\Livewire\Forms\Program\ProgramUpdateForm;
 use App\Http\Livewire\Admin\ProspectusComponent;
-use App\Http\Livewire\Forms\Specialization\SpecializationCreateForm;
 use App\Http\Livewire\Student\Registration;
 use Illuminate\Support\Facades\Route;
 
@@ -74,6 +75,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
             Route::group(['prefix' => 'subjects', 'as' => 'subjects.'], function (){
                 Route::get('', SubjectComponent\SubjectViewComponent::class)->name('view');
                 Route::get('/create', SubjectComponent\SubjectAddComponent::class)->name('create');
+            });
+
+            Route::group(['prefix' => 'strands', 'as' => 'strands.'], function (){
+                Route::get('', StrandComponent\StrandViewComponent::class)->name('view');
+            });
+
+            Route::group(['prefix' => 'tracks', 'as' => 'tracks.'], function (){
+                Route::get('', TrackComponent\TrackViewComponent::class)->name('view');
             });
 
             Route::group(['prefix' => 'school-management', 'as' => 'school.'], function (){
