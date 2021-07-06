@@ -2,31 +2,17 @@
     <x-table.filter>
         <div name='slot'>
             <div class="my-4">
-                <h3 class="font-bold text-md">{{ __('Track')}}</h3>
+                <h3 class="font-bold text-md">{{ __('Program')}}</h3>
                 <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
-                    <select wire:model="trackId" id="track" aria-label="tracks" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
-                        <option value="">All (Default)</option>                                        
-                        <option value="1">Academic</option>                                        
-                        <option value="2">TVL</option>                                        
-                        <option value="3">Sports</option>                                        
-                        <option value="4">Arts and Design</option>                                        
-                    </select>
-                </div>
-            </div>
-            <div class="my-4">
-                <h3 class="font-bold text-md">{{ __('Strand')}}</h3>
-                <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
-                    <select wire:model="strandId" id="strand" aria-label="strands" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
-                        <option value="">All (Default)</option>                                        
-                        <option value="1">ABM</option>                                        
-                        <option value="2">HUMSS</option>                                        
-                        <option value="3">STEM</option>                                        
-                        <option value="4">GAS</option>                                        
-                        <option value="5">A-F</option>                                        
-                        <option value="6">HE</option>                                        
-                        <option value="7">ICT</option>                                        
-                        <option value="8">IA</option>                                        
-                        <option value="9">TVLM</option>                                        
+                    <select wire:model="programId" id="programs" aria-label="programs" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
+                        @forelse ($this->programs as $program)
+                            @if ($loop->first)
+                                <option value="">-- choose a program --</option>                                
+                            @endif
+                            <option value="{{ $program->id }}">{{ $program->code }}</option>
+                        @empty
+                            <option value="">No records</option>
+                        @endforelse                                     
                     </select>
                 </div>
             </div>
@@ -35,12 +21,30 @@
 
     <!-- Module -->
     <div class="min-h-screen w-full py-8 px-8">
+
+        <div class="mb-4 pb-3 border-b border-gray-200">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center justify-between">
+                    <div class="text-2xl font-bold text-gray-500">Specializations</div>
         
-        <x-table.title tableTitle="Specializations"
-            :isSelectedAll="$this->selectAll"
-            :count="count($this->selected)"
-            :route="route('admin.specializations.create')"
-            routeTitle="Add Specialization"/>
+                    @if ( count($this->selected) > 0 && !$this->selectAll )
+                        <div class="px-2 text-green-600 font-bold">{{ __('[')}}
+                            <span>{{ count($this->selected) }}</span>
+                            <span>{{ __('selected ]')}}</span>
+                        </div>
+                    @endif
+        
+                    @if ( $this->selectAll )
+                        <div class="px-2 text-green-600 font-bold">{{ __('[')}}
+                            <span>{{ __('selected all ')}}</span>
+                            <span>{{ count($this->selected) }}</span>
+                            <span>{{ __(' records ]')}}</span>
+                        </div>
+                    @endif
+                </div>
+                <button wire:click="$toggle('addingSpecialization')" wire:loading.attr="disabled" class="focus:ring-2 focus:bg-blue-500 focus:ring-opacity-50 bg-blue-500 hover:bg-blue-600 text-white py-2.5 px-4 font-bold text-xs rounded-lg border border-white">Add Specialization</button>
+            </div>
+        </div>
 
         <x-table.main>
             <x-slot name="paginationLink">
@@ -50,10 +54,10 @@
             <x-slot name="head">
                 <div class="col-span-4 flex" id="columnTitle">
                     <input type="checkbox" wire:model="selectPage" class="cursor-pointer border-gray-400 focus:outline-none focus:ring-transparent mx-5 rounded-sm" title="Select Displayed Data">
-                    <x-table.sort-button nameButton="specialization" event="sortFieldSelected('specialization')"/>
+                    <x-table.sort-button nameButton="specialization" event="sortFieldSelected('title')"/>
                 </div>
-                <x-table.column-title columnTitle="strand" class="col-span-4"/>
-                <x-table.column-title columnTitle="track" class="col-span-3"/>
+                <x-table.column-title columnTitle="description" class="col-span-4"/>
+                <x-table.column-title columnTitle="program" class="col-span-3"/>
                 <div class="col-span-1">
                     <x-table.sort-button nameButton="latest" event="sortFieldSelected('created_at')"/>
                 </div>
@@ -67,12 +71,12 @@
                                 <div class="flex items-center">
                                     <input wire:loading.attr="disabled" type="checkbox" id="{{ $specialization->id }}" value="{{ $specialization->id }}" wire:model="selected" class="cursor-pointer border-gray-500 border-opacity-50 focus:outline-none focus:ring focus:ring-transparent ml-3 mr-5 rounded-sm">
                                     <div class="h-10 flex items-center">
-                                        {{ $specialization->specialization }}
+                                        {{ $specialization->title ?? 'N/A' }}
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex items-center justify-start col-span-12 md:col-span-4 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $specialization->strand->strand }}</div>
-                            <div class="flex items-center justify-start col-span-12 md:col-span-3 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $specialization->strand->track->track }}</div>
+                            <div class="flex items-center justify-start col-span-12 md:col-span-4 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $specialization->description ?? 'N/A' }}</div>
+                            <div class="flex items-center justify-start col-span-12 md:col-span-3 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $specialization->program->code ?? 'N/A' }}</div>
                             <div class="flex items-center justify-center col-span-12 md:col-span-1 md:border-0 border-t border-gray-300">
                                 @if ( !count($selected) > 0)
                                     <x-jet-dropdown align="right" width="60" dropdownClasses="z-10 shadow-2xl">
@@ -204,6 +208,43 @@
 
             <x-jet-button class="ml-2 bg-blue-500 hover:blue-700" wire:click="fileExport" wire:loading.attr="disabled">
                 {{ __('Export') }}
+            </x-jet-button>
+        </x-slot>
+    </x-jet-dialog-modal>
+
+    <!-- Add Specialization's Modal -->
+    <x-jet-dialog-modal wire:model="addingSpecialization">
+        <x-slot name="title">
+            {{ __('Specialization Maintenance') }}
+        </x-slot>
+
+        <x-slot name="content">
+            <form>
+                <div class="grid grid-cols-8 gap-6">
+                    <div class="mt-3 col-span-8">
+                        <div class="mt-4">
+                            <x-jet-label for="title" value="{{ __('Title') }}" />
+                            <x-jet-input wire:model.defer="specialization.title" wire:loading.attr="disabled" id="title" class="block mt-1 w-full" type="text" name="title" autofocus required/>
+                            <x-jet-input-error for="specialization.title" class="mt-2"/>
+                        </div>
+                
+                        <div class="mt-4">
+                            <x-jet-label for="description" value="{{ __('Description') }}" />
+                            <textarea wire:model.defer="specialization.description" wire:loading.attr="disabled" id="description" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" type="text" name="description" required></textarea>
+                            <x-jet-input-error for="specialization.description" class="mt-2"/>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </x-slot>
+
+        <x-slot name="footer">
+            <x-jet-secondary-button wire:click="$toggle('addingSpecialization')" wire:loading.attr="disabled">
+                {{ __('Cancel') }}
+            </x-jet-secondary-button>
+
+            <x-jet-button class="ml-2 bg-blue-500 hover:blue-700" wire:click="save" wire:loading.attr="disabled">
+                {{ __('Add') }}
             </x-jet-button>
         </x-slot>
     </x-jet-dialog-modal>

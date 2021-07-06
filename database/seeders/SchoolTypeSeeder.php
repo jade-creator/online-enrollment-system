@@ -14,6 +14,8 @@ class SchoolTypeSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('school_types')->delete();
+
         $types = [
             [ 'type' => 'Elementary',  'created_at' => now(), 'updated_at' => now()],
             [ 'type' => 'Junior High School',  'created_at' => now(), 'updated_at' => now()],

@@ -14,6 +14,7 @@ class TrackSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('tracks')->delete();
         $tracks = [
             ['track' => 'Academic', 'created_at' => now(), 'updated_at' => now()],
             ['track' => 'Technical Vocational Livelihood', 'created_at' => now(), 'updated_at' => now()],

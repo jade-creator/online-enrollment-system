@@ -15,6 +15,10 @@ class Program extends Model
         'description'
     ];
 
+    public function specializations() { return
+        $this->hasMany(Specialization::class);
+    }
+
     public static function search($search)
     {
         $search = '%'.$search.'%';

@@ -15,6 +15,8 @@ class SchoolYearSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('school_years')->delete();
+
         $years = [
             [ 'from_date' => Carbon::parse('2019-01-01'), 'to_date' => Carbon::parse('2020-01-01')],
             [ 'from_date' => Carbon::parse('2020-01-01'), 'to_date' => Carbon::parse('2021-01-01')]
