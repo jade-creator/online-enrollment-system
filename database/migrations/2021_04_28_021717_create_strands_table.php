@@ -19,6 +19,7 @@ class CreateStrandsTable extends Migration
             $table->string('strand', 100);
             $table->foreignId('track_id')->constrained();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
