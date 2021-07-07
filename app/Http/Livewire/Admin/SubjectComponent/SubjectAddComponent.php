@@ -11,8 +11,6 @@ use Livewire\Component;
 
 class SubjectAddComponent extends Component
 {
-    public Subject $subject;
-
     public function rules() 
     {
         return [

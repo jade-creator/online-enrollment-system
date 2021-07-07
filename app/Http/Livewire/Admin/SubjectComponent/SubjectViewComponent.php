@@ -2,10 +2,6 @@
 
 namespace App\Http\Livewire\Admin\SubjectComponent;
 
-use App\Exports\UsersExport;
-use App\Models\Program;
-use App\Models\SchoolType;
-use App\Models\Strand;
 use App\Models\Subject;
 use App\Traits\WithBulkActions;
 use App\Traits\WithFilters;
@@ -17,8 +13,10 @@ class SubjectViewComponent extends Component
 {
     use WithBulkActions, WithSorting, WithPagination, WithFilters;
 
+    public Subject $subject;
     public int $paginateValue = 10;
-    public bool $confirmingExport = false;
+    public bool $confirmingExport = false, $addingSubject = false;
+    public $availableSubjects = [], $preRequisites = [];
 
     protected $queryString = [
         'search' => [ 'except' => '' ],
@@ -34,10 +32,27 @@ class SubjectViewComponent extends Component
 
     protected $listeners = ['DeselectPage' => 'updatedSelectPage'];
 
+    public function rules() 
+    {
+        return [
+            'subject.code' => ['required', 'string', 'max:255'],
+            'subject.title' => ['required', 'string', 'max:255'],
+            'subject.unit' => ['required', 'integer', 'min:0'],
+        ];     
+    }
+
     protected array $allowedSorts = [
         'code',
         'title',
     ];
+
+    public function mount() 
+    {
+        $this->addSubject();
+        $this->fill([ 
+            'subject' => new Subject(),
+        ]);
+    }
 
     public function render() { return 
         view('livewire.admin.subject-component.subject-view-component', ['subjects' => $this->rows]);
@@ -50,8 +65,45 @@ class SubjectViewComponent extends Component
     public function getRowsQueryProperty() 
     {
         return Subject::search($this->search)
-            ->select(['id', 'code', 'title', 'unit'])
-            ->latest();
+            ->select(['id', 'code', 'title', 'unit', 'created_at'])
+            ->with('requisites')
+            ->orderBy($this->sortBy, $this->sortDirection)
+            ->when(!is_null($this->dateMin),
+                fn ($query) => $query->whereBetween('created_at', [$this->dateMin, $this->dateMax]));
+    }
+
+    public function getSubjectsProperty() {
+        $this->availableSubjects = Subject::get(['id', 'code']);
+        return $this->availableSubjects;
+    }
+
+    public function addSubject() 
+    {
+        $this->preRequisites[] = '';
+    }
+
+    public function removeSubject($index) 
+    {
+        unset($this->preRequisites[$index]);
+        array_values($this->preRequisites);
+    }
+
+    public function resetSubjects() 
+    {
+        $this->preRequisites= [''];
+    }
+
+    public function save() 
+    {
+        $this->validate();
+
+        $this->preRequisites = array_filter($this->preRequisites);
+        $this->preRequisites = array_unique($this->preRequisites);
+        
+        $this->subject->save();
+        $this->subject->requisites()->attach($this->preRequisites);
+
+        $this->fill([ 'addingSubject' => false ]);
     }
 
     public function updatingPaginateValue() { $this->resetPage(); }
@@ -59,7 +111,7 @@ class SubjectViewComponent extends Component
     public function fileExport() 
     {
         $this->confirmingExport = false;
-        return (new UsersExport($this->checkedUsers))->download('users-collection.xlsx');
+        // return (new UsersExport($this->checkedUsers))->download('users-collection.xlsx');
     }    
 
     public function paginationView() { return 

@@ -6,12 +6,29 @@
     </x-table.filter>
 
     <div class="min-h-screen w-full py-8 px-8">
+        <div class="mb-4 pb-3 border-b border-gray-200">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center justify-between">
+                    <div class="text-2xl font-bold text-gray-500">Subjects</div>
         
-        <x-table.title tableTitle="Subjects"
-            :isSelectedAll="$this->selectAll"
-            :count="count($this->selected)"
-            :route="route('admin.subjects.create')"
-            routeTitle="Add Subject"/>
+                    @if ( count($this->selected) > 0 && !$this->selectAll )
+                        <div class="px-2 text-green-600 font-bold">{{ __('[')}}
+                            <span>{{ count($this->selected) }}</span>
+                            <span>{{ __('selected ]')}}</span>
+                        </div>
+                    @endif
+        
+                    @if ( $this->selectAll )
+                        <div class="px-2 text-green-600 font-bold">{{ __('[')}}
+                            <span>{{ __('selected all ')}}</span>
+                            <span>{{ count($this->selected) }}</span>
+                            <span>{{ __(' records ]')}}</span>
+                        </div>
+                    @endif
+                </div>
+                <button wire:click="$toggle('addingSubject')" wire:loading.attr="disabled" class="focus:ring-2 focus:bg-blue-500 focus:ring-opacity-50 bg-blue-500 hover:bg-blue-600 text-white py-2.5 px-4 font-bold text-xs rounded-lg border border-white">Add Subject</button>
+            </div>
+        </div>
 
         <x-table.main>
             <x-slot name="paginationLink">
@@ -23,11 +40,14 @@
                     <input type="checkbox" wire:model="selectPage" class="cursor-pointer border-gray-400 focus:outline-none focus:ring-transparent mx-5 rounded-sm" title="Select Displayed Data">
                     <x-table.sort-button nameButton="code" event="sortFieldSelected('code')"/>
                 </div>
-                <div class="col-span-4" id="title">
+                <div class="col-span-3" id="title">
                     <x-table.sort-button nameButton="title" event="sortFieldSelected('title')"/>
                 </div>
-                <x-table.column-title columnTitle="Unit" class="col-span-3"/>
-                <x-table.column-title columnTitle="action" class="col-span-1"/>
+                <x-table.column-title columnTitle="Unit" class="col-span-2"/>
+                <x-table.column-title columnTitle="Pre Requisite" class="col-span-2"/>
+                <div class="col-span-1">
+                    <x-table.sort-button nameButton="latest" event="sortFieldSelected('created_at')"/>
+                </div>
             </x-slot>
 
             <x-slot name="body">
@@ -42,8 +62,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex items-center justify-start col-span-12 md:col-span-4 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $subject->title ?? 'N/A' }}</div>
-                            <div class="flex items-center justify-start col-span-12 md:col-span-3 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $subject->unit ?? 'N/A' }}</div>
+                            <div class="flex items-center justify-start col-span-12 md:col-span-3 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $subject->title ?? 'N/A' }}</div>
+                            <div class="flex items-center justify-start col-span-12 md:col-span-2 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $subject->unit ?? 'N/A' }}</div>
+                            <div class="flex items-center justify-start col-span-12 md:col-span-2 truncate md:border-0 border-t border-gray-300 font-bold text-xs">
+                                @forelse ($subject->requisites as $requisite)
+                                    {{ $loop->first ? '' : ', '  }}
+                                    <span>&nbsp;{{ $requisite->code }}</span>
+                                @empty
+
+                                @endforelse
+                            </div>
                             <div class="flex items-center justify-center col-span-12 md:col-span-1 md:border-0 border-t border-gray-300">
                                 @if ( !count($selected) > 0)
                                     <x-jet-dropdown align="right" width="60" dropdownClasses="z-10 shadow-2xl">
@@ -175,6 +203,80 @@
 
             <x-jet-button class="ml-2 bg-blue-500 hover:blue-700" wire:click="fileExport" wire:loading.attr="disabled">
                 {{ __('Export') }}
+            </x-jet-button>
+        </x-slot>
+    </x-jet-dialog-modal>
+
+    <!-- Add Strand's Modal -->
+    <x-jet-dialog-modal wire:model="addingSubject">
+        <x-slot name="title">
+            {{ __('Subject Maintenance') }}
+        </x-slot>
+
+        <x-slot name="content">
+            <form>
+                <div class="grid grid-cols-8 gap-6">
+                    <div class="mt-3 col-span-8">
+                        <div class="mt-4">
+                            <x-jet-label for="code" value="{{ __('Code') }}" />
+                            <x-jet-input wire:model.lazy="subject.code" id="code" class="block mt-1 w-full" type="text" name="code" autofocus required/>
+                            <x-jet-input-error for="subject.code" class="mt-2"/>
+                        </div>
+                        <div class="mt-4">
+                            <x-jet-label for="title" value="{{ __('Title') }}" />
+                            <x-jet-input wire:model.lazy="subject.title" id="title" class="block mt-1 w-full" type="text" name="title" autofocus required/>
+                            <x-jet-input-error for="subject.title" class="mt-2"/>
+                        </div>
+                        <div class="mt-4">
+                            <x-jet-label for="unit" value="{{ __('Unit') }}" />
+                            <x-jet-input wire:model.lazy="subject.unit" id="title" class="block mt-1 w-full" type="number" name="unit" autofocus required/>
+                            <x-jet-input-error for="subject.unit" class="mt-2"/>
+                        </div>
+                        <div class="mt-4">
+                            <x-jet-label for="pre-requisite" value="{{ __('Pre-requisite') }}" />
+                            <div class="flex flex-wrap mt-2">
+                                @foreach ($preRequisites as $index => $requisite)
+                                    <div class="mr-2 my-2">
+                                        <div class="flex">
+                                            <select wire:model="preRequisites.{{ $index }}" name="preRequisites[{{ $index }}]" class="w-full bg-white flex-1 p-2 tracking-wide border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
+                                                @forelse ($this->subjects as $subject)
+                                                    @if ($loop->first)
+                                                        <option value="">-- choose a subject --</option>
+                                                    @endif
+                                                    <option value="{{ $subject->id }}">{{ $subject->code }}</option>
+                                                @empty
+                                                    <option value="">No records</option>
+                                                @endforelse
+                                            </select>
+                                            <x-jet-button class="bg-red-500 hover:red-700" wire:click.prevent="removeSubject({{ $index }})" wire:loading.attr="disabled">
+                                                {{ __('X') }}
+                                            </x-jet-button>
+                                        </div>
+                                        <x-jet-input-error for="preRequisite" class="mt-2"/>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <x-jet-button class="ml-2 bg-indigo-500 hover:indigo-700" wire:click.prevent="addSubject" wire:loading.attr="disabled">
+                                {{ __('Add Pre Requisite') }}
+                            </x-jet-button>
+                            <x-jet-button class="ml-2 border-0 text-blue-500" wire:click.prevent="resetSubjects" wire:loading.attr="disabled">
+                                {{ __('Reset') }}
+                            </x-jet-button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </x-slot>
+
+        <x-slot name="footer">
+            <x-jet-secondary-button wire:click="$toggle('addingSubject')" wire:loading.attr="disabled">
+                {{ __('Cancel') }}
+            </x-jet-secondary-button>
+
+            <x-jet-button class="ml-2 bg-blue-500 hover:blue-700" wire:click="save" wire:loading.attr="disabled">
+                {{ __('Add') }}
             </x-jet-button>
         </x-slot>
     </x-jet-dialog-modal>

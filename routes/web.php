@@ -74,7 +74,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
 
             Route::group(['prefix' => 'subjects', 'as' => 'subjects.'], function (){
                 Route::get('', SubjectComponent\SubjectViewComponent::class)->name('view');
-                Route::get('/create', SubjectComponent\SubjectAddComponent::class)->name('create');
+                // Route::get('/create', SubjectComponent\SubjectAddComponent::class)->name('create');
             });
 
             Route::group(['prefix' => 'strands', 'as' => 'strands.'], function (){
