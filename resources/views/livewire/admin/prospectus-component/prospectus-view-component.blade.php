@@ -88,14 +88,15 @@
             </x-slot>
 
             <x-slot name="head">
-                <div class="col-span-4 flex" id="code">
+                <div class="col-span-3 flex" id="code">
                     <input type="checkbox" wire:model="selectPage" class="cursor-pointer border-gray-400 focus:outline-none focus:ring-transparent mx-5 rounded-sm" title="Select Displayed Data">
                     <x-table.sort-button nameButton="code" event="sortFieldSelected('code')"/>
                 </div>
                 <div class="col-span-4" id="title">
                     <x-table.sort-button nameButton="title" event="sortFieldSelected('title')"/>
                 </div>
-                <x-table.column-title columnTitle="Unit" class="col-span-3"/>
+                <x-table.column-title columnTitle="Unit" class="col-span-2"/>
+                <x-table.column-title columnTitle="Pre Requisite" class="col-span-2"/>
                 <x-table.column-title columnTitle="action" class="col-span-1"/>
             </x-slot>
 
@@ -103,7 +104,7 @@
                 @forelse ($prospectus->subjects as $subject)
                     <div class="w-full p-2 my-1 rounded-md shadow hover:shadow-md @if ($this->isSelected($subject->id)) bg-gray-200 @else bg-white @endif border-t border-l border-r border-gray-200 border-opacity-80">
                         <div class="grid grid-cols-12 gap-2">
-                            <div class="col-span-12 md:col-span-4 truncate font-bold text-xs">
+                            <div class="col-span-12 md:col-span-3 truncate font-bold text-xs">
                                 <div class="flex items-center">
                                     <input wire:loading.attr="disabled" type="checkbox" value="{{ $subject->id }}" wire:model="selected" class="cursor-pointer border-gray-500 border-opacity-50 focus:outline-none focus:ring focus:ring-transparent ml-3 mr-5 rounded-sm">
                                     <div class="h-10 flex items-center">
@@ -111,8 +112,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex items-center justify-start col-span-12 md:col-span-4 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $subject->title ?? 'N/A' }}</div>
-                            <div class="flex items-center justify-start col-span-12 md:col-span-3 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $subject->unit ?? 'N/A' }}</div>
+                            <div class="flex items-center justify-start col-span-12 md:col-span-4 truncate md:border-0 border-t border-gray-300 font-bold text-xs"><p class="truncate">{{ $subject->title ?? 'N/A' }}</p></div>
+                            <div class="flex items-center justify-start col-span-12 md:col-span-2 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $subject->unit ?? 'N/A' }}</div>
+                            <div class="flex items-center justify-start col-span-12 md:col-span-2 truncate md:border-0 border-t border-gray-300 font-bold text-xs">
+                                @forelse ($subject->requisites as $requisite)
+                                    {{ $loop->first ? '' : ', '  }}
+                                    <span>&nbsp;{{ $requisite->code }}</span>
+                                @empty
+
+                                @endforelse
+                            </div>
                             <div class="flex items-center justify-center col-span-12 md:col-span-1 md:border-0 border-t border-gray-300">
                                 @if ( !count($selected) > 0)
                                     <x-jet-dropdown align="right" width="60" dropdownClasses="z-10 shadow-2xl">

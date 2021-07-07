@@ -20,6 +20,11 @@ class Subject extends Model
         $this->belongsToMany(Prospectus::class)->withTimestamps();
     }
 
+    public function requisites() { return
+        $this->belongsToMany(Subject::class, 'requisite_subject', 'subject_id', 'requisite_id')
+            ->withTimestamps();
+    }
+
     public static function search($search)
     {
         $search = '%'.$search.'%';

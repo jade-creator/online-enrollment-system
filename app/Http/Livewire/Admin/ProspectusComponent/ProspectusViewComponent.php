@@ -28,10 +28,18 @@ class ProspectusViewComponent extends Component
         'dateMax',
         'sortBy' => [ 'except' => 'created_at' ],
         'sortDirection' => [ 'except' => 'desc' ],
+        'levelId' => [ 'except' => '' ],
+        'programId' => [ 'except' => '' ],
+        'strandId' => [ 'except' => '' ],
+        'termId' => [ 'except' => '' ],
     ];
 
     protected $updatesQueryString = [
         'search',
+        'levelId',
+        'programId',
+        'strandId',
+        'termId',
     ];
 
     protected $listeners = ['DeselectPage' => 'updatedSelectPage'];
@@ -54,7 +62,7 @@ class ProspectusViewComponent extends Component
     public function getRowsQueryProperty()
     {
         $this->prospectus = Prospectus::select(['id', 'level_id', 'program_id', 'strand_id', 'term_id'])
-            ->with('subjects')
+            ->with('subjects.requisites')
             ->when(!empty($this->levelId), function($query) {
                 return $query->where('level_id', $this->levelId);
             })
