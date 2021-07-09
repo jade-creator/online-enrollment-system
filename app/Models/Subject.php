@@ -16,6 +16,10 @@ class Subject extends Model
         'unit',
     ];  
 
+    public function schedules() { return
+        $this->hasMany(Schedule::class);
+    }
+
     public function prospectuses() { return
         $this->belongsToMany(Prospectus::class)->withTimestamps();
     }
