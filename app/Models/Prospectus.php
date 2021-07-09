@@ -17,6 +17,10 @@ class Prospectus extends Model
         'term_id',
     ];  
 
+    public function sections() { return
+        $this->hasMany(Section::class);
+    }
+
     public function subjects() { return
         $this->belongsToMany(Subject::class)->withTimestamps();
     }

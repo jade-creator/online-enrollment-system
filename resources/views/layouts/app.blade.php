@@ -11,6 +11,13 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
         <!-- Styles -->
+        <style>
+            [x-cloak] {
+                visibility: hidden !important;
+                overflow: hidden !important;
+            }
+        </style>
+
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
         {{-- <link rel="stylesheet" href="{{ asset('css/main.css') }}"> --}}
         @livewireStyles

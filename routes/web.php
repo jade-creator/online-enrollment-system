@@ -6,6 +6,7 @@ use App\Http\Livewire\Admin\UserComponent\UserAddComponent;
 use App\Http\Livewire\Admin\UserComponent\UserViewComponent;
 use App\Http\Livewire\Admin\ProgramComponent\ProgramViewComponent;
 use App\Http\Livewire\Admin\SchoolYearComponent\SchoolYearViewComponent;
+use App\Http\Livewire\Admin\SectionComponent;
 use App\Http\Livewire\Admin\SpecializationComponent;
 use App\Http\Livewire\Admin\SubjectComponent;
 use App\Http\Livewire\Admin\StrandComponent;
@@ -66,6 +67,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
         Route::group(['middleware' => 'user.detail', 'prefix' => 'admin', 'as' => 'admin.'], function (){
             Route::get('/dashboard', Dashboard::class)->name('dashboard'); //renamecomponent
             Route::get('/masterlist', Masterlist::class)->name('masterlist'); //renamecomponent
+
+            Route::group(['prefix' => 'sections', 'as' => 'sections.'], function (){
+                Route::get('', SectionComponent\SectionViewComponent::class)->name('view');
+                Route::get('/elem', SectionComponent\SectionElemViewComponent::class)->name('view.elem');
+            });
 
             Route::group(['prefix' => 'prospectuses', 'as' => 'prospectuses.'], function (){
                 Route::get('', ProspectusComponent\ProspectusViewComponent::class)->name('view');
