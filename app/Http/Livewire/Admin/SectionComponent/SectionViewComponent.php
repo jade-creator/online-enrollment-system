@@ -21,7 +21,6 @@ class SectionViewComponent extends Component
 
     public Section $section;
     public Schedule $schedule;
-    public $scheduleId;
     public int $paginateValue = 10;
     public bool $confirmingExport = false, $addingSection = false, $addingSchedule = false;
     public $prospectus, $levelId, $programId, $strandId, $termId, $typeId = 1;
@@ -208,7 +207,7 @@ class SectionViewComponent extends Component
             'schedule.start_time_friday' => ['nullable'],
             'schedule.end_time_friday' => ['nullable', 'after:schedule.start_time_friday'],
         ]);
-        
+
         $this->schedule->save();
 
         // \Debugbar::info($this->schedule);
@@ -251,9 +250,6 @@ class SectionViewComponent extends Component
                 'schedule' => Schedule::find($value),
                 'addingSchedule' => !$this->addingSchedule,
             ]);
-
-            // $this->schedule = Schedule::find($value);
-            // $this->addingSchedule = !$this->addingSchedule;
         }
     }
 
@@ -268,13 +264,11 @@ class SectionViewComponent extends Component
 
     public function updatedLevelId() 
     {
-        // if (empty($this->levelId)) {
-            $this->fill([
-                'programId' => '',
-                'strandId' => '',
-                'termId' => '',
-            ]);
-        // }
+        $this->fill([
+            'programId' => '',
+            'strandId' => '',
+            'termId' => '',
+        ]);
 
         $this->resetPage();
     }
