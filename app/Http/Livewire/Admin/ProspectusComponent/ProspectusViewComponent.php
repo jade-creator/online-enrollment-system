@@ -28,18 +28,18 @@ class ProspectusViewComponent extends Component
         'dateMax',
         'sortBy' => [ 'except' => 'created_at' ],
         'sortDirection' => [ 'except' => 'desc' ],
-        // 'levelId' => [ 'except' => '' ],
-        // 'programId' => [ 'except' => '' ],
-        // 'strandId' => [ 'except' => '' ],
-        // 'termId' => [ 'except' => '' ],
+        'levelId' => [ 'except' => '' ],
+        'programId' => [ 'except' => '' ],
+        'strandId' => [ 'except' => '' ],
+        'termId' => [ 'except' => '' ],
     ];
 
     protected $updatesQueryString = [
         'search',
-        // 'levelId',
-        // 'programId',
-        // 'strandId',
-        // 'termId',
+        'levelId',
+        'programId',
+        'strandId',
+        'termId',
     ];
 
     protected $listeners = ['DeselectPage' => 'updatedSelectPage'];

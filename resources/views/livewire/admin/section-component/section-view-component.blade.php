@@ -245,7 +245,7 @@
                             </div>
                         </div>
                     @empty  
-                        <x-table.no-result title="No section found.🤔"/> 
+                        <x-table.no-result title="No sectionsdad found.🤔"/> 
                     @endforelse
             </x-slot>
         </x-table.main>
