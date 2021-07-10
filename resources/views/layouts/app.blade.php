@@ -15,6 +15,7 @@
             [x-cloak] {
                 visibility: hidden !important;
                 overflow: hidden !important;
+                display: none !important;
             }
         </style>
 
@@ -26,7 +27,8 @@
         <script src="{{ mix('js/app.js') }}" defer></script>
         {{-- <script src="{{ asset('js/main.js') }}"></script> --}}
         <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" data-auto-replace-svg="nest"></script>
-        
+        <!-- Alpine JS-->
+        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js"></script>
     </head>
     <body class="font-sans antialiased">
         <x-jet-banner />
