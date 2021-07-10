@@ -17,6 +17,10 @@ class Prospectus extends Model
         'term_id',
     ];  
 
+    public function registrations() { return
+        $this->hasMany(Registration::class);
+    }
+
     public function sections() { return
         $this->hasMany(Section::class);
     }
