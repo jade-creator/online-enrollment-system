@@ -2,6 +2,7 @@
 
 use App\Http\Livewire\Admin\Dashboard;
 use App\Http\Livewire\Admin\Masterlist;
+use App\Http\Livewire\Admin\FeeComponent                                                ;
 use App\Http\Livewire\Admin\UserComponent\UserAddComponent;
 use App\Http\Livewire\Admin\UserComponent\UserViewComponent;
 use App\Http\Livewire\Admin\ProgramComponent\ProgramViewComponent;
@@ -77,6 +78,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
             //     Route::get('', ProspectusComponent\ProspectusViewComponent::class)->name('view');
             //     Route::get('/create', SubjectComponent\SubjectAddComponent::class)->name('create');
             // });
+
+            Route::get('/fees', FeeComponent\FeeViewComponent::class)->name('fees.view');
 
             Route::group(['prefix' => 'subjects', 'as' => 'subjects.'], function (){
                 Route::get('', SubjectComponent\SubjectViewComponent::class)->name('view');
