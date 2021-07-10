@@ -17,6 +17,10 @@ class Section extends Model
         'room_id',
     ];
 
+    public function registrations() { return
+        $this->hasMany(Registration::class);
+    }
+
     public function schedules() { return
         $this->belongsToMany(Schedule::class)->withTimestamps();
     }

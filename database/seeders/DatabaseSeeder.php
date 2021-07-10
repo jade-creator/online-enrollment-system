@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             ProspectusSeeder::class,
             SubjectSeeder::class,
             RoomSeeder::class,
+            StatusSeeder::class,
         ]);
     }
 }

@@ -9,6 +9,10 @@ class Student extends Model
 {
     use HasFactory;
 
+    public function registrations() { return
+        $this->hasMany(Registration::class);
+    }
+
     public function user(){
         return $this->belongsTo(User::class);
     }

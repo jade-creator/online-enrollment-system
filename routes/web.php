@@ -21,7 +21,7 @@ use App\Http\Livewire\Forms\Profile\SecuritySettingShow;
 use App\Http\Livewire\Forms\Program\ProgramCreateForm;
 use App\Http\Livewire\Forms\Program\ProgramUpdateForm;
 use App\Http\Livewire\Admin\ProspectusComponent;
-use App\Http\Livewire\Student\Registration;
+use App\Http\Livewire\Student;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -118,7 +118,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
         Route::get('/user/personal-details/student', StudentDetailForm::class)->middleware(['detail'])->name('user.personal-details.student');
 
         Route::group(['middleware' => 'user.detail', 'prefix' => 'student', 'as' => 'student.'], function (){
-            Route::get('/registration', Registration::class)->name('registration'); //renamecomponent
+            Route::get('/registrations', Student\RegistrationViewComponent::class)->name('registration');
+            Route::get('/registrations/create', Student\Registration::class)->name('registrations.create');
         });
     });
     // end student
