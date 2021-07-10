@@ -90,7 +90,9 @@
                         </div>
                     @endif
                 </div>
-                <button wire:click.prevent="addingSection" wire:loading.attr="disabled" class="focus:ring-2 focus:bg-blue-500 focus:ring-opacity-50 bg-blue-500 hover:bg-blue-600 text-white py-2.5 px-4 font-bold text-xs rounded-lg border border-white">Add Section</button>
+                @can('create', App\Models\Section::class)
+                    <button wire:click.prevent="addingSection" wire:loading.attr="disabled" class="focus:ring-2 focus:bg-blue-500 focus:ring-opacity-50 bg-blue-500 hover:bg-blue-600 text-white py-2.5 px-4 font-bold text-xs rounded-lg border border-white">Add Section</button>
+                @endcan
             </div>
         </div>
 
@@ -115,7 +117,7 @@
 
             <x-slot name="body">
                     @forelse ($sections as $section)
-                        <div x-data="{ open: false }">
+                        <div id="{{ $section->id }}" x-data="{ open: false }">
                             <div @click="open = ! open" class="w-full p-2 my-1 rounded-md shadow hover:shadow-md @if ($this->isSelected($section->id)) bg-gray-200 @else bg-white @endif border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer">
                                 <div class="grid grid-cols-12 gap-2">
                                     <div class="col-span-12 md:col-span-3 truncate font-bold text-xs">
@@ -183,7 +185,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div x-cloak x-show="open" class="w-full py-2 px-4 my-1 rounded shadow hover:shadow-md bg-white border-t border-l border-r border-gray-200 border-opacity-80">
+                            <div x-show="open" 
+                                 class="w-full py-2 px-4 my-1 rounded shadow hover:shadow-md bg-white border-t border-l border-r border-gray-200 border-opacity-80"
+                                 x-cloak>
+
                                 <div class="py-4 grid grid-cols-12 gap-2">
                                     <x-table.column-title columnTitle="subject" class="col-span-1 text-blue-500"/>
                                     <x-table.column-title columnTitle="monday" class="col-span-2"/>
@@ -384,10 +389,6 @@
         <x-slot name="content">
             <form>
                 <div class="grid grid-cols-8 gap-6">
-                    {{-- <div class="mt-4 col-span-8">
-                        <x-jet-label for="sectionName" value="{{ __('Section Name') }}" />
-                        <x-jet-input wire:model="section.name" id="sectionName" class="block mt-1 w-full" type="text" name="sectionName"/>
-                    </div> --}}
                     <div class="mt-4 grid grid-cols-8 gap-2 col-span-8">
                         <div class="col-span-8">
                             <x-jet-label for="monday" value="{{ __('Monday') }}" />

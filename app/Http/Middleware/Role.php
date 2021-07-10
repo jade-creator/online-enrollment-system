@@ -21,11 +21,19 @@ class Role
             return redirect('/login');
         }
 
-        $user_role = Auth::user()->role->name;
-        if($user_role == $role){
-            return $next($request);
+        $roles = is_array($role) ? $role : explode('|', $role);
+
+        if(!in_array(Auth::user()->role->name, $roles, true)) {
+            abort(403);
         }
 
-        abort(403);
+        return $next($request);
+
+        // $user_role = Auth::user()->role->name;
+        // if($user_role == $role){
+        //     return $next($request);
+        // }
+
+        // abort(403);
     }
 }

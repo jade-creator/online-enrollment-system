@@ -12,9 +12,11 @@ use App\Traits\WithFilters;
 use App\Traits\WithSorting;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ProspectusViewComponent extends Component
 {
+    use AuthorizesRequests;
     use WithBulkActions, WithSorting, WithPagination, WithFilters;
 
     public int $paginateValue = 10;
@@ -90,6 +92,8 @@ class ProspectusViewComponent extends Component
 
     public function addSubject()
     {
+        $this->authorize('create', Prospectus::class);
+
         $this->prospectus->subjects()->attach($this->selectedSubjects);
 
         $this->fill([

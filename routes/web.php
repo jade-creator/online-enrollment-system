@@ -68,15 +68,15 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
             Route::get('/dashboard', Dashboard::class)->name('dashboard'); //renamecomponent
             Route::get('/masterlist', Masterlist::class)->name('masterlist'); //renamecomponent
 
-            Route::group(['prefix' => 'sections', 'as' => 'sections.'], function (){
-                Route::get('', SectionComponent\SectionViewComponent::class)->name('view');
-                Route::get('/elem', SectionComponent\SectionElemViewComponent::class)->name('view.elem');
-            });
+            // Route::group(['prefix' => 'sections', 'as' => 'sections.'], function (){
+            //     Route::get('', SectionComponent\SectionViewComponent::class)->name('view');
+            //     Route::get('/elem', SectionComponent\SectionElemViewComponent::class)->name('view.elem');
+            // });
 
-            Route::group(['prefix' => 'prospectuses', 'as' => 'prospectuses.'], function (){
-                Route::get('', ProspectusComponent\ProspectusViewComponent::class)->name('view');
-                // Route::get('/create', SubjectComponent\SubjectAddComponent::class)->name('create');
-            });
+            // Route::group(['prefix' => 'prospectuses', 'as' => 'prospectuses.'], function (){
+            //     Route::get('', ProspectusComponent\ProspectusViewComponent::class)->name('view');
+            //     Route::get('/create', SubjectComponent\SubjectAddComponent::class)->name('create');
+            // });
 
             Route::group(['prefix' => 'subjects', 'as' => 'subjects.'], function (){
                 Route::get('', SubjectComponent\SubjectViewComponent::class)->name('view');
@@ -112,6 +112,13 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
         });
     });
     // end admin
+
+    // admin and student
+    Route::middleware(['role:admin|student'])->group(function (){
+        Route::get('/sections', SectionComponent\SectionViewComponent::class)->name('sections.view');
+        Route::get('/prospectuses', ProspectusComponent\ProspectusViewComponent::class)->name('prospectuses.view');
+    });
+    // end
 
     // start student
     Route::middleware(['role:student'])->group(function (){

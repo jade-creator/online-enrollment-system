@@ -14,9 +14,11 @@ use Livewire\WithPagination;
 use App\Traits\WithBulkActions;
 use App\Traits\WithFilters;
 use App\Traits\WithSorting;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class SectionViewComponent extends Component
 {
+    use AuthorizesRequests;
     use WithBulkActions, WithSorting, WithPagination, WithFilters;
 
     public Section $section;
@@ -195,6 +197,8 @@ class SectionViewComponent extends Component
 
     public function updateSchedule()
     {
+        $this->authorize('create', Section::class);
+
         $this->validate([
             'schedule.start_time_monday' => ['nullable'],
             'schedule.end_time_monday' => ['nullable', 'after:schedule.start_time_monday'],
@@ -241,6 +245,8 @@ class SectionViewComponent extends Component
 
     public function updatedAddingSchedule($value) 
     {
+        $this->authorize('create', Section::class);
+
         if (!$value) {
             $this->resetFields();
             $this->fill([ 'schedule' => new Schedule() ]);

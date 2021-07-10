@@ -164,7 +164,7 @@
                         </li>
 
                         <li title="Sections">
-                            <a href="{{route('admin.sections.view')}}" class="{{ request()->is('admin/sections*') || request()->is('admin/sections') ? 'text-indigo-500' : 'text-gray-800'}} h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700">
+                            <a href="{{route('sections.view')}}" class="{{ request()->is('sections/*') || request()->is('sections') ? 'text-indigo-500' : 'text-gray-800'}} h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700">
                                 <span class="inline-flex justify-center items-center ml-3 pl-0.5">
                                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" width="22" height="24" stroke="currentColor" id="library"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path></svg>
                                 </span>
@@ -173,7 +173,7 @@
                         </li>
 
                         <li title="Prospectus">
-                            <a href="{{route('admin.prospectuses.view')}}" class="{{ request()->is('admin/prospectus/*') || request()->is('admin/prospectus') ? 'text-indigo-500' : 'text-gray-800'}} h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700">
+                            <a href="{{route('prospectuses.view')}}" class="{{ request()->is('prospectuses/*') || request()->is('prospectuses') ? 'text-indigo-500' : 'text-gray-800'}} h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700">
                                 <span class="inline-flex justify-center items-center ml-3 pl-0.5">
                                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" width="22" height="24" stroke="currentColor" id="library"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path></svg>
                                 </span>
