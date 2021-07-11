@@ -120,6 +120,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
     Route::middleware(['role:admin|student'])->group(function (){
         Route::get('/sections', SectionComponent\SectionViewComponent::class)->name('sections.view');
         Route::get('/prospectuses', ProspectusComponent\ProspectusViewComponent::class)->name('prospectuses.view');
+        Route::get('/pre-registration/{regId}', Student\PreRegistrationComponent::class)->name('pre.registration.view');
     });
     // end
 

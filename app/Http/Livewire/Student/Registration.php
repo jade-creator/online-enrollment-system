@@ -87,12 +87,12 @@ class Registration extends Component
         $this->registration->prospectus_id = $this->prospectus->id;
         $this->registration->save();
 
-        $student = Student::find(Auth::user()->student->id);
+        // $student = Student::find(Auth::user()->student->id);
 
-        if (!$student->isStudent) {
-            $student->isStudent = true;
-            $student->save();
-        }
+        // if (!$student->isStudent) {
+        //     $student->isStudent = true;
+        //     $student->save();
+        // }
 
         return redirect(route('student.registration'));
     }
