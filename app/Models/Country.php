@@ -9,7 +9,7 @@ class Country extends Model
 {
     use HasFactory;
 
-    public function detail(){
-        return $this->belongsTo(Detail::class);
+    public function details(){
+        return $this->hasMany(Detail::class);
     }
 }

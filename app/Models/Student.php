@@ -9,6 +9,15 @@ class Student extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'custom_id',
+        'user_id',
+    ];
+
+    public function getCustomStudentIdAttribute() { return
+        "STUD {$this->custom_id}";
+    }
+
     public function registrations() { return
         $this->hasMany(Registration::class);
     }
@@ -24,9 +33,4 @@ class Student extends Model
     public function attendedSchool(){
         return $this->hasOne(AttendedSchool::class);
     }
-
-    protected $fillable = [
-        'custom_id',
-        'user_id',
-    ];
 }

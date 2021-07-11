@@ -8,6 +8,23 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Person extends Model
 {
     use HasFactory;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'firstname',
+        'middlename',
+        'lastname',
+        'suffix',
+        'isCompleteDetail',
+    ];
+
+    public function getFullNameAttribute() { return
+        "{$this->firstname} {$this->middlename} {$this->lastname}";
+    }
     
     public function user(){
         return $this->hasOne(User::class);
@@ -24,23 +41,4 @@ class Person extends Model
     public function detail(){
         return $this->hasOne(Detail::class);
     }
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'firstname',
-        'middlename',
-        'lastname',
-        'suffix',
-        'isCompleteDetail',
-        // 'gender',
-        // 'civil_status',
-        // 'religion',
-        // 'nationality',
-        // 'birthdate',
-        // 'birthplace',
-        // 'user_id',
-    ];
 }

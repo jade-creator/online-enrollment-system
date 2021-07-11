@@ -10,6 +10,10 @@ class Strand extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public function prospectuses() { return
+        $this->belongsToMany(Prospectus::class);
+    }
+
     public function track() { return
         $this->belongsTo(Track::class);
     }
