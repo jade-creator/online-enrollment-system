@@ -28,14 +28,16 @@ class UsersExport implements FromQuery, WithHeadings, WithMapping
         return [
             'name',
             'email',
+            'role',
         ];
     }
 
     public function map($user): array
     {
         return [
-            $user->name,
-            $user->email,
+            $user->name ?? 'N/A',
+            $user->email ?? 'N/A',
+            $user->role->name ?? 'N/A',
         ];
     }
 }

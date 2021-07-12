@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\SectionComponent;
 
+use App\Exports\SectionsExport;
 use App\Models\Level;
 use App\Models\Program;
 use App\Models\Prospectus;
@@ -214,8 +215,6 @@ class SectionViewComponent extends Component
 
         $this->schedule->save();
 
-        // \Debugbar::info($this->schedule);
-
         $this->resetFields();
         $this->fill([ 'addingSchedule' => false ]);
     }
@@ -279,12 +278,18 @@ class SectionViewComponent extends Component
         $this->resetPage();
     }
 
-    public function updatingPaginateValue() { $this->resetPage(); }
+    public function updatingProgramId() { $this->resetPage(); }
+
+    public function updatingTrackId() { $this->resetPage(); }
+
+    public function updatingStrandId() { $this->resetPage(); }
+
+    public function updatingTermId() { $this->resetPage(); }
 
     public function fileExport() 
     {
         $this->confirmingExport = false;
-        // return (new UsersExport($this->checkedUsers))->download('users-collection.xlsx');
+        return (new SectionsExport($this->selected))->download('sections-collection.xlsx');
     }    
 
     public function paginationView() { return 

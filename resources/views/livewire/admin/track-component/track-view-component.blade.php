@@ -49,7 +49,9 @@
 
             <x-slot name="body">
                 @forelse ($tracks as $track)
-                    <div class="w-full p-2 my-1 rounded-md shadow hover:shadow-md @if ($this->isSelected($track->id)) bg-gray-200 @else bg-white @endif border-t border-l border-r border-gray-200 border-opacity-80">
+                    <div class="{{ $this->isSelected($track->id) ? 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-gray-200 border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer' 
+                        : 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-white border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer' }}">
+
                         <div class="grid grid-cols-12 gap-2">
                             <div class="col-span-12 md:col-span-5 truncate font-bold text-xs">
                                 <div class="flex items-center">

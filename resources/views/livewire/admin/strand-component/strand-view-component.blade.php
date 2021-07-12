@@ -56,7 +56,9 @@
                     <input type="checkbox" wire:model="selectPage" class="cursor-pointer border-gray-400 focus:outline-none focus:ring-transparent mx-5 rounded-sm" title="Select Displayed Data">
                     <x-table.sort-button nameButton="code" event="sortFieldSelected('code')"/>
                 </div>
-                <x-table.sort-button nameButton="strand" event="sortFieldSelected('strand')" class="col-span-6"/>
+                <div class="col-span-6">
+                    <x-table.sort-button nameButton="strand" event="sortFieldSelected('strand')"/>
+                </div>
                 <div class="col-span-1">
                     <x-table.sort-button nameButton="latest" event="sortFieldSelected('created_at')"/>
                 </div>
@@ -64,7 +66,9 @@
 
             <x-slot name="body">
                 @forelse ($strands as $strand)
-                    <div class="w-full p-2 my-1 rounded-md shadow hover:shadow-md @if ($this->isSelected($strand->id)) bg-gray-200 @else bg-white @endif border-t border-l border-r border-gray-200 border-opacity-80">
+                    <div class="{{ $this->isSelected($strand->id) ? 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-gray-200 border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer' 
+                        : 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-white border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer' }}">
+
                         <div class="grid grid-cols-12 gap-2">
                             <div class="col-span-12 md:col-span-5 truncate font-bold text-xs">
                                 <div class="flex items-center">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\PreEnrollmentComponent;
 
+use App\Exports\RegistrationsExport;
 use App\Models\Level;
 use App\Models\Status;
 use App\Models\Registration;
@@ -92,7 +93,7 @@ class PreEnrollmentViewComponent extends Component
     public function fileExport() 
     {
         $this->confirmingExport = false;
-        // return (new UsersExport($this->checkedUsers))->download('users-collection.xlsx');
+        return (new RegistrationsExport($this->selected))->download('registrations-collection.xlsx');
     }    
 
     public function paginationView() { return 

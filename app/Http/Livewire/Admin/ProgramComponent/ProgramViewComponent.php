@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\ProgramComponent;
 
+use App\Exports\ProgramsExport;
 use App\Models\Program;
 use App\Models\Level;
 use App\Models\Term;
@@ -102,7 +103,7 @@ class ProgramViewComponent extends Component
     public function fileExport() 
     {
         $this->confirmingExport = false;
-        // return (new UsersExport($this->checkedUsers))->download('users-collection.xlsx');
+        return (new ProgramsExport($this->selected))->download('programs-collection.xlsx');
     }    
 
     public function paginationView() { return 

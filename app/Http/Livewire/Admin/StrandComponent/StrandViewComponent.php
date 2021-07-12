@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\StrandComponent;
 
+use App\Exports\StrandsExport;
 use App\Models\Strand;
 use App\Models\Track;
 use Livewire\Component;
@@ -98,7 +99,7 @@ class StrandViewComponent extends Component
     public function fileExport() 
     {
         $this->confirmingExport = false;
-        // return (new UsersExport($this->checkedUsers))->download('users-collection.xlsx');
+        return (new StrandsExport($this->selected))->download('strands-collection.xlsx');
     }    
 
     public function paginationView() { return 

@@ -52,13 +52,15 @@
 
             <x-slot name="body">
                 @forelse ($programs as $program)
-                    <div class="w-full p-2 my-1 rounded-md shadow hover:shadow-md @if ($this->isSelected($program->id)) bg-gray-200 @else bg-white @endif border-t border-l border-r border-gray-200 border-opacity-80">
+                    <div class="{{ $this->isSelected($program->id) ? 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-gray-200 border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer' 
+                        : 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-white border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer' }}">
+
                         <div class="grid grid-cols-12 gap-2">
                             <div class="col-span-12 md:col-span-2 truncate font-bold text-xs">
                                 <div class="flex items-center">
                                     <input wire:loading.attr="disabled" type="checkbox" id="{{ $program->id }}" value="{{ $program->id }}" wire:model="selected" class="cursor-pointer border-gray-500 border-opacity-50 focus:outline-none focus:ring focus:ring-transparent ml-3 mr-5 rounded-sm">
                                     <div class="h-10 flex items-center">
-                                        {{ $program->code }}
+                                        {{ $program->code ?? 'N/A' }}
                                     </div>
                                 </div>
                             </div>

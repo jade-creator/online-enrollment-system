@@ -2,12 +2,13 @@
 
 namespace App\Http\Livewire\Admin\ProspectusComponent;
 
+use App\Exports\SubjectsExport;
 use App\Models\Level;
 use App\Models\Program;
 use App\Models\Prospectus;
 use App\Models\Subject;
 use App\Models\Strand;
-use App\Traits\WithBulkActions;
+// use App\Traits\WithBulkActions;
 use App\Traits\WithFilters;
 use App\Traits\WithSorting;
 use Livewire\Component;
@@ -17,7 +18,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class ProspectusViewComponent extends Component
 {
     use AuthorizesRequests;
-    use WithBulkActions, WithSorting, WithPagination, WithFilters;
+    use WithSorting, WithPagination, WithFilters;
 
     public int $paginateValue = 10;
     public bool $confirmingExport = false, $addingSubjects = false;
@@ -132,12 +133,6 @@ class ProspectusViewComponent extends Component
     }
 
     public function updatingPaginateValue() { $this->resetPage(); }
-
-    public function fileExport() 
-    {
-        $this->confirmingExport = false;
-        // return (new UsersExport($this->checkedUsers))->download('users-collection.xlsx');
-    }    
 
     public function paginationView() { return 
         'partials.pagination-link'; 
