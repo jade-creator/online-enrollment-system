@@ -69,7 +69,9 @@
 
             <x-slot name="body">
                 @forelse ($users as $user)
-                    <div class="w-full p-2 my-1 rounded-md shadow hover:shadow-md @if ($this->isSelected($user->id)) bg-gray-200 @else bg-white @endif border-t border-l border-r border-gray-200 border-opacity-80">
+                    <div class="{{ $this->isSelected($user->id) ? 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-gray-200 border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer' 
+                        : 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-white border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer' }}">
+
                         <div class="grid grid-cols-12 gap-2">
                             <div class="col-span-12 md:col-span-5 truncate font-bold text-xs">
                                 <div class="flex items-center">
@@ -80,14 +82,14 @@
                                         </div>
                                     @endif
                                     <div class="ml-4">
-                                        {{ $user->name }}
+                                        {{ $user->name ?? 'N/A'}}
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex items-center justify-start col-span-12 md:col-span-4 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $user->email }}</div>
+                            <div class="flex items-center justify-start col-span-12 md:col-span-4 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $user->email ?? 'N/A' }}</div>
                             <div class="flex items-center justify-start col-span-12 md:col-span-2 truncate md:border-0 border-t border-gray-300 font-bold text-xs">
                                 <span class="px-2 leading-5 rounded-md text-white @if ($user->role->name === 'admin') bg-gray-800 @else bg-indigo-800 @endif">
-                                    {{ $user->role->name }}
+                                    {{ $user->role->name ?? 'N/A' }}
                                 </span>
                             </div>
                             <div class="flex items-center justify-center col-span-12 md:col-span-1 md:border-0 border-t border-gray-300">

@@ -52,7 +52,9 @@
 
             <x-slot name="body">
                 @forelse ($subjects as $subject)
-                    <div class="w-full p-2 my-1 rounded-md shadow hover:shadow-md @if ($this->isSelected($subject->id)) bg-gray-200 @else bg-white @endif border-t border-l border-r border-gray-200 border-opacity-80">
+                    <div class="{{ $this->isSelected($subject->id) ? 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-gray-200 border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer' 
+                        : 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-white border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer' }}">
+                        
                         <div class="grid grid-cols-12 gap-2">
                             <div class="col-span-12 md:col-span-4 truncate font-bold text-xs">
                                 <div class="flex items-center">
@@ -238,7 +240,7 @@
                                 @foreach ($preRequisites as $index => $requisite)
                                     <div class="mr-2 my-2">
                                         <div class="flex">
-                                            <select wire:model="preRequisites.{{ $index }}" name="preRequisites[{{ $index }}]" class="w-full bg-white flex-1 p-2 tracking-wide border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
+                                            <select wire:model="preRequisites.{{ $index }}" name="preRequisites[{{ $index }}]" class="w-full bg-white flex-1 p-2 tracking-wide border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-l-md shadow-sm">
                                                 @forelse ($this->subjects as $subject)
                                                     @if ($loop->first)
                                                         <option value="">-- choose a subject --</option>
@@ -248,18 +250,27 @@
                                                     <option value="">No records</option>
                                                 @endforelse
                                             </select>
-                                            <x-jet-button class="bg-red-500 hover:red-700" wire:click.prevent="removeSubject({{ $index }})" wire:loading.attr="disabled">
-                                                {{ __('X') }}
-                                            </x-jet-button>
+                                            <button wire:click.prevent="removeSubject({{ $index }})" class="bg-red-500 hover:bg-red-700 items-center px-3 py-2 border border-transparent rounded-r-md font-semibold text-xs text-white focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                                 </svg>
+                                            </button>
                                         </div>
                                         <x-jet-input-error for="preRequisite" class="mt-2"/>
                                     </div>
                                 @endforeach
                             </div>
                         </div>
-                        <div class="mt-4">
-                            <x-jet-button class="ml-2 bg-indigo-500 hover:indigo-700" wire:click.prevent="addSubject" wire:loading.attr="disabled">
-                                {{ __('Add Pre Requisite') }}
+                        <div class="mt-4 flex">
+                            <x-jet-button class="flex items-end ml-2 border border-indigo-500 hover:bg-gray-200 text-indigo-500" wire:click.prevent="addSubject" wire:loading.attr="disabled">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                 </svg>
+                                <span>{{ __('Add Pre Requisite') }}</span>
                             </x-jet-button>
                             <x-jet-button class="ml-2 border-0 text-blue-500" wire:click.prevent="resetSubjects" wire:loading.attr="disabled">
                                 {{ __('Reset') }}

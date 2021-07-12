@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\TrackComponent;
 
+use App\Exports\TracksExport;
 use App\Models\Track;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -84,7 +85,7 @@ class TrackViewComponent extends Component
     public function fileExport() 
     {
         $this->confirmingExport = false;
-        // return (new UsersExport($this->checkedUsers))->download('users-collection.xlsx');
+        return (new TracksExport($this->selected))->download('tracks-collection.xlsx');
     }    
 
     public function paginationView() { return 

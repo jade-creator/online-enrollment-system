@@ -98,11 +98,12 @@
 
         <x-table.main>
             <x-slot name="paginationLink">
+                {{ $sections->links() }}
             </x-slot>
 
             <x-slot name="head">
                 <div class="col-span-3 flex" id="ID">
-                    <input type="checkbox" wire:model="selectPage" class="cursor-pointer border-gray-400 focus:outline-none focus:ring-transparent mx-5 rounded-sm" title="Select Displayed Data">
+                    <input @click.stop type="checkbox" wire:model="selectPage" class="cursor-pointer border-gray-400 focus:outline-none focus:ring-transparent mx-5 rounded-sm" title="Select Displayed Data">
                     <x-table.sort-button nameButton="ID" event="sortFieldSelected('ID')"/>
                 </div>
                 <div class="col-span-3" id="name">
@@ -118,7 +119,11 @@
             <x-slot name="body">
                     @forelse ($sections as $section)
                         <div id="{{ $section->id }}" x-data="{ open: false }">
-                            <div @click="open = ! open" class="w-full p-2 my-1 rounded-md shadow hover:shadow-md @if ($this->isSelected($section->id)) bg-gray-200 @else bg-white @endif border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer">
+                            <div @click="open = ! open" 
+                                 @click.away="open = false"
+                                 @close.stop="open = false"
+                                 class="{{ $this->isSelected($section->id) ? 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-gray-200 border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer' 
+                                 : 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-white border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer' }}">
                                 <div class="grid grid-cols-12 gap-2">
                                     <div class="col-span-12 md:col-span-3 truncate font-bold text-xs">
                                         <div class="flex items-center">
@@ -186,6 +191,12 @@
                                 </div>
                             </div>
                             <div x-show="open" 
+                                 x-transition:enter="transition ease-out duration-300"
+                                 x-transition:enter-start="opacity-0 transform scale-90"
+                                 x-transition:enter-end="opacity-100 transform scale-100"
+                                 x-transition:leave="transition ease-in duration-300"
+                                 x-transition:leave-start="opacity-100 transform scale-100"
+                                 x-transition:leave-end="opacity-0 transform scale-90"
                                  class="w-full py-2 px-4 my-1 rounded shadow hover:shadow-md bg-white border-t border-l border-r border-gray-200 border-opacity-80"
                                  x-cloak>
 

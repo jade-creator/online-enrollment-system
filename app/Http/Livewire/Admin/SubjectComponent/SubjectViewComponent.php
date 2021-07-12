@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\SubjectComponent;
 
+use App\Exports\SubjectsExport;
 use App\Models\Subject;
 use App\Traits\WithBulkActions;
 use App\Traits\WithFilters;
@@ -111,7 +112,7 @@ class SubjectViewComponent extends Component
     public function fileExport() 
     {
         $this->confirmingExport = false;
-        // return (new UsersExport($this->checkedUsers))->download('users-collection.xlsx');
+        return (new SubjectsExport($this->selected))->download('subjects-collection.xlsx');
     }    
 
     public function paginationView() { return 

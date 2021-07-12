@@ -2,32 +2,33 @@
 
 namespace App\Http\Livewire\Admin\FeeComponent;
 
+use App\Exports\FeesExport;
 use App\Models\Fee;
 use App\Models\Level;
 use App\Models\Program;
 use App\Models\Prospectus;
 use App\Models\Strand;
 use Livewire\Component;
-use Livewire\WithPagination;
 use App\Traits\WithBulkActions;
-use App\Traits\WithFilters;
-use App\Traits\WithSorting;
+// use App\Traits\WithFilters;
+// use App\Traits\WithSorting;
 
 class FeeViewComponent extends Component
 {
     public Fee $fee;
-    public int $paginateValue = 10;
+    public $search = '', $paginateValue = 1;
     public bool $applyToAll = false, $confirmingExport = false, $addingFees = false;
     public $prospectus, $levelId, $programId, $strandId, $termId;
 
-    use WithBulkActions, WithSorting, WithPagination, WithFilters;
+    use WithBulkActions;
+    // use WithSorting, WithFilters;
 
     protected $queryString = [
         'search' => [ 'except' => '' ],
-        'dateMin' => [ 'except' => null ],
-        'dateMax',
-        'sortBy' => [ 'except' => 'created_at' ],
-        'sortDirection' => [ 'except' => 'desc' ],
+        // 'dateMin' => [ 'except' => null ],
+        // 'dateMax',
+        // 'sortBy' => [ 'except' => 'created_at' ],
+        // 'sortDirection' => [ 'except' => 'desc' ],
         'levelId' => [ 'except' => '' ],
         'programId' => [ 'except' => '' ],
         'strandId' => [ 'except' => '' ],
@@ -52,10 +53,10 @@ class FeeViewComponent extends Component
         ];
     }
 
-    protected array $allowedSorts = [
-        'id',
-        'name',
-    ];
+    // protected array $allowedSorts = [
+    //     'id',
+    //     'name',
+    // ];
 
     public function mount() 
     {
@@ -140,19 +141,11 @@ class FeeViewComponent extends Component
             'strandId' => '',
             'termId' => '',
         ]);
-
-        $this->resetPage();
     }
-
-    public function updatingPaginateValue() { $this->resetPage(); }
 
     public function fileExport() 
     {
         $this->confirmingExport = false;
-        // return (new UsersExport($this->checkedUsers))->download('users-collection.xlsx');
+        return (new FeesExport($this->selected))->download('fees-collection.xlsx');
     }    
-
-    public function paginationView() { return 
-        'partials.pagination-link'; 
-    }
 }
