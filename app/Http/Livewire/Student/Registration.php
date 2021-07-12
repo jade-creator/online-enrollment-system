@@ -7,12 +7,14 @@ use App\Models\Program;
 use App\Models\Prospectus;
 use App\Models;
 use App\Models\Strand;
-use App\Models\Student;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Registration extends Component
 {
+    use AuthorizesRequests;
+
     public Models\Registration $registration;
     public $steps = 2, $currentStep = 1;
     public $prospectus, $levelId, $programId, $strandId, $termId;
@@ -83,6 +85,8 @@ class Registration extends Component
 
     public function save()
     {
+        $this->authorize('create', Registration::class);
+
         $this->registration->student_id = Auth::user()->student->id;
         $this->registration->prospectus_id = $this->prospectus->id;
         $this->registration->save();

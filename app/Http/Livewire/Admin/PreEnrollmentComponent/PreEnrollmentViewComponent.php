@@ -1,21 +1,20 @@
 <?php
 
-namespace App\Http\Livewire\Student;
+namespace App\Http\Livewire\Admin\PreEnrollmentComponent;
 
-use App\Models\Registration;
+use App\Models\Level;
 use App\Models\Status;
+use App\Models\Registration;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Traits\WithFilters;
 use App\Traits\WithBulkActions;
 use App\Traits\WithSorting;
-use Illuminate\Support\Facades\Auth;
 
-class RegistrationViewComponent extends Component
+class PreEnrollmentViewComponent extends Component
 {
     use WithBulkActions, WithSorting, WithPagination, WithFilters;
 
-    public Registration $registration;
     public int $paginateValue = 10;
     public bool $confirmingExport = false;
     public $statusId = '';
@@ -31,6 +30,7 @@ class RegistrationViewComponent extends Component
 
     protected $updatesQueryString = [
         'search',
+        'statusId',
     ];
 
     protected $allowedSorts = [
@@ -40,7 +40,7 @@ class RegistrationViewComponent extends Component
     protected $listeners = ['DeselectPage' => 'updatedSelectPage'];
 
     public function render() { return 
-        view('livewire.student.registration-view-component', ['registrations' => $this->rows]);
+        view('livewire.admin.pre-enrollment-component.pre-enrollment-view-component', ['registrations' => $this->rows]);
     }
 
     public function getRowsProperty() { return
@@ -50,17 +50,27 @@ class RegistrationViewComponent extends Component
     public function getRowsQueryProperty() 
     {
         return Registration::search($this->search)
-            ->select(['id', 'isNew', 'status_id', 'section_id', 'prospectus_id', 'created_at'])
-            ->where('student_id', Auth::user()->student->id)
+            ->select(['id', 'isNew', 'status_id', 'section_id', 'student_id', 'prospectus_id', 'created_at'])
             ->when(!empty($this->statusId), function ($query) {
                 return $query->where('status_id', $this->statusId);
             })
             ->with([
+                'student.user.person',
                 'status:id,name',
                 'section:id,name',
                 'prospectus:id,level_id',
                 'prospectus.level:id,level'
             ])
+            ->when(!empty($this->search), function($query) {
+                return $query->orWhereHas('student', function($query) {
+                            return $query->where('custom_id', 'LIKE', '%'.$this->search.'%');
+                        })
+                        ->orWhereHas('student.user.person', function($query) {
+                            return $query->where('firstname', 'LIKE', '%'.$this->search.'%')
+                                ->orWhere('middlename', 'LIKE', '%'.$this->search.'%')
+                                ->orWhere('lastname', 'LIKE', '%'.$this->search.'%');
+                        });
+            })
             ->orderBy($this->sortBy, $this->sortDirection)
             ->when(!is_null($this->dateMin), function($query) {
                 return $query->whereBetween('created_at', [$this->dateMin, $this->dateMax]);
@@ -71,7 +81,13 @@ class RegistrationViewComponent extends Component
         Status::get(['id', 'name']);
     }
 
+    public function getLevelsProperty() { return
+        Level::get(['id', 'level']);
+    }
+
     public function updatingPaginateValue() { $this->resetPage(); }
+
+    public function updatingStatusId() { $this->resetPage(); }
 
     public function fileExport() 
     {
@@ -82,5 +98,4 @@ class RegistrationViewComponent extends Component
     public function paginationView() { return 
         'partials.pagination-link'; 
     }
-
 }

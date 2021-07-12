@@ -2,7 +2,7 @@
     <div class="py-10">
         <div class="flex items-center justify-between">
             <p class="font-bold text-lg">Pre Registration</p>
-            <x-jet-button class="ml-2 bg-indigo-700 hover:bg-indigo-800">
+            <x-jet-button wire:click.prevent="createPDF" wire:loading.attr="disabled" class="ml-2 bg-indigo-700 hover:bg-indigo-800">
                 {{ __('Export to PDF')}}
             </x-jet-button>
         </div>
@@ -153,21 +153,23 @@
     </div>
 
     <div class="w-full mb-10 flex items-center justify-start">
-        @if ($registration->status->name == 'pending')
-            <x-jet-button class="ml-2 bg-indigo-500 hover:bg-indigo-700" wire:click.prevent="$toggle('enrollingStudent')" wire:loading.attr="disabled">
-                {{ __('Enroll') }}
+        @can('update', $registration)
+            @if ($registration->status->name == 'pending')
+                <x-jet-button class="ml-2 bg-indigo-500 hover:bg-indigo-700" wire:click.prevent="$toggle('enrollingStudent')" wire:loading.attr="disabled">
+                    {{ __('Enroll') }}
+                </x-jet-button>
+            @else
+                <x-jet-button class="ml-2 bg-yellow-500 hover:bg-yellow-700" wire:click.prevent="pending" wire:loading.attr="disabled">
+                    {{ __('Pending') }}
+                </x-jet-button>
+            @endif
+            <x-jet-button class="ml-2 bg-red-500 hover:bg-red-700" wire:click.prevent="reject" wire:loading.attr="disabled">
+                {{ __('Reject') }}
             </x-jet-button>
-        @else
-            <x-jet-button class="ml-2 bg-yellow-500 hover:bg-yellow-700" wire:click.prevent="pending" wire:loading.attr="disabled">
-                {{ __('Pending') }}
-            </x-jet-button>
-        @endif
-        <x-jet-button class="ml-2 bg-red-500 hover:bg-red-700" wire:click.prevent="reject" wire:loading.attr="disabled">
-            {{ __('Reject') }}
-        </x-jet-button>
+        @endcan
     </div>
 
-    <div wire:loading wire:target="enroll, pending, reject, enrollingStudent">
+    <div wire:loading wire:target="enroll, pending, reject, enrollingStudent, createPDF">
         @include('partials.loading')
     </div>
 

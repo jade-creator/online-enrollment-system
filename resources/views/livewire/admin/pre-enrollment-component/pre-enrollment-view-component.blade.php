@@ -24,11 +24,28 @@
     <!-- Module -->
     <div class="min-h-screen w-full py-8 px-8">
 
-        <x-table.title tableTitle="All Registrations" 
-            :isSelectedAll="$this->selectAll" 
-            :count="count($this->selected)" 
-            :route="route('student.registrations.create')" 
-            routeTitle="Add Registration"/>
+        <div class="mb-4 pb-3 border-b border-gray-200">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center justify-between">
+                    <div class="text-2xl font-bold text-gray-500">Pre Enrollment</div>
+        
+                    @if ( count($this->selected) > 0 && !$this->selectAll )
+                        <div class="px-2 text-green-600 font-bold">{{ __('[')}}
+                            <span>{{ count($this->selected) }}</span>
+                            <span>{{ __('selected ]')}}</span>
+                        </div>
+                    @endif
+        
+                    @if ( $this->selectAll )
+                        <div class="px-2 text-green-600 font-bold">{{ __('[')}}
+                            <span>{{ __('selected all ')}}</span>
+                            <span>{{ count($this->selected) }}</span>
+                            <span>{{ __(' records ]')}}</span>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
 
         <x-table.main>
             <x-slot name="paginationLink">
@@ -40,10 +57,10 @@
                     <input type="checkbox" wire:model="selectPage" class="cursor-pointer border-gray-400 focus:outline-none focus:ring-transparent mx-5 rounded-sm" title="Select Displayed Data">
                     <x-table.sort-button nameButton="ID" event="sortFieldSelected('id')"/>
                 </div>
-                <x-table.column-title columnTitle="student type" class="col-span-2"/>
-                <x-table.column-title columnTitle="status" class="col-span-2"/>
+                <x-table.column-title columnTitle="name" class="col-span-3"/>
+                <x-table.column-title columnTitle="level" class="col-span-2"/>
                 <x-table.column-title columnTitle="section" class="col-span-2"/>
-                <x-table.column-title columnTitle="prospectus" class="col-span-3"/>
+                <x-table.column-title columnTitle="status" class="col-span-2"/>
                 <div class="col-span-1">
                     <x-table.sort-button nameButton="latest" event="sortFieldSelected('created_at')"/>
                 </div>
@@ -51,21 +68,22 @@
 
             <x-slot name="body">
                 @forelse ($registrations as $registration)
-                    <div class="w-full p-2 my-1 rounded-md shadow hover:shadow-md @if ($this->isSelected($registration->id)) bg-gray-200 @else bg-white @endif border-t border-l border-r border-gray-200 border-opacity-80">
+                    <div class="{{ $this->isSelected($registration->id) ? 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-gray-200 border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer' 
+                        : 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-white border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer' }}">
+
                         <div class="grid grid-cols-12 gap-2">
                             <div class="col-span-12 md:col-span-2 truncate font-bold text-xs">
                                 <div class="flex items-center">
                                     <input wire:loading.attr="disabled" type="checkbox" id="{{ $registration->id }}" value="{{ $registration->id }}" wire:model="selected" class="cursor-pointer border-gray-500 border-opacity-50 focus:outline-none focus:ring focus:ring-transparent ml-3 mr-5 rounded-sm">
                                     <div class="h-10 flex items-center">
-                                        {{ $registration->id ?? 'N/A' }}
+                                        {{ $registration->student->isStudent ? $registration->student->custom_student_id : '--' }}
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex items-center justify-start col-span-12 md:col-span-2 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $registration->isNew ? 'Old' : 'New' }}</div>
-                            <div class="flex items-center justify-start col-span-12 md:col-span-2 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $registration->status->name }}</div>
-                            <div class="flex items-center justify-start col-span-12 md:col-span-2 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $registration->section->name ?? 'N/A' }}</div>
-                            <div class="flex items-center justify-start col-span-12 md:col-span-3 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $registration->prospectus->level->level ?? 'N/A' }}
-                            </div>
+                            <div class="flex items-center justify-start col-span-12 md:col-span-3 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $registration->student->user->person->full_name ?? 'N/A' }}</div>
+                            <div class="flex items-center justify-start col-span-12 md:col-span-2 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $registration->prospectus->level->level ?? 'N/A' }}</div>
+                            <div class="flex items-center justify-start col-span-12 md:col-span-2 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $registration->section->name ?? '--' }}</div>
+                            <div class="flex items-center justify-start col-span-12 md:col-span-2 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $registration->status->name ?? 'N/A' }}</div>
                             <div class="flex items-center justify-center col-span-12 md:col-span-1 md:border-0 border-t border-gray-300">
                                 @if ( !count($selected) > 0)
                                     <x-jet-dropdown align="right" width="60" dropdownClasses="z-10 shadow-2xl">
@@ -96,6 +114,21 @@
                                                                 <path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
                                                              </svg>
                                                             <p class="pl-2">{{ __('View')}}</p>
+                                                        </button>
+                                                    </a>
+                                                </div>
+                                                <div>
+                                                    <a role="button">
+                                                        <button class="flex w-full px-4 py-2 hover:bg-red-500 hover:text-white rounded-b-md outline-none focus:outline-none transition-all duration-300 ease-in-out" type="button">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                                <line x1="4" y1="7" x2="20" y2="7"></line>
+                                                                <line x1="10" y1="11" x2="10" y2="17"></line>
+                                                                <line x1="14" y1="11" x2="14" y2="17"></line>
+                                                                <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
+                                                                <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
+                                                             </svg>
+                                                            <p class="pl-2">{{ __('Delete')}}</p>
                                                         </button>
                                                     </a>
                                                 </div>
@@ -162,7 +195,7 @@
         @endif
     </div>
 
-    <div wire:loading wire:target="paginateValue, search, selectPage, previousPage, nextPage, confirmingExport, viewRegistration">
+    <div wire:loading wire:target="paginateValue, search, selectPage, previousPage, nextPage, confirmingExport">
         @include('partials.loading')
     </div>
 
