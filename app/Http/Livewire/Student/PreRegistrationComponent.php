@@ -4,12 +4,14 @@ namespace App\Http\Livewire\Student;
 
 use App\Models\Registration;
 use App\Models\Section;
-use App\Models\Student;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use PDF;
 
 class PreRegistrationComponent extends Component
 {
+    use AuthorizesRequests;
+
     public Registration $registration;
     public $enrollingStudent = false;
     public $regId, $studentId;
@@ -36,6 +38,8 @@ class PreRegistrationComponent extends Component
                             'section',
                         ])
                         ->findOrFail($this->regId);
+
+        $this->authorize('view', $this->registration);
     }
 
     public function render() { return 
@@ -44,11 +48,13 @@ class PreRegistrationComponent extends Component
 
     public function enroll()
     {
+        $this->authorize('update', $this->registration);
+
         $this->validate();
         $this->registration->status_id = 3;
         $this->registration->save();
 
-        $student = Student::find(Auth::user()->student->id);
+        $student = $this->registration->student;
 
         if (!$student->isStudent) {
             $student->isStudent = true;
@@ -60,6 +66,8 @@ class PreRegistrationComponent extends Component
 
     public function pending()
     {
+        $this->authorize('update', $this->registration);
+
         $this->registration->section_id = null;
         $this->registration->status_id = 2;
         $this->registration->save();
@@ -69,6 +77,8 @@ class PreRegistrationComponent extends Component
 
     public function reject()
     {
+        $this->authorize('update', $this->registration);
+
         $this->registration->section_id = null;
         $this->registration->status_id = 4;
         $this->registration->save();
@@ -76,11 +86,20 @@ class PreRegistrationComponent extends Component
         return redirect(route('pre.registration.view', ['regId' => $this->regId]));
     }
 
-    public function updatedenrollingStudent() 
-    {
+    public function updatedEnrollingStudent() 
+    { 
         $this->fill([
-            'studentId' => Auth::user()->student->custom_student_id,
+            'studentId' => $this->registration->student->custom_student_id,
         ]);
+    }
+
+    public function createPDF()
+    {
+        $pdf = PDF::loadView('pdf.registration', ['registration' => $this->registration])->output();
+        return response()->streamDownload(
+            fn () => print($pdf),
+            $this->registration->student->user->person->full_name . '.pdf'
+        );
     }
 
     public function getSectionsProperty() { return 

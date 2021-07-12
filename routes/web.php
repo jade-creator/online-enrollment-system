@@ -6,6 +6,7 @@ use App\Http\Livewire\Admin\FeeComponent                                        
 use App\Http\Livewire\Admin\UserComponent\UserAddComponent;
 use App\Http\Livewire\Admin\UserComponent\UserViewComponent;
 use App\Http\Livewire\Admin\ProgramComponent\ProgramViewComponent;
+use App\Http\Livewire\Admin\PreEnrollmentComponent;
 use App\Http\Livewire\Admin\SchoolYearComponent\SchoolYearViewComponent;
 use App\Http\Livewire\Admin\SectionComponent;
 use App\Http\Livewire\Admin\SpecializationComponent;
@@ -79,6 +80,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
             //     Route::get('/create', SubjectComponent\SubjectAddComponent::class)->name('create');
             // });
 
+            Route::get('/pre-enrollments', PreEnrollmentComponent\PreEnrollmentViewComponent::class)->name('pre.enrollments.view');
+
             Route::get('/fees', FeeComponent\FeeViewComponent::class)->name('fees.view');
 
             Route::group(['prefix' => 'subjects', 'as' => 'subjects.'], function (){
@@ -121,6 +124,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
         Route::get('/sections', SectionComponent\SectionViewComponent::class)->name('sections.view');
         Route::get('/prospectuses', ProspectusComponent\ProspectusViewComponent::class)->name('prospectuses.view');
         Route::get('/pre-registration/{regId}', Student\PreRegistrationComponent::class)->name('pre.registration.view');
+        Route::get('/pre-registration/{regId}/pdf', [PreEnrollmentComponent\PreEnrollmentPdfComponent::class, 'createPDF'])->name('pre.registration.pdf');
     });
     // end
 
