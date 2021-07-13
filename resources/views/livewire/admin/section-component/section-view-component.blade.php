@@ -157,32 +157,43 @@
                                                         <div class="block px-4 py-3 text-sm text-gray-500 font-bold">
                                                             {{ __('Actions') }}
                                                         </div>
-                                                        <div>
-                                                            <a href="#">
-                                                                <button class="flex w-full px-4 py-2 hover:bg-gray-200 outline-none focus:outline-none transition-all duration-300 ease-in-out" type="button">
+                                                        @if (auth()->user()->role->name == 'admin')
+                                                            <div>
+                                                                <button wire:click.prevent="viewSection({{ $section }})" class="flex w-full px-4 py-2 hover:bg-gray-200 outline-none focus:outline-none transition-all duration-300 ease-in-out">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                                        <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
-                                                                        <polyline points="7 11 12 16 17 11"></polyline>
-                                                                        <line x1="12" y1="4" x2="12" y2="16"></line>
+                                                                        <circle cx="12" cy="12" r="2"></circle>
+                                                                        <path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
                                                                     </svg>
                                                                     <p class="pl-2">{{ __('View')}}</p>
-                                                                </button>
-                                                            </a>
-                                                        </div>
-                                                        <div>
-                                                            <a href="#">
-                                                                <button class="flex w-full px-4 py-2 hover:bg-gray-200 rounded-b-md outline-none focus:outline-none transition-all duration-300 ease-in-out" type="button">
+                                                                </button>                                                        
+                                                            </div>
+                                                            <div>
+                                                                <button wire:click.prevent="removeConfirm({{ $section }})" class="flex w-full px-4 py-2 hover:bg-red-500 hover:text-white rounded-b-md outline-none focus:outline-none transition-all duration-300 ease-in-out">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                                        <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
-                                                                        <polyline points="7 11 12 16 17 11"></polyline>
-                                                                        <line x1="12" y1="4" x2="12" y2="16"></line>
+                                                                        <line x1="4" y1="7" x2="20" y2="7"></line>
+                                                                        <line x1="10" y1="11" x2="10" y2="17"></line>
+                                                                        <line x1="14" y1="11" x2="14" y2="17"></line>
+                                                                        <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
+                                                                        <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
                                                                     </svg>
                                                                     <p class="pl-2">{{ __('Delete')}}</p>
                                                                 </button>
-                                                            </a>
-                                                        </div>
+                                                            </div>
+                                                        @else
+                                                            <div>
+                                                                <button class="flex w-full px-4 py-2 bg-gray-200 outline-none focus:outline-none transition-all duration-300 ease-in-out">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                                        <rect x="5" y="11" width="14" height="10" rx="2"></rect>
+                                                                        <circle cx="12" cy="16" r="1"></circle>
+                                                                        <path d="M8 11v-4a4 4 0 0 1 8 0v4"></path>
+                                                                     </svg>
+                                                                    <p class="pl-2">{{ __('Administrative Access')}}</p>
+                                                                </button>                                                        
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                 </x-slot>
                                             </x-jet-dropdown>
@@ -240,17 +251,24 @@
                                             </p>
                                         </div>
                                         <div class="col-span-12 md:col-span-1 font-bold text-xs">
-                                            <button wire:click="updatedAddingSchedule({{ $schedule->id }})">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                    <path d="M3.5 5.5l1.5 1.5l2.5 -2.5"></path>
-                                                    <path d="M3.5 11.5l1.5 1.5l2.5 -2.5"></path>
-                                                    <path d="M3.5 17.5l1.5 1.5l2.5 -2.5"></path>
-                                                    <line x1="11" y1="6" x2="20" y2="6"></line>
-                                                    <line x1="11" y1="12" x2="20" y2="12"></line>
-                                                    <line x1="11" y1="18" x2="20" y2="18"></line>
-                                                </svg>
-                                            </button>
+                                            @if (auth()->user()->role->name == 'admin')
+                                                <button wire:click="updatedAddingSchedule({{ $schedule->id }})" class="btn hover:text-indigo-500 rounded-circle p-1 mx-1 hover focus:outline-none" data-toggle="tooltip" data-placement="top" title="Edit">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                        <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4"></path>
+                                                        <line x1="13.5" y1="6.5" x2="17.5" y2="10.5"></line>
+                                                    </svg>
+                                                </button>
+                                            @else
+                                                <button class="btn text-gray-400 rounded-circle p-1 mx-1 hover focus:outline-none" data-toggle="tooltip" data-placement="top" title="Lock">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                        <rect x="5" y="11" width="14" height="10" rx="2"></rect>
+                                                        <circle cx="12" cy="16" r="1"></circle>
+                                                        <path d="M8 11v-4a4 4 0 0 1 8 0v4"></path>
+                                                     </svg>
+                                                </button> 
+                                            @endif
                                         </div>
                                     @empty
                                         <div class="py-4 col-span-12 md:col-span-12 font-bold text-xs">
@@ -261,7 +279,7 @@
                             </div>
                         </div>
                     @empty  
-                        <x-table.no-result title="No sectionsdad found.🤔"/> 
+                        <x-table.no-result title="No sections found.🤔"/> 
                     @endforelse
             </x-slot>
         </x-table.main>
@@ -387,6 +405,56 @@
 
             <x-jet-button class="ml-2 bg-blue-500 hover:blue-700" wire:click="save" wire:loading.attr="disabled">
                 {{ __('Add') }}
+            </x-jet-button>
+        </x-slot>
+    </x-jet-dialog-modal>
+
+    <!-- View Section/s Confirmation Modal -->
+    <x-jet-dialog-modal wire:model="viewingSection">
+        <x-slot name="title">
+            {{ __('Section Details') }}
+        </x-slot>
+
+        <x-slot name="content">
+            <form>
+                <div class="grid grid-cols-8 gap-6">
+                    <div class="mt-4 col-span-4">
+                        <x-jet-label for="name" value="{{ __('Name') }}" />
+                        <x-jet-input wire:model.lazy="section.name" id="name" class="block mt-1 w-full" type="text" name="name" autofocus required/>
+                        <x-jet-input-error for="section.name" class="mt-2"/>
+                    </div>
+                    
+                    <div class="mt-4 col-span-4">
+                        <x-jet-label for="room" value="{{ __('Room') }}" />
+                        <select wire:model.lazy="section.room_id" name="room" class="w-full mt-1 bg-white flex-1 p-2 tracking-wide border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
+                            @forelse ($this->rooms as $room)
+                                @if ($loop->first)
+                                    <option value="">-- choose a room --</option>
+                                @endif
+                                <option value="{{ $room->id }}">{{ $room->name }}</option>
+                            @empty
+                                <option value="">No records</option>
+                            @endforelse
+                        </select>
+                        <x-jet-input-error for="section.room_id" class="mt-2"/>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <x-jet-label for="remarks" value="{{ __('Remarks') }}" />
+                    <textarea wire:model.lazy="section.remarks" id="remarks" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" type="text" name="remarks" autofocus required></textarea>
+                    <x-jet-input-error for="section.remarks" class="mt-2"/>
+                </div>
+            </form>
+        </x-slot>
+
+        <x-slot name="footer">
+            <x-jet-secondary-button wire:click="$toggle('viewingSection')" wire:loading.attr="disabled">
+                {{ __('Cancel') }}
+            </x-jet-secondary-button>
+
+            <x-jet-button class="ml-2 bg-blue-500 hover:blue-700" wire:click="updateSection" wire:loading.attr="disabled">
+                {{ __('Update') }}
             </x-jet-button>
         </x-slot>
     </x-jet-dialog-modal>

@@ -136,30 +136,27 @@
                                                             {{ __('Actions') }}
                                                         </div>
                                                         <div>
-                                                            <a href="#">
-                                                                <button class="flex w-full px-4 py-2 hover:bg-gray-200 outline-none focus:outline-none transition-all duration-300 ease-in-out" type="button">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                                        <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
-                                                                        <polyline points="7 11 12 16 17 11"></polyline>
-                                                                        <line x1="12" y1="4" x2="12" y2="16"></line>
-                                                                    </svg>
-                                                                    <p class="pl-2">{{ __('View')}}</p>
-                                                                </button>
-                                                            </a>
+                                                            <button wire:click.prevent="viewFee({{ $fee }})" class="flex w-full px-4 py-2 hover:bg-gray-200 outline-none focus:outline-none transition-all duration-300 ease-in-out">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                                    <circle cx="12" cy="12" r="2"></circle>
+                                                                    <path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
+                                                                 </svg>
+                                                                <p class="pl-2">{{ __('View')}}</p>
+                                                            </button> 
                                                         </div>
                                                         <div>
-                                                            <a href="#">
-                                                                <button class="flex w-full px-4 py-2 hover:bg-gray-200 rounded-b-md outline-none focus:outline-none transition-all duration-300 ease-in-out" type="button">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                                        <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
-                                                                        <polyline points="7 11 12 16 17 11"></polyline>
-                                                                        <line x1="12" y1="4" x2="12" y2="16"></line>
-                                                                    </svg>
-                                                                    <p class="pl-2">{{ __('Delete')}}</p>
-                                                                </button>
-                                                            </a>
+                                                            <button wire:click.prevent="removeConfirm({{ $fee }})" class="flex w-full px-4 py-2 hover:bg-red-500 hover:text-white rounded-b-md outline-none focus:outline-none transition-all duration-300 ease-in-out">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                                    <line x1="4" y1="7" x2="20" y2="7"></line>
+                                                                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                                                                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                                                                    <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
+                                                                    <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
+                                                                </svg>
+                                                                <p class="pl-2">{{ __('Delete')}}</p>
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </x-slot>
@@ -284,6 +281,39 @@
 
             <x-jet-button class="ml-2 bg-blue-500 hover:blue-700" wire:click="save" wire:loading.attr="disabled">
                 {{ __('Add') }}
+            </x-jet-button>
+        </x-slot>
+    </x-jet-dialog-modal>
+
+    <!-- Viewing Section/s Confirmation Modal -->
+    <x-jet-dialog-modal wire:model="viewingFee">
+        <x-slot name="title">
+            {{ __('Fee Maintenance') }}
+        </x-slot>
+
+        <x-slot name="content">
+            <form>
+                <div class="mt-4 col-span-6">
+                    <x-jet-label for="fee" value="{{ __('Name') }}" />
+                    <x-jet-input wire:model.defer="fee.name" id="fee" class="block mt-1 w-full" type="text" name="fee" autofocus required/>
+                    <x-jet-input-error for="fee.name" class="mt-2"/>
+                </div>
+
+                <div class="mt-4 col-span-6">
+                    <x-jet-label for="price" value="{{ __('Price') }}" />
+                    <x-jet-input wire:model.defer="fee.price" id="price" class="block mt-1 w-full" type="number" name="price" autofocus required/>
+                    <x-jet-input-error for="fee.price" class="mt-2"/>
+                </div>
+            </form>
+        </x-slot>
+
+        <x-slot name="footer">
+            <x-jet-secondary-button wire:click="$toggle('viewingFee')" wire:loading.attr="disabled">
+                {{ __('Cancel') }}
+            </x-jet-secondary-button>
+
+            <x-jet-button class="ml-2 bg-blue-500 hover:blue-700" wire:click="updateFee" wire:loading.attr="disabled">
+                {{ __('Update') }}
             </x-jet-button>
         </x-slot>
     </x-jet-dialog-modal>

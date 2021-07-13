@@ -36,11 +36,11 @@
             </x-slot>
 
             <x-slot name="head">
-                <div class="col-span-4 flex" id="code">
+                <div class="col-span-3 flex" id="code">
                     <input type="checkbox" wire:model="selectPage" class="cursor-pointer border-gray-400 focus:outline-none focus:ring-transparent mx-5 rounded-sm" title="Select Displayed Data">
                     <x-table.sort-button nameButton="code" event="sortFieldSelected('code')"/>
                 </div>
-                <div class="col-span-3" id="title">
+                <div class="col-span-4" id="title">
                     <x-table.sort-button nameButton="title" event="sortFieldSelected('title')"/>
                 </div>
                 <x-table.column-title columnTitle="Unit" class="col-span-2"/>
@@ -56,7 +56,7 @@
                         : 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-white border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer' }}">
                         
                         <div class="grid grid-cols-12 gap-2">
-                            <div class="col-span-12 md:col-span-4 truncate font-bold text-xs">
+                            <div class="col-span-12 md:col-span-3 truncate font-bold text-xs">
                                 <div class="flex items-center">
                                     <input wire:loading.attr="disabled" type="checkbox" id="{{ $subject->id }}" value="{{ $subject->id }}" wire:model="selected" class="cursor-pointer border-gray-500 border-opacity-50 focus:outline-none focus:ring focus:ring-transparent ml-3 mr-5 rounded-sm">
                                     <div class="h-10 flex items-center">
@@ -64,7 +64,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex items-center justify-start col-span-12 md:col-span-3 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $subject->title ?? 'N/A' }}</div>
+                            <div class="flex items-center justify-start col-span-12 md:col-span-4 truncate md:border-0 border-t border-gray-300 font-bold text-xs"><p class="truncate">{{ $subject->title ?? 'N/A' }}</p></div>
                             <div class="flex items-center justify-start col-span-12 md:col-span-2 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $subject->unit ?? 'N/A' }}</div>
                             <div class="flex items-center justify-start col-span-12 md:col-span-2 truncate md:border-0 border-t border-gray-300 font-bold text-xs">
                                 @forelse ($subject->requisites as $requisite)
@@ -96,30 +96,27 @@
                                                     {{ __('Actions') }}
                                                 </div>
                                                 <div>
-                                                    <a href="#">
-                                                        <button class="flex w-full px-4 py-2 hover:bg-gray-200 outline-none focus:outline-none transition-all duration-300 ease-in-out" type="button">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                                <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
-                                                                <polyline points="7 11 12 16 17 11"></polyline>
-                                                                <line x1="12" y1="4" x2="12" y2="16"></line>
-                                                            </svg>
-                                                            <p class="pl-2">{{ __('View')}}</p>
-                                                        </button>
-                                                    </a>
+                                                    <button wire:click.prevent="viewSubject({{ $subject }})" class="flex w-full px-4 py-2 hover:bg-gray-200 outline-none focus:outline-none transition-all duration-300 ease-in-out">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                            <circle cx="12" cy="12" r="2"></circle>
+                                                            <path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
+                                                         </svg>
+                                                        <p class="pl-2">{{ __('View')}}</p>
+                                                    </button> 
                                                 </div>
                                                 <div>
-                                                    <a href="#">
-                                                        <button class="flex w-full px-4 py-2 hover:bg-gray-200 rounded-b-md outline-none focus:outline-none transition-all duration-300 ease-in-out" type="button">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                                <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
-                                                                <polyline points="7 11 12 16 17 11"></polyline>
-                                                                <line x1="12" y1="4" x2="12" y2="16"></line>
-                                                            </svg>
-                                                            <p class="pl-2">{{ __('Delete')}}</p>
-                                                        </button>
-                                                    </a>
+                                                    <button wire:click.prevent="removeConfirm({{ $subject }})" class="flex w-full px-4 py-2 hover:bg-red-500 hover:text-white rounded-b-md outline-none focus:outline-none transition-all duration-300 ease-in-out">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                            <line x1="4" y1="7" x2="20" y2="7"></line>
+                                                            <line x1="10" y1="11" x2="10" y2="17"></line>
+                                                            <line x1="14" y1="11" x2="14" y2="17"></line>
+                                                            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
+                                                            <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
+                                                        </svg>
+                                                        <p class="pl-2">{{ __('Delete')}}</p>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </x-slot>
@@ -209,7 +206,7 @@
         </x-slot>
     </x-jet-dialog-modal>
 
-    <!-- Add Strand's Modal -->
+    <!-- Add subect's Modal -->
     <x-jet-dialog-modal wire:model="addingSubject">
         <x-slot name="title">
             {{ __('Subject Maintenance') }}
@@ -288,6 +285,89 @@
 
             <x-jet-button class="ml-2 bg-blue-500 hover:blue-700" wire:click="save" wire:loading.attr="disabled">
                 {{ __('Add') }}
+            </x-jet-button>
+        </x-slot>
+    </x-jet-dialog-modal>
+
+    <!-- Viewing subect's Modal -->
+    <x-jet-dialog-modal wire:model="viewingSubject">
+        <x-slot name="title">
+            {{ __('Subject Maintenance') }}
+        </x-slot>
+
+        <x-slot name="content">
+            <form>
+                <div class="grid grid-cols-8 gap-6">
+                    <div class="mt-3 col-span-8">
+                        <div class="mt-4">
+                            <x-jet-label for="code" value="{{ __('Code') }}" />
+                            <x-jet-input wire:model.lazy="subject.code" id="code" class="block mt-1 w-full" type="text" name="code" autofocus required/>
+                            <x-jet-input-error for="subject.code" class="mt-2"/>
+                        </div>
+                        <div class="mt-4">
+                            <x-jet-label for="title" value="{{ __('Title') }}" />
+                            <x-jet-input wire:model.lazy="subject.title" id="title" class="block mt-1 w-full" type="text" name="title" autofocus required/>
+                            <x-jet-input-error for="subject.title" class="mt-2"/>
+                        </div>
+                        <div class="mt-4">
+                            <x-jet-label for="unit" value="{{ __('Unit') }}" />
+                            <x-jet-input wire:model.lazy="subject.unit" id="title" class="block mt-1 w-full" type="number" name="unit" autofocus required/>
+                            <x-jet-input-error for="subject.unit" class="mt-2"/>
+                        </div>
+                        <div class="mt-4">
+                            <x-jet-label for="pre-requisite" value="{{ __('Pre-requisite') }}" />
+                            <div class="flex flex-wrap mt-2">
+                                @foreach ($preRequisites as $index => $requisite)
+                                    <div class="mr-2 my-2">
+                                        <div class="flex">
+                                            <select wire:model="preRequisites.{{ $index }}" name="preRequisites[{{ $index }}]" class="w-full bg-white flex-1 p-2 tracking-wide border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-l-md shadow-sm">
+                                                @forelse ($this->subjects as $subject)
+                                                    @if ($loop->first)
+                                                        <option value="">-- choose a subject --</option>
+                                                    @endif
+                                                    <option value="{{ $subject->id }}">{{ $subject->code }}</option>
+                                                @empty
+                                                    <option value="">No records</option>
+                                                @endforelse
+                                            </select>
+                                            <button wire:click.prevent="removeSubject({{ $index }})" class="bg-red-500 hover:bg-red-700 items-center px-3 py-2 border border-transparent rounded-r-md font-semibold text-xs text-white focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                                 </svg>
+                                            </button>
+                                        </div>
+                                        <x-jet-input-error for="preRequisite" class="mt-2"/>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <div class="mt-4 flex">
+                            <x-jet-button class="flex items-end ml-2 border border-indigo-500 hover:bg-gray-200 text-indigo-500" wire:click.prevent="addSubject" wire:loading.attr="disabled">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                 </svg>
+                                <span>{{ __('Add Pre Requisite') }}</span>
+                            </x-jet-button>
+                            <x-jet-button class="ml-2 border-0 text-blue-500" wire:click.prevent="resetSubjects" wire:loading.attr="disabled">
+                                {{ __('Reset') }}
+                            </x-jet-button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </x-slot>
+
+        <x-slot name="footer">
+            <x-jet-secondary-button wire:click="$toggle('viewingSubject')" wire:loading.attr="disabled">
+                {{ __('Cancel') }}
+            </x-jet-secondary-button>
+
+            <x-jet-button class="ml-2 bg-blue-500 hover:blue-700" wire:click="updateSubject" wire:loading.attr="disabled">
+                {{ __('Update') }}
             </x-jet-button>
         </x-slot>
     </x-jet-dialog-modal>

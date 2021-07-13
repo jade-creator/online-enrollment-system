@@ -7,6 +7,7 @@ use App\Models\Program;
 use App\Models\Level;
 use App\Models\Term;
 use App\Models\Prospectus;
+use App\Models\SchoolType;
 use App\Traits\WithBulkActions;
 use App\Traits\WithFilters;
 use App\Traits\WithSorting;
@@ -19,7 +20,7 @@ class ProgramViewComponent extends Component
 
     public Program $program;
     public int $paginateValue = 10;
-    public bool $confirmingExport = false, $addingProgram = false;
+    public bool $confirmingExport = false, $addingProgram = false, $viewingProgram = false;
 
     protected $queryString = [
         'search' => [ 'except' => '' ],
@@ -60,7 +61,7 @@ class ProgramViewComponent extends Component
         $this->rowsQuery->paginate($this->paginateValue);
     }
 
-    public function getRowsQueryProperty() 
+    public function getRowsQueryProperty()
     {
         return Program::search($this->search)
             ->select(['id', 'code', 'program', 'description', 'created_at'])
@@ -69,15 +70,55 @@ class ProgramViewComponent extends Component
                 fn ($query) => $query->whereBetween('created_at', [$this->dateMin, $this->dateMax]));
     }
 
-    public function save() 
+    public function updateProgram()
     {
         $this->validate();
         $this->program->save();
 
-        $collegeLevels = Level::orderBy('id', 'DESC')->take(4)->get();
+        $this->fill([ 'viewingProgram' => false ]);
+
+        $this->dispatchBrowserEvent('swal:success', [ 
+            'text' => "The program has been updated.",
+        ]);
+    }
+
+    public function removeConfirm() {
+        return $this->dispatchBrowserEvent('swal:modal', [ 
+            'title' => "Unable Action!",
+            'type' => "error",
+            'text' => "The system detected that this program is already added in a prospectus. There maybe students enrolled under it, this
+            action can produce inconsistent data.",
+        ]);
+    }
+
+    public function viewProgram(Program $program)
+    {
+        $this->fill([
+            'program' => $program,
+            'viewingProgram' => true,
+        ]);
+    }
+
+    public function save() 
+    {
+        $this->validate();
+
+        $type = SchoolType::where('type', 'College')
+            ->with('levels')
+            ->first();
+        
+        if (!$type) {
+            return $this->dispatchBrowserEvent('swal:modal', [ 
+                'title' => "Oops Sorry..",
+                'type' => "error",
+                'text' => "Internal Server Error 404.",
+            ]);
+        }
+
+        $this->program->save();
         $terms = Term::get(['id']);
 
-        $levelIds = $collegeLevels->pluck('id')->toArray();
+        $levelIds = $type->levels->pluck('id')->toArray();
         sort($levelIds);
 
         foreach ($levelIds as $key => $levelId) {
@@ -96,6 +137,24 @@ class ProgramViewComponent extends Component
         }
 
         $this->fill([ 'addingProgram' => false ]);
+    }
+
+    public function resetFields()
+    {
+        $this->fill([ 'program' => new Program() ]);
+        $this->resetValidation();
+    }
+
+    public function updatedViewingProgram($value)
+    {
+        if (!$value) {
+            $this->resetFields();
+        }
+    }
+
+    public function updatedAddingProgram()
+    {
+        $this->resetFields();
     }
 
     public function updatingPaginateValue() { $this->resetPage(); }

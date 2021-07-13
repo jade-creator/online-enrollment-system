@@ -155,7 +155,7 @@
     <div class="w-full mb-10 flex items-center justify-start">
         @can('update', $registration)
             @if ($registration->status->name == 'pending')
-                <x-jet-button class="ml-2 bg-indigo-500 hover:bg-indigo-700" wire:click.prevent="$toggle('enrollingStudent')" wire:loading.attr="disabled">
+                <x-jet-button wire:click.prevent="$toggle('enrollingStudent')" wire:loading.attr="disabled" class="ml-2 bg-indigo-500 hover:bg-indigo-700">
                     {{ __('Enroll') }}
                 </x-jet-button>
             @else
@@ -163,13 +163,13 @@
                     {{ __('Pending') }}
                 </x-jet-button>
             @endif
-            <x-jet-button class="ml-2 bg-red-500 hover:bg-red-700" wire:click.prevent="reject" wire:loading.attr="disabled">
+            <x-jet-button class="ml-2 bg-red-500 hover:bg-red-700" wire:click.prevent="rejectConfirm" wire:loading.attr="disabled">
                 {{ __('Reject') }}
             </x-jet-button>
         @endcan
     </div>
 
-    <div wire:loading wire:target="enroll, pending, reject, enrollingStudent, createPDF">
+    <div wire:loading wire:target="enroll, pending, rejectConfirm, enrollingStudent, createPDF">
         @include('partials.loading')
     </div>
 

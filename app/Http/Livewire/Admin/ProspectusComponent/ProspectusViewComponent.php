@@ -2,35 +2,24 @@
 
 namespace App\Http\Livewire\Admin\ProspectusComponent;
 
-use App\Exports\SubjectsExport;
 use App\Models\Level;
 use App\Models\Program;
 use App\Models\Prospectus;
 use App\Models\Subject;
 use App\Models\Strand;
-// use App\Traits\WithBulkActions;
-use App\Traits\WithFilters;
-use App\Traits\WithSorting;
 use Livewire\Component;
-use Livewire\WithPagination;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ProspectusViewComponent extends Component
 {
     use AuthorizesRequests;
-    use WithSorting, WithPagination, WithFilters;
 
-    public int $paginateValue = 10;
-    public bool $confirmingExport = false, $addingSubjects = false;
+    public Subject $subject;
+    public $addingSubjects = false;
     public $prospectus, $levelId, $programId, $strandId, $termId;
     public $selectedSubjects = [];
 
     protected $queryString = [
-        'search' => [ 'except' => '' ],
-        'dateMin' => [ 'except' => null ],
-        'dateMax',
-        'sortBy' => [ 'except' => 'created_at' ],
-        'sortDirection' => [ 'except' => 'desc' ],
         'levelId' => [ 'except' => '' ],
         'programId' => [ 'except' => '' ],
         'strandId' => [ 'except' => '' ],
@@ -38,24 +27,21 @@ class ProspectusViewComponent extends Component
     ];
 
     protected $updatesQueryString = [
-        'search',
         'levelId',
         'programId',
         'strandId',
         'termId',
     ];
 
-    protected $listeners = ['DeselectPage' => 'updatedSelectPage'];
-
-    protected array $allowedSorts = [
-        'code',
-        'title',
-    ];
+    protected $listeners = ['DeselectPage' => 'updatedSelectPage', 'removeItem'];
 
     public function mount() {
         $level = $this->levels->first();
 
-        $this->fill([ 'levelId' => $level->id, ]);
+        $this->fill([ 
+            'subject' => new Subject(), 
+            'levelId' => $level->id, 
+        ]);
     }
     
     public function render() { return
@@ -83,6 +69,23 @@ class ProspectusViewComponent extends Component
         return $this->prospectus;
     }
 
+    public function removeConfirm(Subject $subject) {
+        $this->subject = $subject;
+
+        $this->dispatchBrowserEvent('swal:confirmDelete', [ 
+            'type' => 'warning',
+            'title' => 'Are you sure?',
+            'text' => 'Please note that upon deletion it cannot be retrievable.',
+        ]);
+    }
+
+    public function removeItem()
+    {   
+        $this->prospectus->subjects()->detach($this->subject->id);
+
+        $this->fill([ 'subject' => new Subject() ]);
+    }
+
     public function dehydrate() {
         $this->fill([
             'programId' => $this->prospectus->program_id,
@@ -93,6 +96,14 @@ class ProspectusViewComponent extends Component
 
     public function addSubject()
     {
+        if (empty($this->selectedSubjects)) {
+            return $this->dispatchBrowserEvent('swal:modal', [ 
+                'title' => "Unable Action!",
+                'type' => "error",
+                'text' => "There are no subjects selected.",
+            ]);
+        }
+
         $this->authorize('create', Prospectus::class);
 
         $this->prospectus->subjects()->attach($this->selectedSubjects);
@@ -100,6 +111,10 @@ class ProspectusViewComponent extends Component
         $this->fill([
             'selectedSubjects' => [],
             'addingSubjects' => false,
+        ]);
+
+        $this->dispatchBrowserEvent('swal:success', [ 
+            'text' => "The prospectus has been updated.",
         ]);
     }
 
@@ -130,11 +145,5 @@ class ProspectusViewComponent extends Component
             'strandId' => '',
             'termId' => '',
         ]);
-    }
-
-    public function updatingPaginateValue() { $this->resetPage(); }
-
-    public function paginationView() { return 
-        'partials.pagination-link'; 
     }
 }

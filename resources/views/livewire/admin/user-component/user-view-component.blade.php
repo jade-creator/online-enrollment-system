@@ -41,12 +41,29 @@
 
     <!-- Module -->
     <div class="min-h-screen w-full py-8 px-8">
+        <div class="mb-4 pb-3 border-b border-gray-200">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center justify-between">
+                    <div class="text-2xl font-bold text-gray-500">All Users</div>
         
-        <x-table.title tableTitle="All Users" 
-            :isSelectedAll="$this->selectAll" 
-            :count="count($this->selected)" 
-            :route="route('admin.users.create')" 
-            routeTitle="Add User"/>
+                    @if ( count($this->selected) > 0 && !$this->selectAll )
+                        <div class="px-2 text-green-600 font-bold">{{ __('[')}}
+                            <span>{{ count($this->selected) }}</span>
+                            <span>{{ __('selected ]')}}</span>
+                        </div>
+                    @endif
+        
+                    @if ( $this->selectAll )
+                        <div class="px-2 text-green-600 font-bold">{{ __('[')}}
+                            <span>{{ __('selected all ')}}</span>
+                            <span>{{ count($this->selected) }}</span>
+                            <span>{{ __(' records ]')}}</span>
+                        </div>
+                    @endif
+                </div>
+                <button wire:click.prevent="$toggle('addingUser')" wire:loading.attr="disabled" class="focus:ring-2 focus:bg-blue-500 focus:ring-opacity-50 bg-blue-500 hover:bg-blue-600 text-white py-2.5 px-4 font-bold text-xs rounded-lg border border-white">Add User</button>
+            </div>
+        </div>
 
         <x-table.main>
             <x-slot name="paginationLink">
@@ -88,7 +105,8 @@
                             </div>
                             <div class="flex items-center justify-start col-span-12 md:col-span-4 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $user->email ?? 'N/A' }}</div>
                             <div class="flex items-center justify-start col-span-12 md:col-span-2 truncate md:border-0 border-t border-gray-300 font-bold text-xs">
-                                <span class="px-2 leading-5 rounded-md text-white @if ($user->role->name === 'admin') bg-gray-800 @else bg-indigo-800 @endif">
+                                <span class="{{ $user->role->name === 'admin' ? 'px-2 leading-5 rounded-md text-white bg-gray-800' 
+                                    : 'px-2 leading-5 rounded-md text-white bg-indigo-800'}}">
                                     {{ $user->role->name ?? 'N/A' }}
                                 </span>
                             </div>
@@ -223,6 +241,69 @@
 
             <x-jet-button class="ml-2 bg-blue-500 hover:blue-700" wire:click="fileExport" wire:loading.attr="disabled">
                 {{ __('Export') }}
+            </x-jet-button>
+        </x-slot>
+    </x-jet-dialog-modal>
+
+    <!-- Add Track's Modal -->
+    <x-jet-dialog-modal wire:model="addingUser">
+        <x-slot name="title">
+            {{ __('User Maintenance') }}
+        </x-slot>
+
+        <x-slot name="content">
+            <form>
+                <div class="grid grid-cols-8 gap-6">
+                    <div class="mt-3 col-span-8">
+                        <div class="mt-4">
+                            <x-jet-label for="role" value="{{ __('Role') }}" />
+                            <select name="role" id="role" class="w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" required wire:model.defer="role" wire:loading.attr="disabled">
+                                @forelse ($this->roles as $role)
+                                    @if ($loop->first)
+                                        <option value="">-- choose a role --</option>
+                                    @endif
+                                    <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                @empty
+                                    <option value="">No records found.</option>
+                                @endforelse
+                            </select>
+                            <x-jet-input-error for="role" class="mt-2"/>
+                        </div>
+                
+                        <div class="mt-4">
+                            <x-jet-label for="name" value="{{ __('Name') }}" />
+                            <x-jet-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" autofocus autocomplete="name" placeholder="eg. John Doe" required wire:model.defer="name" wire:loading.attr="disabled"/>
+                            <x-jet-input-error for="name" class="mt-2"/>
+                        </div>
+                
+                        <div class="mt-4">
+                            <x-jet-label for="email" value="{{ __('Email') }}" />
+                            <x-jet-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" placeholder="example@gmail.com" required wire:model.defer="email" wire:loading.attr="disabled"/>
+                            <x-jet-input-error for="email" class="mt-2"/>
+                        </div>
+                
+                        <div class="mt-4">
+                            <x-jet-label for="password" value="{{ __('Password') }}" />
+                            <x-jet-input id="password" class="block mt-1 w-full" type="password" name="password" autocomplete="new-password" required wire:model.defer="password" wire:loading.attr="disabled"/>
+                            <x-jet-input-error for="password" class="mt-2"/>
+                        </div>
+                
+                        <div class="mt-4">
+                            <x-jet-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
+                            <x-jet-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" autocomplete="new-password" required wire:model.defer="password_confirmation" wire:loading.attr="disabled"/>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </x-slot>
+
+        <x-slot name="footer">
+            <x-jet-secondary-button wire:click="$toggle('addingUser')" wire:loading.attr="disabled">
+                {{ __('Cancel') }}
+            </x-jet-secondary-button>
+
+            <x-jet-button class="ml-2 bg-blue-500 hover:blue-700" wire:click="save" wire:loading.attr="disabled">
+                {{ __('Add') }}
             </x-jet-button>
         </x-slot>
     </x-jet-dialog-modal>

@@ -3,7 +3,10 @@
 namespace App\Http\Livewire\Admin\StrandComponent;
 
 use App\Exports\StrandsExport;
+use App\Models\Prospectus;
+use App\Models\SchoolType;
 use App\Models\Strand;
+use App\Models\Term;
 use App\Models\Track;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -17,7 +20,7 @@ class StrandViewComponent extends Component
 
     public Strand $strand;
     public int $paginateValue = 10;
-    public bool $confirmingExport = false, $addingStrand = false;
+    public bool $confirmingExport = false, $addingStrand = false, $viewingStrand = false;
     public $trackId = '';
 
     protected $queryString = [
@@ -79,14 +82,99 @@ class StrandViewComponent extends Component
         Track::get(['id', 'track']);
     }
 
+    public function removeConfirm() {
+        return $this->dispatchBrowserEvent('swal:modal', [ 
+            'title' => "Unable Action!",
+            'type' => "error",
+            'text' => "The system detected that this strand is already added in a prospectus. There maybe students enrolled under it, this
+            action can produce inconsistent data.",
+        ]);
+    }
+
+    public function addingStrand()
+    {
+        if (!$this->trackId) {
+            return $this->dispatchBrowserEvent('swal:modal', [ 
+                'title' => "Oops Sorry..",
+                'type' => "error",
+                'text' => "Please fill up the necessary fields (Track) accordingly.",
+            ]);
+        }
+
+        $this->fill([ 'addingStrand' => true ]);
+    }
+
+    public function viewStrand(Strand $strand)
+    {
+        $this->fill([
+            'strand' => $strand,
+            'viewingStrand' => true,
+        ]);
+    }
+
+    public function updateStrand()
+    {
+        $this->validate();
+        $this->strand->save();
+
+        $this->dispatchBrowserEvent('swal:success', [ 
+            'text' => "The strand has been updated.",
+        ]);
+
+        $this->fill([ 'viewingStrand' => false ]);
+    }
+
     public function save() 
     {
         $this->validate();
 
+        $type = SchoolType::where('type', 'Senior High School')
+            ->with('levels')
+            ->first();
+        
+        if (!$type) {
+            return $this->dispatchBrowserEvent('swal:modal', [ 
+                'title' => "Oops Sorry..",
+                'type' => "error",
+                'text' => "Internal Server Error 404.",
+            ]);
+        }
+
         $this->strand->track_id = $this->trackId;
         $this->strand->save();
+        $terms = Term::get(['id']);
+
+        $levelIds = $type->levels->pluck('id')->toArray();
+        sort($levelIds);
+
+        foreach ($levelIds as $key => $levelId) {
+
+            if ($key > 2) {
+                break;
+            }
+
+            $terms->map(function ($term) use ($levelId) {
+                Prospectus::create([
+                    'level_id' => $levelId,
+                    'strand_id' => $this->strand->id,
+                    'term_id' => $term->id,
+                ]);
+            });
+        }
 
         $this->fill([ 'addingStrand' => false ]);
+    }
+
+    public function updatedViewingStrand($value)
+    {
+        if (!$value) {
+            $this->fill([ 'strand' => new Strand() ]);
+        }
+    }
+
+    public function updatedAddingStrand()
+    {
+        $this->fill([ 'strand' => new Strand() ]);
     }
 
     public function updated($propertyName)

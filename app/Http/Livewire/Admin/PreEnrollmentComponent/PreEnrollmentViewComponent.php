@@ -16,6 +16,7 @@ class PreEnrollmentViewComponent extends Component
 {
     use WithBulkActions, WithSorting, WithPagination, WithFilters;
 
+    public Registration $registration;
     public int $paginateValue = 10;
     public bool $confirmingExport = false;
     public $statusId = '';
@@ -38,7 +39,12 @@ class PreEnrollmentViewComponent extends Component
         'id',
     ];
 
-    protected $listeners = ['DeselectPage' => 'updatedSelectPage'];
+    protected $listeners = ['DeselectPage' => 'updatedSelectPage', 'removeItem'];
+
+    public function mount()
+    {
+        $this->fill([ 'registration' => new Registration() ]);
+    }
 
     public function render() { return 
         view('livewire.admin.pre-enrollment-component.pre-enrollment-view-component', ['registrations' => $this->rows]);
@@ -76,6 +82,21 @@ class PreEnrollmentViewComponent extends Component
             ->when(!is_null($this->dateMin), function($query) {
                 return $query->whereBetween('created_at', [$this->dateMin, $this->dateMax]);
             });
+    }
+
+    public function removeConfirm(Registration $registration) {
+        $this->registration = $registration;
+
+        $this->dispatchBrowserEvent('swal:confirmDelete', [ 
+            'type' => 'warning',
+            'title' => 'Are you sure?',
+            'text' => 'Please note that upon deletion it cannot be retrievable.',
+        ]);
+    }
+
+    public function removeItem()
+    {   
+        $this->registration->delete();
     }
 
     public function getStatusesProperty() { return

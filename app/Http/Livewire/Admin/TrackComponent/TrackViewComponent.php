@@ -2,13 +2,13 @@
 
 namespace App\Http\Livewire\Admin\TrackComponent;
 
-use App\Exports\TracksExport;
 use App\Models\Track;
 use Livewire\Component;
-use Livewire\WithPagination;
 use App\Traits\WithFilters;
-use App\Traits\WithBulkActions;
 use App\Traits\WithSorting;
+use Livewire\WithPagination;
+use App\Exports\TracksExport;
+use App\Traits\WithBulkActions;
 
 class TrackViewComponent extends Component
 {
@@ -16,7 +16,7 @@ class TrackViewComponent extends Component
 
     public Track $track;
     public int $paginateValue = 10;
-    public bool $confirmingExport = false, $addingTrack = false;
+    public bool $confirmingExport = false, $addingTrack = false, $viewingTrack = false;
 
     protected $queryString = [
         'search' => [ 'except' => '' ],
@@ -34,7 +34,7 @@ class TrackViewComponent extends Component
         'track',
     ];
 
-    protected $listeners = ['DeselectPage' => 'updatedSelectPage'];
+    protected $listeners = ['DeselectPage' => 'updatedSelectPage', 'removeItem'];
 
     public function rules() 
     {
@@ -67,12 +67,66 @@ class TrackViewComponent extends Component
             });
     }
 
+    public function removeConfirm(Track $track) {
+        $this->track = $track;
+
+        if (!$track->strands->isEmpty()) {
+            return $this->dispatchBrowserEvent('swal:modal', [ 
+                'title' => 'Unable Action!',
+                'type' => 'error',
+                'text' => 'This Track has already strands added to it.',
+            ]);
+        }
+
+        $this->dispatchBrowserEvent('swal:confirmDelete', [ 
+            'type' => 'warning',
+            'title' => 'Are you sure?',
+            'text' => 'Please note that upon deletion it cannot be retrievable.',
+        ]);
+    }
+
+    public function removeItem()
+    {   
+        $this->track->delete();
+    }
+
+    public function updateTrack()
+    {
+        $this->save();
+
+        $this->fill([ 'viewingTrack' => false ]);
+
+        $this->dispatchBrowserEvent('swal:success', [ 
+            'text' => "The track has been updated.",
+        ]);
+    }
+
+    public function viewTrack(Track $track)
+    {
+        $this->fill([
+            'track' => $track,
+            'viewingTrack' => true,
+        ]);
+    }
+
     public function save() 
     {
         $this->validate();
         $this->track->save();
 
         $this->fill([ 'addingTrack' => false ]);
+    }
+
+    public function updatedViewingTrack($value)
+    {
+        if (!$value) {
+            $this->fill([ 'track' => new Track() ]);
+        }
+    }
+
+    public function updatedAddingTrack()
+    {
+        $this->fill([ 'track' => new Track() ]);
     }
 
     public function updated($propertyName)
