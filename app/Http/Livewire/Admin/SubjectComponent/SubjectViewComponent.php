@@ -16,7 +16,7 @@ class SubjectViewComponent extends Component
 
     public Subject $subject;
     public int $paginateValue = 10;
-    public bool $confirmingExport = false, $addingSubject = false;
+    public bool $confirmingExport = false, $addingSubject = false, $viewingSubject = false;
     public $availableSubjects = [], $preRequisites = [];
 
     protected $queryString = [
@@ -31,7 +31,7 @@ class SubjectViewComponent extends Component
         'search',
     ];
 
-    protected $listeners = ['DeselectPage' => 'updatedSelectPage'];
+    protected $listeners = ['DeselectPage' => 'updatedSelectPage', 'removeItem'];
 
     public function rules() 
     {
@@ -78,6 +78,60 @@ class SubjectViewComponent extends Component
         return $this->availableSubjects;
     }
 
+    public function removeConfirm(Subject $subject) {
+        $this->subject = $subject;
+
+        if (!$this->subject->prospectuses->isEmpty()) {
+            return $this->dispatchBrowserEvent('swal:modal', [ 
+                'title' => "Unable Action!",
+                'type' => "error",
+                'text' => "The system detected that this subject is already added in a prospectus. There maybe students enrolled under it, this
+                action can produce inconsistent data.",
+            ]);
+        }
+
+        $this->dispatchBrowserEvent('swal:confirmDelete', [ 
+            'type' => 'warning',
+            'title' => 'Are you sure?',
+            'text' => 'Please note that upon deletion it cannot be retrievable.',
+        ]);
+    }
+
+    public function removeItem()
+    {   
+        $this->subject->delete();
+    }
+
+    public function viewSubject(Subject $subject)
+    {
+        $this->fill([
+            'subject' => $subject,
+            'viewingSubject' => true,
+        ]);
+
+        if (!$subject->requisites->isEmpty()) {
+            $preRequisites = $subject->requisites->pluck('id')->toArray();
+            $this->preRequisites = array_map(function($value) {
+                return (string)$value;
+            }, $preRequisites);
+        }
+    }
+
+    public function updateSubject()
+    {
+        if (!$this->subject->requisites->isEmpty()) {
+            $this->subject->requisites()->detach();
+        }
+
+        $this->save();
+
+        $this->dispatchBrowserEvent('swal:success', [ 
+            'text' => "The subject has been updated.",
+        ]);
+
+        $this->fill([ 'viewingSubject' => false ]);
+    }
+
     public function addSubject() 
     {
         $this->preRequisites[] = '';
@@ -105,6 +159,25 @@ class SubjectViewComponent extends Component
         $this->subject->requisites()->attach($this->preRequisites);
 
         $this->fill([ 'addingSubject' => false ]);
+    }
+
+    public function resetFields()
+    {
+        $this->fill([ 'subject' => new Subject() ]);
+        $this->resetSubjects();
+        $this->resetValidation();
+    }
+
+    public function updatedViewingSubject($value)
+    {
+        if (!$value) {
+           $this->resetFields();
+        }
+    }
+
+    public function updatedAddingSubject()
+    {   
+       $this->resetFields();
     }
 
     public function updatingPaginateValue() { $this->resetPage(); }

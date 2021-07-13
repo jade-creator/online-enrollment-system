@@ -16,6 +16,8 @@ class PreRegistrationComponent extends Component
     public $enrollingStudent = false;
     public $regId, $studentId;
 
+    protected $listeners = ['reject', 'toggleEnrollingStudent'];
+
     public function rules()
     {
         return [
@@ -61,7 +63,9 @@ class PreRegistrationComponent extends Component
             $student->save();
         }
 
-        return redirect(route('pre.registration.view', ['regId' => $this->regId]));
+        $this->dispatchBrowserEvent('swal:successEnroll', [ 
+            'text' => "The student has been enrolled.",
+        ]);
     }
 
     public function pending()
@@ -75,6 +79,15 @@ class PreRegistrationComponent extends Component
         return redirect(route('pre.registration.view', ['regId' => $this->regId]));
     }
 
+    public function rejectConfirm()
+    {
+        $this->dispatchBrowserEvent('swal:confirmReject', [ 
+            'type' => 'warning',
+            'title' => 'Are you sure?',
+            'text' => "This action will remove the student from it's current section.",
+        ]);
+    }
+
     public function reject()
     {
         $this->authorize('update', $this->registration);
@@ -84,6 +97,11 @@ class PreRegistrationComponent extends Component
         $this->registration->save();
 
         return redirect(route('pre.registration.view', ['regId' => $this->regId]));
+    }
+
+    public function toggleEnrollingStudent()
+    {
+        $this->fill([ 'enrollingStudent' => !$this->enrollingStudent ]);
     }
 
     public function updatedEnrollingStudent() 

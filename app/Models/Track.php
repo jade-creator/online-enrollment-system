@@ -10,7 +10,7 @@ class Track extends Model
 {
     use HasFactory, SoftDeletes;
 
-    public function strand() { return
+    public function strands() { return
         $this->hasMany(Strand::class);
     }
 

@@ -25,7 +25,7 @@ class SectionViewComponent extends Component
     public Section $section;
     public Schedule $schedule;
     public int $paginateValue = 10;
-    public bool $confirmingExport = false, $addingSection = false, $addingSchedule = false;
+    public bool $confirmingExport = false, $addingSection = false, $viewingSection = false, $addingSchedule = false;
     public $prospectus, $levelId, $programId, $strandId, $termId, $typeId = 1;
 
     protected $queryString = [
@@ -48,7 +48,7 @@ class SectionViewComponent extends Component
         'termId',
     ];
 
-    protected $listeners = ['DeselectPage' => 'updatedSelectPage'];
+    protected $listeners = ['DeselectPage' => 'updatedSelectPage', 'removeItem'];
 
     public function rules() 
     {
@@ -145,8 +145,10 @@ class SectionViewComponent extends Component
                     ->firstOrFail();
 
         if ($this->prospectus->subjects->isEmpty()) {
-            return \Debugbar::info([
-                'error: ' => 'No subject included under this prospectus.'
+            return $this->dispatchBrowserEvent('swal:modal', [ 
+                'title' => "Warning",
+                'type' => "error",
+                'text' => "Please add subject/s first under this prospectus.",
             ]);
         }
 
@@ -165,35 +167,37 @@ class SectionViewComponent extends Component
             $schedule->sections()->attach([$sectionId]);
         });
 
-        $this->resetFields();
-        $this->fill([ 'addingSection' => false ]);
+        $this->resetFields(false);
+    }
+
+    public function addSectionError()
+    {
+        return $this->dispatchBrowserEvent('swal:modal', [ 
+            'title' => "Oops Sorry..",
+            'type' => "error",
+            'text' => "Please fill up the necessary fields (Level, Program, Track, Strand and Term) accordingly.",
+        ]);
     }
 
     public function addingSection() {
 
         if (empty($this->levelId)) {
-            return \Debugbar::info([
-                'error' => 'Level Id is required.'
-            ]);
+            return $this->addSectionError();
         }
 
         if ($this->levelId > 10 && empty($this->termId)) {
-            return \Debugbar::info([
-                'error' => 'term Id is required.'
-            ]);
+            return $this->addSectionError();
         }
 
         if ($this->levelId > 13 && empty($this->programId)) {
-            return \Debugbar::info([
-                'error' => 'program Id is required.'
-            ]);
-        } else if (($this->levelId > 10 && $this->levelId < 13) && empty($this->strandId)) {
-            return \Debugbar::info([
-                'error' => 'strand Id is required.'
-            ]);
+            return $this->addSectionError();
+        }  
+        
+        if (($this->levelId > 10 && $this->levelId < 13) && empty($this->strandId)) {
+            return $this->addSectionError();
         }
 
-        $this->fill([ 'addingSection' => true ]);
+        $this->resetFields(true);
     }
 
     public function updateSchedule()
@@ -215,8 +219,53 @@ class SectionViewComponent extends Component
 
         $this->schedule->save();
 
-        $this->resetFields();
         $this->fill([ 'addingSchedule' => false ]);
+
+        $this->dispatchBrowserEvent('swal:success', [ 
+            'text' => "The schedule has been updated.",
+        ]);
+    }
+
+    public function viewSection(Section $section)
+    {
+        $this->fill([
+            'section' => $section,
+            'viewingSection' => true,
+        ]);
+    }
+
+    public function updateSection()
+    {
+        $this->validate();
+        $this->section->save();
+        $this->fill([ 'viewingSection' => false, ]);
+
+        $this->dispatchBrowserEvent('swal:success', [ 
+            'text' => "The section has been updated.",
+        ]);
+    }
+
+    public function removeConfirm(Section $section) {
+        $this->section = $section;
+
+        if (!$this->section->registrations->isEmpty()) {
+            return $this->dispatchBrowserEvent('swal:modal', [ 
+                'title' => "Warning!",
+                'type' => "warning",
+                'text' => "There are students enrolled on this section.",
+            ]);
+        }
+
+        $this->dispatchBrowserEvent('swal:confirmDelete', [ 
+            'type' => 'warning',
+            'title' => 'Are you sure?',
+            'text' => 'Please note that upon deletion it cannot be retrievable.',
+        ]);
+    }
+
+    public function removeItem()
+    {   
+        $this->section->delete();
     }
 
     public function getRoomsProperty() { return
@@ -235,11 +284,16 @@ class SectionViewComponent extends Component
         Strand::get(['id', 'code']);
     }
 
-    public function updatedAddingSection($value) 
+    public function updatedViewingSection($value)
     {
         if (!$value) {
-            $this->resetFields();
+            $this->fill([ 'section' => new Section() ]);
         }
+    }
+
+    public function updatedAddingSection() 
+    {
+        $this->fill([ 'section' => new Section() ]);
     }
 
     public function updatedAddingSchedule($value) 
@@ -247,8 +301,10 @@ class SectionViewComponent extends Component
         $this->authorize('create', Section::class);
 
         if (!$value) {
-            $this->resetFields();
-            $this->fill([ 'schedule' => new Schedule() ]);
+            $this->fill([ 
+                'section' => new Section(), 
+                'schedule' => new Schedule(), 
+            ]);
         } else{
             $this->resetValidation();
             $this->fill([ 
@@ -258,12 +314,10 @@ class SectionViewComponent extends Component
         }
     }
 
-    public function resetFields() {
+    public function resetFields($bool) {
         $this->fill([
+            'addingSection' => $bool,
             'section' => new Section(),
-            'section.name' => '',
-            'section.remarks' => null,
-            'section.room_id' => '',
         ]);
     }
 

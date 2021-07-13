@@ -41,4 +41,3 @@ class UsersExport implements FromQuery, WithHeadings, WithMapping
         ];
     }
 }
-

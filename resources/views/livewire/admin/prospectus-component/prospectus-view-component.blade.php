@@ -1,62 +1,61 @@
 <div class="w-full flex flex-1 scrolling-touch">
-    <x-table.filter>
-        <div name='slot'>
+    <div class="flex-grow bg-white shadow-md px-5 pt-8 text-gray-500">
+        <h3 class="font-bold text-lg">{{ __('Filters')}}</h3>
+        <div class="my-4">
+            <h3 class="font-bold text-md">{{ __('Level')}}</h3>
+            <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
+                <select wire:model="levelId" wire:loading.attr="disabled" id="level" aria-label="levels" class="w-52 bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
+                    @forelse ($this->levels as $level)
+                        <option value="{{ $level->id }}">{{ $level->level }}</option>
+                    @empty
+                        <option value="">No records</option>
+                    @endforelse
+                </select>
+            </div>
+        </div>
+
+        @if ($levelId >= 14) <!-- show if level is college -->
             <div class="my-4">
-                <h3 class="font-bold text-md">{{ __('Level')}}</h3>
+                <h3 class="font-bold text-md">{{ __('Program')}}</h3>
                 <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
-                    <select wire:model="levelId" wire:loading.attr="disabled" id="level" aria-label="levels" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
-                        @forelse ($this->levels as $level)
-                            <option value="{{ $level->id }}">{{ $level->level }}</option>
+                    <select wire:model="programId" wire:loading.attr="disabled" id="program" aria-label="programs" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
+                        @forelse ($this->programs as $program)
+                            <option value="{{ $program->id }}">{{ $program->code }}</option>
                         @empty
                             <option value="">No records</option>
                         @endforelse
                     </select>
                 </div>
             </div>
+        @endif
 
-            @if ($levelId >= 14) <!-- show if level is college -->
-                <div class="my-4">
-                    <h3 class="font-bold text-md">{{ __('Program')}}</h3>
-                    <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
-                        <select wire:model="programId" wire:loading.attr="disabled" id="program" aria-label="programs" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
-                            @forelse ($this->programs as $program)
-                                <option value="{{ $program->id }}">{{ $program->code }}</option>
-                            @empty
-                                <option value="">No records</option>
-                            @endforelse
-                        </select>
-                    </div>
+        @if ($levelId == 12 || $levelId == 13) <!-- show if level is shs -->
+            <div class="my-4">
+                <h3 class="font-bold text-md">{{ __('Strand')}}</h3>
+                <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
+                    <select wire:model="strandId" wire:loading.attr="disabled" id="strand" aria-label="strands" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
+                        @forelse ($this->strands as $strand)
+                            <option value="{{ $strand->id }}">{{ $strand->code }}</option>
+                        @empty
+                            <option value="">No records</option>
+                        @endforelse
+                    </select>
                 </div>
-            @endif
-
-            @if ($levelId == 12 || $levelId == 13) <!-- show if level is shs -->
-                <div class="my-4">
-                    <h3 class="font-bold text-md">{{ __('Strand')}}</h3>
-                    <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
-                        <select wire:model="strandId" wire:loading.attr="disabled" id="strand" aria-label="strands" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
-                            @forelse ($this->strands as $strand)
-                                <option value="{{ $strand->id }}">{{ $strand->code }}</option>
-                            @empty
-                                <option value="">No records</option>
-                            @endforelse
-                        </select>
-                    </div>
+            </div>
+        @endif
+            
+        @if ($levelId >= 12) <!-- show if level is shs to college -->
+            <div class="my-4">
+                <h3 class="font-bold text-md">{{ __('Term')}}</h3>
+                <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
+                    <select wire:model="termId" wire:loading.attr="disabled" id="term" aria-label="terms" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
+                        <option value="1">1st term</option>
+                        <option value="2">2nd term</option>
+                    </select>
                 </div>
-            @endif
-                
-            @if ($levelId >= 12) <!-- show if level is shs to college -->
-                <div class="my-4">
-                    <h3 class="font-bold text-md">{{ __('Term')}}</h3>
-                    <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
-                        <select wire:model="termId" wire:loading.attr="disabled" id="term" aria-label="terms" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
-                            <option value="1">1st term</option>
-                            <option value="2">2nd term</option>
-                        </select>
-                    </div>
-                </div>
-            @endif
-        </div>
-    </x-table.filter>
+            </div>
+        @endif
+    </div>
 
     <div class="min-h-screen w-full py-8 px-8">
         <div class="mb-4 pb-3 border-b border-gray-200">
@@ -83,7 +82,7 @@
                 </div>
                 <x-table.column-title columnTitle="Unit" class="col-span-2"/>
                 <x-table.column-title columnTitle="Pre Requisite" class="col-span-2"/>
-                <x-table.column-title columnTitle="action" class="col-span-1"/>
+                <x-table.column-title columnTitle="Actions" class="col-span-1"/>
             </x-slot>
 
             <x-slot name="body">
@@ -127,32 +126,45 @@
                                             <div class="block px-4 py-3 text-sm text-gray-500 font-bold">
                                                 {{ __('Actions') }}
                                             </div>
-                                            <div>
-                                                <a href="#">
-                                                    <button class="flex w-full px-4 py-2 hover:bg-gray-200 outline-none focus:outline-none transition-all duration-300 ease-in-out" type="button">
+                                            @if (auth()->user()->role->name == 'admin')
+                                                <div>
+                                                    <a href="{{ route('admin.subjects.view', ['search' => $subject->title]) }}">
+                                                        <button class="flex w-full px-4 py-2 hover:bg-gray-200 outline-none focus:outline-none transition-all duration-300 ease-in-out">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                                <circle cx="12" cy="12" r="2"></circle>
+                                                                <path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
+                                                                </svg>
+                                                            <p class="pl-2">{{ __('View')}}</p>
+                                                        </button> 
+                                                    </a>
+                                                </div>
+                                                <div>
+                                                    <button wire:click.prevent="removeConfirm({{ $subject }})" class="flex w-full px-4 py-2 hover:bg-red-500 hover:text-white rounded-b-md outline-none focus:outline-none transition-all duration-300 ease-in-out">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                            <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
-                                                            <polyline points="7 11 12 16 17 11"></polyline>
-                                                            <line x1="12" y1="4" x2="12" y2="16"></line>
-                                                        </svg>
-                                                        <p class="pl-2">{{ __('View')}}</p>
-                                                    </button>
-                                                </a>
-                                            </div>
-                                            <div>
-                                                <a href="#">
-                                                    <button class="flex w-full px-4 py-2 hover:bg-gray-200 rounded-b-md outline-none focus:outline-none transition-all duration-300 ease-in-out" type="button">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                            <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
-                                                            <polyline points="7 11 12 16 17 11"></polyline>
-                                                            <line x1="12" y1="4" x2="12" y2="16"></line>
+                                                            <line x1="4" y1="7" x2="20" y2="7"></line>
+                                                            <line x1="10" y1="11" x2="10" y2="17"></line>
+                                                            <line x1="14" y1="11" x2="14" y2="17"></line>
+                                                            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
+                                                            <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
                                                         </svg>
                                                         <p class="pl-2">{{ __('Delete')}}</p>
                                                     </button>
-                                                </a>
-                                            </div>
+                                                </div>
+                                            @else
+                                                <div>
+                                                    <button class="flex w-full px-4 py-2 bg-gray-200 outline-none focus:outline-none transition-all duration-300 ease-in-out">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                            <rect x="5" y="11" width="14" height="10" rx="2"></rect>
+                                                            <circle cx="12" cy="16" r="1"></circle>
+                                                            <path d="M8 11v-4a4 4 0 0 1 8 0v4"></path>
+                                                        </svg>
+                                                        <p class="pl-2">{{ __('Administrative Access')}}</p>
+                                                    </button>                                                        
+                                                </div>
+                                            @endif
                                         </div>
                                     </x-slot>
                                 </x-jet-dropdown>
@@ -166,7 +178,7 @@
         </x-table.main>
     </div>
 
-    <div wire:loading wire:target="paginateValue, search, selectPage, previousPage, nextPage, confirmingExport">
+    <div wire:loading wire:target="levelId, ProgramId, TrackId, TermId">
         @include('partials.loading')
     </div>
 

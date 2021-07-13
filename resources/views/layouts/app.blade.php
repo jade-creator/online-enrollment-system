@@ -32,40 +32,7 @@
     </head>
     <body class="font-sans antialiased">
         <x-jet-banner />
-
-        {{-- <div class="min-h-screen max-w-8xl flex flex-col bg-gray-100">
-            <header class="top-0 left-0 fixed w-full z-40">
-                @livewire('navigation-menu')
-            </header>
-
-            <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white shadow">
-                    <div class="w-full mx-auto px-4 flex flex-row items-center">
-                        <div class="relative mr-3 cursor-pointer px-3 py-2 rounded-full text-gray-500 hover:bg-gray-200 " title="back">
-                            <i class="fas fa-arrow-left" title="back"></i>
-                            <a href="{{ route('admin.dashboard')}}" class="absolute w-full h-full top-0 left-0"></a>
-                        </div>
-                        <div class="py-4">
-                            {{ $header }}
-                        </div>
-                    </div>
-                </header>
-            @endif
-
-            <!-- Page Content -->
-            <main class="w-full">
-                    @if (request()->is('admin/*') || request()->is('student/*'))
-                        <div class="fixed left-0 top-12 overflow-hidden bg-black w-48 m-5 hidden lg:block rounded-md shadow-md h-full">
-                            @include('sidebar')
-                        </div>
-                    @endif
-
-                    {{ $slot }}
-            </main>
-
-            @include('partials.offline')
-        </div>  --}}
+        {{-- @include('partials.offline') --}}
         
         <div class="min-h-screen max-w-8xl flex flex-col bg-anti-flash">
             @livewire('navigation-menu')
@@ -87,9 +54,63 @@
                 </div>
             </main>
         </div>
-        @include('partials.alerts')
+        {{-- @include('partials.alerts') --}}
 
         @stack('modals')
         @livewireScripts
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+        <script>
+            window.addEventListener('swal:successEnroll', event => {
+                swal(event.detail.text, {
+                    icon: "success",
+                });
+                window.livewire.emit('toggleEnrollingStudent');
+            });
+
+            window.addEventListener('swal:success', event => {
+                swal(event.detail.text, {
+                    icon: "success",
+                });
+            });
+
+            window.addEventListener('swal:modal', event => {
+                swal({
+                    title: event.detail.title,
+                    text: event.detail.text,
+                    icon: event.detail.type,
+                });
+            });
+
+            window.addEventListener('swal:confirmReject', event => {
+                swal({
+                    title: event.detail.title,
+                    text: event.detail.text,
+                    icon: event.detail.type,
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willReject) => {
+                    if (willReject) {
+                        window.livewire.emit('reject');
+                    }
+                });
+            });
+
+            window.addEventListener('swal:confirmDelete', event => {
+                swal({
+                    title: event.detail.title,
+                    text: event.detail.text,
+                    icon: event.detail.type,
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        window.livewire.emit('removeItem');
+                    }
+                });
+            });
+        </script>
     </body>
 </html>

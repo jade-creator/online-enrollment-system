@@ -10,25 +10,18 @@ use App\Models\Prospectus;
 use App\Models\Strand;
 use Livewire\Component;
 use App\Traits\WithBulkActions;
-// use App\Traits\WithFilters;
-// use App\Traits\WithSorting;
 
 class FeeViewComponent extends Component
 {
     public Fee $fee;
     public $search = '', $paginateValue = 1;
-    public bool $applyToAll = false, $confirmingExport = false, $addingFees = false;
+    public bool $applyToAll = false, $confirmingExport = false, $addingFees = false, $viewingFee = false;
     public $prospectus, $levelId, $programId, $strandId, $termId;
 
     use WithBulkActions;
-    // use WithSorting, WithFilters;
 
     protected $queryString = [
         'search' => [ 'except' => '' ],
-        // 'dateMin' => [ 'except' => null ],
-        // 'dateMax',
-        // 'sortBy' => [ 'except' => 'created_at' ],
-        // 'sortDirection' => [ 'except' => 'desc' ],
         'levelId' => [ 'except' => '' ],
         'programId' => [ 'except' => '' ],
         'strandId' => [ 'except' => '' ],
@@ -43,7 +36,7 @@ class FeeViewComponent extends Component
         'termId',
     ];
 
-    protected $listeners = ['DeselectPage' => 'updatedSelectPage'];
+    protected $listeners = ['DeselectPage' => 'updatedSelectPage', 'removeItem'];
 
     public function rules() 
     {
@@ -52,11 +45,6 @@ class FeeViewComponent extends Component
             'fee.price' => ['required', 'numeric', 'min:1'],
         ];
     }
-
-    // protected array $allowedSorts = [
-    //     'id',
-    //     'name',
-    // ];
 
     public function mount() 
     {
@@ -97,6 +85,40 @@ class FeeViewComponent extends Component
         return $this->prospectus;
     }
 
+    public function removeConfirm(Fee $fee) {
+        $this->fee = $fee;
+
+        $this->dispatchBrowserEvent('swal:confirmDelete', [ 
+            'type' => 'warning',
+            'title' => 'Are you sure?',
+            'text' => 'Please note that upon deletion it cannot be retrievable.',
+        ]);
+    }
+
+    public function removeItem()
+    {   
+        $this->fee->delete();
+    }
+
+    public function updateFee()
+    {
+        $this->validate();
+        $this->fee->save();
+        $this->fill([ 'viewingFee' => false ]);
+
+        $this->dispatchBrowserEvent('swal:success', [ 
+            'text' => "The fee has been updated.",
+        ]);
+    }
+
+    public function viewFee(Fee $fee)
+    {
+        $this->fill([
+            'fee' => $fee,
+            'viewingFee' => true,
+        ]);
+    }
+
     public function save()
     {
         $this->validate();
@@ -132,6 +154,24 @@ class FeeViewComponent extends Component
 
     public function getStrandsProperty() { return
         Strand::get(['id', 'code']);
+    }
+
+    public function resetFields()
+    {
+        $this->fill([ 'fee' => new Fee() ]);
+        $this->resetValidation();
+    }
+
+    public function updatedViewingFee($value)
+    {
+        if (!$value) {
+            $this->resetFields();
+        }
+    }
+
+    public function updatedAddingFees()
+    {
+        $this->resetFields();
     }
 
     public function updatedLevelId() 
