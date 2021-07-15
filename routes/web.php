@@ -22,6 +22,7 @@ use App\Http\Livewire\Forms\PersonalDetail\PersonalDetailShow;
 use App\Http\Livewire\Forms\Profile\SecuritySettingShow;
 use App\Http\Livewire\Forms\Program\ProgramCreateForm;
 use App\Http\Livewire\Forms\Program\ProgramUpdateForm;
+use App\Http\Livewire\Forms\User;
 use App\Http\Livewire\Admin\ProspectusComponent;
 use App\Http\Livewire\Student;
 use Illuminate\Support\Facades\Route;
@@ -68,7 +69,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
     
         Route::group(['middleware' => 'user.detail', 'prefix' => 'admin', 'as' => 'admin.'], function (){
             Route::get('/dashboard', Dashboard::class)->name('dashboard'); //renamecomponent
-            Route::get('/masterlist', Masterlist::class)->name('masterlist'); //renamecomponent
+            // Route::get('/masterlist', Masterlist::class)->name('masterlist');
 
             // Route::group(['prefix' => 'sections', 'as' => 'sections.'], function (){
             //     Route::get('', SectionComponent\SectionViewComponent::class)->name('view');
@@ -125,6 +126,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
         Route::get('/prospectuses', ProspectusComponent\ProspectusViewComponent::class)->name('prospectuses.view');
         Route::get('/pre-registration/{regId}', Student\PreRegistrationComponent::class)->name('pre.registration.view');
         Route::get('/pre-registration/{regId}/pdf', [PreEnrollmentComponent\PreEnrollmentPdfComponent::class, 'createPDF'])->name('pre.registration.pdf');
+        Route::get('/user/personal-profile/{userId}', User\UserProfileComponent::class)->name('user.personal.profile.view');
     });
     // end
 

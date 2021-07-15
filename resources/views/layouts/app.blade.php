@@ -54,7 +54,6 @@
                 </div>
             </main>
         </div>
-        {{-- @include('partials.alerts') --}}
 
         @stack('modals')
         @livewireScripts

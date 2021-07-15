@@ -132,28 +132,14 @@
                                                     {{ __('Actions') }}
                                                 </div>
                                                 <div>
-                                                    <a href="#">
+                                                    <a href="{{ route('user.personal.profile.view', ['userId' => $user->id]) }}">
                                                         <button class="flex w-full px-4 py-2 hover:bg-gray-200 outline-none focus:outline-none transition-all duration-300 ease-in-out" type="button">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                                <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
-                                                                <polyline points="7 11 12 16 17 11"></polyline>
-                                                                <line x1="12" y1="4" x2="12" y2="16"></line>
+                                                                <circle cx="12" cy="12" r="2"></circle>
+                                                                <path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
                                                             </svg>
-                                                            <p class="pl-2">{{ __('View')}}</p>
-                                                        </button>
-                                                    </a>
-                                                </div>
-                                                <div>
-                                                    <a href="#">
-                                                        <button class="flex w-full px-4 py-2 hover:bg-gray-200 rounded-b-md outline-none focus:outline-none transition-all duration-300 ease-in-out" type="button">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                                <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
-                                                                <polyline points="7 11 12 16 17 11"></polyline>
-                                                                <line x1="12" y1="4" x2="12" y2="16"></line>
-                                                            </svg>
-                                                            <p class="pl-2">{{ __('Delete')}}</p>
+                                                            <p class="pl-2">{{ __('View Profile')}}</p>
                                                         </button>
                                                     </a>
                                                 </div>

@@ -61,20 +61,20 @@ class Registration extends Component
             ->first();
 
         if (!$this->prospectus) {
-            return \Debugbar::info([
-                'error' => 'Unable to proceed.'
+            return $this->dispatchBrowserEvent('swal:modal', [ 
+                'title' => "Error!",
+                'type' => "error",
+                'text' => "Internal Error. Please contact the admin.",
             ]);
         }
 
         if (!$this->prospectus->subjects()->exists()) {
-            return \Debugbar::info([
-                'error' => 'Unable to proceed. Has no subject yet.'
+            return $this->dispatchBrowserEvent('swal:modal', [ 
+                'title' => "Unable Action!",
+                'type' => "error",
+                'text' => "There are no subjects under this prospectus. Please fill out the fields accordingly. If error persists please contact the admin.",
             ]);
         }
-
-        \Debugbar::info([
-            'first' => $this->prospectus
-        ]);
 
         if ($this->currentStep == $this->steps) {
             return;
@@ -89,14 +89,8 @@ class Registration extends Component
 
         $this->registration->student_id = Auth::user()->student->id;
         $this->registration->prospectus_id = $this->prospectus->id;
+        $this->registration->status_id = 2;
         $this->registration->save();
-
-        // $student = Student::find(Auth::user()->student->id);
-
-        // if (!$student->isStudent) {
-        //     $student->isStudent = true;
-        //     $student->save();
-        // }
 
         return redirect(route('student.registration'));
     }
