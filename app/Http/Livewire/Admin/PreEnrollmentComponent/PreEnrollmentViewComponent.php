@@ -29,11 +29,13 @@ class PreEnrollmentViewComponent extends Component
         'sortBy' => [ 'except' => 'created_at' ],
         'sortDirection' => [ 'except' => 'desc' ],
         'statusId' => [ 'except' => '' ],
+        'typeId' => [ 'except' => '' ],
     ];
 
     protected $updatesQueryString = [
         'search',
         'statusId',
+        'typeId',
     ];
 
     protected $allowedSorts = [

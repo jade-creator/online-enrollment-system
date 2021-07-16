@@ -2,11 +2,13 @@
 
 namespace App\Http\Livewire\Student;
 
+use App\Models;
 use App\Models\Level;
+use App\Models\Mark;
 use App\Models\Program;
 use App\Models\Prospectus;
-use App\Models;
 use App\Models\Strand;
+use App\Models\Status;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -18,6 +20,8 @@ class Registration extends Component
     public Models\Registration $registration;
     public $steps = 2, $currentStep = 1;
     public $prospectus, $levelId, $programId, $strandId, $termId;
+    public bool $selectAll = true;
+    public array $selected = [];
 
     public function rules()
     {
@@ -42,6 +46,8 @@ class Registration extends Component
 
     public function next() 
     {
+        if ($this->currentStep == $this->steps) return;
+
         $this->validate();
 
         $this->prospectus = Prospectus::select(['id', 'level_id', 'program_id', 'strand_id', 'term_id'])
@@ -76,21 +82,53 @@ class Registration extends Component
             ]);
         }
 
-        if ($this->currentStep == $this->steps) {
-            return;
-        }
+        if ($this->selectAll) $this->pluckRows($this->prospectus->subjects);
 
         $this->currentStep++;
     }
 
+    public function updatedSelected()
+    {
+        $this->selectAll = false;
+    }
+
+    public function updatedSelectAll(bool $value)
+    {
+        if ($value) return $this->pluckRows($this->prospectus->subjects);
+        
+        $this->updatedSelected();
+        $this->selected = [];
+    }
+
+    public function pluckRows($data)
+    {
+        $this->selected = $data->pluck('id')->toArray();
+    }
+
     public function save()
     {
+        if (empty($this->selected)) {
+            return $this->dispatchBrowserEvent('swal:modal', [ 
+                'title' => "Error!",
+                'type' => "error",
+                'text' => "No Selected Subject/s.",
+            ]);
+        }
+
         $this->authorize('create', Registration::class);
 
         $this->registration->student_id = Auth::user()->student->id;
         $this->registration->prospectus_id = $this->prospectus->id;
-        $this->registration->status_id = 2;
+
+        $status = Status::where('name', 'pending')->firstOrFail();
+        $this->registration->status_id = $status->id;
         $this->registration->save();
+
+        $mark = Mark::where('name', 'tba')->firstOrFail();
+        
+        foreach ($this->selected as $id) {
+            $this->registration->subjects()->attach($id, ['mark_id' => $mark->id]);
+        }
 
         return redirect(route('student.registration'));
     }

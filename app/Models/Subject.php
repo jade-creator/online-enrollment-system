@@ -16,6 +16,16 @@ class Subject extends Model
         'unit',
     ];  
 
+    public function mark() { return
+        $this->belongsTo(Mark::class);
+    }
+
+    public function registrations() { return
+        $this->belongsToMany(Registration::class)
+            ->withTimestamps()
+            ->withPivot(['grade', 'mark_id']);
+    }
+
     public function schedules() { return
         $this->hasMany(Schedule::class);
     }

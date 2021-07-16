@@ -97,7 +97,7 @@
                                         <div class="flex-shrink-0">
                                             <img class="h-10 w-10 rounded-full object-cover" src="{{ $user->profile_photo_url }}"/>
                                         </div>
-                                    @endif
+                                    @endif 
                                     <div class="ml-4">
                                         {{ $user->name ?? 'N/A'}}
                                     </div>

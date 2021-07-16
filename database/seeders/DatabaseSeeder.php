@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             SubjectSeeder::class,
             RoomSeeder::class,
             StatusSeeder::class,
+            MarkSeeder::class,
         ]);
     }
 }
