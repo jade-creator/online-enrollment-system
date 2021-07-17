@@ -1,26 +1,26 @@
 <?php
 
-namespace App\Http\Livewire\Admin\PreEnrollmentComponent;
+namespace App\Http\Livewire\Admin\GradeComponent;
 
-use App\Exports\RegistrationsExport;
-use App\Models\Level;
-use App\Models\Status;
+use App\Models\Grade;
 use App\Models\Registration;
 use App\Models\SchoolType;
+use App\Models\Status;
+use App\Services\Remarks;
+use App\Traits\WithFilters;
+use App\Traits\WithSorting;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Traits\WithFilters;
-use App\Traits\WithBulkActions;
-use App\Traits\WithSorting;
 
-class PreEnrollmentViewComponent extends Component
+class GradeViewComponent extends Component
 {
-    use WithBulkActions, WithSorting, WithPagination, WithFilters;
+    use WithSorting, WithPagination, WithFilters;
 
-    public Registration $registration;
+    public Grade $grade;
     public int $paginateValue = 10;
-    public bool $confirmingExport = false;
-    public $statusId = '', $typeId = '';
+    public bool $gradingStudent = false;
+    public int $subjectGrade = 0;
+    public $typeId = '', $subjectCode = '';
 
     protected $queryString = [
         'search' => [ 'except' => '' ],
@@ -28,13 +28,11 @@ class PreEnrollmentViewComponent extends Component
         'dateMax',
         'sortBy' => [ 'except' => 'created_at' ],
         'sortDirection' => [ 'except' => 'desc' ],
-        'statusId' => [ 'except' => '' ],
         'typeId' => [ 'except' => '' ],
     ];
 
     protected $updatesQueryString = [
         'search',
-        'statusId',
         'typeId',
     ];
 
@@ -42,15 +40,20 @@ class PreEnrollmentViewComponent extends Component
         'id',
     ];
 
-    protected $listeners = ['DeselectPage' => 'updatedSelectPage', 'removeItem'];
+    public function rules()
+    {
+        return [
+            'grade.value' => ['required', 'numeric', 'min:0', 'max:100'],
+        ];
+    }
 
     public function mount()
     {
-        $this->fill([ 'registration' => new Registration() ]);
+        $this->fill(['grade' => new Grade()]);
     }
 
     public function render() { return 
-        view('livewire.admin.pre-enrollment-component.pre-enrollment-view-component', ['registrations' => $this->rows]);
+        view('livewire.admin.grade-component.grade-view-component', ['registrations' => $this->rows]);
     }
 
     public function getRowsProperty() { return
@@ -59,11 +62,11 @@ class PreEnrollmentViewComponent extends Component
 
     public function getRowsQueryProperty() 
     {
+        $status = Status::where('name', 'enrolled')->firstOrFail();
+
         return Registration::search($this->search)
             ->select(['id', 'isNew', 'status_id', 'section_id', 'student_id', 'prospectus_id', 'created_at'])
-            ->when(!empty($this->statusId), function ($query) {
-                return $query->where('status_id', $this->statusId);
-            })
+            ->where('status_id', $status->id)
             ->with([
                 'student.user.person',
                 'status:id,name',
@@ -71,6 +74,9 @@ class PreEnrollmentViewComponent extends Component
                 'prospectus:id,level_id',
                 'prospectus.level:id,level,school_type_id',
                 'prospectus.level.schoolType:id',
+                'grades:id,registration_id,subject_id,mark_id,value',
+                'grades.subject:id,code,title',
+                'grades.mark:id,name',
             ])
             ->when(!empty($this->search), function($query) {
                 return $query->orWhereHas('student', function($query) {
@@ -93,27 +99,27 @@ class PreEnrollmentViewComponent extends Component
             });
     }
 
-    public function removeConfirm(Registration $registration) {
-        $this->registration = $registration;
+    public function save()
+    {
+        $this->validate();
 
-        $this->dispatchBrowserEvent('swal:confirmDelete', [ 
-            'type' => 'warning',
-            'title' => 'Are you sure?',
-            'text' => 'Please note that upon deletion it cannot be retrievable.',
+        $this->grade->mark_id = (new Remarks())->getMark($this->grade->value);
+        $this->grade->save();
+        $this->fill(['gradingStudent' => false]);
+
+        $this->dispatchBrowserEvent('swal:success', [ 
+            'text' => "The student's grade has been updated.",
         ]);
     }
 
-    public function removeItem()
-    {   
-        $this->registration->delete();
-    }
-
-    public function getStatusesProperty() { return
-        Status::get(['id', 'name']);
-    }
-
-    public function getLevelsProperty() { return
-        Level::get(['id', 'level']);
+    public function addGrade(Grade $grade) 
+    {
+        $this->resetValidation();
+        $this->fill([ 
+            'subjectCode' => $grade->subject->code, 
+            'grade' => $grade, 
+            'gradingStudent' => true, 
+        ]);
     }
 
     public function getTypesProperty() { return
@@ -122,15 +128,7 @@ class PreEnrollmentViewComponent extends Component
 
     public function updatingPaginateValue() { $this->resetPage(); }
 
-    public function updatingStatusId() { $this->resetPage(); }
-
     public function updatingTypeId() { $this->resetPage(); }
-
-    public function fileExport() 
-    {
-        $this->confirmingExport = false;
-        return (new RegistrationsExport($this->selected))->download('registrations-collection.xlsx');
-    }    
 
     public function paginationView() { return 
         'partials.pagination-link'; 

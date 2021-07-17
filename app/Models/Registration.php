@@ -18,10 +18,8 @@ class Registration extends Model
         'prospectus_id',
     ];
 
-    public function subjects() { return
-        $this->belongsToMany(Subject::class)
-            ->withTimestamps()
-            ->withPivot(['grade', 'mark_id']);
+    public function grades() { return
+        $this->hasMany(Grade::class);
     }
 
     public function status() { return
@@ -46,8 +44,7 @@ class Registration extends Model
 
         return empty($search) ? static::query()
             : static::where(function ($query) use ($search){
-                return $query
-                ->where('id', 'LIKE', $search);
+                return $query->where('id', 'LIKE', $search);
             });
     }
 }

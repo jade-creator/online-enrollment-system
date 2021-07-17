@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRegistrationSubjectTable extends Migration
+class CreateGradesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreateRegistrationSubjectTable extends Migration
      */
     public function up()
     {
-        Schema::create('registration_subject', function (Blueprint $table) {
+        Schema::create('grades', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('registration_id')->constrained();
             $table->foreignId('subject_id')->constrained();
-            $table->unsignedInteger('grade')->nullable();
             $table->foreignId('mark_id')->constrained();
+            $table->unsignedInteger('value')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -29,6 +31,6 @@ class CreateRegistrationSubjectTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('registration_subject');
+        Schema::dropIfExists('grades');
     }
 }

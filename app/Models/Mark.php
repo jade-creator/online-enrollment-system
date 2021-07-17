@@ -13,7 +13,7 @@ class Mark extends Model
         'name',
     ];
 
-    public function subjects() { return
-        $this->hasMany(Subject::class);
+    public function grades() { return
+        $this->hasMany(Grade::class);
     }
 }
