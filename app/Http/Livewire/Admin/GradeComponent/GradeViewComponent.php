@@ -62,11 +62,11 @@ class GradeViewComponent extends Component
 
     public function getRowsQueryProperty() 
     {
-        $status = Status::where('name', 'enrolled')->firstOrFail();
+        $statuses = Status::whereIn('name', ['enrolled', 'released'])->get();
+        $statuses = $statuses->pluck('id')->toArray();
 
         return Registration::search($this->search)
             ->select(['id', 'isNew', 'status_id', 'section_id', 'student_id', 'prospectus_id', 'created_at'])
-            ->where('status_id', $status->id)
             ->with([
                 'student.user.person',
                 'status:id,name',
@@ -93,6 +93,7 @@ class GradeViewComponent extends Component
                     return $query->where('id', $this->typeId);
                 });
             })
+            ->whereIn('status_id', $statuses)
             ->orderBy($this->sortBy, $this->sortDirection)
             ->when(!is_null($this->dateMin), function($query) {
                 return $query->whereBetween('created_at', [$this->dateMin, $this->dateMax]);

@@ -102,9 +102,10 @@
             </x-slot>
 
             <x-slot name="head">
-                <div class="col-span-2 flex items-start" id="ID">
+                <div class="col-span-2 flex items-start" id="columnTitle">
                     <input @click.stop type="checkbox" wire:model="selectPage" class="cursor-pointer border-gray-400 focus:outline-none focus:ring-transparent mx-5 rounded-sm" title="Select Displayed Data">
-                    <x-table.sort-button nameButton="ID" event="sortFieldSelected('ID')"/>
+                    {{-- <x-table.column-title columnTitle="ID"/> --}}
+                    <x-table.sort-button nameButton="ID" event="sortFieldSelected('id')"/>
                 </div>
                 <div class="col-span-2" id="name">
                     <x-table.sort-button nameButton="name" event="sortFieldSelected('name')"/>
@@ -363,7 +364,7 @@
         @endif
     </div>
 
-    <div wire:loading wire:target="paginateValue, search, selectPage, previousPage, nextPage, confirmingExport">
+    <div wire:loading wire:target="paginateValue, search, selectPage, previousPage, nextPage, confirmingExport, releaseConfirm, releaseAll">
         @include('partials.loading')
     </div>
 
