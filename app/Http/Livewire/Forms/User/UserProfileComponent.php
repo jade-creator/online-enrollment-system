@@ -83,6 +83,10 @@ class UserProfileComponent extends Component
 
     public function getRegistrationsProperty()
     {
-        return Registration::where('student_id', $this->user->student->id)->latest()->take(3)->get();
+        return Registration::with('prospectus')
+            ->where('student_id', $this->user->student->id)
+            ->latest()
+            ->take(3)
+            ->get();
     }
 }
