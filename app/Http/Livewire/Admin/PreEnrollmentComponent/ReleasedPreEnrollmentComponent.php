@@ -4,23 +4,23 @@ namespace App\Http\Livewire\Admin\PreEnrollmentComponent;
 
 use App\Exports\RegistrationsExport;
 use App\Models\Level;
-use App\Models\Status;
 use App\Models\Registration;
 use App\Models\SchoolType;
+use App\Models\Status;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Traits\WithFilters;
 use App\Traits\WithBulkActions;
 use App\Traits\WithSorting;
 
-class PreEnrollmentViewComponent extends Component
+class ReleasedPreEnrollmentComponent extends Component
 {
     use WithBulkActions, WithSorting, WithPagination, WithFilters;
 
     public Registration $registration;
     public int $paginateValue = 10;
     public bool $confirmingExport = false;
-    public $statusId = '', $typeId = '';
+    public $typeId = '';
 
     protected $queryString = [
         'search' => [ 'except' => '' ],
@@ -28,21 +28,15 @@ class PreEnrollmentViewComponent extends Component
         'dateMax',
         'sortBy' => [ 'except' => 'created_at' ],
         'sortDirection' => [ 'except' => 'desc' ],
-        'statusId' => [ 'except' => '' ],
         'typeId' => [ 'except' => '' ],
     ];
-
+    
     protected $updatesQueryString = [
         'search',
-        'statusId',
         'typeId',
     ];
 
-    protected $allowedSorts = [
-        'id',
-    ];
-
-    protected $listeners = ['DeselectPage' => 'updatedSelectPage', 'removeItem'];
+    protected $allowedSorts = [];
 
     public function mount()
     {
@@ -50,7 +44,7 @@ class PreEnrollmentViewComponent extends Component
     }
 
     public function render() { return 
-        view('livewire.admin.pre-enrollment-component.pre-enrollment-view-component', ['registrations' => $this->rows]);
+        view('livewire.admin.pre-enrollment-component.released-pre-enrollment-component', ['registrations' => $this->rows]);
     }
 
     public function getRowsProperty() { return
@@ -84,9 +78,10 @@ class PreEnrollmentViewComponent extends Component
                     return $query->where('id', $this->typeId);
                 });
             })
-            ->whereNull('released_at')
+            ->whereNotNull('released_at')
             ->when(!empty($this->statusId), function ($query) {
-                return $query->where('status_id', $this->statusId);
+                $status = Status::where('name', 'released')->first();
+                return $query->where('status_id', $status->id);
             })
             ->orderBy($this->sortBy, $this->sortDirection)
             ->when(!is_null($this->dateMin), function($query) {
@@ -107,10 +102,6 @@ class PreEnrollmentViewComponent extends Component
     public function removeItem()
     {   
         $this->registration->delete();
-    }
-
-    public function getStatusesProperty() { return
-        Status::get(['id', 'name']);
     }
 
     public function getLevelsProperty() { return

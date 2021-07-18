@@ -70,7 +70,7 @@ class RegistrationPolicy
      */
     public function update(User $user, Registration $registration)
     {
-        return $user->role->name == 'admin';
+        return $user->role->name == 'admin' && $registration->status->name != 'released';
     }
 
     /**

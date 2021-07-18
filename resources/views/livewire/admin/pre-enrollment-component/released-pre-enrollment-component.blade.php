@@ -2,21 +2,6 @@
     <x-table.filter>
         <div name='slot'>
             <div class="my-4">
-                <h3 class="font-bold text-md">{{ __('Status')}}</h3>
-                <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
-                    <select wire:model="statusId" wire:loading.attr="disabled" id="status" aria-label="statuses" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
-                        @forelse ($this->statuses as $status)
-                            @if ($loop->first)
-                                <option value="">-- choose a status --</option>
-                            @endif
-                            <option value="{{ $status->id }}">{{ $status->name }}</option>
-                        @empty
-                            <option value="">No records</option>
-                        @endforelse
-                    </select>
-                </div>
-            </div>
-            <div class="my-4">
                 <h3 class="font-bold text-md">{{ __('Types')}}</h3>
                 <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
                     <select wire:model="typeId" wire:loading.attr="disabled" id="type" aria-label="types" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
@@ -40,7 +25,7 @@
         <div class="mb-4 pb-3 border-b border-gray-200">
             <div class="flex items-center justify-between">
                 <div class="flex items-center justify-between">
-                    <div class="text-2xl font-bold text-gray-500">Pre Enrollment</div>
+                    <div class="text-2xl font-bold text-gray-500">Released: Pre Enrollment</div>
         
                     @if ( count($this->selected) > 0 && !$this->selectAll )
                         <div class="px-2 text-green-600 font-bold">{{ __('[')}}
@@ -57,15 +42,10 @@
                         </div>
                     @endif
                 </div>
-                <a href="{{ route("admin.released.enrollments.view") }}">
+                <a href="{{ route("admin.pre.enrollments.view") }}">
                     <x-jet-secondary-button class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M4 19v2h16v-14l-8 -4l-8 4v2"></path>
-                            <path d="M13 14h-9"></path>
-                            <path d="M7 11l-3 3l3 3"></path>
-                        </svg>
-                        <p class="pl-2">{{ __('Released')}}</p>
+                        <svg fill="none" stroke="currentColor" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
+                        <p class="pl-2">{{ __('Current List')}}</p>
                     </x-jet-secondary-button>
                 </a>
             </div>
@@ -141,19 +121,6 @@
                                                         </button>
                                                     </a>
                                                 </div>
-                                                @can('updateGrade', $registration)
-                                                    <div>
-                                                        <a href="{{ route('admin.grades.view', ['search' => $registration->student->custom_id]) }}">
-                                                            <button class="flex w-full px-4 py-2 hover:bg-gray-200 outline-none focus:outline-none transition-all duration-300 ease-in-out">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                                    <path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"></path>
-                                                                </svg>
-                                                                <p class="pl-2">{{ __('Grading')}}</p>
-                                                            </button>
-                                                        </a>
-                                                    </div>
-                                                @endcan
                                                 <div>
                                                     <button wire:click.prevent="removeConfirm({{ $registration }})" class="flex w-full px-4 py-2 hover:bg-red-500 hover:text-white rounded-b-md outline-none focus:outline-none transition-all duration-300 ease-in-out">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">

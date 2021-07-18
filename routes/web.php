@@ -84,6 +84,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
             Route::get('/grades', GradeComponent\GradeViewComponent::class)->name('grades.view');
 
             Route::get('/pre-enrollments', PreEnrollmentComponent\PreEnrollmentViewComponent::class)->name('pre.enrollments.view');
+            Route::get('/pre-enrollments/released', PreEnrollmentComponent\ReleasedPreEnrollmentComponent::class)->name('released.enrollments.view');
 
             Route::get('/fees', FeeComponent\FeeViewComponent::class)->name('fees.view');
 
