@@ -21,7 +21,6 @@ class SchoolTypeSeeder extends Seeder
             [ 'type' => 'Junior High School',  'created_at' => now(), 'updated_at' => now()],
             [ 'type' => 'Senior High School',  'created_at' => now(), 'updated_at' => now()],
             [ 'type' => 'College',  'created_at' => now(), 'updated_at' => now()],
-            [ 'type' => 'Alternative Learning System Accreditation And Equivalency',  'created_at' => now(), 'updated_at' => now()],
         ];
 
         DB::table('school_types')->insert($types);

@@ -6,6 +6,7 @@ use App\Exports\RegistrationsExport;
 use App\Models\Level;
 use App\Models\Status;
 use App\Models\Registration;
+use App\Models\SchoolType;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Traits\WithFilters;
@@ -19,7 +20,7 @@ class PreEnrollmentViewComponent extends Component
     public Registration $registration;
     public int $paginateValue = 10;
     public bool $confirmingExport = false;
-    public $statusId = '';
+    public $statusId = '', $typeId = '';
 
     protected $queryString = [
         'search' => [ 'except' => '' ],
@@ -66,10 +67,11 @@ class PreEnrollmentViewComponent extends Component
                 'status:id,name',
                 'section:id,name',
                 'prospectus:id,level_id',
-                'prospectus.level:id,level'
+                'prospectus.level:id,level,school_type_id',
+                'prospectus.level.schoolType:id',
             ])
             ->when(!empty($this->search), function($query) {
-                return $query->orWhereHas('student', function($query) {
+                return $query->whereHas('student', function($query) {
                             return $query->where('custom_id', 'LIKE', '%'.$this->search.'%');
                         })
                         ->orWhereHas('student.user.person', function($query) {
@@ -77,6 +79,11 @@ class PreEnrollmentViewComponent extends Component
                                 ->orWhere('middlename', 'LIKE', '%'.$this->search.'%')
                                 ->orWhere('lastname', 'LIKE', '%'.$this->search.'%');
                         });
+            })
+            ->when(!empty($this->typeId), function ($query) {
+                return $query->whereHas('prospectus.level.schoolType', function($query) {
+                    return $query->where('id', $this->typeId);
+                });
             })
             ->orderBy($this->sortBy, $this->sortDirection)
             ->when(!is_null($this->dateMin), function($query) {
@@ -105,6 +112,10 @@ class PreEnrollmentViewComponent extends Component
 
     public function getLevelsProperty() { return
         Level::get(['id', 'level']);
+    }
+
+    public function getTypesProperty() { return
+        SchoolType::get(['id', 'type']);
     }
 
     public function updatingPaginateValue() { $this->resetPage(); }

@@ -17,6 +17,21 @@
                         </select>
                     </div>
                 </div>
+                <div class="my-4">
+                    <h3 class="font-bold text-md">{{ __('Types')}}</h3>
+                    <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
+                        <select wire:model="typeId" wire:loading.attr="disabled" id="type" aria-label="types" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
+                            @forelse ($this->types as $type)
+                                @if ($loop->first)
+                                    <option value="">-- choose a type --</option>
+                                @endif
+                                <option value="{{ $type->id }}">{{ $type->type }}</option>
+                            @empty
+                                <option value="">No records</option>
+                            @endforelse
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
     </x-table.filter>
