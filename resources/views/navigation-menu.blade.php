@@ -100,7 +100,7 @@
                                 {{ __('Manage Account') }}
                             </div>
 
-                            <x-jet-dropdown-link href="#">
+                            <x-jet-dropdown-link href="{{ route('user.personal.profile.view', ['userId' => auth()->user()->id]) }}">
                                 {{ __('Personal Profile') }}
                             </x-jet-dropdown-link>
 
@@ -155,7 +155,7 @@
                         </li>
     
                         <li title="masterlist">
-                            <a href="{{route('admin.masterlist')}}" class="{{ request()->is('admin/masterlist') ? 'text-indigo-500' : 'text-gray-800'}} h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700">
+                            <a href="{{route('admin.pre.enrollments.view')}}" class="{{ request()->is('admin/pre-enrollments') ? 'text-indigo-500' : 'text-gray-800'}} h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700">
                                 <span class="inline-flex justify-center items-center ml-3 pl-0.5">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
                                 </span>
@@ -166,7 +166,13 @@
                         <li title="Sections">
                             <a href="{{route('sections.view')}}" class="{{ request()->is('sections/*') || request()->is('sections') ? 'text-indigo-500' : 'text-gray-800'}} h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700">
                                 <span class="inline-flex justify-center items-center ml-3 pl-0.5">
-                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" width="22" height="24" stroke="currentColor" id="library"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path></svg>
+                                    {{-- <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" width="22" height="24" stroke="currentColor" id="library"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path></svg> --}}
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="" width="22" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <line x1="9" y1="12" x2="15" y2="12"></line>
+                                        <line x1="12" y1="9" x2="12" y2="15"></line>
+                                        <path d="M4 6v-1a1 1 0 0 1 1 -1h1m5 0h2m5 0h1a1 1 0 0 1 1 1v1m0 5v2m0 5v1a1 1 0 0 1 -1 1h-1m-5 0h-2m-5 0h-1a1 1 0 0 1 -1 -1v-1m0 -5v-2m0 -5"></path>
+                                     </svg>
                                 </span>
                                 <span class="ml-4 mt-1 text-sm tracking-wide truncate">{{ __('Sections') }}</span>
                             </a>
@@ -175,7 +181,13 @@
                         <li title="Prospectus">
                             <a href="{{route('prospectuses.view')}}" class="{{ request()->is('prospectuses/*') || request()->is('prospectuses') ? 'text-indigo-500' : 'text-gray-800'}} h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700">
                                 <span class="inline-flex justify-center items-center ml-3 pl-0.5">
-                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" width="22" height="24" stroke="currentColor" id="library"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="" width="22" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <circle cx="12" cy="7" r="3"></circle>
+                                        <circle cx="17" cy="16" r="3"></circle>
+                                        <circle cx="7" cy="16" r="3"></circle>
+                                     </svg>
+                                    {{-- <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" width="22" height="24" stroke="currentColor" id="library"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path></svg> --}}
                                 </span>
                                 <span class="ml-4 mt-1 text-sm tracking-wide truncate">{{ __('Prospectus') }}</span>
                             </a>
@@ -184,7 +196,15 @@
                         <li title="Subjects">
                             <a href="{{route('admin.subjects.view')}}" class="{{ request()->is('admin/subjects/*') || request()->is('admin/subjects') ? 'text-indigo-500' : 'text-gray-800'}} h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700">
                                 <span class="inline-flex justify-center items-center ml-3 pl-0.5">
-                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" width="22" height="24" stroke="currentColor" id="library"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="" width="22" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <line x1="6" y1="9" x2="12" y2="9"></line>
+                                        <line x1="4" y1="5" x2="8" y2="5"></line>
+                                        <path d="M6 5v11a1 1 0 0 0 1 1h5"></path>
+                                        <rect x="12" y="7" width="8" height="4" rx="1"></rect>
+                                        <rect x="12" y="15" width="8" height="4" rx="1"></rect>
+                                     </svg>
+                                    {{-- <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" width="22" height="24" stroke="currentColor" id="library"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path></svg> --}}
                                 </span>
                                 <span class="ml-4 mt-1 text-sm tracking-wide truncate">{{ __('Subjects') }}</span>
                             </a>
@@ -193,7 +213,13 @@
                         <li title="Strands">
                             <a href="{{route('admin.strands.view')}}" class="{{ request()->is('admin/strands/*') || request()->is('admin/strands') ? 'text-indigo-500' : 'text-gray-800'}} h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700">
                                 <span class="inline-flex justify-center items-center ml-3 pl-0.5">
-                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" width="22" height="24" stroke="currentColor" id="library"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="" width="22" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <circle transform="rotate(-45 12 12)" cx="12" cy="12" r="4"></circle>
+                                        <path d="M9.172 20.485a4 4 0 1 0 -5.657 -5.657"></path>
+                                        <path d="M14.828 3.515a4 4 0 1 0 5.657 5.657"></path>
+                                     </svg>
+                                    {{-- <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" width="22" height="24" stroke="currentColor" id="library"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path></svg> --}}
                                 </span>
                                 <span class="ml-4 mt-1 text-sm tracking-wide truncate">{{ __('Strands') }}</span>
                             </a>
@@ -202,7 +228,11 @@
                         <li title="Tracks">
                             <a href="{{route('admin.tracks.view')}}" class="{{ request()->is('admin/tracks/*') || request()->is('admin/tracks') ? 'text-indigo-500' : 'text-gray-800'}} h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700">
                                 <span class="inline-flex justify-center items-center ml-3 pl-0.5">
-                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" width="22" height="24" stroke="currentColor" id="library"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-track" width="22" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <path d="M4 15l11 -11m5 5l-11 11m-4 -8l7 7m-3.5 -10.5l7 7m-3.5 -10.5l7 7"></path>
+                                     </svg>
+                                    {{-- <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" width="22" height="24" stroke="currentColor" id="library"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path></svg> --}}
                                 </span>
                                 <span class="ml-4 mt-1 text-sm tracking-wide truncate">{{ __('Tracks') }}</span>
                             </a>
@@ -211,7 +241,13 @@
                         <li title="Programs">
                             <a href="{{route('admin.programs.view')}}" class="{{ request()->is('admin/programs/*') || request()->is('admin/programs') ? 'text-indigo-500' : 'text-gray-800'}} h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700">
                                 <span class="inline-flex justify-center items-center ml-3 pl-0.5">
-                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" width="22" height="24" stroke="currentColor" id="library"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-code" width="22" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <polyline points="7 8 3 12 7 16"></polyline>
+                                        <polyline points="17 8 21 12 17 16"></polyline>
+                                        <line x1="14" y1="4" x2="10" y2="20"></line>
+                                     </svg>
+                                    {{-- <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" width="22" height="24" stroke="currentColor" id="library"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path></svg> --}}
                                 </span>
                                 <span class="ml-4 mt-1 text-sm tracking-wide truncate">{{ __('Programs') }}</span>
                             </a>
@@ -221,7 +257,16 @@
                             <a href="{{route('admin.fees.view')}}" class="{{ request()->is('admin/fees/*') || request()->is('admin/fees') ? 'text-indigo-500 h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700' 
                                 : 'text-gray-800 h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700'}}">
                                 <span class="inline-flex justify-center items-center ml-3 pl-0.5">
-                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" width="22" height="24" stroke="currentColor" id="library"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="" width="22" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <ellipse cx="16" cy="6" rx="5" ry="3"></ellipse>
+                                        <path d="M11 6v4c0 1.657 2.239 3 5 3s5 -1.343 5 -3v-4"></path>
+                                        <path d="M11 10v4c0 1.657 2.239 3 5 3s5 -1.343 5 -3v-4"></path>
+                                        <path d="M11 14v4c0 1.657 2.239 3 5 3s5 -1.343 5 -3v-4"></path>
+                                        <path d="M7 9h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5"></path>
+                                        <path d="M5 15v1m0 -8v1"></path>
+                                     </svg>
+                                    {{-- <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" width="22" height="24" stroke="currentColor" id="library"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path></svg> --}}
                                 </span>
                                 <span class="ml-4 mt-1 text-sm tracking-wide truncate">{{ __('Fees') }}</span>
                             </a>
@@ -234,20 +279,10 @@
                                 </span>
                                 <div class="flex flex-row items-center justify-between w-full ml-4 pr-4" @mouseover="subnav = 'users'" @click.away="subnav = 'none'">
                                     <span class="mt-1 text-sm tracking-wide truncate">{{ __('Users') }}</span>
-                                    <svg class="h-3 text-gray-400" fill="none" stroke="currentColor" fill-rule="evenodd" viewBox="0 0 7 12"><path fill-rule="nonzero" d="M5.569 5.994L0 .726.687 0l6.336 5.994-6.335 6.002L0 11.27z"></path></svg>    
+                                    {{-- <svg class="h-3 text-gray-400" fill="none" stroke="currentColor" fill-rule="evenodd" viewBox="0 0 7 12"><path fill-rule="nonzero" d="M5.569 5.994L0 .726.687 0l6.336 5.994-6.335 6.002L0 11.27z"></path></svg>     --}}
                                 </div>
                             </a>
                         </li>
-
-                        <li x-show="subnav == 'users'">
-                            <a href="{{route('admin.users.view')}}" class="pl-9 relative flex flex-row items-center h-11 hover:bg-gray-100 text-gray-500 hover:text-gray-700">
-                                <span class="ml-4 mt-1 text-xs tracking-wide truncate">{{ __('View Users')}}</span>
-                            </a>
-                            <a href="{{route('admin.users.create')}}" class="pl-9 relative flex flex-row items-center h-11 hover:bg-gray-100 text-gray-500 hover:text-gray-700">
-                                <span class="ml-4 mt-1 text-xs tracking-wide truncate">{{ __('Add User')}}</span>
-                            </a>
-                        </li>
-
                         {{-- <li title="School Management">
                             <a href="{{route('admin.school.year.view')}}" class="{{ request()->is('admin/school-management/years*') || request()->is('admin/school-management/years') ? 'text-indigo-500' : 'text-gray-800'}} h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700">
                                 <span class="inline-flex justify-center items-center ml-3 pl-0.5">
@@ -260,15 +295,43 @@
     
                     @if(auth()->user()->role->name === 'student')
                         <li title="registration">
-                            <a href="{{route('student.registration')}}" class="{{ request()->is('student/registration') ? 'font-bold text-indigo-500' : 'text-gray-800'}} relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-200 text-gray-500 hover:text-gray-700">
+                            <a href="{{route('student.registration')}}" class="{{ request()->is('student/registrations') ? 'font-bold text-indigo-500' : 'text-gray-800'}} relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-200 text-gray-500 hover:text-gray-700">
                             <span class="inline-flex justify-center items-center ml-3 pl-0.5">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" ></path>
-                                </svg>
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
                             </span>
                             <span class="ml-4 mt-1 text-sm tracking-wide truncate">{{ __('Registration') }}</span>
                             </a>
                         </li>
+
+                        <li title="Sections">
+                            <a href="{{route('sections.view')}}" class="{{ request()->is('sections/*') || request()->is('sections') ? 'text-indigo-500' : 'text-gray-800'}} h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700">
+                                <span class="inline-flex justify-center items-center ml-3 pl-0.5">
+                                    {{-- <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" width="22" height="24" stroke="currentColor" id="library"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path></svg> --}}
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="" width="22" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <line x1="9" y1="12" x2="15" y2="12"></line>
+                                        <line x1="12" y1="9" x2="12" y2="15"></line>
+                                        <path d="M4 6v-1a1 1 0 0 1 1 -1h1m5 0h2m5 0h1a1 1 0 0 1 1 1v1m0 5v2m0 5v1a1 1 0 0 1 -1 1h-1m-5 0h-2m-5 0h-1a1 1 0 0 1 -1 -1v-1m0 -5v-2m0 -5"></path>
+                                     </svg>
+                                </span>
+                                <span class="ml-4 mt-1 text-sm tracking-wide truncate">{{ __('Schedule') }}</span>
+                            </a>
+                        </li>
                 
+                        <li title="Prospectus">
+                            <a href="{{route('prospectuses.view')}}" class="{{ request()->is('prospectuses/*') || request()->is('prospectuses') ? 'text-indigo-500' : 'text-gray-800'}} h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700">
+                                <span class="inline-flex justify-center items-center ml-3 pl-0.5">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="" width="22" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <circle cx="12" cy="7" r="3"></circle>
+                                        <circle cx="17" cy="16" r="3"></circle>
+                                        <circle cx="7" cy="16" r="3"></circle>
+                                     </svg>
+                                    {{-- <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" width="22" height="24" stroke="currentColor" id="library"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path></svg> --}}
+                                </span>
+                                <span class="ml-4 mt-1 text-sm tracking-wide truncate">{{ __('Prospectus') }}</span>
+                            </a>
+                        </li>
                     @endif
                     <!-- Responsive Settings Options -->
                     <div class="block lg:hidden pt-4 pb-1 border-t border-gray-200">
