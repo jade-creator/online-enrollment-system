@@ -9,6 +9,7 @@ use App\Models\Prospectus;
 use App\Models\Room;
 use App\Models\Schedule;
 use App\Models\Section;
+use App\Models\Status;
 use App\Models\Strand;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -27,6 +28,7 @@ class SectionViewComponent extends Component
     public int $paginateValue = 10;
     public bool $confirmingExport = false, $addingSection = false, $viewingSection = false, $addingSchedule = false;
     public $prospectus, $levelId, $programId, $strandId, $termId, $typeId = 1;
+    public $registrations;
 
     protected $queryString = [
         'search' => [ 'except' => '' ],
@@ -48,7 +50,7 @@ class SectionViewComponent extends Component
         'termId',
     ];
 
-    protected $listeners = ['DeselectPage' => 'updatedSelectPage', 'removeItem'];
+    protected $listeners = ['DeselectPage' => 'updatedSelectPage', 'removeItem', 'releaseStudents'];
 
     public function rules() 
     {
@@ -56,6 +58,7 @@ class SectionViewComponent extends Component
             'section.name' => ['required', 'string'],
             'section.remarks' => ['nullable', 'string'],
             'section.room_id' => ['required', 'integer'],
+            'section.seat' => ['required', 'numeric', 'min:1'],
             'schedule.start_time_monday' => ['nullable'],
             'schedule.end_time_monday' => ['nullable', 'after:schedule.start_time_monday'],
             'schedule.start_time_tuesday' => ['nullable'],
@@ -78,6 +81,7 @@ class SectionViewComponent extends Component
         $this->fill([ 
             'section' => new Section(),
             'schedule' => new Schedule(), 
+            'registrations' => collect(), 
         ]);
     }
 
@@ -91,8 +95,15 @@ class SectionViewComponent extends Component
 
     public function getRowsQueryProperty()
     {
-        return Section::select(['id', 'name', 'remarks', 'prospectus_id', 'room_id', 'created_at'])
-            ->with(['prospectus:id,level_id,program_id,strand_id,term_id', 'schedules.subject', 'room:id,name'])
+        return Section::select(['id', 'name', 'remarks', 'prospectus_id', 'room_id', 'seat', 'created_at'])
+            ->with([
+                'prospectus:id,level_id,program_id,strand_id,term_id', 'schedules.subject', 'room:id,name',
+                'registrations' => function($query) {
+                    $status = Status::where('name', 'enrolled')->first();
+                    return $query->where('status_id', $status->id)
+                                ->whereNull('released_at');
+                }    
+            ])
             ->when(!empty($this->levelId), function($query) {
                 return $query->WhereHas('prospectus', function($query) {
                             return $query->where('level_id', $this->levelId);
@@ -237,11 +248,72 @@ class SectionViewComponent extends Component
     public function updateSection()
     {
         $this->validate();
+
+        if ($this->section->seat < $this->section->registrations->count()) {
+            return $this->dispatchBrowserEvent('swal:modal', [ 
+                'title' => "Oops Sorry..",
+                'type' => "error",
+                'text' => "Sorry available seats should not be less than to current number of students.",
+            ]);
+        }
+
         $this->section->save();
         $this->fill([ 'viewingSection' => false, ]);
 
         $this->dispatchBrowserEvent('swal:success', [ 
             'text' => "The section has been updated.",
+        ]);
+    }
+
+    public function release()
+    {
+        $status = Status::where('name', 'released')->first();
+
+        if ($this->registrations->count() > 0) {
+            foreach ($this->registrations as $registration ) {
+                $registration->status_id = $status->id;
+                $registration->released_at = now();
+                $registration->save();
+            }
+        }
+    }
+
+    public function releaseConfirm(Section $section)
+    {
+        $this->section = $section;
+
+        $this->dispatchBrowserEvent('swal:confirmRelease', [ 
+            'type' => 'warning',
+            'title' => 'Are you sure?',
+            'text' => 'Students under this section will be removed. Their registration will moved to history once this action is successfull.',
+        ]);
+    }
+
+    public function releaseStudents()
+    {
+        $this->registrations = $this->section->registrations;
+        $this->release();
+
+        $this->dispatchBrowserEvent('swal:success', [
+            'text' => "The students have been released.",
+        ]);
+    }
+
+    public function releaseAll()
+    {
+        $sections = Section::with(['registrations' => function($query) {
+                    return $query->whereNull('released_at');
+                }]) 
+                ->whereIn('id', $this->selected)
+                ->get();
+
+        $sections->map(function($section) {
+            $this->registrations = $section->registrations;
+            $this->release();
+        });
+
+        $this->dispatchBrowserEvent('swal:success', [ 
+            'text' => "The students have been released.",
         ]);
     }
 
@@ -333,8 +405,6 @@ class SectionViewComponent extends Component
     }
 
     public function updatingProgramId() { $this->resetPage(); }
-
-    public function updatingTrackId() { $this->resetPage(); }
 
     public function updatingStrandId() { $this->resetPage(); }
 

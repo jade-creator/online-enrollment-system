@@ -15,6 +15,7 @@ class Section extends Model
         'remarks',
         'prospectus_id',
         'room_id',
+        'seat',
     ];
 
     public function registrations() { return

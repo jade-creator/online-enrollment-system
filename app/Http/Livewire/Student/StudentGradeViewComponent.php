@@ -47,14 +47,13 @@ class StudentGradeViewComponent extends Component
 
     public function getRowsQueryProperty() 
     {
-        $status = Status::where('name', 'enrolled')->firstOrFail();
+        $statuses = Status::whereIn('name', ['enrolled', 'released'])->get();
+        $statuses = $statuses->pluck('id')->toArray();
 
         return Registration::search($this->search)
             ->select(['id', 'isNew', 'status_id', 'section_id', 'student_id', 'prospectus_id', 'created_at'])
-            ->where([
-                ['status_id', $status->id],
-                ['student_id', Auth::user()->student->id],
-            ])
+            ->where('student_id', Auth::user()->student->id)
+            ->whereIn('status_id', $statuses)
             ->with([
                 'student.user.person',
                 'status:id,name',
@@ -66,16 +65,6 @@ class StudentGradeViewComponent extends Component
                 'grades.subject:id,code,title',
                 'grades.mark:id,name',
             ])
-            ->when(!empty($this->search), function($query) {
-                return $query->orWhereHas('student', function($query) {
-                            return $query->where('custom_id', 'LIKE', '%'.$this->search.'%');
-                        })
-                        ->orWhereHas('student.user.person', function($query) {
-                            return $query->where('firstname', 'LIKE', '%'.$this->search.'%')
-                                ->orWhere('middlename', 'LIKE', '%'.$this->search.'%')
-                                ->orWhere('lastname', 'LIKE', '%'.$this->search.'%');
-                        });
-            })
             ->when(!empty($this->typeId), function ($query) {
                 return $query->whereHas('prospectus.level.schoolType', function($query) {
                     return $query->where('id', $this->typeId);

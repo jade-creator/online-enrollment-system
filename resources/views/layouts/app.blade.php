@@ -110,6 +110,21 @@
                     }
                 });
             });
+
+            window.addEventListener('swal:confirmRelease', event => {
+                swal({
+                    title: event.detail.title,
+                    text: event.detail.text,
+                    icon: event.detail.type,
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willRelease) => {
+                    if (willRelease) {
+                        window.livewire.emit('releaseStudents');
+                    }
+                });
+            });
         </script>
     </body>
 </html>

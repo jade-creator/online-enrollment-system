@@ -4,6 +4,8 @@ namespace App\Http\Livewire\Student;
 
 use App\Models\Registration;
 use App\Models\Section;
+use App\Models\Status;
+use App\Services\Sections;
 use Livewire\Component;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use PDF;
@@ -54,8 +56,21 @@ class PreRegistrationComponent extends Component
     {
         $this->authorize('update', $this->registration);
 
+        $isSectionFull = (new Sections())->isFull($this->registration->section_id);
+
+        if ($isSectionFull) {
+            return $this->dispatchBrowserEvent('swal:modal', [ 
+                'title' => "Oops Sorry..",
+                'type' => "error",
+                'text' => "Sorry but this section is already full.",
+            ]);
+        }
+
         $this->validate();
-        $this->registration->status_id = 3;
+
+        $status = Status::where('name', 'enrolled')->firstOrFail();
+        $this->registration->released_at = null;
+        $this->registration->status_id = $status->id;
         $this->registration->save();
 
         $student = $this->registration->student;
@@ -74,8 +89,10 @@ class PreRegistrationComponent extends Component
     {
         $this->authorize('update', $this->registration);
 
+        $status = Status::where('name', 'pending')->firstOrFail();
+
         $this->registration->section_id = null;
-        $this->registration->status_id = 2;
+        $this->registration->status_id = $status->id;
         $this->registration->save();
 
         return redirect(route('pre.registration.view', ['regId' => $this->regId]));
@@ -94,8 +111,10 @@ class PreRegistrationComponent extends Component
     {
         $this->authorize('update', $this->registration);
 
+        $status = Status::where('name', 'denied')->firstOrFail();
+
         $this->registration->section_id = null;
-        $this->registration->status_id = 4;
+        $this->registration->status_id = $status->id;
         $this->registration->save();
 
         return redirect(route('pre.registration.view', ['regId' => $this->regId]));

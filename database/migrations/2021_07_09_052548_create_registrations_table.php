@@ -20,6 +20,7 @@ class CreateRegistrationsTable extends Migration
             $table->foreignId('section_id')->nullable()->constrained();
             $table->foreignId('student_id')->constrained();
             $table->foreignId('prospectus_id')->constrained();
+            $table->timestamp('released_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

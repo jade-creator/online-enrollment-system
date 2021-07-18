@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin;
 use App\Models\Registration;
 use App\Models\Section;
 use App\Models\Subject;
+use App\Models\Status;
 use App\Models\User;
 use Carbon\Carbon;
 use Livewire\Component;
@@ -31,17 +32,17 @@ class Dashboard extends Component
         Subject::get('id');
     }
 
-    public function getRecentlyEnrolleesProperty() { return
-        Registration::
-        // whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
-            with('student.user.person')
-            ->where('status_id', 3)
+    public function getRecentlyEnrolleesProperty() { 
+        $status = Status::where('name', 'enrolled')->firstOrFail();
+        
+        return Registration::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+            ->with('student.user.person')
+            ->where('status_id', $status->id)
             ->latest()
             ->take(5)
             ->get();
     }
 
-    
     public function getAllRegistrationsProperty()
     {
         return Registration::with([
