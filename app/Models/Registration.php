@@ -18,6 +18,12 @@ class Registration extends Model
         'prospectus_id',
     ];
 
+    public function subjects() { return
+        $this->belongsToMany(Subject::class)
+            ->withTimestamps()
+            ->withPivot(['grade', 'mark_id']);
+    }
+
     public function status() { return
         $this->belongsTo(Status::class);
     }

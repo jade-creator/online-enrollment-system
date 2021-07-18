@@ -17,7 +17,7 @@ class StatusSeeder extends Seeder
         DB::table('statuses')->delete();
 
         $statuses = [
-            ['name' => 'requested', 'created_at' => now(), 'updated_at' => now()],
+            // ['name' => 'requested', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'pending', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'enrolled', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'denied', 'created_at' => now(), 'updated_at' => now()],

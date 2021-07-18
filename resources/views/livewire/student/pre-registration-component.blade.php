@@ -100,7 +100,7 @@
                     <th>Pre Requisite</th>
                 </thead>
                 <tbody>
-                    @forelse ($registration->prospectus->subjects as $subject)
+                    @forelse ($registration->subjects as $subject)
                         <tr>
                             <td class="pb-4 text-center">{{ $subject->id ?? 'N/A' }}</td>
                             <td class="pb-4 text-center">{{ $subject->code ?? 'N/A' }}</td>
