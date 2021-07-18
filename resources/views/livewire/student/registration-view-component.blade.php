@@ -114,6 +114,17 @@
                                                             <p class="pl-2">{{ __('View')}}</p>
                                                         </button>
                                                     </a>
+                                                    @can('viewGrade', $registration)
+                                                        <a href="{{ route('student.grades.view', ['search' => $registration->id]) }}">
+                                                            <button class="flex w-full px-4 py-2 hover:bg-gray-200 outline-none focus:outline-none transition-all duration-300 ease-in-out" type="button">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                                    <path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"></path>
+                                                                </svg>
+                                                                <p class="pl-2">{{ __('Grades')}}</p>
+                                                            </button>
+                                                        </a>
+                                                    @endcan
                                                 </div>
                                             </div>
                                         </x-slot>

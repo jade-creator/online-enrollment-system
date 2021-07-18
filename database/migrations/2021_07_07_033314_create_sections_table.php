@@ -19,6 +19,7 @@ class CreateSectionsTable extends Migration
             $table->text('remarks')->nullable();
             $table->foreignId('prospectus_id')->constrained();
             $table->foreignId('room_id')->constrained();
+            $table->unsignedInteger('seat');
             $table->timestamps();
             $table->softDeletes();
         });

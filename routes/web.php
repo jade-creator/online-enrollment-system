@@ -138,7 +138,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
 
         Route::group(['middleware' => 'user.detail', 'prefix' => 'student', 'as' => 'student.'], function (){
             Route::get('/registrations', Student\RegistrationViewComponent::class)->name('registration');
-            Route::get('/registrations/create', Student\Registration::class)->name('registrations.create');
+            Route::get('/registrations/create', Student\Registration::class)->middleware(['password.confirm'])->name('registrations.create');
             Route::get('/grades', Student\StudentGradeViewComponent::class)->name('grades.view');
         });
     });

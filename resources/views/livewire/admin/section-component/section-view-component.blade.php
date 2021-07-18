@@ -102,15 +102,17 @@
             </x-slot>
 
             <x-slot name="head">
-                <div class="col-span-3 flex" id="ID">
+                <div class="col-span-2 flex items-start" id="ID">
                     <input @click.stop type="checkbox" wire:model="selectPage" class="cursor-pointer border-gray-400 focus:outline-none focus:ring-transparent mx-5 rounded-sm" title="Select Displayed Data">
                     <x-table.sort-button nameButton="ID" event="sortFieldSelected('ID')"/>
                 </div>
-                <div class="col-span-3" id="name">
+                <div class="col-span-2" id="name">
                     <x-table.sort-button nameButton="name" event="sortFieldSelected('name')"/>
                 </div>
-                <x-table.column-title columnTitle="remarks" class="col-span-3"/>
+                <x-table.column-title columnTitle="remarks" class="col-span-2"/>
                 <x-table.column-title columnTitle="room" class="col-span-2"/>
+                <x-table.column-title columnTitle="seats" class="col-span-1"/>
+                <x-table.column-title columnTitle="current no. of students" class="col-span-2 text-center"/>
                 <div class="col-span-1">
                     <x-table.sort-button nameButton="latest" event="sortFieldSelected('created_at')"/>
                 </div>
@@ -125,7 +127,7 @@
                                  class="{{ $this->isSelected($section->id) ? 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-gray-200 border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer' 
                                  : 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-white border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer' }}">
                                 <div class="grid grid-cols-12 gap-2">
-                                    <div class="col-span-12 md:col-span-3 truncate font-bold text-xs">
+                                    <div class="col-span-12 md:col-span-2 truncate font-bold text-xs">
                                         <div class="flex items-center">
                                             <input wire:loading.attr="disabled" type="checkbox" value="{{ $section->id }}" wire:model="selected" class="cursor-pointer border-gray-500 border-opacity-50 focus:outline-none focus:ring focus:ring-transparent ml-3 mr-5 rounded-sm">
                                             <div class="h-10 flex items-center">
@@ -133,9 +135,11 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="flex items-center justify-start col-span-12 md:col-span-3 truncate md:border-0 border-t border-gray-300 font-bold text-xs"><p class="truncate">{{ $section->name ?? 'N/A' }}</p></div>
-                                    <div class="flex items-center justify-start col-span-12 md:col-span-3 truncate md:border-0 border-t border-gray-300 font-bold text-xs"><p class="truncate">{{ $section->remarks ?? 'N/A' }}</p></div>
+                                    <div class="flex items-center justify-start col-span-12 md:col-span-2 truncate md:border-0 border-t border-gray-300 font-bold text-xs"><p class="truncate">{{ $section->name ?? 'N/A' }}</p></div>
+                                    <div class="flex items-center justify-start col-span-12 md:col-span-2 truncate md:border-0 border-t border-gray-300 font-bold text-xs"><p class="truncate">{{ $section->remarks ?? 'N/A' }}</p></div>
                                     <div class="flex items-center justify-start col-span-12 md:col-span-2 truncate md:border-0 border-t border-gray-300 font-bold text-xs"><p class="truncate">{{ $section->room->name ?? 'N/A' }}</p></div>
+                                    <div class="flex items-center justify-start col-span-12 md:col-span-1 truncate md:border-0 border-t border-gray-300 font-bold text-xs"><p class="truncate">{{ $section->seat ?? 'N/A' }}</p></div>
+                                    <div class="flex items-center justify-center col-span-12 md:col-span-2 truncate md:border-0 border-t border-gray-300 font-bold text-xs"><p class="truncate">{{ $section->registrations->count() }}</p></div>
                                     <div class="flex items-center justify-center col-span-12 md:col-span-1 md:border-0 border-t border-gray-300">
                                         @if ( !count($selected) > 0)
                                             <x-jet-dropdown align="right" width="60" dropdownClasses="z-10 shadow-2xl">
@@ -168,6 +172,19 @@
                                                                     <p class="pl-2">{{ __('View')}}</p>
                                                                 </button>                                                        
                                                             </div>
+                                                            @can('release', $section)
+                                                                <div>
+                                                                    <button wire:click.prevent="releaseConfirm({{ $section }})" class="flex w-full px-4 py-2 hover:bg-gray-200 outline-none focus:outline-none transition-all duration-300 ease-in-out">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                                            <path d="M4 19v2h16v-14l-8 -4l-8 4v2"></path>
+                                                                            <path d="M13 14h-9"></path>
+                                                                            <path d="M7 11l-3 3l3 3"></path>
+                                                                         </svg>
+                                                                        <p class="pl-2">{{ __('Release Students')}}</p>
+                                                                    </button>                                                        
+                                                                </div>
+                                                            @endcan
                                                             <div>
                                                                 <button wire:click.prevent="removeConfirm({{ $section }})" class="flex w-full px-4 py-2 hover:bg-red-500 hover:text-white rounded-b-md outline-none focus:outline-none transition-all duration-300 ease-in-out">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -305,16 +322,28 @@
                     </div>
                     <div class="py-3 border-r border-gray-300">&nbsp;</div>
                     <div class="flex pl-5">
-                        <x-table.bulk-action-button nameButton="Export" event="$toggle('confirmingExport')">
-                            <x-slot name="icon">
-                                <svg class="text-gray-600" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
-                                    <polyline points="7 11 12 16 17 11"></polyline>
-                                    <line x1="12" y1="4" x2="12" y2="16"></line>
-                                </svg>
-                            </x-slot>
-                        </x-table.bulk-action-button>
+                        @can('create', App\Models\Section::class)
+                            <x-table.bulk-action-button nameButton="Export" event="$toggle('confirmingExport')">
+                                <x-slot name="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
+                                        <polyline points="7 11 12 16 17 11"></polyline>
+                                        <line x1="12" y1="4" x2="12" y2="16"></line>
+                                    </svg>
+                                </x-slot>
+                            </x-table.bulk-action-button>
+                            <x-table.bulk-action-button nameButton="Release" event="releaseAll">
+                                <x-slot name="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <path d="M4 19v2h16v-14l-8 -4l-8 4v2"></path>
+                                        <path d="M13 14h-9"></path>
+                                        <path d="M7 11l-3 3l3 3"></path>
+                                    </svg>
+                                </x-slot>
+                            </x-table.bulk-action-button>
+                        @endcan
                         <x-table.bulk-action-button nameButton="Select All" event="selectAll">
                             <x-slot name="icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -389,6 +418,12 @@
                         <x-jet-input-error for="section.room_id" class="mt-2"/>
                     </div>
                 </div>
+
+                <div class="mt-4">
+                    <x-jet-label for="seat" value="{{ __('Seat') }}" />
+                    <x-jet-input wire:model.lazy="section.seat" id="seat" class="block mt-1 w-full" type="number" name="seat" autofocus required/>
+                    <x-jet-input-error for="section.seat" class="mt-2"/>
+                </div>
                 
                 <div class="mt-4">
                     <x-jet-label for="remarks" value="{{ __('Remarks') }}" />
@@ -438,6 +473,12 @@
                         </select>
                         <x-jet-input-error for="section.room_id" class="mt-2"/>
                     </div>
+                </div>
+
+                <div class="mt-4">
+                    <x-jet-label for="seat" value="{{ __('Seat') }}" />
+                    <x-jet-input wire:model.lazy="section.seat" id="seat" class="block mt-1 w-full" type="number" name="seat" autofocus required/>
+                    <x-jet-input-error for="section.seat" class="mt-2"/>
                 </div>
                 
                 <div class="mt-4">

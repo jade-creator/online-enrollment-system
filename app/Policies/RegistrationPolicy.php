@@ -33,6 +33,11 @@ class RegistrationPolicy
         return $user->role->name == 'admin' && $registration->status->name == "enrolled";
     }
 
+    public function viewGrade(User $user, Registration $registration)
+    {
+        return $registration->status->name == "enrolled" || $registration->status->name == "released";
+    }
+
     /**
      * Determine whether the user can view the model.
      *
