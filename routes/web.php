@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Livewire\Admin\Dashboard;
-use App\Http\Livewire\Admin\Masterlist;
-use App\Http\Livewire\Admin\FeeComponent                                                ;
+use App\Http\Livewire\Admin\FeeComponent;
+use App\Http\Livewire\Admin\GradeComponent;
 use App\Http\Livewire\Admin\UserComponent\UserAddComponent;
 use App\Http\Livewire\Admin\UserComponent\UserViewComponent;
 use App\Http\Livewire\Admin\ProgramComponent\ProgramViewComponent;
@@ -81,6 +81,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
             //     Route::get('/create', SubjectComponent\SubjectAddComponent::class)->name('create');
             // });
 
+            Route::get('/grades', GradeComponent\GradeViewComponent::class)->name('grades.view');
+
             Route::get('/pre-enrollments', PreEnrollmentComponent\PreEnrollmentViewComponent::class)->name('pre.enrollments.view');
 
             Route::get('/fees', FeeComponent\FeeViewComponent::class)->name('fees.view');
@@ -137,6 +139,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
         Route::group(['middleware' => 'user.detail', 'prefix' => 'student', 'as' => 'student.'], function (){
             Route::get('/registrations', Student\RegistrationViewComponent::class)->name('registration');
             Route::get('/registrations/create', Student\Registration::class)->name('registrations.create');
+            Route::get('/grades', Student\StudentGradeViewComponent::class)->name('grades.view');
         });
     });
     // end student

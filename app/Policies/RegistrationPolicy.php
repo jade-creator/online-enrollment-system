@@ -22,6 +22,18 @@ class RegistrationPolicy
     }
 
     /**
+     * Determine whether the user can update it's child.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Registration  $registration
+     * @return mixed
+     */
+    public function updateGrade(User $user, Registration $registration)
+    {
+        return $user->role->name == 'admin' && $registration->status->name == "enrolled";
+    }
+
+    /**
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user

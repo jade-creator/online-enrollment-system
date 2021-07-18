@@ -2,8 +2,15 @@
     <div class="py-10">
         <div class="flex items-center justify-between">
             <p class="font-bold text-lg">Pre Registration</p>
-            <x-jet-button wire:click.prevent="createPDF" wire:loading.attr="disabled" class="ml-2 bg-indigo-700 hover:bg-indigo-800">
-                {{ __('Export to PDF')}}
+            <x-jet-button wire:click.prevent="createPDF" wire:loading.attr="disabled" class="ml-2 bg-indigo-700 hover:bg-indigo-800 flex items-end">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="22" height="22" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                    <path d="M5 8v-3a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2h-5"></path>
+                    <circle cx="6" cy="14" r="3"></circle>
+                    <path d="M4.5 17l-1.5 5l3 -1.5l3 1.5l-1.5 -5"></path>
+                 </svg>
+                <span>{{ __('Export to PDF')}}</span>
             </x-jet-button>
         </div>
         <x-jet-section-border/>
@@ -88,7 +95,7 @@
     <div class="w-full mb-10">
         <div class="w-full bg-blue-100 bg-opacity-20 border-t border-l border-r border-blue-200 p-4 rounded-t-md font-semibold flex items-center justify-between">
             <p>Subjects</p>
-            <p class="font-normal text-xs">Total Units: {{ $registration->prospectus->subjects->sum('unit') }}</p>
+            <p class="font-normal text-xs">Total Units: {{ $registration->grades->sum('subject.unit') }}</p>
         </div>
         <div class="border-b border-l border-r border-gray-200 rounded-b-md p-4">
             <table class="w-full">
@@ -100,14 +107,14 @@
                     <th>Pre Requisite</th>
                 </thead>
                 <tbody>
-                    @forelse ($registration->subjects as $subject)
+                    @forelse ($registration->grades as $grade)
                         <tr>
-                            <td class="pb-4 text-center">{{ $subject->id ?? 'N/A' }}</td>
-                            <td class="pb-4 text-center">{{ $subject->code ?? 'N/A' }}</td>
-                            <td class="pb-4 text-center">{{ $subject->title ?? 'N/A' }}</td>
-                            <td class="pb-4 text-center">{{ $subject->unit ?? 'N/A' }}</td>
+                            <td class="pb-4 text-center">{{ $grade->subject->id ?? 'N/A' }}</td>
+                            <td class="pb-4 text-center">{{ $grade->subject->code ?? 'N/A' }}</td>
+                            <td class="pb-4 text-center">{{ $grade->subject->title ?? 'N/A' }}</td>
+                            <td class="pb-4 text-center">{{ $grade->subject->unit ?? 'N/A' }}</td>
                             <td class="pb-4 text-center">
-                                @forelse ($subject->requisites as $requisite)
+                                @forelse ($grade->subject->requisites as $requisite)
                                     {{ $loop->first ? '' : ', '  }}
                                     <span>&nbsp;{{ $requisite->code }}</span>
                                 @empty
@@ -155,16 +162,36 @@
     <div class="w-full mb-10 flex items-center justify-start">
         @can('update', $registration)
             @if ($registration->status->name == 'pending')
-                <x-jet-button wire:click.prevent="$toggle('enrollingStudent')" wire:loading.attr="disabled" class="ml-2 bg-indigo-500 hover:bg-indigo-700">
-                    {{ __('Enroll') }}
+                <x-jet-button wire:click.prevent="$toggle('enrollingStudent')" wire:loading.attr="disabled" class="ml-2 bg-indigo-500 hover:bg-indigo-700 flex items-end">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="22" height="22" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <circle cx="12" cy="9" r="6"></circle>
+                        <polyline points="9 14.2 9 21 12 19 15 21 15 14.2" transform="rotate(-30 12 9)"></polyline>
+                        <polyline points="9 14.2 9 21 12 19 15 21 15 14.2" transform="rotate(30 12 9)"></polyline>
+                     </svg>
+                    <span>{{ __('Enroll') }}</span>
                 </x-jet-button>
             @else
-                <x-jet-button class="ml-2 bg-yellow-500 hover:bg-yellow-700" wire:click.prevent="pending" wire:loading.attr="disabled">
-                    {{ __('Pending') }}
+                <x-jet-button wire:click.prevent="pending" wire:loading.attr="disabled" class="ml-2 bg-yellow-500 hover:bg-yellow-700 flex items-end">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="22" height="22" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M15 4.55a8 8 0 0 0 -6 14.9m0 -4.45v5h-5"></path>
+                        <line x1="18.37" y1="7.16" x2="18.37" y2="7.17"></line>
+                        <line x1="13" y1="19.94" x2="13" y2="19.95"></line>
+                        <line x1="16.84" y1="18.37" x2="16.84" y2="18.38"></line>
+                        <line x1="19.37" y1="15.1" x2="19.37" y2="15.11"></line>
+                        <line x1="19.94" y1="11" x2="19.94" y2="11.01"></line>
+                     </svg>
+                    <span>{{ __('Pending') }}</span>
                 </x-jet-button>
             @endif
-            <x-jet-button class="ml-2 bg-red-500 hover:bg-red-700" wire:click.prevent="rejectConfirm" wire:loading.attr="disabled">
-                {{ __('Reject') }}
+            <x-jet-button wire:click.prevent="rejectConfirm" wire:loading.attr="disabled" class="ml-2 bg-red-500 hover:bg-red-700 flex items-end">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="22" height="22" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <circle cx="12" cy="12" r="9"></circle>
+                    <line x1="5.7" y1="5.7" x2="18.3" y2="18.3"></line>
+                 </svg>
+                <span>{{ __('Reject') }}</span>
             </x-jet-button>
         @endcan
     </div>

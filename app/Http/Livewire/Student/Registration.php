@@ -3,12 +3,14 @@
 namespace App\Http\Livewire\Student;
 
 use App\Models;
+use App\Models\Grade;
 use App\Models\Level;
 use App\Models\Mark;
 use App\Models\Program;
 use App\Models\Prospectus;
 use App\Models\Strand;
 use App\Models\Status;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -125,10 +127,17 @@ class Registration extends Component
         $this->registration->save();
 
         $mark = Mark::where('name', 'tba')->firstOrFail();
-        
+        $grades = [];
+
         foreach ($this->selected as $id) {
-            $this->registration->subjects()->attach($id, ['mark_id' => $mark->id]);
+            $grades[] = new Grade([
+                'subject_id' => $id,
+                'mark_id' => $mark->id,
+            ]);
         }
+
+        $this->registration->grades()->saveMany($grades);
+
 
         return redirect(route('student.registration'));
     }

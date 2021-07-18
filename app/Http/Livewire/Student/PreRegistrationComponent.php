@@ -37,7 +37,9 @@ class PreRegistrationComponent extends Component
                             'prospectus.term',
                             'prospectus.fees',
                             'section',
-                            'subjects',
+                            'grades:id,registration_id,subject_id',
+                            'grades.subject:id,code,title,unit',
+                            'grades.subject.requisites',
                         ])
                         ->findOrFail($this->regId);
 
