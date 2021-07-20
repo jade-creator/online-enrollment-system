@@ -238,7 +238,7 @@
                                     <div class="mr-2 my-2">
                                         <div class="flex">
                                             <select wire:model="preRequisites.{{ $index }}" name="preRequisites[{{ $index }}]" class="w-full bg-white flex-1 p-2 tracking-wide border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-l-md shadow-sm">
-                                                @forelse ($this->subjects as $subject)
+                                                @forelse ($availableSubjects as $subject)
                                                     @if ($loop->first)
                                                         <option value="">-- choose a subject --</option>
                                                     @endif
@@ -321,7 +321,7 @@
                                     <div class="mr-2 my-2">
                                         <div class="flex">
                                             <select wire:model="preRequisites.{{ $index }}" name="preRequisites[{{ $index }}]" class="w-full bg-white flex-1 p-2 tracking-wide border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-l-md shadow-sm">
-                                                @forelse ($this->subjects as $subject)
+                                                @forelse ($this->availableSubjects as $subject)
                                                     @if ($loop->first)
                                                         <option value="">-- choose a subject --</option>
                                                     @endif

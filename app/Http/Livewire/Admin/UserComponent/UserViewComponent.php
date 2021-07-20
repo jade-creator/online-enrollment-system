@@ -22,7 +22,7 @@ class UserViewComponent extends Component
     
     public int $paginateValue = 10;
     public bool $confirmingExport = false, $addingUser = false;
-    public $role;
+    public $role = '';
     public $name;
     public $email;
     public $password;   

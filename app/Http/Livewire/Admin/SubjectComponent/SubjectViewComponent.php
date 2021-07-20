@@ -73,11 +73,6 @@ class SubjectViewComponent extends Component
                 fn ($query) => $query->whereBetween('created_at', [$this->dateMin, $this->dateMax]));
     }
 
-    public function getSubjectsProperty() {
-        $this->availableSubjects = Subject::get(['id', 'code']);
-        return $this->availableSubjects;
-    }
-
     public function removeConfirm(Subject $subject) {
         $this->subject = $subject;
 
@@ -107,6 +102,7 @@ class SubjectViewComponent extends Component
         $this->fill([
             'subject' => $subject,
             'viewingSubject' => true,
+            'availableSubjects' => Subject::whereNotIn('id', [$subject->id])->get(['id', 'code']),
         ]);
 
         if (!$subject->requisites->isEmpty()) {

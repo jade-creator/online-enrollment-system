@@ -10,7 +10,6 @@ use App\Models\Program;
 use App\Models\Prospectus;
 use App\Models\Strand;
 use App\Models\Status;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
