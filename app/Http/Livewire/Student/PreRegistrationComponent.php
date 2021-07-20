@@ -128,7 +128,7 @@ class PreRegistrationComponent extends Component
     public function updatedEnrollingStudent() 
     { 
         $this->fill([
-            'studentId' => $this->registration->student->custom_student_id,
+            'studentId' => $this->registration->student->custom_id,
         ]);
     }
 

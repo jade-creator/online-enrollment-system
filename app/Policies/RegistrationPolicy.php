@@ -28,6 +28,11 @@ class RegistrationPolicy
      * @param  \App\Models\Registration  $registration
      * @return mixed
      */
+    public function viewSection(User $user, Registration $registration)
+    {
+        return $registration->section_id;
+    }
+
     public function updateGrade(User $user, Registration $registration)
     {
         return $user->role->name == 'admin' && $registration->status->name == "enrolled";

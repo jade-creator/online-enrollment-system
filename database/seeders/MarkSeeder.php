@@ -17,10 +17,10 @@ class MarkSeeder extends Seeder
         DB::table('marks')->delete();
 
         $marks = [
-            ['name' => 'tba', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'dropped', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'failed', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'passed', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'TBA', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Dropped', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Failed', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Passed', 'created_at' => now(), 'updated_at' => now()],
         ];
 
         DB::table('marks')->insert($marks);

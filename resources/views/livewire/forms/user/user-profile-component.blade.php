@@ -68,7 +68,7 @@
                             <line x1="15" y1="12" x2="17" y2="12"></line>
                             <line x1="7" y1="16" x2="17" y2="16"></line>
                         </svg>
-                        <p class="font-bold text-indigo-500">{{ $user->student->isStudent ? $user->student->custom_student_id : 'N/A' }}</p>
+                        <p class="font-bold text-indigo-500">{{ $user->student->isStudent ? $user->student->custom_id : 'N/A' }}</p>
                     </div>
                 </div>
                 @forelse ($this->registrations as $registration)

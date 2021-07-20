@@ -14,8 +14,9 @@ class Student extends Model
         'user_id',
     ];
 
-    public function getCustomStudentIdAttribute() { return
-        "STUD {$this->custom_id}";
+    public function setCustomIdAttribute($value) 
+    {
+        $this->attributes['custom_id'] = "STUD " . date("Y") . "-{$value}";
     }
 
     public function registrations() { return
