@@ -138,11 +138,11 @@
     <div @click="open = ! open" :class="{'w-full': open, 'lg:w-12': ! open}" class="w-12 h-full transparent fixed">
         {{-- z-40 --}}
 
-        <div @click.stop :class="{'w-full sm:w-60 shadow-lg': open, 'w-0 lg:w-12': ! open}" class="transition-width transition-slowest ease top-0 left-0 h-full bg-white border-r border-gray-200">
+        <div @click.stop :class="{'w-full sm:w-60 shadow-lg sidebar overflow-y-auto scrolling-touch': open, 'w-0 lg:w-12': ! open}" class="transition-width transition-slowest ease top-0 left-0 h-full bg-white border-r border-gray-200">
 
-            <div x-data="{ subnav: 'none' }">
+            <div>
 
-                <ul class="pt-3 flex flex-col space-y-1 h-full w-full overflow-hidden scrolling-touch">
+                <ul class="pt-3 flex flex-col space-y-1 h-full w-full">
                     @if(auth()->user()->role->name === 'admin')
                         <li title="Dashboard">
                             <a href="{{route('admin.dashboard')}}" class="{{ request()->is('admin/dashboard') ? 'text-indigo-500 h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700' 
@@ -286,25 +286,15 @@
                             </a>
                         </li>
 
-                        <li title="users">
+                        <li title="Users">
                             <a href="{{route('admin.users.view')}}" class="{{ request()->is('admin/users/*') || request()->is('admin/users') ? 'text-indigo-500 h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700' 
-                            : 'text-gray-800 h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700'}}">
+                                : 'text-gray-800 h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700'}}">
                                 <span class="inline-flex justify-center items-center ml-3 pl-0.5">
                                     <svg class="w-5 h-5" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                                 </span>
-                                <div class="flex flex-row items-center justify-between w-full ml-4 pr-4" @mouseover="subnav = 'users'" @click.away="subnav = 'none'">
-                                    <span class="mt-1 text-sm tracking-wide truncate">{{ __('Users') }}</span>
-                                </div>
+                                <span class="ml-4 mt-1 text-sm tracking-wide truncate">{{ __('Users') }}</span>
                             </a>
                         </li>
-                        {{-- <li title="School Management">
-                            <a href="{{route('admin.school.year.view')}}" class="{{ request()->is('admin/school-management/years*') || request()->is('admin/school-management/years') ? 'text-indigo-500' : 'text-gray-800'}} h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700">
-                                <span class="inline-flex justify-center items-center ml-3 pl-0.5">
-                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" width="22" height="24" stroke="currentColor" id="library"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path></svg>
-                                </span>
-                                <span class="ml-4 mt-1 text-sm tracking-wide truncate">{{ __('School Year') }}</span>
-                            </a>
-                        </li> --}}
                     @endif
     
                     @if(auth()->user()->role->name === 'student')
