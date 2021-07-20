@@ -47,7 +47,7 @@ require_once __DIR__ . '/jetstream.php';
 
 //------START GUEST----
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 //------END GUEST-------
 
@@ -124,7 +124,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
     // end admin
 
     // admin and student
-    Route::middleware(['role:admin|student'])->group(function (){
+    Route::middleware(['role:admin|student', 'user.detail'])->group(function (){
         Route::get('/sections', SectionComponent\SectionViewComponent::class)->name('sections.view');
         Route::get('/prospectuses', ProspectusComponent\ProspectusViewComponent::class)->name('prospectuses.view');
         Route::get('/pre-registration/{regId}', Student\PreRegistrationComponent::class)->name('pre.registration.view');

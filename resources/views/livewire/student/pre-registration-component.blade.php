@@ -64,7 +64,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="pb-4">Student ID: <span class="text-gray-500 pl-4">{{ $registration->student->isStudent ? $registration->student->custom_student_id : 'N/A' }}</span></td>
+                        <td class="pb-4">Student ID: <span class="text-gray-500 pl-4">{{ $registration->student->isStudent ? $registration->student->custom_id : 'N/A' }}</span></td>
                         <td class="pb-4">Type: <span class="text-gray-500 pl-4">{{ $registration->isNew ? 'New' : 'Old' }}</span></td>
                     </tr>
                     <tr>

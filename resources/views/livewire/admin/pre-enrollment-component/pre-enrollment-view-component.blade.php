@@ -100,7 +100,7 @@
                                 <div class="flex items-center">
                                     <input wire:loading.attr="disabled" type="checkbox" id="{{ $registration->id }}" value="{{ $registration->id }}" wire:model="selected" class="cursor-pointer border-gray-500 border-opacity-50 focus:outline-none focus:ring focus:ring-transparent ml-3 mr-5 rounded-sm">
                                     <div class="h-10 flex items-center">
-                                        {{ $registration->student->isStudent ? $registration->student->custom_student_id : '--' }}
+                                        {{ $registration->student->isStudent ? $registration->student->custom_id : '--' }}
                                     </div>
                                 </div>
                             </div>
@@ -141,6 +141,21 @@
                                                         </button>
                                                     </a>
                                                 </div>
+                                                @can('viewSection', $registration)
+                                                    <div>
+                                                        <a href="{{ route('sections.view', ['search' => $registration->section_id]) }}">
+                                                            <button class="flex w-full px-4 py-2 hover:bg-gray-200 outline-none focus:outline-none transition-all duration-300 ease-in-out">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                                    <line x1="9" y1="12" x2="15" y2="12"></line>
+                                                                    <line x1="12" y1="9" x2="12" y2="15"></line>
+                                                                    <path d="M4 6v-1a1 1 0 0 1 1 -1h1m5 0h2m5 0h1a1 1 0 0 1 1 1v1m0 5v2m0 5v1a1 1 0 0 1 -1 1h-1m-5 0h-2m-5 0h-1a1 1 0 0 1 -1 -1v-1m0 -5v-2m0 -5"></path>
+                                                                </svg>
+                                                                <p class="pl-2">{{ __('Section')}}</p>
+                                                            </button>
+                                                        </a>
+                                                    </div>
+                                                @endcan
                                                 @can('updateGrade', $registration)
                                                     <div>
                                                         <a href="{{ route('admin.grades.view', ['search' => $registration->student->custom_id]) }}">

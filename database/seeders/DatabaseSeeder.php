@@ -30,6 +30,9 @@ class DatabaseSeeder extends Seeder
             RoomSeeder::class,
             StatusSeeder::class,
             MarkSeeder::class,
+            AdminSeeder::class,
+            StudentSeeder::class,
+            GuardianSeeder::class,
         ]);
     }
 }

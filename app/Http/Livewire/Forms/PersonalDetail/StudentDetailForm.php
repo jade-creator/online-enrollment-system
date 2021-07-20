@@ -26,9 +26,7 @@ class StudentDetailForm extends Component
                     'user_id' => Auth::user()->id,
                 ]);
 
-                $this->student->update([
-                    'custom_id' => date("Y"). '-' . $this->student->id,
-                ]);
+                $this->student->update(['custom_id' => $this->student->id]);
 
                 return $this->student;
             });

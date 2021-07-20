@@ -95,7 +95,8 @@ class SectionViewComponent extends Component
 
     public function getRowsQueryProperty()
     {
-        return Section::select(['id', 'name', 'remarks', 'prospectus_id', 'room_id', 'seat', 'created_at'])
+        return Section::search($this->search)
+            ->select(['id', 'name', 'remarks', 'prospectus_id', 'room_id', 'seat', 'created_at'])
             ->with([
                 'prospectus:id,level_id,program_id,strand_id,term_id', 'schedules.subject', 'room:id,name',
                 'registrations' => function($query) {

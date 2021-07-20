@@ -33,4 +33,16 @@ class Section extends Model
     public function prospectus() { return
         $this->belongsTo(Prospectus::class);
     }
+
+    public static function search(?string $search)
+    {
+        $search = '%'.$search.'%';
+
+        return empty($search) ? static::query()
+            : static::where(function ($query) use ($search){
+                return $query
+                ->where('id', 'LIKE', $search)
+                ->orWhere('name', 'LIKE', $search);
+            });
+    }
 }
