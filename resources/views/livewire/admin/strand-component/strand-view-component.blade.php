@@ -223,12 +223,12 @@
                     <div class="mt-3 col-span-8">
                         <div class="mt-4">
                             <x-jet-label for="code" value="{{ __('Code') }}" />
-                            <x-jet-input wire:model.lazy="strand.code" id="code" class="block mt-1 w-full" type="text" name="code" autofocus required/>
+                            <x-jet-input wire:model.defer="strand.code" id="code" class="block mt-1 w-full" type="text" name="code" autofocus required/>
                             <x-jet-input-error for="strand.code" class="mt-2"/>
                         </div>
                         <div class="mt-4">
                             <x-jet-label for="strand" value="{{ __('Strand') }}" />
-                            <x-jet-input wire:model.lazy="strand.strand" id="strand" class="block mt-1 w-full" type="text" name="strand" autofocus required/>
+                            <x-jet-input wire:model.defer="strand.strand" id="strand" class="block mt-1 w-full" type="text" name="strand" autofocus required/>
                             <x-jet-input-error for="strand.strand" class="mt-2"/>
                         </div>
                     </div>
@@ -259,12 +259,12 @@
                     <div class="mt-3 col-span-8">
                         <div class="mt-4">
                             <x-jet-label for="code" value="{{ __('Code') }}" />
-                            <x-jet-input wire:model.lazy="strand.code" id="code" class="block mt-1 w-full" type="text" name="code" autofocus required/>
+                            <x-jet-input wire:model.defer="strand.code" id="code" class="block mt-1 w-full" type="text" name="code" autofocus required/>
                             <x-jet-input-error for="strand.code" class="mt-2"/>
                         </div>
                         <div class="mt-4">
                             <x-jet-label for="strand" value="{{ __('Strand') }}" />
-                            <x-jet-input wire:model.lazy="strand.strand" id="strand" class="block mt-1 w-full" type="text" name="strand" autofocus required/>
+                            <x-jet-input wire:model.defer="strand.strand" id="strand" class="block mt-1 w-full" type="text" name="strand" autofocus required/>
                             <x-jet-input-error for="strand.strand" class="mt-2"/>
                         </div>
                     </div>

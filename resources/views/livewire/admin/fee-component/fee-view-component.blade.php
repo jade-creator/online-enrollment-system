@@ -113,7 +113,7 @@
                                         </div>
                                     </div>
                                     <div class="flex items-center justify-start col-span-12 md:col-span-4 truncate md:border-0 border-t border-gray-300 font-bold text-xs"><p class="truncate">{{ $fee->name ?? 'N/A' }}</p></div>
-                                    <div class="flex items-center justify-start col-span-12 md:col-span-4 truncate md:border-0 border-t border-gray-300 font-bold text-xs"><p class="truncate">PHP {{ $fee->price ?? 'N/A' }}</p></div>
+                                    <div class="flex items-center justify-start col-span-12 md:col-span-4 truncate md:border-0 border-t border-gray-300 font-bold text-xs"><p class="truncate">PHP {{ number_format((float)$fee->price, 2, '.', ',') ?? 'N/A' }}</p></div>
                                     <div class="flex items-center justify-center col-span-12 md:col-span-1 md:border-0 border-t border-gray-300">
                                         @if ( !count($selected) > 0)
                                             <x-jet-dropdown align="right" width="60" dropdownClasses="z-10 shadow-2xl">

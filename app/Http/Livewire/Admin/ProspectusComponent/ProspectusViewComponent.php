@@ -41,6 +41,9 @@ class ProspectusViewComponent extends Component
         $this->fill([ 
             'subject' => new Subject(), 
             'levelId' => $level->id, 
+            'programId' => '', 
+            'strandId' => '', 
+            'termId' => '', 
         ]);
     }
     

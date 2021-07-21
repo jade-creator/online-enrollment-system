@@ -37,11 +37,11 @@
             </x-slot>
 
             <x-slot name="head">
-                <div class="col-span-5 flex" id="columnTitle">
+                <div class="col-span-3 flex" id="columnTitle">
                     <input type="checkbox" wire:model="selectPage" class="cursor-pointer border-gray-400 focus:outline-none focus:ring-transparent mx-5 rounded-sm" title="Select Displayed Data">
                     <x-table.sort-button nameButton="track" event="sortFieldSelected('track')"/>
                 </div>
-                <x-table.column-title columnTitle="description" class="col-span-6"/>
+                <x-table.column-title columnTitle="description" class="col-span-8"/>
                 <div class="col-span-1">
                     <x-table.sort-button nameButton="latest" event="sortFieldSelected('created_at')"/>
                 </div>
@@ -53,7 +53,7 @@
                         : 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-white border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer' }}">
 
                         <div class="grid grid-cols-12 gap-2">
-                            <div class="col-span-12 md:col-span-5 truncate font-bold text-xs">
+                            <div class="col-span-12 md:col-span-3 truncate font-bold text-xs">
                                 <div class="flex items-center">
                                     <input wire:loading.attr="disabled" type="checkbox" id="{{ $track->id }}" value="{{ $track->id }}" wire:model="selected" class="cursor-pointer border-gray-500 border-opacity-50 focus:outline-none focus:ring focus:ring-transparent ml-3 mr-5 rounded-sm">
                                     <div class="h-10 flex items-center">
@@ -61,7 +61,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex items-center justify-start col-span-12 md:col-span-6 truncate md:border-0 border-t border-gray-300 font-bold text-xs"><p class="truncate">{{ $track->description ?? 'N/A' }}</p></div>
+                            <div class="flex items-center justify-start col-span-12 md:col-span-8 truncate md:border-0 border-t border-gray-300 font-bold text-xs"><p class="truncate">{{ $track->description ?? 'N/A' }}</p></div>
                             <div class="flex items-center justify-center col-span-12 md:col-span-1 md:border-0 border-t border-gray-300">
                                 @if ( !count($selected) > 0)
                                     <x-jet-dropdown align="right" width="60" dropdownClasses="z-10 shadow-2xl">
@@ -206,13 +206,13 @@
                     <div class="mt-3 col-span-8">
                         <div class="mt-4">
                             <x-jet-label for="track" value="{{ __('Track') }}" />
-                            <x-jet-input wire:model.lazy="track.track" id="track" class="block mt-1 w-full" type="text" name="track" autofocus required/>
+                            <x-jet-input wire:model.defer="track.track" id="track" class="block mt-1 w-full" type="text" name="track" autofocus required/>
                             <x-jet-input-error for="track.track" class="mt-2"/>
                         </div>
                 
                         <div class="mt-4">
                             <x-jet-label for="description" value="{{ __('Description') }}" />
-                            <textarea wire:model.lazy="track.description" id="description" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" type="text" name="description" required></textarea>
+                            <textarea wire:model.defer="track.description" id="description" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" type="text" name="description" required></textarea>
                             <x-jet-input-error for="track.description" class="mt-2"/>
                         </div>
                     </div>
@@ -243,13 +243,13 @@
                     <div class="mt-3 col-span-8">
                         <div class="mt-4">
                             <x-jet-label for="track" value="{{ __('Track') }}" />
-                            <x-jet-input wire:model.lazy="track.track" id="track" class="block mt-1 w-full" type="text" name="track" autofocus required/>
+                            <x-jet-input wire:model.defer="track.track" id="track" class="block mt-1 w-full" type="text" name="track" autofocus required/>
                             <x-jet-input-error for="track.track" class="mt-2"/>
                         </div>
                 
                         <div class="mt-4">
                             <x-jet-label for="description" value="{{ __('Description') }}" />
-                            <textarea wire:model.lazy="track.description" id="description" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" type="text" name="description" required></textarea>
+                            <textarea wire:model.defer="track.description" id="description" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" type="text" name="description" required></textarea>
                             <x-jet-input-error for="track.description" class="mt-2"/>
                         </div>
                     </div>

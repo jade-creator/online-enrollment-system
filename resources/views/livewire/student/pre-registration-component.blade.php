@@ -135,7 +135,7 @@
     <div class="w-full mb-10">
         <div class="w-full bg-blue-100 bg-opacity-20 border-t border-l border-r border-blue-200 p-4 rounded-t-md font-semibold flex items-center justify-between">
             <p>Assessment</p>
-            <p class="font-normal text-xs">Total: PHP {{ number_format((float)$registration->prospectus->fees->sum('price'), 2, '.', '') }}</p>
+            <p class="font-normal text-xs">Total: PHP {{ number_format((float)$registration->prospectus->fees->sum('price'), 2, '.', ',') }}</p>
         </div>
         <div class="border-b border-l border-r border-gray-200 rounded-b-md p-4">
             <table class="w-full">
@@ -147,7 +147,7 @@
                     @forelse ($registration->prospectus->fees as $fee)
                         <tr>
                             <td class="pb-4 text-left font-bold">{{ $fee->name ?? 'N/A' }}</td>
-                            <td class="pb-4 text-left">PHP{{ $fee->price ?? 'N/A' }}</td>
+                            <td class="pb-4 text-left">PHP {{ number_format((float)$fee->price, 2, '.', ',') ?? 'N/A' }}</td>
                         </tr>
                     @empty
                         <tr>

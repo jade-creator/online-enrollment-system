@@ -211,26 +211,26 @@
                         <div class="grid grid-cols-8 gap-6">
                             <div class="mt-4 col-span-4">
                                 <x-jet-label for="code" value="{{ __('Code') }}" />
-                                <x-jet-input wire:model.lazy="program.code" id="code" class="block mt-1 w-full" type="text" name="code" autofocus required/>
+                                <x-jet-input wire:model.defer="program.code" id="code" class="block mt-1 w-full" type="text" name="code" autofocus required/>
                                 <x-jet-input-error for="program.code" class="mt-2"/>
                             </div>
                             
                             <div class="mt-4 col-span-4">
                                 <x-jet-label for="year" value="{{ __('Year') }}" />
-                                <x-jet-input wire:model.lazy="program.year" id="year" class="block mt-1 w-full" type="number" name="year" autofocus required/>
+                                <x-jet-input wire:model.defer="program.year" id="year" class="block mt-1 w-full" type="number" name="year" autofocus required/>
                                 <x-jet-input-error for="program.year" class="mt-2"/>
                             </div>
                         </div>
                 
                         <div class="mt-4">
                             <x-jet-label for="program" value="{{ __('Program') }}" />
-                            <x-jet-input wire:model.lazy="program.program" id="program" class="block mt-1 w-full" type="text" name="program" :value="old('program')" required/>
+                            <x-jet-input wire:model.defer="program.program" id="program" class="block mt-1 w-full" type="text" name="program" :value="old('program')" required/>
                             <x-jet-input-error for="program.program" class="mt-2"/>
                         </div>
                 
                         <div class="mt-4">
                             <x-jet-label for="description" value="{{ __('Description') }}" />
-                            <textarea wire:model.lazy="program.description" id="description" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" type="text" name="description" required></textarea>
+                            <textarea wire:model.defer="program.description" id="description" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" type="text" name="description" required></textarea>
                             <x-jet-input-error for="program.description" class="mt-2"/>
                         </div>
                     </div>
@@ -262,26 +262,26 @@
                         <div class="grid grid-cols-8 gap-6">
                             <div class="mt-4 col-span-4">
                                 <x-jet-label for="code" value="{{ __('Code') }}" />
-                                <x-jet-input wire:model.lazy="program.code" id="code" class="block mt-1 w-full" type="text" name="code" autofocus required/>
+                                <x-jet-input wire:model.defer="program.code" id="code" class="block mt-1 w-full" type="text" name="code" autofocus required/>
                                 <x-jet-input-error for="program.code" class="mt-2"/>
                             </div>
                             
                             <div class="mt-4 col-span-4">
                                 <x-jet-label for="year" value="{{ __('Year') }}" />
-                                <x-jet-input readonly wire:model.lazy="program.year" id="year" class="block mt-1 w-full bg-gray-200" type="number" name="year" autofocus required/>
+                                <x-jet-input readonly wire:model="program.year" id="year" class="block mt-1 w-full bg-gray-200" type="number" name="year" autofocus required/>
                                 <x-jet-input-error for="program.year" class="mt-2"/>
                             </div>
                         </div>
                 
                         <div class="mt-4">
                             <x-jet-label for="program" value="{{ __('Program') }}" />
-                            <x-jet-input wire:model.lazy="program.program" id="program" class="block mt-1 w-full" type="text" name="program" :value="old('program')" required/>
+                            <x-jet-input wire:model.defer="program.program" id="program" class="block mt-1 w-full" type="text" name="program" :value="old('program')" required/>
                             <x-jet-input-error for="program.program" class="mt-2"/>
                         </div>
                 
                         <div class="mt-4">
                             <x-jet-label for="description" value="{{ __('Description') }}" />
-                            <textarea wire:model.lazy="program.description" id="description" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" type="text" name="description" required></textarea>
+                            <textarea wire:model.defer="program.description" id="description" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" type="text" name="description" required></textarea>
                             <x-jet-input-error for="program.description" class="mt-2"/>
                         </div>
                     </div>

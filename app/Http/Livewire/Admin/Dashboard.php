@@ -35,8 +35,7 @@ class Dashboard extends Component
     public function getRecentlyEnrolleesProperty() { 
         $status = Status::where('name', 'enrolled')->firstOrFail();
         
-        return Registration::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
-            ->with('student.user.person')
+        return Registration::with('student.user.person')
             ->where('status_id', $status->id)
             ->latest()
             ->take(5)
