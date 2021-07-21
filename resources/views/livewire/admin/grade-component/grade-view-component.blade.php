@@ -192,7 +192,7 @@
 
                 <div class="col-span-6">
                     <x-jet-label for="grade" value="{{ __('Grade') }}" class="my-2"/>
-                    <input wire:model="grade.value" type="number" id="grade" class="w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
+                    <input wire:model.defer="grade.value" type="number" id="grade" class="w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
                     <x-jet-input-error for="grade.value" class="mt-2"/>
                 </div>
             </form>

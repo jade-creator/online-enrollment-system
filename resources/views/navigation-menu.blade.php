@@ -155,13 +155,13 @@
                             </a>
                         </li>
     
-                        <li title="Masterlist">
+                        <li title="Pre Enrollment">
                             <a href="{{route('admin.pre.enrollments.view')}}" class="{{ request()->is('admin/pre-enrollments/*') || request()->is('admin/pre-enrollments') ? 'text-indigo-500 h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700' 
                             : 'text-gray-800 h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700'}}">
                                 <span class="inline-flex justify-center items-center ml-3 pl-0.5">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
                                 </span>
-                                <span class="ml-4 mt-1 text-sm tracking-wide truncate">{{ __('Masterlist') }}</span>
+                                <span class="ml-4 mt-1 text-sm tracking-wide truncate">{{ __('Pre Enrollment') }}</span>
                             </a>
                         </li>
 
@@ -298,17 +298,17 @@
                     @endif
     
                     @if(auth()->user()->role->name === 'student')
-                        <li title="registration">
+                        <li title="registrations">
                             <a href="{{route('student.registration')}}" class="{{ request()->is('student/registrations') ? 'text-indigo-500 h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700' 
                             : 'text-gray-800 h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700'}}">
                             <span class="inline-flex justify-center items-center ml-3 pl-0.5">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
                             </span>
-                            <span class="ml-4 mt-1 text-sm tracking-wide truncate">{{ __('Registration') }}</span>
+                            <span class="ml-4 mt-1 text-sm tracking-wide truncate">{{ __('Registrations') }}</span>
                             </a>
                         </li>
 
-                        <li title="Sections">
+                        <li title="Schedules">
                             <a href="{{route('sections.view')}}" class="{{ request()->is('sections/*') || request()->is('sections') ? 'text-indigo-500 h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700' 
                             : 'text-gray-800 h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700'}}">
                                 <span class="inline-flex justify-center items-center ml-3 pl-0.5">
@@ -319,7 +319,7 @@
                                         <path d="M4 6v-1a1 1 0 0 1 1 -1h1m5 0h2m5 0h1a1 1 0 0 1 1 1v1m0 5v2m0 5v1a1 1 0 0 1 -1 1h-1m-5 0h-2m-5 0h-1a1 1 0 0 1 -1 -1v-1m0 -5v-2m0 -5"></path>
                                     </svg>
                                 </span>
-                                <span class="ml-4 mt-1 text-sm tracking-wide truncate">{{ __('Schedule') }}</span>
+                                <span class="ml-4 mt-1 text-sm tracking-wide truncate">{{ __('Schedules') }}</span>
                             </a>
                         </li>
 

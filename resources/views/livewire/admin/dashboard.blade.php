@@ -27,7 +27,7 @@
                                 <div class="text-xs uppercase font-light text-gray-500">Pre Enrollments</div>
                                 <div class="text-xl font-bold">{{ $this->registrations->count() }}</div>
                             </div>
-                            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="stroke-current text-gray-500" height="24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                            <svg class="stroke-current text-gray-500" fill="none" stroke="currentColor" stroke-width="2" height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
                         </div>
                     </div>
                 </div>
@@ -38,7 +38,12 @@
                                 <div class="text-xs uppercase font-light text-gray-500">Sections</div>
                                 <div class="text-xl font-bold">{{ $this->sections->count() }}</div>
                             </div>
-                            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="stroke-current text-gray-500" height="24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current text-gray-500" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <line x1="9" y1="12" x2="15" y2="12"></line>
+                                <line x1="12" y1="9" x2="12" y2="15"></line>
+                                <path d="M4 6v-1a1 1 0 0 1 1 -1h1m5 0h2m5 0h1a1 1 0 0 1 1 1v1m0 5v2m0 5v1a1 1 0 0 1 -1 1h-1m-5 0h-2m-5 0h-1a1 1 0 0 1 -1 -1v-1m0 -5v-2m0 -5"></path>
+                             </svg>
                         </div>
                     </div>
                 </div>
@@ -49,7 +54,14 @@
                                 <div class="text-xs uppercase font-light text-gray-500">Subjects</div>
                                 <div class="text-xl font-bold">{{ $this->subjects->count() }}</div>
                             </div>
-                            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="stroke-current text-gray-500" height="24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current text-gray-500" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <line x1="6" y1="9" x2="12" y2="9"></line>
+                                <line x1="4" y1="5" x2="8" y2="5"></line>
+                                <path d="M6 5v11a1 1 0 0 0 1 1h5"></path>
+                                <rect x="12" y="7" width="8" height="4" rx="1"></rect>
+                                <rect x="12" y="15" width="8" height="4" rx="1"></rect>
+                            </svg>
                         </div>
                     </div>
                 </div>
@@ -134,7 +146,7 @@
                         <div class="flex flex-row justify-between mb-6">
                             <div class="flex flex-col">
                                 <div class="text-sm font-light text-gray-500">Recently Enrolled</div>
-                                <div class="text-sm font-bold"><span>This week</span></div>
+                                <div class="text-sm font-bold"><span>All Levels</span></div>
                             </div>
                             <div class="mt-2 text-gray-400 hover:text-green-500 cursor-pointer">
                                 <i class="fas fa-redo-alt"></i>

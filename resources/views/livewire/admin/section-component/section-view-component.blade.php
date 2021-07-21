@@ -364,7 +364,7 @@
         @endif
     </div>
 
-    <div wire:loading wire:target="paginateValue, search, selectPage, previousPage, nextPage, confirmingExport, releaseConfirm, releaseAll">
+    <div wire:loading wire:target="paginateValue, search, selectPage, selectAll, previousPage, nextPage, confirmingExport, releaseConfirm, releaseAll">
         @include('partials.loading')
     </div>
 
@@ -400,13 +400,13 @@
                 <div class="grid grid-cols-8 gap-6">
                     <div class="mt-4 col-span-4">
                         <x-jet-label for="name" value="{{ __('Name') }}" />
-                        <x-jet-input wire:model.lazy="section.name" id="name" class="block mt-1 w-full" type="text" name="name" autofocus required/>
+                        <x-jet-input wire:model.defer="section.name" id="name" class="block mt-1 w-full" type="text" name="name" autofocus required/>
                         <x-jet-input-error for="section.name" class="mt-2"/>
                     </div>
                     
                     <div class="mt-4 col-span-4">
                         <x-jet-label for="room" value="{{ __('Room') }}" />
-                        <select wire:model.lazy="section.room_id" name="room" class="w-full mt-1 bg-white flex-1 p-2 tracking-wide border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
+                        <select wire:model.defer="section.room_id" name="room" class="w-full mt-1 bg-white flex-1 p-2 tracking-wide border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" required>
                             @forelse ($this->rooms as $room)
                                 @if ($loop->first)
                                     <option value="">-- choose a room --</option>
@@ -422,13 +422,13 @@
 
                 <div class="mt-4">
                     <x-jet-label for="seat" value="{{ __('Seat') }}" />
-                    <x-jet-input wire:model.lazy="section.seat" id="seat" class="block mt-1 w-full" type="number" name="seat" autofocus required/>
+                    <x-jet-input wire:model.defer="section.seat" id="seat" class="block mt-1 w-full" type="number" name="seat" autofocus required/>
                     <x-jet-input-error for="section.seat" class="mt-2"/>
                 </div>
                 
                 <div class="mt-4">
                     <x-jet-label for="remarks" value="{{ __('Remarks') }}" />
-                    <textarea wire:model.lazy="section.remarks" id="remarks" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" type="text" name="remarks" autofocus required></textarea>
+                    <textarea wire:model.defer="section.remarks" id="remarks" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" type="text" name="remarks" autofocus required></textarea>
                     <x-jet-input-error for="section.remarks" class="mt-2"/>
                 </div>
             </form>
@@ -456,13 +456,13 @@
                 <div class="grid grid-cols-8 gap-6">
                     <div class="mt-4 col-span-4">
                         <x-jet-label for="name" value="{{ __('Name') }}" />
-                        <x-jet-input wire:model.lazy="section.name" id="name" class="block mt-1 w-full" type="text" name="name" autofocus required/>
+                        <x-jet-input wire:model.defer="section.name" id="name" class="block mt-1 w-full" type="text" name="name" autofocus required/>
                         <x-jet-input-error for="section.name" class="mt-2"/>
                     </div>
                     
                     <div class="mt-4 col-span-4">
                         <x-jet-label for="room" value="{{ __('Room') }}" />
-                        <select wire:model.lazy="section.room_id" name="room" class="w-full mt-1 bg-white flex-1 p-2 tracking-wide border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
+                        <select wire:model.defer="section.room_id" name="room" class="w-full mt-1 bg-white flex-1 p-2 tracking-wide border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
                             @forelse ($this->rooms as $room)
                                 @if ($loop->first)
                                     <option value="">-- choose a room --</option>
@@ -478,13 +478,13 @@
 
                 <div class="mt-4">
                     <x-jet-label for="seat" value="{{ __('Seat') }}" />
-                    <x-jet-input wire:model.lazy="section.seat" id="seat" class="block mt-1 w-full" type="number" name="seat" autofocus required/>
+                    <x-jet-input wire:model.defer="section.seat" id="seat" class="block mt-1 w-full" type="number" name="seat" autofocus required/>
                     <x-jet-input-error for="section.seat" class="mt-2"/>
                 </div>
                 
                 <div class="mt-4">
                     <x-jet-label for="remarks" value="{{ __('Remarks') }}" />
-                    <textarea wire:model.lazy="section.remarks" id="remarks" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" type="text" name="remarks" autofocus required></textarea>
+                    <textarea wire:model.defer="section.remarks" id="remarks" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" type="text" name="remarks" autofocus required></textarea>
                     <x-jet-input-error for="section.remarks" class="mt-2"/>
                 </div>
             </form>
@@ -516,12 +516,12 @@
                         </div>
                         <div class="col-span-4">
                             <x-jet-label for="start" value="{{ __('Start Time') }}" />
-                            <x-jet-input wire:model="schedule.start_time_monday" id="start" class="block mt-1 w-full" type="time" name="start" autofocus required/>
+                            <x-jet-input wire:model.defer="schedule.start_time_monday" id="start" class="block mt-1 w-full" type="time" name="start" autofocus required/>
                             <x-jet-input-error for="schedule.start_time_monday" class="mt-2"/>
                         </div>
                         <div class="col-span-4">
                             <x-jet-label for="end" value="{{ __('End Time') }}" />
-                            <x-jet-input wire:model="schedule.end_time_monday" id="end" class="block mt-1 w-full" type="time" name="end" autofocus required/>
+                            <x-jet-input wire:model.defer="schedule.end_time_monday" id="end" class="block mt-1 w-full" type="time" name="end" autofocus required/>
                             <x-jet-input-error for="schedule.end_time_monday" class="mt-2"/>
                         </div>
                     </div>
@@ -531,12 +531,12 @@
                         </div>
                         <div class="col-span-4">
                             <x-jet-label for="start" value="{{ __('Start Time') }}" />
-                            <x-jet-input wire:model="schedule.start_time_tuesday" id="start" class="block mt-1 w-full" type="time" name="start" autofocus required/>
+                            <x-jet-input wire:model.defer="schedule.start_time_tuesday" id="start" class="block mt-1 w-full" type="time" name="start" autofocus required/>
                             <x-jet-input-error for="schedule.start_time_tuesday" class="mt-2"/>
                         </div>
                         <div class="col-span-4">
                             <x-jet-label for="end" value="{{ __('End Time') }}" />
-                            <x-jet-input wire:model="schedule.end_time_tuesday" id="end" class="block mt-1 w-full" type="time" name="end" autofocus required/>
+                            <x-jet-input wire:model.defer="schedule.end_time_tuesday" id="end" class="block mt-1 w-full" type="time" name="end" autofocus required/>
                             <x-jet-input-error for="schedule.end_time_tuesday" class="mt-2"/>
                         </div>
                     </div>
@@ -546,12 +546,12 @@
                         </div>
                         <div class="col-span-4">
                             <x-jet-label for="start" value="{{ __('Start Time') }}" />
-                            <x-jet-input wire:model="schedule.start_time_wednesday" id="start" class="block mt-1 w-full" type="time" name="start" autofocus required/>
+                            <x-jet-input wire:model.defer="schedule.start_time_wednesday" id="start" class="block mt-1 w-full" type="time" name="start" autofocus required/>
                             <x-jet-input-error for="schedule.start_time_wednesday" class="mt-2"/>
                         </div>
                         <div class="col-span-4">
                             <x-jet-label for="end" value="{{ __('End Time') }}" />
-                            <x-jet-input wire:model="schedule.end_time_wednesday" id="end" class="block mt-1 w-full" type="time" name="end" autofocus required/>
+                            <x-jet-input wire:model.defer="schedule.end_time_wednesday" id="end" class="block mt-1 w-full" type="time" name="end" autofocus required/>
                             <x-jet-input-error for="schedule.end_time_wednesday" class="mt-2"/>
                         </div>
                     </div>
@@ -561,12 +561,12 @@
                         </div>
                         <div class="col-span-4">
                             <x-jet-label for="start" value="{{ __('Start Time') }}" />
-                            <x-jet-input wire:model="schedule.start_time_thursday" id="start" class="block mt-1 w-full" type="time" name="start" autofocus required/>
+                            <x-jet-input wire:model.defer="schedule.start_time_thursday" id="start" class="block mt-1 w-full" type="time" name="start" autofocus required/>
                             <x-jet-input-error for="schedule.start_time_thursday" class="mt-2"/>
                         </div>
                         <div class="col-span-4">
                             <x-jet-label for="end" value="{{ __('End Time') }}" />
-                            <x-jet-input wire:model="schedule.end_time_thursday" id="end" class="block mt-1 w-full" type="time" name="end" autofocus required/>
+                            <x-jet-input wire:model.defer="schedule.end_time_thursday" id="end" class="block mt-1 w-full" type="time" name="end" autofocus required/>
                             <x-jet-input-error for="schedule.end_time_thursday" class="mt-2"/>
                         </div>
                     </div>
@@ -576,12 +576,12 @@
                         </div>
                         <div class="col-span-4">
                             <x-jet-label for="start" value="{{ __('Start Time') }}" />
-                            <x-jet-input wire:model="schedule.start_time_friday" id="start" class="block mt-1 w-full" type="time" name="start" autofocus required/>
+                            <x-jet-input wire:model.defer="schedule.start_time_friday" id="start" class="block mt-1 w-full" type="time" name="start" autofocus required/>
                             <x-jet-input-error for="schedule.start_time_friday" class="mt-2"/>
                         </div>
                         <div class="col-span-4">
                             <x-jet-label for="end" value="{{ __('End Time') }}" />
-                            <x-jet-input wire:model="schedule.end_time_friday" id="end" class="block mt-1 w-full" type="time" name="end" autofocus required/>
+                            <x-jet-input wire:model.defer="schedule.end_time_friday" id="end" class="block mt-1 w-full" type="time" name="end" autofocus required/>
                             <x-jet-input-error for="schedule.end_time_friday" class="mt-2"/>
                         </div>
                     </div>

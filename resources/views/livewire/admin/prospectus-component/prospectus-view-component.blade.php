@@ -74,12 +74,8 @@
             </x-slot>
 
             <x-slot name="head">
-                <div class="col-span-3 flex pl-4" id="code">
-                    <x-table.sort-button nameButton="code" event="sortFieldSelected('code')"/>
-                </div>
-                <div class="col-span-4" id="title">
-                    <x-table.sort-button nameButton="title" event="sortFieldSelected('title')"/>
-                </div>
+                <x-table.column-title columnTitle="code" class="col-span-3 pl-4"/>
+                <x-table.column-title columnTitle="title" class="col-span-4"/>
                 <x-table.column-title columnTitle="Unit" class="col-span-2"/>
                 <x-table.column-title columnTitle="Pre Requisite" class="col-span-2"/>
                 <x-table.column-title columnTitle="Actions" class="col-span-1"/>
@@ -101,9 +97,9 @@
                             <div class="flex items-center justify-start col-span-12 md:col-span-2 truncate md:border-0 border-t border-gray-300 font-bold text-xs">
                                 @forelse ($subject->requisites as $requisite)
                                     {{ $loop->first ? '' : ', '  }}
-                                    <span>&nbsp;{{ $requisite->code }}</span>
+                                    <a href="{{ route('admin.subjects.view', ['search' => $requisite->title]) }}" class="text-indigo-500 underline"><span>{{ $requisite->code }}</span></a>
                                 @empty
-
+                                    N/A
                                 @endforelse
                             </div>
                             <div class="flex items-center justify-center col-span-12 md:col-span-1 md:border-0 border-t border-gray-300">

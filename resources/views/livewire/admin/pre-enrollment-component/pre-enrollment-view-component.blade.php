@@ -143,7 +143,7 @@
                                                 </div>
                                                 @can('viewSection', $registration)
                                                     <div>
-                                                        <a href="{{ route('sections.view', ['search' => $registration->section_id]) }}">
+                                                        <a href="{{ route('sections.view', ['search' => $registration->section->name]) }}">
                                                             <button class="flex w-full px-4 py-2 hover:bg-gray-200 outline-none focus:outline-none transition-all duration-300 ease-in-out">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>

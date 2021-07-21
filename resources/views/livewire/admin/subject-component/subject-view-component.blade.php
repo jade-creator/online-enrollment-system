@@ -71,7 +71,7 @@
                                     {{ $loop->first ? '' : ', '  }}
                                     <span>&nbsp;{{ $requisite->code }}</span>
                                 @empty
-
+                                    N/A
                                 @endforelse
                             </div>
                             <div class="flex items-center justify-center col-span-12 md:col-span-1 md:border-0 border-t border-gray-300">
@@ -218,17 +218,17 @@
                     <div class="mt-3 col-span-8">
                         <div class="mt-4">
                             <x-jet-label for="code" value="{{ __('Code') }}" />
-                            <x-jet-input wire:model.lazy="subject.code" id="code" class="block mt-1 w-full" type="text" name="code" autofocus required/>
+                            <x-jet-input wire:model.defer="subject.code" id="code" class="block mt-1 w-full" type="text" name="code" autofocus required/>
                             <x-jet-input-error for="subject.code" class="mt-2"/>
                         </div>
                         <div class="mt-4">
                             <x-jet-label for="title" value="{{ __('Title') }}" />
-                            <x-jet-input wire:model.lazy="subject.title" id="title" class="block mt-1 w-full" type="text" name="title" autofocus required/>
+                            <x-jet-input wire:model.defer="subject.title" id="title" class="block mt-1 w-full" type="text" name="title" autofocus required/>
                             <x-jet-input-error for="subject.title" class="mt-2"/>
                         </div>
                         <div class="mt-4">
                             <x-jet-label for="unit" value="{{ __('Unit') }}" />
-                            <x-jet-input wire:model.lazy="subject.unit" id="title" class="block mt-1 w-full" type="number" name="unit" autofocus required/>
+                            <x-jet-input wire:model.defer="subject.unit" id="title" class="block mt-1 w-full" type="number" name="unit" autofocus required/>
                             <x-jet-input-error for="subject.unit" class="mt-2"/>
                         </div>
                         <div class="mt-4">
@@ -238,7 +238,7 @@
                                     <div class="mr-2 my-2">
                                         <div class="flex">
                                             <select wire:model="preRequisites.{{ $index }}" name="preRequisites[{{ $index }}]" class="w-full bg-white flex-1 p-2 tracking-wide border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-l-md shadow-sm">
-                                                @forelse ($availableSubjects as $subject)
+                                                @forelse ($this->allSubjects as $subject)
                                                     @if ($loop->first)
                                                         <option value="">-- choose a subject --</option>
                                                     @endif
@@ -269,9 +269,11 @@
                                  </svg>
                                 <span>{{ __('Add Pre Requisite') }}</span>
                             </x-jet-button>
-                            <x-jet-button class="ml-2 border-0 text-blue-500" wire:click.prevent="resetSubjects" wire:loading.attr="disabled">
-                                {{ __('Reset') }}
-                            </x-jet-button>
+                            @if ($this->preRequisites)
+                                <x-jet-button class="ml-2 border-0 text-blue-500" wire:click.prevent="resetSubjects" wire:loading.attr="disabled">
+                                    {{ __('Reset') }}
+                                </x-jet-button>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -301,17 +303,17 @@
                     <div class="mt-3 col-span-8">
                         <div class="mt-4">
                             <x-jet-label for="code" value="{{ __('Code') }}" />
-                            <x-jet-input wire:model.lazy="subject.code" id="code" class="block mt-1 w-full" type="text" name="code" autofocus required/>
+                            <x-jet-input wire:model.defer="subject.code" id="code" class="block mt-1 w-full" type="text" name="code" autofocus required/>
                             <x-jet-input-error for="subject.code" class="mt-2"/>
                         </div>
                         <div class="mt-4">
                             <x-jet-label for="title" value="{{ __('Title') }}" />
-                            <x-jet-input wire:model.lazy="subject.title" id="title" class="block mt-1 w-full" type="text" name="title" autofocus required/>
+                            <x-jet-input wire:model.defer="subject.title" id="title" class="block mt-1 w-full" type="text" name="title" autofocus required/>
                             <x-jet-input-error for="subject.title" class="mt-2"/>
                         </div>
                         <div class="mt-4">
                             <x-jet-label for="unit" value="{{ __('Unit') }}" />
-                            <x-jet-input wire:model.lazy="subject.unit" id="title" class="block mt-1 w-full" type="number" name="unit" autofocus required/>
+                            <x-jet-input wire:model.defer="subject.unit" id="title" class="block mt-1 w-full" type="number" name="unit" autofocus required/>
                             <x-jet-input-error for="subject.unit" class="mt-2"/>
                         </div>
                         <div class="mt-4">
@@ -352,9 +354,11 @@
                                  </svg>
                                 <span>{{ __('Add Pre Requisite') }}</span>
                             </x-jet-button>
-                            <x-jet-button class="ml-2 border-0 text-blue-500" wire:click.prevent="resetSubjects" wire:loading.attr="disabled">
-                                {{ __('Reset') }}
-                            </x-jet-button>
+                            @if ($this->preRequisites)
+                                <x-jet-button class="ml-2 border-0 text-blue-500" wire:click.prevent="resetSubjects" wire:loading.attr="disabled">
+                                    {{ __('Reset') }}
+                                </x-jet-button>
+                            @endif
                         </div>
                     </div>
                 </div>

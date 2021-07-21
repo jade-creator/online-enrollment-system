@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\AttendedSchool;
 use App\Models\Contact;
 use App\Models\Detail;
-use App\Models\Guardian;
 use App\Models\Person;
 use App\Models\Role;
 use App\Models\Student;
@@ -23,7 +22,7 @@ class StudentSeeder extends Seeder
     {
         $role = Role::where('name', 'student')->first();
 
-        Person::factory()->count(1)->create()->each(function ($person) use ($role) {
+        Person::factory()->count(199)->create()->each(function ($person) use ($role) {
             $person->user()->save(
                 User::factory()->make([
                     'role_id' => $role->id,
