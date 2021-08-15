@@ -7,12 +7,8 @@ use App\Http\Livewire\Admin\UserComponent\UserAddComponent;
 use App\Http\Livewire\Admin\UserComponent\UserViewComponent;
 use App\Http\Livewire\Admin\ProgramComponent\ProgramViewComponent;
 use App\Http\Livewire\Admin\PreEnrollmentComponent;
-use App\Http\Livewire\Admin\SchoolYearComponent\SchoolYearViewComponent;
 use App\Http\Livewire\Admin\SectionComponent;
-use App\Http\Livewire\Admin\SpecializationComponent;
 use App\Http\Livewire\Admin\SubjectComponent;
-use App\Http\Livewire\Admin\StrandComponent;
-use App\Http\Livewire\Admin\TrackComponent;
 use App\Http\Livewire\Forms\Contact\ContactShow;
 use App\Http\Livewire\Forms\Guardian\GuardianShow;
 use App\Http\Livewire\Forms\Education\EducationShow;
@@ -51,7 +47,6 @@ Route::get('/', function () {
 });
 //------END GUEST-------
 
-
 Route::middleware(['auth:sanctum', 'verified'])->group(function (){
     // start guard
     Route::group(['middleware' => 'user.detail', 'prefix' => 'user', 'as' => 'user.'], function (){
@@ -66,44 +61,20 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
     // start admin
     Route::middleware(['role:admin'])->group(function () {
         Route::get('/user/personal-details/admin', AdminDetailForm::class)->middleware(['detail'])->name('user.personal-details.admin');
-    
+
         Route::group(['middleware' => 'user.detail', 'prefix' => 'admin', 'as' => 'admin.'], function (){
-            Route::get('/dashboard', Dashboard::class)->name('dashboard'); //renamecomponent
-            // Route::get('/masterlist', Masterlist::class)->name('masterlist');
-
-            // Route::group(['prefix' => 'sections', 'as' => 'sections.'], function (){
-            //     Route::get('', SectionComponent\SectionViewComponent::class)->name('view');
-            //     Route::get('/elem', SectionComponent\SectionElemViewComponent::class)->name('view.elem');
-            // });
-
-            // Route::group(['prefix' => 'prospectuses', 'as' => 'prospectuses.'], function (){
-            //     Route::get('', ProspectusComponent\ProspectusViewComponent::class)->name('view');
-            //     Route::get('/create', SubjectComponent\SubjectAddComponent::class)->name('create');
-            // });
+            Route::get('/dashboard', Dashboard::class)->name('dashboard'); // TODO : renamecomponent
 
             Route::get('/grades', GradeComponent\GradeViewComponent::class)->name('grades.view');
 
-            Route::get('/pre-enrollments', PreEnrollmentComponent\PreEnrollmentViewComponent::class)->name('pre.enrollments.view');
-            Route::get('/pre-enrollments/released', PreEnrollmentComponent\ReleasedPreEnrollmentComponent::class)->name('released.enrollments.view');
+            Route::group(['prefix' => 'pre-enrollments'], function (){
+                Route::get('', PreEnrollmentComponent\PreEnrollmentViewComponent::class)->name('pre.enrollments.view');
+                Route::get('/released', PreEnrollmentComponent\ReleasedPreEnrollmentComponent::class)->name('released.enrollments.view');
+            });
 
             Route::get('/fees', FeeComponent\FeeViewComponent::class)->name('fees.view');
 
-            Route::group(['prefix' => 'subjects', 'as' => 'subjects.'], function (){
-                Route::get('', SubjectComponent\SubjectViewComponent::class)->name('view');
-                // Route::get('/create', SubjectComponent\SubjectAddComponent::class)->name('create');
-            });
-
-            Route::group(['prefix' => 'strands', 'as' => 'strands.'], function (){
-                Route::get('', StrandComponent\StrandViewComponent::class)->name('view');
-            });
-
-            Route::group(['prefix' => 'tracks', 'as' => 'tracks.'], function (){
-                Route::get('', TrackComponent\TrackViewComponent::class)->name('view');
-            });
-
-            Route::group(['prefix' => 'school-management', 'as' => 'school.'], function (){
-                Route::get('/years', SchoolYearViewComponent::class)->name('year.view');
-            });
+            Route::get('/subjects', SubjectComponent\SubjectViewComponent::class)->name('subjects.view');
 
             Route::group(['prefix' => 'programs', 'as' => 'programs.'], function (){
                 Route::get('', ProgramViewComponent::class)->name('view');
@@ -111,24 +82,25 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
                 Route::get('/update/{program}', ProgramUpdateForm::class)->name('update');
             });
 
-            Route::group(['prefix' => 'specializations', 'as' => 'specializations.'], function (){
-                Route::get('', SpecializationComponent\SpecializationViewComponent::class)->name('view');
-            });
-
             Route::group(['prefix' => 'users', 'as' => 'users.'], function (){
                 Route::get('', UserViewComponent::class)->name('view');
                 Route::get('/create', UserAddComponent::class)->name('create');
-            });          
+            });
         });
     });
     // end admin
 
     // admin and student
     Route::middleware(['role:admin|student', 'user.detail'])->group(function (){
-        Route::get('/sections', SectionComponent\SectionViewComponent::class)->name('sections.view');
+        Route::get('/sections', SectionComponent\SectionIndexComponent::class)->name('sections.view');
+
         Route::get('/prospectuses', ProspectusComponent\ProspectusViewComponent::class)->name('prospectuses.view');
-        Route::get('/pre-registration/{regId}', Student\PreRegistrationComponent::class)->name('pre.registration.view');
-        Route::get('/pre-registration/{regId}/pdf', [PreEnrollmentComponent\PreEnrollmentPdfComponent::class, 'createPDF'])->name('pre.registration.pdf');
+
+        Route::group(['prefix' => 'pre-registration', 'as' => 'pre.registration.'], function () {
+            Route::get('/{regId}', Student\PreRegistrationComponent::class)->name('view');
+            Route::get('/{regId}/pdf', [PreEnrollmentComponent\PreEnrollmentPdfComponent::class, 'createPDF'])->name('pdf');
+        });
+
         Route::get('/user/personal-profile/{userId}', User\UserProfileComponent::class)->name('user.personal.profile.view');
     });
     // end

@@ -10,13 +10,17 @@ class SectionPolicy
 {
     use HandlesAuthorization;
 
-    public function create(User $user)
+    public function before(User $user)
     {
         return $user->role->name == 'admin';
     }
 
+    public function create(User $user) { return true; }
+
+    public function update(User $user, Section $section) { return true; }
+
     public function release(User $user, Section $section)
     {
-        return $user->role->name == 'admin' && $section->registrations->count() != 0;
+        return $section->registrations->count() != 0;
     }
 }

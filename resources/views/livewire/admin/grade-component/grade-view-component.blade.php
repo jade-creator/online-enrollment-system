@@ -1,21 +1,6 @@
 <div class="w-full flex flex-1 scrolling-touch">
     <x-table.filter>
         <div name='slot'>
-            <div class="my-4">
-                <h3 class="font-bold text-md">{{ __('Types')}}</h3>
-                <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
-                    <select wire:model="typeId" wire:loading.attr="disabled" id="type" aria-label="types" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
-                        @forelse ($this->types as $type)
-                            @if ($loop->first)
-                                <option value="">-- choose a type --</option>
-                            @endif
-                            <option value="{{ $type->id }}">{{ $type->type }}</option>
-                        @empty
-                            <option value="">No records</option>
-                        @endforelse
-                    </select>
-                </div>
-            </div>
         </div>
     </x-table.filter>
 
@@ -32,7 +17,7 @@
 
         <x-table.main>
             <x-slot name="paginationLink">
-                {{ $registrations->links() }} 
+                {{ $registrations->links() }}
             </x-slot>
 
             <x-slot name="head">
@@ -52,7 +37,7 @@
             <x-slot name="body">
                 @forelse ($registrations as $registration)
                     <div id="{{ $registration->id }}" x-data="{ open: false }">
-                        <div @click="open = ! open" 
+                        <div @click="open = ! open"
                              @click.away="open = false"
                              @close.stop="open = false"
                              class="w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-white border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer">
@@ -77,7 +62,7 @@
                                                 </button>
                                             </span>
                                         </x-slot>
-            
+
                                         <x-slot name="content">
                                             <div class="w-60">
                                                 <div class="block px-4 py-3 text-sm text-gray-500 font-bold">
@@ -114,7 +99,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div x-show="open" 
+                        <div x-show="open"
                              x-transition:enter="transition ease-out duration-300"
                              x-transition:enter-start="opacity-0 transform scale-90"
                              x-transition:enter-end="opacity-100 transform scale-100"
@@ -166,7 +151,7 @@
                             </div>
                         </div>
                     </div>
-                @empty 
+                @empty
                     <x-table.no-result title="No registration found.🤔"/>
                 @endforelse
             </x-slot>

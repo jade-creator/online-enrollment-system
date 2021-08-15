@@ -18,6 +18,16 @@ class Registration extends Model
         'prospectus_id',
     ];
 
+    public function statusEnrolled() { return
+        Status::where('name', 'enrolled')->first();
+    }
+
+    public function scopeEnrolled($query)
+    {
+        return $query->where('status_id', $this->statusEnrolled()->id)
+            ->whereNull('released_at');
+    }
+
     public function grades() { return
         $this->hasMany(Grade::class);
     }

@@ -13,9 +13,8 @@ class Prospectus extends Model
     protected $fillable = [
         'level_id',
         'program_id',
-        'strand_id',
         'term_id',
-    ];  
+    ];
 
     public function registrations() { return
         $this->hasMany(Registration::class);
@@ -33,19 +32,15 @@ class Prospectus extends Model
         $this->belongsToMany(Subject::class)->withTimestamps();
     }
 
-    public function level() { return 
+    public function level() { return
         $this->belongsTo(Level::class);
     }
 
-    public function program() { return 
+    public function program() { return
         $this->belongsTo(Program::class);
     }
 
-    public function strand() { return 
-        $this->belongsTo(Strand::class);
-    }
-
-    public function term() { return 
+    public function term() { return
         $this->belongsTo(Term::class);
     }
 }

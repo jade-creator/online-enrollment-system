@@ -17,7 +17,6 @@ class CreateProspectusesTable extends Migration
             $table->id();
             $table->foreignId('level_id')->constrained();
             $table->foreignId('program_id')->nullable()->constrained();
-            $table->foreignId('strand_id')->nullable()->constrained();
             $table->foreignId('term_id')->nullable()->constrained();
             $table->timestamps();
             $table->softDeletes();

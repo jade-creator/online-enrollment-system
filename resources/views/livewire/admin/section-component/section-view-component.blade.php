@@ -1,7 +1,6 @@
 <div class="w-full flex flex-1 scrolling-touch">
     <x-table.filter>
         <div name='slot'>
-
             <div class="my-4">
                 <h3 class="font-bold text-md">{{ __('Level')}}</h3>
                 <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
@@ -18,7 +17,7 @@
                 </div>
             </div>
 
-            @if ($levelId > 13) <!-- show if level is college -->
+            @if (!empty($levelId))
                 <div class="my-4">
                     <h3 class="font-bold text-md">{{ __('Program')}}</h3>
                     <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
@@ -34,34 +33,19 @@
                         </select>
                     </div>
                 </div>
-            @endif
 
-            @if ($levelId > 10 && $levelId < 14) <!-- show if level is shs -->
-                <div class="my-4">
-                    <h3 class="font-bold text-md">{{ __('Strand')}}</h3>
-                    <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
-                        <select wire:model="strandId" wire:loading.attr="disabled" id="strand" aria-label="strands" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
-                            @forelse ($this->strands as $strand)
-                                @if ($loop->first)
-                                    <option value="" selected>All (strands)</option>
-                                @endif
-                                <option value="{{ $strand->id }}">{{ $strand->code }}</option>
-                            @empty
-                                <option value="">No records</option>
-                            @endforelse
-                        </select>
-                    </div>
-                </div>
-            @endif
-                
-            @if ($levelId > 10) <!-- show if level is shs to college -->
                 <div class="my-4">
                     <h3 class="font-bold text-md">{{ __('Term')}}</h3>
                     <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
                         <select wire:model="termId" wire:loading.attr="disabled" id="term" aria-label="terms" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
-                            <option value="" selected>All (Terms)</option>
-                            <option value="1">1st term</option>
-                            <option value="2">2nd term</option>
+                            @forelse ($this->terms as $term)
+                                @if ($loop->first)
+                                    <option value="" selected>All (terms)</option>
+                                @endif
+                                <option value="{{ $term->id }}">{{ $term->term }}</option>
+                            @empty
+                                <option value="">No records</option>
+                            @endforelse
                         </select>
                     </div>
                 </div>
@@ -74,14 +58,14 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center justify-between">
                     <div class="text-2xl font-bold text-gray-500">Sections</div>
-        
+
                     @if ( count($this->selected) > 0 && !$this->selectAll )
                         <div class="px-2 text-green-600 font-bold">{{ __('[')}}
                             <span>{{ count($this->selected) }}</span>
                             <span>{{ __('selected ]')}}</span>
                         </div>
                     @endif
-        
+
                     @if ( $this->selectAll )
                         <div class="px-2 text-green-600 font-bold">{{ __('[')}}
                             <span>{{ __('selected all ')}}</span>
@@ -98,7 +82,7 @@
 
         <x-table.main>
             <x-slot name="paginationLink">
-                {{ $sections->links() }}
+                {{ $sections->links('partials.pagination-link') }}
             </x-slot>
 
             <x-slot name="head">
@@ -110,7 +94,7 @@
                 <div class="col-span-2" id="name">
                     <x-table.sort-button nameButton="name" event="sortFieldSelected('name')"/>
                 </div>
-                <x-table.column-title columnTitle="remarks" class="col-span-2"/>
+                <x-table.column-title columnTitle="term" class="col-span-2"/>
                 <x-table.column-title columnTitle="room" class="col-span-2"/>
                 <x-table.column-title columnTitle="seats" class="col-span-1"/>
                 <x-table.column-title columnTitle="current no. of students" class="col-span-2 text-center"/>
@@ -122,10 +106,10 @@
             <x-slot name="body">
                     @forelse ($sections as $section)
                         <div id="{{ $section->id }}" x-data="{ open: false }">
-                            <div @click="open = ! open" 
+                            <div @click="open = ! open"
                                  @click.away="open = false"
                                  @close.stop="open = false"
-                                 class="{{ $this->isSelected($section->id) ? 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-gray-200 border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer' 
+                                 class="{{ $this->isSelected($section->id) ? 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-gray-200 border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer'
                                  : 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-white border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer' }}">
                                 <div class="grid grid-cols-12 gap-2">
                                     <div class="col-span-12 md:col-span-2 truncate font-bold text-xs">
@@ -137,7 +121,7 @@
                                         </div>
                                     </div>
                                     <div class="flex items-center justify-start col-span-12 md:col-span-2 truncate md:border-0 border-t border-gray-300 font-bold text-xs"><p class="truncate">{{ $section->name ?? 'N/A' }}</p></div>
-                                    <div class="flex items-center justify-start col-span-12 md:col-span-2 truncate md:border-0 border-t border-gray-300 font-bold text-xs"><p class="truncate">{{ $section->remarks ?? 'N/A' }}</p></div>
+                                    <div class="flex items-center justify-start col-span-12 md:col-span-2 truncate md:border-0 border-t border-gray-300 font-bold text-xs"><p class="truncate">{{ $section->prospectus->term_id ?? 'N/A' }}</p></div>
                                     <div class="flex items-center justify-start col-span-12 md:col-span-2 truncate md:border-0 border-t border-gray-300 font-bold text-xs"><p class="truncate">{{ $section->room->name ?? 'N/A' }}</p></div>
                                     <div class="flex items-center justify-start col-span-12 md:col-span-1 truncate md:border-0 border-t border-gray-300 font-bold text-xs"><p class="truncate">{{ $section->seat ?? 'N/A' }}</p></div>
                                     <div class="flex items-center justify-center col-span-12 md:col-span-2 truncate md:border-0 border-t border-gray-300 font-bold text-xs"><p class="truncate">{{ $section->registrations->count() }}</p></div>
@@ -156,7 +140,7 @@
                                                         </button>
                                                     </span>
                                                 </x-slot>
-                    
+
                                                 <x-slot name="content">
                                                     <div class="w-60">
                                                         <div class="block px-4 py-3 text-sm text-gray-500 font-bold">
@@ -171,7 +155,7 @@
                                                                         <path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
                                                                     </svg>
                                                                     <p class="pl-2">{{ __('View')}}</p>
-                                                                </button>                                                        
+                                                                </button>
                                                             </div>
                                                             @can('release', $section)
                                                                 <div>
@@ -183,7 +167,7 @@
                                                                             <path d="M7 11l-3 3l3 3"></path>
                                                                          </svg>
                                                                         <p class="pl-2">{{ __('Release Students')}}</p>
-                                                                    </button>                                                        
+                                                                    </button>
                                                                 </div>
                                                             @endcan
                                                             <div>
@@ -209,7 +193,7 @@
                                                                         <path d="M8 11v-4a4 4 0 0 1 8 0v4"></path>
                                                                      </svg>
                                                                     <p class="pl-2">{{ __('Administrative Access')}}</p>
-                                                                </button>                                                        
+                                                                </button>
                                                             </div>
                                                         @endif
                                                     </div>
@@ -219,7 +203,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div x-show="open" 
+                            <div x-show="open"
                                  x-transition:enter="transition ease-out duration-300"
                                  x-transition:enter-start="opacity-0 transform scale-90"
                                  x-transition:enter-end="opacity-100 transform scale-100"
@@ -285,7 +269,7 @@
                                                         <circle cx="12" cy="16" r="1"></circle>
                                                         <path d="M8 11v-4a4 4 0 0 1 8 0v4"></path>
                                                      </svg>
-                                                </button> 
+                                                </button>
                                             @endif
                                         </div>
                                     @empty
@@ -296,8 +280,8 @@
                                 </div>
                             </div>
                         </div>
-                    @empty  
-                        <x-table.no-result title="No sections found.🤔"/> 
+                    @empty
+                        <x-table.no-result title="No sections found.🤔"/>
                     @endforelse
             </x-slot>
         </x-table.main>
@@ -403,7 +387,7 @@
                         <x-jet-input wire:model.defer="section.name" id="name" class="block mt-1 w-full" type="text" name="name" autofocus required/>
                         <x-jet-input-error for="section.name" class="mt-2"/>
                     </div>
-                    
+
                     <div class="mt-4 col-span-4">
                         <x-jet-label for="room" value="{{ __('Room') }}" />
                         <select wire:model.defer="section.room_id" name="room" class="w-full mt-1 bg-white flex-1 p-2 tracking-wide border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" required>
@@ -425,12 +409,6 @@
                     <x-jet-input wire:model.defer="section.seat" id="seat" class="block mt-1 w-full" type="number" name="seat" autofocus required/>
                     <x-jet-input-error for="section.seat" class="mt-2"/>
                 </div>
-                
-                <div class="mt-4">
-                    <x-jet-label for="remarks" value="{{ __('Remarks') }}" />
-                    <textarea wire:model.defer="section.remarks" id="remarks" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" type="text" name="remarks" autofocus required></textarea>
-                    <x-jet-input-error for="section.remarks" class="mt-2"/>
-                </div>
             </form>
         </x-slot>
 
@@ -445,7 +423,7 @@
         </x-slot>
     </x-jet-dialog-modal>
 
-    <!-- View Section/s Confirmation Modal -->
+    <!-- Updating Section/s Confirmation Modal -->
     <x-jet-dialog-modal wire:model="viewingSection">
         <x-slot name="title">
             {{ __('Section Details') }}
@@ -459,7 +437,7 @@
                         <x-jet-input wire:model.defer="section.name" id="name" class="block mt-1 w-full" type="text" name="name" autofocus required/>
                         <x-jet-input-error for="section.name" class="mt-2"/>
                     </div>
-                    
+
                     <div class="mt-4 col-span-4">
                         <x-jet-label for="room" value="{{ __('Room') }}" />
                         <select wire:model.defer="section.room_id" name="room" class="w-full mt-1 bg-white flex-1 p-2 tracking-wide border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
@@ -476,16 +454,17 @@
                     </div>
                 </div>
 
-                <div class="mt-4">
-                    <x-jet-label for="seat" value="{{ __('Seat') }}" />
-                    <x-jet-input wire:model.defer="section.seat" id="seat" class="block mt-1 w-full" type="number" name="seat" autofocus required/>
-                    <x-jet-input-error for="section.seat" class="mt-2"/>
-                </div>
-                
-                <div class="mt-4">
-                    <x-jet-label for="remarks" value="{{ __('Remarks') }}" />
-                    <textarea wire:model.defer="section.remarks" id="remarks" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" type="text" name="remarks" autofocus required></textarea>
-                    <x-jet-input-error for="section.remarks" class="mt-2"/>
+                <div class="grid grid-cols-8 gap-6">
+                    <div class="mt-4 col-span-4">
+                        <x-jet-label for="seat" value="{{ __('Seat') }}" />
+                        <x-jet-input wire:model.defer="section.seat" id="seat" class="block mt-1 w-full" type="number" name="seat" autofocus required/>
+                        <x-jet-input-error for="section.seat" class="mt-2"/>
+                    </div>
+
+                    <div class="mt-4 col-span-4">
+                        <x-jet-label for="currentNumberOfStudents" value="{{ __('Current Number of Students') }}" />
+                        <x-jet-input wire:model="currentNumberOfStudents" id="currentNumberOfStudents" class="block mt-1 w-full" type="number" name="currentNumberOfStudents" readonly/>
+                    </div>
                 </div>
             </form>
         </x-slot>
@@ -501,7 +480,7 @@
         </x-slot>
     </x-jet-dialog-modal>
 
-    <!-- Adding Schedule/s Confirmation Modal -->
+    <!-- Updating Schedule/s Confirmation Modal -->
     <x-jet-dialog-modal wire:model="addingSchedule">
         <x-slot name="title">
             {{ __('Schedule Maintenance') }}

@@ -19,6 +19,7 @@ class CreatePeopleTable extends Migration
             $table->string('middlename');
             $table->string('lastname');
             $table->string('suffix')->nullable();
+            $table->boolean('isCompleteDetail');
             $table->timestamps();
         });
     }

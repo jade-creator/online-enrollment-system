@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin\ProspectusComponent;
 use App\Models\Level;
 use App\Models\Program;
 use App\Models\Prospectus;
+use App\Models\SchoolType;
 use App\Models\Subject;
 use App\Models\Strand;
 use Livewire\Component;
@@ -16,20 +17,18 @@ class ProspectusViewComponent extends Component
 
     public Subject $subject;
     public $addingSubjects = false;
-    public $prospectus, $levelId, $programId, $strandId, $termId;
+    public $prospectus, $levelId, $programId, $termId;
     public $selectedSubjects = [];
 
     protected $queryString = [
         'levelId' => [ 'except' => '' ],
         'programId' => [ 'except' => '' ],
-        'strandId' => [ 'except' => '' ],
         'termId' => [ 'except' => '' ],
     ];
 
     protected $updatesQueryString = [
         'levelId',
         'programId',
-        'strandId',
         'termId',
     ];
 
@@ -38,31 +37,27 @@ class ProspectusViewComponent extends Component
     public function mount() {
         $level = $this->levels->first();
 
-        $this->fill([ 
-            'subject' => new Subject(), 
-            'levelId' => $level->id, 
-            'programId' => '', 
-            'strandId' => '', 
-            'termId' => '', 
+        $this->fill([
+            'subject' => new Subject(),
+            'levelId' => $level->id,
+            'programId' => '',
+            'termId' => '',
         ]);
     }
-    
+
     public function render() { return
         view('livewire.admin.prospectus-component.prospectus-view-component', ['prospectus' => $this->rowsQuery]);
     }
 
     public function getRowsQueryProperty()
     {
-        $this->prospectus = Prospectus::select(['id', 'level_id', 'program_id', 'strand_id', 'term_id'])
+        $this->prospectus = Prospectus::select(['id', 'level_id', 'program_id', 'term_id'])
             ->with('subjects.requisites')
             ->when(!empty($this->levelId), function($query) {
                 return $query->where('level_id', $this->levelId);
             })
             ->when(!empty($this->programId), function($query) {
                 return $query->where('program_id', $this->programId);
-            })
-            ->when(!empty($this->strandId), function($query) {
-                return $query->where('strand_id', $this->strandId);
             })
             ->when(!empty($this->termId), function($query) {
                 return $query->where('term_id', $this->termId);
@@ -75,7 +70,7 @@ class ProspectusViewComponent extends Component
     public function removeConfirm(Subject $subject) {
         $this->subject = $subject;
 
-        $this->dispatchBrowserEvent('swal:confirmDelete', [ 
+        $this->dispatchBrowserEvent('swal:confirmDelete', [
             'type' => 'warning',
             'title' => 'Are you sure?',
             'text' => 'Please note that upon deletion it cannot be retrievable.',
@@ -83,7 +78,7 @@ class ProspectusViewComponent extends Component
     }
 
     public function removeItem()
-    {   
+    {
         $this->prospectus->subjects()->detach($this->subject->id);
 
         $this->fill([ 'subject' => new Subject() ]);
@@ -100,7 +95,7 @@ class ProspectusViewComponent extends Component
     public function addSubject()
     {
         if (empty($this->selectedSubjects)) {
-            return $this->dispatchBrowserEvent('swal:modal', [ 
+            return $this->dispatchBrowserEvent('swal:modal', [
                 'title' => "Unable Action!",
                 'type' => "error",
                 'text' => "There are no subjects selected.",
@@ -116,21 +111,22 @@ class ProspectusViewComponent extends Component
             'addingSubjects' => false,
         ]);
 
-        $this->dispatchBrowserEvent('swal:success', [ 
+        $this->dispatchBrowserEvent('swal:success', [
             'text' => "The prospectus has been updated.",
         ]);
     }
 
-    public function getLevelsProperty() { return
-        Level::get(['id', 'level']);
+    public function getLevelsProperty() {
+        $college = SchoolType::select(['id', 'type'])
+            ->where('type', 'College')
+            ->with('levels')
+            ->first();
+
+        return $college->levels;
     }
 
     public function getProgramsProperty() { return
         Program::get(['id', 'code']);
-    }
-
-    public function getStrandsProperty() { return
-        Strand::get(['id', 'code']);
     }
 
     public function getSubjectsProperty() {
