@@ -28,12 +28,12 @@
         {{-- <script src="{{ asset('js/main.js') }}"></script> --}}
         <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" data-auto-replace-svg="nest"></script>
         <!-- Alpine JS-->
-        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
     </head>
     <body class="font-sans antialiased">
         <x-jet-banner />
         {{-- @include('partials.offline') --}}
-        
+
         <div class="min-h-screen max-w-8xl flex flex-col bg-anti-flash">
             @livewire('navigation-menu')
 
@@ -106,7 +106,7 @@
                 })
                 .then((willDelete) => {
                     if (willDelete) {
-                        window.livewire.emit('removeItem');
+                        window.livewire.emit('removeItem', event.detail.item);
                     }
                 });
             });

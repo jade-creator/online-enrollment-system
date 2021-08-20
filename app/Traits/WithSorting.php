@@ -4,37 +4,28 @@ namespace App\Traits;
 
 trait WithSorting
 {
-    public $sortBy;
-    public $sortDirection;
-
-    public function mountWithSorting() 
-    {
-        $this->fill([
-            'sortBy' => 'created_at',
-            'sortDirection' => 'desc',
-        ]);
-    }
+    public string $sortBy = 'created_at', $sortDirection = 'desc';
 
     public function isAllowedSorts(string $field): bool
-    { 
-        return in_array($field, $this->allowedSorts); 
-    } 
+    {
+        return in_array($field, $this->allowedSorts);
+    }
 
     public function sortFieldSelected(string $field): void
     {
         $this->sortBy = $this->isAllowedSorts($field) ? $field : 'created_at';
 
-        $this->sortDirection = $this->sortBy === $field 
-            ? $this->reverseSort() 
+        $this->sortDirection = $this->sortBy === $field
+            ? $this->reverseSort()
             : 'desc';
 
-        $this->resetPage(); 
-    }   
+        $this->resetPage();
+    }
 
     public function reverseSort()
     {
         return $this->sortDirection === 'desc'
             ? 'asc'
             : 'desc';
-    } 
+    }
 }
