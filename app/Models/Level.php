@@ -20,7 +20,7 @@ class Level extends Model
     protected $fillable = [
         'level',
         'school_type_id',
-    ];  
+    ];
 
     public static function search(?string $search)
     {

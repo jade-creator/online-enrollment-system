@@ -15,8 +15,8 @@ class Program extends Model
         'description'
     ];
 
-    public function specializations() { return
-        $this->hasMany(Specialization::class);
+    public function prospectuses() { return
+        $this->hasMany(Prospectus::class);
     }
 
     public static function search($search)

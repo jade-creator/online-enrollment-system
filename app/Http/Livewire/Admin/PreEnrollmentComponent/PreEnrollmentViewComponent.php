@@ -20,7 +20,7 @@ class PreEnrollmentViewComponent extends Component
     public Registration $registration;
     public int $paginateValue = 10;
     public bool $confirmingExport = false;
-    public $statusId = '', $typeId = '';
+    public $statusId = '';
 
     protected $queryString = [
         'search' => [ 'except' => '' ],
@@ -29,13 +29,11 @@ class PreEnrollmentViewComponent extends Component
         'sortBy' => [ 'except' => 'created_at' ],
         'sortDirection' => [ 'except' => 'desc' ],
         'statusId' => [ 'except' => '' ],
-        'typeId' => [ 'except' => '' ],
     ];
 
     protected $updatesQueryString = [
         'search',
         'statusId',
-        'typeId',
     ];
 
     protected $allowedSorts = [
@@ -49,7 +47,7 @@ class PreEnrollmentViewComponent extends Component
         $this->fill([ 'registration' => new Registration() ]);
     }
 
-    public function render() { return 
+    public function render() { return
         view('livewire.admin.pre-enrollment-component.pre-enrollment-view-component', ['registrations' => $this->rows]);
     }
 
@@ -57,7 +55,7 @@ class PreEnrollmentViewComponent extends Component
         $this->rowsQuery->paginate($this->paginateValue);
     }
 
-    public function getRowsQueryProperty() 
+    public function getRowsQueryProperty()
     {
         return Registration::search($this->search)
             ->select(['id', 'isNew', 'status_id', 'section_id', 'student_id', 'prospectus_id', 'created_at', 'released_at'])
@@ -79,11 +77,6 @@ class PreEnrollmentViewComponent extends Component
                                 ->orWhere('lastname', 'LIKE', '%'.$this->search.'%');
                         });
             })
-            ->when(!empty($this->typeId), function ($query) {
-                return $query->whereHas('prospectus.level.schoolType', function($query) {
-                    return $query->where('id', $this->typeId);
-                });
-            })
             ->whereNull('released_at')
             ->when(!empty($this->statusId), function ($query) {
                 return $query->where('status_id', $this->statusId);
@@ -97,7 +90,7 @@ class PreEnrollmentViewComponent extends Component
     public function removeConfirm(Registration $registration) {
         $this->registration = $registration;
 
-        $this->dispatchBrowserEvent('swal:confirmDelete', [ 
+        $this->dispatchBrowserEvent('swal:confirmDelete', [
             'type' => 'warning',
             'title' => 'Are you sure?',
             'text' => 'Please note that upon deletion it cannot be retrievable.',
@@ -105,7 +98,7 @@ class PreEnrollmentViewComponent extends Component
     }
 
     public function removeItem()
-    {   
+    {
         $this->registration->delete();
     }
 
@@ -117,23 +110,19 @@ class PreEnrollmentViewComponent extends Component
         Level::get(['id', 'level']);
     }
 
-    public function getTypesProperty() { return
-        SchoolType::get(['id', 'type']);
-    }
-
     public function updatingPaginateValue() { $this->resetPage(); }
 
     public function updatingStatusId() { $this->resetPage(); }
 
     public function updatingTypeId() { $this->resetPage(); }
 
-    public function fileExport() 
+    public function fileExport()
     {
         $this->confirmingExport = false;
         return (new RegistrationsExport($this->selected))->download('registrations-collection.xlsx');
-    }    
+    }
 
-    public function paginationView() { return 
-        'partials.pagination-link'; 
+    public function paginationView() { return
+        'partials.pagination-link';
     }
 }

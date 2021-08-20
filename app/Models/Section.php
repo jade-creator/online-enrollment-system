@@ -12,11 +12,25 @@ class Section extends Model
 
     protected $fillable = [
         'name',
-        'remarks',
         'prospectus_id',
         'room_id',
         'seat',
     ];
+
+    public $with = [
+        'prospectus:id,level_id,program_id,term_id',
+        'prospectus.level:id,level',
+        'prospectus.program:id,program',
+        'prospectus.term:id,term',
+        'room:id,name',
+    ];
+
+    public function scopeDateFiltered($query, $dateMin, $dateMax) //TODO: create baseModel and inherit this to every child models
+    {
+        return $query->when(!is_null($dateMin), function ($query) use ($dateMin, $dateMax) {
+            return $query->whereBetween('created_at', [$dateMin, $dateMax]);
+        });
+    }
 
     public function registrations() { return
         $this->hasMany(Registration::class);

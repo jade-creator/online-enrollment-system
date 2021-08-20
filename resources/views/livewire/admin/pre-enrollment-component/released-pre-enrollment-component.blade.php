@@ -1,21 +1,6 @@
 <div class="w-full flex flex-1 scrolling-touch">
     <x-table.filter>
         <div name='slot'>
-            <div class="my-4">
-                <h3 class="font-bold text-md">{{ __('Types')}}</h3>
-                <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
-                    <select wire:model="typeId" wire:loading.attr="disabled" id="type" aria-label="types" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
-                        @forelse ($this->types as $type)
-                            @if ($loop->first)
-                                <option value="">-- choose a type --</option>
-                            @endif
-                            <option value="{{ $type->id }}">{{ $type->type }}</option>
-                        @empty
-                            <option value="">No records</option>
-                        @endforelse
-                    </select>
-                </div>
-            </div>
         </div>
     </x-table.filter>
 
@@ -26,14 +11,14 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center justify-between">
                     <div class="text-2xl font-bold text-gray-500">Released: Pre Enrollment</div>
-        
+
                     @if ( count($this->selected) > 0 && !$this->selectAll )
                         <div class="px-2 text-green-600 font-bold">{{ __('[')}}
                             <span>{{ count($this->selected) }}</span>
                             <span>{{ __('selected ]')}}</span>
                         </div>
                     @endif
-        
+
                     @if ( $this->selectAll )
                         <div class="px-2 text-green-600 font-bold">{{ __('[')}}
                             <span>{{ __('selected all ')}}</span>
@@ -53,7 +38,7 @@
 
         <x-table.main>
             <x-slot name="paginationLink">
-                {{ $registrations->links() }} 
+                {{ $registrations->links() }}
             </x-slot>
 
             <x-slot name="head">
@@ -72,7 +57,7 @@
 
             <x-slot name="body">
                 @forelse ($registrations as $registration)
-                    <div class="{{ $this->isSelected($registration->id) ? 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-gray-200 border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer' 
+                    <div class="{{ $this->isSelected($registration->id) ? 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-gray-200 border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer'
                         : 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-white border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer' }}">
 
                         <div class="grid grid-cols-12 gap-2">
@@ -103,7 +88,7 @@
                                                 </button>
                                             </span>
                                         </x-slot>
-            
+
                                         <x-slot name="content">
                                             <div class="w-60">
                                                 <div class="block px-4 py-3 text-sm text-gray-500 font-bold">
@@ -141,8 +126,8 @@
                             </div>
                         </div>
                     </div>
-                @empty  
-                    <x-table.no-result title="No registration found.🤔"/> 
+                @empty
+                    <x-table.no-result title="No registration found.🤔"/>
                 @endforelse
             </x-slot>
         </x-table.main>

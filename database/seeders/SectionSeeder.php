@@ -17,11 +17,10 @@ class SectionSeeder extends Seeder
      * @return void
      */
     public function run()
-    {        
-        $prospectuses = Prospectus::select(['id', 'program_id', 'strand_id', 'level_id', 'term_id'])
+    {
+        $prospectuses = Prospectus::select(['id', 'program_id', 'level_id', 'term_id'])
                     ->with([
                         'program:id,code',
-                        'strand:id,code',
                         'level:id,level',
                         'term:id,term',
                     ])
@@ -33,26 +32,15 @@ class SectionSeeder extends Seeder
             foreach ($sectionNames as $sectionName) {
                 $room = Room::select('id')->inRandomOrder()->first();
 
-                if ($prospectus->program_id) {
-                    $this->name = $prospectus->program->code . " - " . $prospectus->level->level[0] . $sectionName;
-                }
-
-                if ($prospectus->strand_id) {
-                    $this->name = $prospectus->strand->code. " - " . $prospectus->level->level[-1] . $sectionName;
-                } 
-                
-                if (!$prospectus->term_id){
-                    $this->name = $prospectus->level->level. " - " . $sectionName;
-                }
+                $this->name = $prospectus->program->code . " - " . $prospectus->level->level[0] . $sectionName;
 
                 Section::create([
                     'name' => $this->name,
-                    'remarks' => $prospectus->term_id ? $prospectus->term->term : null,
                     'prospectus_id' => $prospectus->id,
                     'room_id' => $room->id,
                     'seat' => mt_rand(30, 40),
-                ]); 
-            }     
+                ]);
+            }
         });
     }
 }

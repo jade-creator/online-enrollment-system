@@ -3,31 +3,34 @@
 namespace App\Http\Livewire\Admin\SectionComponent;
 
 use App\Exports\SectionsExport;
-use App\Models\Level;
+use App\Http\Requests\ScheduleFormRequest;
 use App\Models\Program;
 use App\Models\Prospectus;
 use App\Models\Room;
 use App\Models\Schedule;
+use App\Models\SchoolType;
 use App\Models\Section;
 use App\Models\Status;
-use App\Models\Strand;
-use Livewire\Component;
-use Livewire\WithPagination;
+use App\Models\Term;
 use App\Traits\WithBulkActions;
+use App\Traits\WithExporting;
 use App\Traits\WithFilters;
 use App\Traits\WithSorting;
+use Livewire\Component;
+use Livewire\WithPagination;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class SectionViewComponent extends Component
 {
     use AuthorizesRequests;
-    use WithBulkActions, WithSorting, WithPagination, WithFilters;
+    use WithBulkActions, WithSorting, WithPagination, WithFilters, WithExporting;
 
     public Section $section;
     public Schedule $schedule;
-    public int $paginateValue = 10;
-    public bool $confirmingExport = false, $addingSection = false, $viewingSection = false, $addingSchedule = false;
-    public $prospectus, $levelId, $programId, $strandId, $termId, $typeId = 1;
+    public Prospectus $prospectus;
+    public int $paginateValue = 10, $currentNumberOfStudents = 0;
+    public bool $addingSection = false, $viewingSection = false, $addingSchedule = false;
+    public $levelId, $programId, $termId;
     public $registrations;
 
     protected $queryString = [
@@ -38,7 +41,6 @@ class SectionViewComponent extends Component
         'sortDirection' => [ 'except' => 'desc' ],
         'levelId' => [ 'except' => '' ],
         'programId' => [ 'except' => '' ],
-        'strandId' => [ 'except' => '' ],
         'termId' => [ 'except' => '' ],
     ];
 
@@ -46,64 +48,56 @@ class SectionViewComponent extends Component
         'search',
         'levelId',
         'programId',
-        'strandId',
         'termId',
     ];
 
     protected $listeners = ['DeselectPage' => 'updatedSelectPage', 'removeItem', 'releaseStudents'];
-
-    public function rules() 
-    {
-        return [
-            'section.name' => ['required', 'string'],
-            'section.remarks' => ['nullable', 'string'],
-            'section.room_id' => ['required', 'integer'],
-            'section.seat' => ['required', 'numeric', 'min:1'],
-            'schedule.start_time_monday' => ['nullable'],
-            'schedule.end_time_monday' => ['nullable', 'after:schedule.start_time_monday'],
-            'schedule.start_time_tuesday' => ['nullable'],
-            'schedule.end_time_tuesday' => ['nullable', 'after:schedule.start_time_tuesday'],
-            'schedule.start_time_wednesday' => ['nullable'],
-            'schedule.end_time_wednesday' => ['nullable', 'after:schedule.start_time_wednesday'],
-            'schedule.start_time_thursday' => ['nullable'],
-            'schedule.end_time_thursday' => ['nullable', 'after:schedule.start_time_thursday'],
-            'schedule.start_time_friday' => ['nullable'],
-            'schedule.end_time_friday' => ['nullable', 'after:schedule.start_time_friday'],
-        ];
-    }
 
     protected array $allowedSorts = [
         'id',
         'name',
     ];
 
+    public function rules()
+    {
+        return [
+            'section.name' => ['required', 'string'],
+            'section.room_id' => ['required', 'integer'],
+            'section.seat' => ['required', 'integer', 'min:1', 'gte:currentNumberOfStudents'],
+            'currentNumberOfStudents' => ['integer', 'min:0'],
+        ];
+    }
+
     public function mount() {
-        $this->fill([ 
+        $this->fill([
             'section' => new Section(),
-            'schedule' => new Schedule(), 
-            'registrations' => collect(), 
+            'schedule' => new Schedule(),
+            'prospectus' => new Prospectus(),
+            'registrations' => collect(),
         ]);
     }
 
-    public function render() { return 
+    public function render() { return
         view('livewire.admin.section-component.section-view-component', ['sections' => $this->rows]);
     }
 
-    public function getRowsProperty() { return 
+    public function getRowsProperty() { return
         $this->rowsQuery->paginate($this->paginateValue);
     }
 
     public function getRowsQueryProperty()
     {
         return Section::search($this->search)
-            ->select(['id', 'name', 'remarks', 'prospectus_id', 'room_id', 'seat', 'created_at'])
+            ->select(['id', 'name',  'prospectus_id', 'room_id', 'seat', 'created_at'])
             ->with([
-                'prospectus:id,level_id,program_id,strand_id,term_id', 'schedules.subject', 'room:id,name',
+                'prospectus:id,level_id,program_id,term_id',
+                'schedules.subject',
+                'room:id,name',
                 'registrations' => function($query) {
                     $status = Status::where('name', 'enrolled')->first();
                     return $query->where('status_id', $status->id)
                                 ->whereNull('released_at');
-                }    
+                }
             ])
             ->when(!empty($this->levelId), function($query) {
                 return $query->WhereHas('prospectus', function($query) {
@@ -113,11 +107,6 @@ class SectionViewComponent extends Component
             ->when(!empty($this->programId), function($query) {
                 return $query->WhereHas('prospectus', function($query) {
                             return $query->where('program_id', $this->programId);
-                        });
-            })
-            ->when(!empty($this->strandId), function($query) {
-                return $query->WhereHas('prospectus', function($query) {
-                            return $query->where('strand_id', $this->strandId);
                         });
             })
             ->when(!empty($this->termId), function($query) {
@@ -131,13 +120,9 @@ class SectionViewComponent extends Component
             });
     }
 
-    public function updated($propertyName)
-    {
-        $this->validateOnly($propertyName);
-    }
-
     public function save()
     {
+        $this->authorize('create', Section::class);
         $this->validate();
 
         $this->prospectus = Prospectus::select(['id'])
@@ -148,16 +133,13 @@ class SectionViewComponent extends Component
                     ->when(!empty($this->programId), function($query) {
                         return $query->where('program_id', $this->programId);
                     })
-                    ->when(!empty($this->strandId), function($query) {
-                        return $query->where('strand_id', $this->strandId);
-                    })
                     ->when(!empty($this->termId), function($query) {
                         return $query->where('term_id', $this->termId);
                     })
                     ->firstOrFail();
 
         if ($this->prospectus->subjects->isEmpty()) {
-            return $this->dispatchBrowserEvent('swal:modal', [ 
+            return $this->dispatchBrowserEvent('swal:modal', [
                 'title' => "Warning",
                 'type' => "error",
                 'text' => "Please add subject/s first under this prospectus.",
@@ -182,86 +164,38 @@ class SectionViewComponent extends Component
         $this->resetFields(false);
     }
 
-    public function addSectionError()
-    {
-        return $this->dispatchBrowserEvent('swal:modal', [ 
-            'title' => "Oops Sorry..",
-            'type' => "error",
-            'text' => "Please fill up the necessary fields (Level, Program, Track, Strand and Term) accordingly.",
-        ]);
-    }
-
+    //TODO : make it a trait.
     public function addingSection() {
 
-        if (empty($this->levelId)) {
-            return $this->addSectionError();
-        }
-
-        if ($this->levelId > 10 && empty($this->termId)) {
-            return $this->addSectionError();
-        }
-
-        if ($this->levelId > 13 && empty($this->programId)) {
-            return $this->addSectionError();
-        }  
-        
-        if (($this->levelId > 10 && $this->levelId < 13) && empty($this->strandId)) {
-            return $this->addSectionError();
+        if (empty($this->levelId) || empty($this->programId) || empty($this->termId)) {
+            return $this->dispatchBrowserEvent('swal:modal', [
+                'title' => "Oops Sorry..",
+                'type' => "error",
+                'text' => "Please selected the necessary fields (Level, Program, and Term).",
+            ]);
         }
 
         $this->resetFields(true);
-    }
-
-    public function updateSchedule()
-    {
-        $this->authorize('create', Section::class);
-
-        $this->validate([
-            'schedule.start_time_monday' => ['nullable'],
-            'schedule.end_time_monday' => ['nullable', 'after:schedule.start_time_monday'],
-            'schedule.start_time_tuesday' => ['nullable'],
-            'schedule.end_time_tuesday' => ['nullable', 'after:schedule.start_time_tuesday'],
-            'schedule.start_time_wednesday' => ['nullable'],
-            'schedule.end_time_wednesday' => ['nullable', 'after:schedule.start_time_wednesday'],
-            'schedule.start_time_thursday' => ['nullable'],
-            'schedule.end_time_thursday' => ['nullable', 'after:schedule.start_time_thursday'],
-            'schedule.start_time_friday' => ['nullable'],
-            'schedule.end_time_friday' => ['nullable', 'after:schedule.start_time_friday'],
-        ]);
-
-        $this->schedule->save();
-
-        $this->fill([ 'addingSchedule' => false ]);
-
-        $this->dispatchBrowserEvent('swal:success', [ 
-            'text' => "The schedule has been updated.",
-        ]);
     }
 
     public function viewSection(Section $section)
     {
         $this->fill([
             'section' => $section,
+            'currentNumberOfStudents' => $section->registrations->count(),
             'viewingSection' => true,
         ]);
     }
 
     public function updateSection()
     {
+        $this->authorize('update', $this->section);
         $this->validate();
-
-        if ($this->section->seat < $this->section->registrations->count()) {
-            return $this->dispatchBrowserEvent('swal:modal', [ 
-                'title' => "Oops Sorry..",
-                'type' => "error",
-                'text' => "Sorry available seats should not be less than to current number of students.",
-            ]);
-        }
 
         $this->section->save();
         $this->fill([ 'viewingSection' => false, ]);
 
-        $this->dispatchBrowserEvent('swal:success', [ 
+        $this->dispatchBrowserEvent('swal:success', [
             'text' => "The section has been updated.",
         ]);
     }
@@ -283,7 +217,7 @@ class SectionViewComponent extends Component
     {
         $this->section = $section;
 
-        $this->dispatchBrowserEvent('swal:confirmRelease', [ 
+        $this->dispatchBrowserEvent('swal:confirmRelease', [
             'type' => 'warning',
             'title' => 'Are you sure?',
             'text' => 'Students under this section will be removed. Their registration will moved to history once this action is successfull.',
@@ -304,7 +238,7 @@ class SectionViewComponent extends Component
     {
         $sections = Section::with(['registrations' => function($query) {
                     return $query->whereNull('released_at');
-                }]) 
+                }])
                 ->whereIn('id', $this->selected)
                 ->get();
 
@@ -313,7 +247,7 @@ class SectionViewComponent extends Component
             $this->release();
         });
 
-        $this->dispatchBrowserEvent('swal:success', [ 
+        $this->dispatchBrowserEvent('swal:success', [
             'text' => "The students have been released.",
         ]);
     }
@@ -322,39 +256,42 @@ class SectionViewComponent extends Component
         $this->section = $section;
 
         if (!$this->section->registrations->isEmpty()) {
-            return $this->dispatchBrowserEvent('swal:modal', [ 
+            return $this->dispatchBrowserEvent('swal:modal', [
                 'title' => "Warning!",
                 'type' => "warning",
                 'text' => "There are students enrolled on this section.",
             ]);
         }
 
-        $this->dispatchBrowserEvent('swal:confirmDelete', [ 
+        $this->dispatchBrowserEvent('swal:confirmDelete', [
             'type' => 'warning',
             'title' => 'Are you sure?',
             'text' => 'Please note that upon deletion it cannot be retrievable.',
         ]);
     }
 
-    public function removeItem()
-    {   
-        $this->section->delete();
-    }
+    public function removeItem() { $this->section->delete(); }
 
     public function getRoomsProperty() { return
         Room::get(['id', 'name']);
     }
 
-    public function getLevelsProperty() { return
-        Level::get(['id', 'level']);
+    public function getLevelsProperty()
+    {
+        $college = SchoolType::select(['id', 'type'])
+            ->where('type', 'College')
+            ->with('levels:id,level,school_type_id')
+            ->first();
+
+        return $college->levels;
     }
 
     public function getProgramsProperty() { return
         Program::get(['id', 'code']);
     }
 
-    public function getStrandsProperty() { return
-        Strand::get(['id', 'code']);
+    public function getTermsProperty() { return
+        Term::get(['id', 'term']);
     }
 
     public function updatedViewingSection($value)
@@ -362,25 +299,37 @@ class SectionViewComponent extends Component
         if (!$value) {
             $this->fill([ 'section' => new Section() ]);
         }
+        $this->resetValidation();
     }
 
-    public function updatedAddingSection() 
+    public function updatedAddingSection() { $this->fill([ 'section' => new Section() ]); }
+
+    public function updateSchedule(ScheduleFormRequest  $request)
     {
-        $this->fill([ 'section' => new Section() ]);
+        $this->authorize('update', $this->schedule);
+        $this->validate($request->rules());
+
+        $this->schedule->save();
+
+        $this->fill([ 'addingSchedule' => false ]);
+
+        $this->dispatchBrowserEvent('swal:success', [
+            'text' => "The schedule has been updated.",
+        ]);
     }
 
-    public function updatedAddingSchedule($value) 
+    public function updatedAddingSchedule($value)
     {
         $this->authorize('create', Section::class);
 
         if (!$value) {
-            $this->fill([ 
-                'section' => new Section(), 
-                'schedule' => new Schedule(), 
+            $this->fill([
+                'section' => new Section(),
+                'schedule' => new Schedule(),
             ]);
         } else{
             $this->resetValidation();
-            $this->fill([ 
+            $this->fill([
                 'schedule' => Schedule::find($value),
                 'addingSchedule' => !$this->addingSchedule,
             ]);
@@ -394,30 +343,13 @@ class SectionViewComponent extends Component
         ]);
     }
 
-    public function updatedLevelId() 
-    {
-        $this->fill([
-            'programId' => '',
-            'strandId' => '',
-            'termId' => '',
-        ]);
-
-        $this->resetPage();
-    }
+    public function updatedLevelId() { $this->resetPage(); } //TODO: reset program and term ids.
 
     public function updatingProgramId() { $this->resetPage(); }
 
-    public function updatingStrandId() { $this->resetPage(); }
-
     public function updatingTermId() { $this->resetPage(); }
 
-    public function fileExport() 
-    {
-        $this->confirmingExport = false;
-        return (new SectionsExport($this->selected))->download('sections-collection.xlsx');
-    }    
-
-    public function paginationView() { return 
-        'partials.pagination-link'; 
+    public function fileExport() { return
+        $this->excelFileExport((new SectionsExport($this->selected)), 'section-collection.xlsx');
     }
 }

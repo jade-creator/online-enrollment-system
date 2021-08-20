@@ -12,7 +12,7 @@ use Livewire\Component;
 
 class Dashboard extends Component
 {
-    public function render() { return 
+    public function render() { return
         view('livewire.admin.dashboard');
     }
 
@@ -32,9 +32,9 @@ class Dashboard extends Component
         Subject::get('id');
     }
 
-    public function getRecentlyEnrolleesProperty() { 
+    public function getRecentlyEnrolleesProperty() {
         $status = Status::where('name', 'enrolled')->firstOrFail();
-        
+
         return Registration::with('student.user.person')
             ->where('status_id', $status->id)
             ->latest()

@@ -20,7 +20,7 @@ class GradeViewComponent extends Component
     public int $paginateValue = 10;
     public bool $gradingStudent = false;
     public int $subjectGrade = 0;
-    public $typeId = '', $subjectCode = '';
+    public string $subjectCode = '';
 
     protected $queryString = [
         'search' => [ 'except' => '' ],
@@ -28,12 +28,10 @@ class GradeViewComponent extends Component
         'dateMax',
         'sortBy' => [ 'except' => 'created_at' ],
         'sortDirection' => [ 'except' => 'desc' ],
-        'typeId' => [ 'except' => '' ],
     ];
 
     protected $updatesQueryString = [
         'search',
-        'typeId',
     ];
 
     protected $allowedSorts = [
@@ -52,7 +50,7 @@ class GradeViewComponent extends Component
         $this->fill(['grade' => new Grade()]);
     }
 
-    public function render() { return 
+    public function render() { return
         view('livewire.admin.grade-component.grade-view-component', ['registrations' => $this->rows]);
     }
 
@@ -60,7 +58,7 @@ class GradeViewComponent extends Component
         $this->rowsQuery->paginate($this->paginateValue);
     }
 
-    public function getRowsQueryProperty() 
+    public function getRowsQueryProperty()
     {
         $statuses = Status::whereIn('name', ['enrolled', 'released'])->get();
         $statuses = $statuses->pluck('id')->toArray();
@@ -88,11 +86,6 @@ class GradeViewComponent extends Component
                                 ->orWhere('lastname', 'LIKE', '%'.$this->search.'%');
                         });
             })
-            ->when(!empty($this->typeId), function ($query) {
-                return $query->whereHas('prospectus.level.schoolType', function($query) {
-                    return $query->where('id', $this->typeId);
-                });
-            })
             ->whereIn('status_id', $statuses)
             ->orderBy($this->sortBy, $this->sortDirection)
             ->when(!is_null($this->dateMin), function($query) {
@@ -108,30 +101,26 @@ class GradeViewComponent extends Component
         $this->grade->save();
         $this->fill(['gradingStudent' => false]);
 
-        $this->dispatchBrowserEvent('swal:success', [ 
+        $this->dispatchBrowserEvent('swal:success', [
             'text' => "The student's grade has been updated.",
         ]);
     }
 
-    public function addGrade(Grade $grade) 
+    public function addGrade(Grade $grade)
     {
         $this->resetValidation();
-        $this->fill([ 
-            'subjectCode' => $grade->subject->code, 
-            'grade' => $grade, 
-            'gradingStudent' => true, 
+        $this->fill([
+            'subjectCode' => $grade->subject->code,
+            'grade' => $grade,
+            'gradingStudent' => true,
         ]);
-    }
-
-    public function getTypesProperty() { return
-        SchoolType::get(['id', 'type']);
     }
 
     public function updatingPaginateValue() { $this->resetPage(); }
 
     public function updatingTypeId() { $this->resetPage(); }
 
-    public function paginationView() { return 
-        'partials.pagination-link'; 
+    public function paginationView() { return
+        'partials.pagination-link';
     }
 }

@@ -14,47 +14,28 @@
                 </div>
             </div>
 
-            @if ($levelId >= 14) <!-- show if level is college -->
-                <div class="my-4">
-                    <h3 class="font-bold text-md">{{ __('Program')}}</h3>
-                    <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
-                        <select wire:model="programId" wire:loading.attr="disabled" id="program" aria-label="programs" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
-                            @forelse ($this->programs as $program)
-                                <option value="{{ $program->id }}">{{ $program->code }}</option>
-                            @empty
-                                <option value="">No records</option>
-                            @endforelse
-                        </select>
-                    </div>
+            <div class="my-4">
+                <h3 class="font-bold text-md">{{ __('Program')}}</h3>
+                <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
+                    <select wire:model="programId" wire:loading.attr="disabled" id="program" aria-label="programs" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
+                        @forelse ($this->programs as $program)
+                            <option value="{{ $program->id }}">{{ $program->code }}</option>
+                        @empty
+                            <option value="">No records</option>
+                        @endforelse
+                    </select>
                 </div>
-            @endif
+            </div>
 
-            @if ($levelId == 12 || $levelId == 13) <!-- show if level is shs -->
-                <div class="my-4">
-                    <h3 class="font-bold text-md">{{ __('Strand')}}</h3>
-                    <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
-                        <select wire:model="strandId" wire:loading.attr="disabled" id="strand" aria-label="strands" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
-                            @forelse ($this->strands as $strand)
-                                <option value="{{ $strand->id }}">{{ $strand->code }}</option>
-                            @empty
-                                <option value="">No records</option>
-                            @endforelse
-                        </select>
-                    </div>
+            <div class="my-4">
+                <h3 class="font-bold text-md">{{ __('Term')}}</h3>
+                <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
+                    <select wire:model="termId" wire:loading.attr="disabled" id="term" aria-label="terms" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
+                        <option value="1">1st term</option>
+                        <option value="2">2nd term</option>
+                    </select>
                 </div>
-            @endif
-                
-            @if ($levelId >= 12) <!-- show if level is shs to college -->
-                <div class="my-4">
-                    <h3 class="font-bold text-md">{{ __('Term')}}</h3>
-                    <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
-                        <select wire:model="termId" wire:loading.attr="disabled" id="term" aria-label="terms" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
-                            <option value="1">1st term</option>
-                            <option value="2">2nd term</option>
-                        </select>
-                    </div>
-                </div>
-            @endif
+            </div>
         </div>
     </x-table.filter>
 
@@ -63,14 +44,14 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center justify-between">
                     <div class="text-2xl font-bold text-gray-500">Fees</div>
-        
+
                     @if ( count($this->selected) > 0 && !$this->selectAll )
                         <div class="px-2 text-green-600 font-bold">{{ __('[')}}
                             <span>{{ count($this->selected) }}</span>
                             <span>{{ __('selected ]')}}</span>
                         </div>
                     @endif
-        
+
                     @if ( $this->selectAll )
                         <div class="px-2 text-green-600 font-bold">{{ __('[')}}
                             <span>{{ __('selected all ')}}</span>
@@ -100,7 +81,7 @@
             <x-slot name="body">
                     @forelse ($prospectus->fees as $fee)
                         <div id="{{ $fee->id }}" x-data="{ open: false }">
-                            <div @click="open = ! open" class="{{ $this->isSelected($fee->id) ? 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-gray-200 border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer' 
+                            <div @click="open = ! open" class="{{ $this->isSelected($fee->id) ? 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-gray-200 border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer'
                             : 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-white border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer' }}">
 
                                 <div class="grid grid-cols-12 gap-2">
@@ -129,7 +110,7 @@
                                                         </button>
                                                     </span>
                                                 </x-slot>
-                    
+
                                                 <x-slot name="content">
                                                     <div class="w-60">
                                                         <div class="block px-4 py-3 text-sm text-gray-500 font-bold">
@@ -143,7 +124,7 @@
                                                                     <path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
                                                                  </svg>
                                                                 <p class="pl-2">{{ __('View')}}</p>
-                                                            </button> 
+                                                            </button>
                                                         </div>
                                                         <div>
                                                             <button wire:click.prevent="removeConfirm({{ $fee }})" class="flex w-full px-4 py-2 hover:bg-red-500 hover:text-white rounded-b-md outline-none focus:outline-none transition-all duration-300 ease-in-out">
@@ -166,8 +147,8 @@
                                 </div>
                             </div>
                         </div>
-                    @empty  
-                        <x-table.no-result title="No fee found.🤔"/> 
+                    @empty
+                        <x-table.no-result title="No fee found.🤔"/>
                     @endforelse
             </x-slot>
         </x-table.main>

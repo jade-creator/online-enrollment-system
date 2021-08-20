@@ -21,6 +21,7 @@ class CreateDetailsTable extends Migration
             $table->date('birthdate');
             $table->string('birthplace');
             $table->foreignId('person_id')->constrained();
+            $table->foreignId('country_id')->constrained();
             $table->timestamps();
         });
     }
