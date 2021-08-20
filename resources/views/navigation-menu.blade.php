@@ -136,12 +136,10 @@
 
     <!-- Responsive Navigation Menu -->
     <div @click="open = ! open" :class="{'w-full': open, 'lg:w-12': ! open}" class="w-12 h-full transparent fixed">
-        {{-- z-40 --}}
 
-        <div @click.stop :class="{'w-full sm:w-60 shadow-lg sidebar overflow-y-auto scrolling-touch': open, 'w-0 lg:w-12': ! open}" class="transition-width transition-slowest ease top-0 left-0 h-full bg-white border-r border-gray-200">
+        <div @click.stop :class="{'w-full sm:w-60 shadow-lg sidebar scrolling-touch': open, 'w-0 lg:w-12': ! open}" class="overflow-y-auto overflow-x-hidden transition-width transition-slowest ease top-0 left-0 h-full bg-white border-r border-gray-200">
 
             <div>
-{{--TODO: icon-bug doesn't hide --}}
                 <ul class="pt-3 flex flex-col space-y-1 h-full w-full">
                     @if(auth()->user()->role->name === 'admin')
                         <li title="Dashboard">
