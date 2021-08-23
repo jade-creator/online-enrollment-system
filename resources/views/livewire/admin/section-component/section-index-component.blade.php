@@ -1,11 +1,6 @@
-<div class="w-full flex flex-1 scrolling-touch">
-    <x-table.filter>
-        <div name='slot'>
-            <livewire:partials.prospectus-filter>
-        </div>
-    </x-table.filter>
+<div class="w-full scrolling-touch">
 
-    <div class="min-h-screen w-full py-8 px-8">
+    <div class="h-content w-full py-8 px-8">
         <div>
             @forelse ($sections as $section)
                 @if ($loop->first && filled($this->prospectusId))
@@ -18,13 +13,21 @@
             @empty
             @endforelse
         </div>
+        
         <x-table.title tableTitle="Sections" :isSelectedAll="$this->selectAll" :count="count($this->selected)">
             @can('create', App\Models\Section::class)
                 <x-table.nav-button action="addingSection" buttonName="Add Section"/>
             @endcan
         </x-table.title>
 
+        <x-table.filter>
+            <div name='slot'>
+                <livewire:partials.prospectus-filter>
+            </div>
+         </x-table.filter>
+
         <x-table.main>
+
             <x-slot name="paginationLink">
                 {{ $sections->links('partials.pagination-link') }}
             </x-slot>
@@ -112,6 +115,7 @@
                     <x-table.no-result title="No sections found.🤔"/>
                 @endforelse
             </x-slot>
+            
         </x-table.main>
 
         @include('livewire.admin.section-component.section-bulk-action')
