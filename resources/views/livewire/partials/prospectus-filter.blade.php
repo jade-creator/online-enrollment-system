@@ -1,22 +1,25 @@
-<div class="my-4">
-    <div class="flex items-align justify-between">
-        <h3 class="font-bold text-md">{{ __('Program')}}</h3>
-        @if (filled($programId))
-            <button wire:click.prevent="$toggle('confirmingTerm')" class="mb-2 pt-1 pr-3 focus:outline-none active:outline-none"><x-icons.view-icon/></button>
-        @endif
+<div class="space-y-4">
+   <div>
+        <div class="flex items-align justify-between">
+            <h3 class="font-bold text-md">{{ __('Program')}}</h3>
+            @if (filled($programId))
+                <button wire:click.prevent="$toggle('confirmingTerm')" class="mb-2 pt-1 pr-3 focus:outline-none active:outline-none"><x-icons.view-icon/></button>
+            @endif
+        </div>
+        <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
+            <select wire:model="programId" wire:loading.attr="disabled" id="program" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
+                @forelse ($this->programs as $program)
+                    @if ($loop->first)
+                        <option value="" selected>All</option>
+                    @endif
+                    <option value="{{ $program->id }}">{{ $program->code }}</option>
+                @empty
+                    <option value="">No records</option>
+                @endforelse
+            </select>
+        </div>
     </div>
-    <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
-        <select wire:model="programId" wire:loading.attr="disabled" id="program" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
-            @forelse ($this->programs as $program)
-                @if ($loop->first)
-                    <option value="" selected>All</option>
-                @endif
-                <option value="{{ $program->id }}">{{ $program->code }}</option>
-            @empty
-                <option value="">No records</option>
-            @endforelse
-        </select>
-    </div>
+    
     <!-- Export Seciotn/s Confirmation Modal -->
     <x-jet-dialog-modal wire:model="confirmingTerm" maxWidth="sm">
         <x-slot name="title">
