@@ -4,12 +4,14 @@ namespace App\Http\Livewire\Admin\SectionComponent;
 
 use App\Models;
 use App\Services\Section\SectionService;
+use App\Traits\WithSweetAlert;
 use Livewire\Component;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class SectionUpdateComponent extends Component
 {
     use AuthorizesRequests;
+    use WithSweetAlert;
 
     public Models\Section $section;
     public int $currentNumberOfStudents = 0;
@@ -42,29 +44,26 @@ class SectionUpdateComponent extends Component
         try {
             $this->section = (new SectionService())->update($this->section);
 
-            $this->dispatchBrowserEvent('swal:success', [
-                'text' => $this->section->name." has been updated.",
-            ]);
+            $this->emitUp('refresh');
+            $this->success($this->section->name.' has been updated.');
         } catch (\Exception $e) {
-            $this->dispatchBrowserEvent('swal:modal', [
-                'title' => "Warning",
-                'type' => "error",
-                'text' => $e->getMessage(),
-            ]);
+            $this->error($e->getMessage());
         }
 
-        $this->modalViewingSection($this->section);
+        $this->toggleViewingSection();
     }
 
     public function modalViewingSection(Models\Section $section)
     {
         $this->setSection($section);
+        $this->currentNumberOfStudents = $this->section->registrations->count();
+        $this->toggleViewingSection();
+    }
 
+    public function toggleViewingSection()
+    {
         $this->resetValidation();
-        $this->fill([
-            'currentNumberOfStudents' => $this->section->registrations->count(),
-            'viewingSection' => !$this->viewingSection,
-        ]);
+        $this->viewingSection = !$this->viewingSection;
     }
 
     public function setSection(Models\Section $section) { $this->section = $section; }

@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin\SectionComponent;
 
 use App\Exports\SectionsExport;
 use App\Models;
+use App\Services\RegistrationService;
 use App\Traits;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire;
@@ -11,11 +12,14 @@ use Livewire;
 class SectionIndexComponent extends Livewire\Component
 {
     use AuthorizesRequests;
-    use Livewire\WithPagination, Traits\WithBulkActions, Traits\WithSorting, Traits\WithFilters, Traits\WithExporting;
+    use Livewire\WithPagination, Traits\WithBulkActions, Traits\WithSorting, Traits\WithFilters, Traits\WithExporting,
+        Traits\WithSweetAlert;
 
-    public int $paginateValue = 10, $currentNumberOfStudents = 0;
-    public string $prospectusId = '';
-    public $registrations;
+    public Models\Section $section;
+    public Models\Status $status;
+    private RegistrationService $registrationService;
+    public int $paginateValue = 10;
+    public string $programId = '';
 
     protected $queryString = [
         'search' => [ 'except' => '' ],
@@ -23,16 +27,17 @@ class SectionIndexComponent extends Livewire\Component
         'dateMax',
         'sortBy' => [ 'except' => 'created_at' ],
         'sortDirection' => [ 'except' => 'desc' ],
+        'programId' => [ 'except' => '' ],
     ];
 
     protected $updatesQueryString = [
         'search',
+        'programId',
     ];
 
     protected $listeners = [
         'DeselectPage' => 'updatedSelectPage',
         'refresh' => '$refresh',
-        'setProspectusId',
         'releaseStudents',
         'removeConfirm',
     ];
@@ -42,7 +47,11 @@ class SectionIndexComponent extends Livewire\Component
         'name',
     ];
 
-    public function mount() { $this->fill([ 'registrations' => collect() ]); }
+    public function mount()
+    {
+        $this->status = Models\Status::where('name', 'released')->firstOrFail();
+        $this->registrationService = new RegistrationService($this->status->id);
+    }
 
     public function render() { return
         view('livewire.admin.section-component.section-index-component', ['sections' => $this->rows]);
@@ -62,40 +71,49 @@ class SectionIndexComponent extends Livewire\Component
                     return $query->enrolled();
                 },
             ])
-            ->when(filled($this->prospectusId), function($query) {
-                return $query->where('prospectus_id', $this->prospectusId);
-            })
+            ->filterWithProspectusByProgram($this->programId)
             ->orderBy($this->sortBy, $this->sortDirection)
             ->dateFiltered($this->dateMin, $this->dateMax);
     }
 
-    public function setProspectusId($value)
-    {
-        $this->prospectusId = $value;
-        $this->resetPage();
-    }
-
     public function removeConfirm(Models\Section $section)
     {
-        if (!$section->registrations->isEmpty()) {
-            return $this->dispatchBrowserEvent('swal:modal', [
-                'title' => "Warning!",
-                'type' => "warning",
-                'text' => "There are students enrolled under ".$section->name,
-            ]);
-        }
+        if (!$section->registrations->isEmpty()) return $this->warning("There are students enrolled under ".$section->name);
 
-        $this->dispatchBrowserEvent('swal:confirmDelete', [
+        $this->confirmDelete($section, $section->name);
+    }
+
+    public function releaseConfirm(Models\Section $section)
+    {
+        $this->section = $section;
+
+        $this->dispatchBrowserEvent('swal:confirmRelease', [
             'type' => 'warning',
             'title' => 'Are you sure?',
-            'text' => 'Deleting '.$section->name.' cannot be retrievable.',
-            'item' => $section,
+            'text' => 'Students under this section will be removed. Their registration will be moved to history once successfull.',
         ]);
     }
 
+    public function release(string $method, $argument)
+    {
+        try {
+            $this->registrationService->$method($argument);
+            $this->success('The students have been released.');
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
+        }
+    }
+
+    public function releaseStudents() { $this->release('release', $this->section->registrations); }
+
+    public function releaseAll() { $this->release('releaseAll', $this->selected); }
+
     public function getRoomsProperty() { return
-        Models\Room::select(['id', 'name'])
-            ->get();
+        Models\Room::get(['id', 'name']);
+    }
+
+    public function getProgramsProperty() { return
+        Models\Program::get(['id', 'code']);
     }
 
     public function fileExport() { return

@@ -37,20 +37,18 @@
                 </x-table.cell>
 
                 <x-table.cell-action>
-                    <x-slot name="container">
-                        @if (auth()->user()->role->name == 'admin')
-                            <button wire:click="updatedAddingSchedule({{ $schedule->id }})" class="hover:text-indigo-500 rounded-circle p-1 mx-1 focus:outline-none" data-toggle="tooltip" data-placement="top" title="Edit">
-                                <x-icons.edit-icon/>
-                            </button>
-                        @else
-                            <x-table.cell-button title="Administrative Access">
-                                <x-icons.lock-icon/>
-                            </x-table.cell-button>
-                        @endif
-                    </x-slot>
+                    @can ('update', $schedule)
+                        <button wire:click.prevent="$emit('modalViewingSchedule', {{ $schedule }})" class="hover:text-indigo-500 rounded-circle p-1 mx-1 focus:outline-none" data-toggle="tooltip" data-placement="top" title="Edit">
+                            <x-icons.edit-icon/>
+                        </button>
+                    @elsecan ('view', App\Models\Schedule::class)
+                        <x-table.cell-button title="Administrative Access">
+                            <x-icons.lock-icon/>
+                        </x-table.cell-button>
+                    @endcan
                 </x-table.cell-action>
             @empty
-                <x-table.no-result title="No added subject under the prospectus.🤔"/>
+                <x-table.no-result>No added subject under the prospectus.🤔</x-table.no-result>
             @endforelse
         </div>
     </x-slot>

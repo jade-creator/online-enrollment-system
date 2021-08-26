@@ -4,12 +4,14 @@ namespace App\Http\Livewire\Admin\SectionComponent;
 
 use App\Models\Section;
 use App\Services\Section\SectionService;
+use App\Traits\WithSweetAlert;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
 class SectionDestroyComponent extends Component
 {
     use AuthorizesRequests;
+    use WithSweetAlert;
 
     protected $listeners = [ 'removeItem' ];
 
@@ -29,15 +31,9 @@ class SectionDestroyComponent extends Component
             $section = (new SectionService())->destroy($section);
 
             $this->emitUp('refresh');
-            $this->dispatchBrowserEvent('swal:success', [
-                'text' => $section->name." has been deleted.",
-            ]);
+            $this->success($section->name." has been deleted.");
         } catch (\Exception $e) {
-            $this->dispatchBrowserEvent('swal:modal', [
-                'title' => "Warning",
-                'type' => "error",
-                'text' => $e->getMessage(),
-            ]);
+            $this->error($e->getMessage());
         }
     }
 }

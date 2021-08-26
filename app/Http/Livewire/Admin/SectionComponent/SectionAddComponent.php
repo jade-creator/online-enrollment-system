@@ -4,16 +4,19 @@ namespace App\Http\Livewire\Admin\SectionComponent;
 
 use App\Models;
 use App\Services\Section\SectionService;
+use App\Traits\WithSweetAlert;
 use Livewire\Component;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class SectionAddComponent extends Component
 {
     use AuthorizesRequests;
+    use WithSweetAlert;
 
     public Models\Section $section;
     public bool $addingSection = false;
-    public $rooms;
+    public string $programId = '', $levelId = '', $termId = '';
+    public $rooms, $programs;
 
     protected  $listeners = ['modalAddingSection'];
 
@@ -23,7 +26,9 @@ class SectionAddComponent extends Component
             'section.name' => ['required', 'string'],
             'section.room_id' => ['required', 'integer'],
             'section.seat' => ['required', 'integer', 'min:1'],
-            'section.prospectus_id' => ['required', 'integer'],
+            'programId' => ['required', 'integer'],
+            'levelId' => ['required', 'integer'],
+            'termId' => ['required', 'integer'],
         ];
     }
 
@@ -31,13 +36,12 @@ class SectionAddComponent extends Component
         view('livewire.admin.section-component.section-add-component');
     }
 
-    public function modalAddingSection($prospectusId = null)
+    public function modalAddingSection()
     {
         $this->resetValidation();
         $this->fill([
             'section' => new Models\Section(),
             'addingSection' => !$this->addingSection,
-            'section.prospectus_id' => $prospectusId,
         ]);
     }
 
@@ -47,20 +51,22 @@ class SectionAddComponent extends Component
         $this->validate();
 
         try {
-            (new SectionService())->store($this->section);
+            (new SectionService())->store($this->programId, $this->levelId, $this->termId, $this->section);
 
             $this->emitUp('refresh');
-            $this->dispatchBrowserEvent('swal:success', [
-                'text' => "Section has been added.",
-            ]);
+            $this->success($this->section->name.' has been added.');
         }catch (\Exception $e) {
-            $this->dispatchBrowserEvent('swal:modal', [
-                'title' => "Warning",
-                'type' => "error",
-                'text' => $e->getMessage(),
-            ]);
+            $this->error($e->getMessage());
         }
 
         $this->modalAddingSection();
+    }
+
+    public function getLevelsProperty() { return
+        Models\Level::get(['id', 'level']);
+    }
+
+    public function getTermsProperty() { return
+        Models\Term::get(['id', 'term']);
     }
 }

@@ -1,32 +1,32 @@
-<div class="w-full flex flex-1 scrolling-touch">
-    <x-table.filter>
-        <livewire:partials.prospectus-filter>
-    </x-table.filter>
+<div class="w-full scrolling-touch">
 
-    <div class="min-h-screen w-full py-8 px-8">
-        <div>
-            @forelse ($sections as $section)
-                @if ($loop->first && filled($this->prospectusId))
-                    <h1 class="mb-4 text-gray-500 font-bold text-sm"> <!--TODO: make it a separate component-->
-                        <span>{{ $section->prospectus->program->program }}</span>
-                        <x-icons.right-arrow-icon/>
-                        <span>{{ $section->prospectus->level->level }}</span>
-                        <x-icons.right-arrow-icon/>
-                        <span>{{ $section->prospectus->term->term }}</span>
-                    </h1>
-                @endif
-            @empty
-            @endforelse
-        </div>
+    <div class="h-content w-full py-8 px-8">
+
         <x-table.title tableTitle="Sections" :isSelectedAll="$this->selectAll" :count="count($this->selected)">
             @can('create', App\Models\Section::class)
-                <x-table.nav-button wire:click.prevent="$emit('modalAddingSection', {{ $prospectusId }})" :disabled="empty($prospectusId)">
+                <x-table.nav-button wire:click.prevent="$emit('modalAddingSection')">
                     Add Section
                 </x-table.nav-button>
             @endcan
         </x-table.title>
 
+        <x-table.filter>
+            <x-table.filter-slot title="Program">
+                <select wire:model="programId" wire:loading.attr="disabled" name="program" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
+                    @forelse ($this->programs as $program)
+                        @if ($loop->first)
+                            <option value="" selected>All</option>
+                        @endif
+                        <option value="{{ $program->id ?? 'N/A' }}">{{ $program->code ?? 'N/A' }}</option>
+                    @empty
+                        <option value="">No records</option>
+                    @endforelse
+                </select>
+            </x-table.filter-slot>
+        </x-table.filter>
+
         <x-table.main>
+
             <x-slot name="paginationLink">
                 {{ $sections->links('partials.pagination-link') }}
             </x-slot>
@@ -39,9 +39,11 @@
                 <div class="col-span-2" id="name">
                     <x-table.sort-button event="sortFieldSelected('name')">name</x-table.sort-button>
                 </div>
-                <x-table.column-title class="col-span-2">term</x-table.column-title>
-                <x-table.column-title class="col-span-2">room</x-table.column-title>
-                <x-table.column-title class="col-span-1">seats</x-table.column-title>
+                <x-table.column-title class="col-span-1">program</x-table.column-title>
+                <x-table.column-title class="col-span-1">level</x-table.column-title>
+                <x-table.column-title class="col-span-1">term</x-table.column-title>
+                <x-table.column-title class="col-span-1">room</x-table.column-title>
+                <x-table.column-title class="col-span-1 text-center">seats</x-table.column-title>
                 <x-table.column-title class="col-span-2 text-center">current no. of students</x-table.column-title>
                 <div class="col-span-1">
                     <x-table.sort-button event="sortFieldSelected('created_at')">latest</x-table.sort-button>
@@ -50,14 +52,16 @@
 
             <x-slot name="body">
                 @forelse ($sections as $section)
-                    <div x-data="{ open: false }">
-                        <x-table.row wire:key="'table-row-'.{{$section->id}}" :active="$this->isSelected($section->id)">
+                    <div wire:key="table-row-{{$section->id}}" x-data="{ open: false }">
+                        <x-table.row :active="$this->isSelected($section->id)">
                             <div name="slot" class="grid grid-cols-12 gap-2">
                                 <x-table.cell-checkbox :value="$section->id"/>
                                 <x-table.cell class="justify-start md:col-span-2">{{ $section->name ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-2">{{ $section->prospectus->term->term ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-2">{{ $section->room->name ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-1">{{ $section->seat ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell class="justify-start md:col-span-1">{{ $section->prospectus->program->code ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell class="justify-start md:col-span-1">{{ $section->prospectus->level->level ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell class="justify-start md:col-span-1">{{ $section->prospectus->term->term ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell class="justify-start md:col-span-1">{{ $section->room->name ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell class="justify-center md:col-span-1">{{ $section->seat ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell class="justify-center md:col-span-2">{{ $section->registrations->count() }}</x-table.cell>
                                 <x-table.cell-action>
                                     @if (!count($selected) > 0)
@@ -78,7 +82,7 @@
                                                     @endcan
 
                                                     @can ('release', $section)
-                                                        <x-table.cell-button wire:click.prevent="$emitSelf('viewSection', {{$section}})" title="Release Students">
+                                                        <x-table.cell-button wire:click.prevent="$emitSelf('releaseConfirm', {{$section}})" title="Release Students">
                                                             <x-icons.release-icon/>
                                                         </x-table.cell-button>
                                                     @endcan
@@ -99,25 +103,27 @@
                                 </x-table.cell-action>
                             </div>
                         </x-table.row>
-
-                        @include('livewire.admin.section-component.section-view-schedule')
+                        <livewire:admin.schedule-component.schedule-view-component :section="$section" :wire:key="'schedule-view-component-'.$section->id">
                     </div>
                 @empty
-                    <x-table.no-result title="No sections found.🤔"/>
+                    <x-table.no-result>No sections found.🤔</x-table.no-result>
                 @endforelse
             </x-slot>
+
         </x-table.main>
 
         @include('livewire.admin.section-component.section-bulk-action')
     </div>
 
-    <div wire:loading wire:target="paginateValue, search, selectPage, selectAll, previousPage, nextPage, confirmingExport, releaseConfirm, releaseAll">
+    <div wire:loading>
         @include('partials.loading')
     </div>
 
-    <livewire:admin.section-component.section-add-component :rooms="$this->rooms">
+    <livewire:admin.section-component.section-add-component :rooms="$this->rooms" :programs="$this->programs">
 
     <livewire:admin.section-component.section-update-component :rooms="$this->rooms">
 
     <livewire:admin.section-component.section-destroy-component>
+
+    <livewire:admin.schedule-component.schedule-update-component>
 </div>

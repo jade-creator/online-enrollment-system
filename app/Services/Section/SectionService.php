@@ -6,14 +6,20 @@ use App\Models;
 
 class SectionService
 {
-    public function store(Models\Section $section) : void
+    public function store(int $programId, $levelId, $termId, Models\Section $section) : void
     {
         $prospectus = Models\Prospectus::select(['id'])
             ->with('subjects:id')
-            ->findOrFail($section->prospectus_id);
+            ->where([
+                'program_id' => $programId,
+                'level_id' => $levelId,
+                'term_id' => $termId,
+            ])
+            ->firstOrFail();
 
         if ($prospectus->subjects->isEmpty()) throw new \Exception('Please add subject/s first under this prospectus.');
 
+        $section->prospectus_id = $prospectus->id;
         $section->save();
 
         $prospectus->subjects->map(function ($subject) use ($section) {
