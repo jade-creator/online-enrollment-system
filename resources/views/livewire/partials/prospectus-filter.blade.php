@@ -1,5 +1,9 @@
 <div class="space-y-4">
+<<<<<<< HEAD
     <div>
+=======
+   <div>
+>>>>>>> main
         <div class="flex items-align justify-between">
             <h3 class="font-bold text-md">{{ __('Program')}}</h3>
             @if (filled($programId))
@@ -19,7 +23,11 @@
             </select>
         </div>
     </div>
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> main
     <!-- Export Seciotn/s Confirmation Modal -->
     <x-jet-dialog-modal wire:model="confirmingTerm" maxWidth="sm">
         <x-slot name="title">

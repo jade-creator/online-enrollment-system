@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 <div class="py-3 mb-1">
+=======
+<div class="py-3 mb-1"> 
+>>>>>>> main
     <div class="flex flex-col md:flex-row space-x-3 items-center md:justify-between text-gray-600">
 
         <div class="my-4 w-full md:w-52 relative border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
@@ -12,7 +16,11 @@
 
         <div class="flex flex-wrap justify-end items-center">
             <div class="flex items-center mb-2 md:mb-0 md:mr-3">
+<<<<<<< HEAD
                 <h5 class="mr-3">{{ __('Displaying ')}}
+=======
+                <h5 class="mr-3">{{ __('Displaying ')}} 
+>>>>>>> main
                     @if ($paginator->total() > 0)
                         <span class="font-bold">{{ $paginator->firstItem() }}</span>
                         <span>{{ __('to ')}}</span>
@@ -47,7 +55,12 @@
                     </button>
                 @endif
 
+<<<<<<< HEAD
             <!-- paginator Counter -->
+=======
+
+                <!-- paginator Counter -->
+>>>>>>> main
                 @if ($paginator->hasPages())
                     <h5 class="pr-2">
                         <span class="font-bold">{{ $paginator->currentPage() }}</span>
@@ -55,7 +68,11 @@
                         <span class="font-bold">{{ $paginator->lastPage() }}</span>
                     </h5>
                 @else
+<<<<<<< HEAD
                     <h5 class="pr-2">
+=======
+                    <h5 class="pr-2">   
+>>>>>>> main
                         <span>{{ __('--')}}</span>
                     </h5>
                 @endif

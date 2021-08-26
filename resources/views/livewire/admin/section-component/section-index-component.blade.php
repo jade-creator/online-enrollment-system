@@ -1,7 +1,23 @@
 <div class="w-full scrolling-touch">
 
     <div class="h-content w-full py-8 px-8">
+<<<<<<< HEAD
 
+=======
+        <div>
+            @forelse ($sections as $section)
+                @if ($loop->first && filled($this->prospectusId))
+                    <h1 class="border-l-4 mb-4 px-2 border-indigo-500"> <!--TODO: make it a separate component-->
+                        <span>{{ $section->prospectus->program->program }}</span><span class="px-2 font-bold text-lg">></span>
+                        <span>{{ $section->prospectus->level->level }}</span><span class="px-2 font-bold text-lg">></span>
+                        <span>{{ $section->prospectus->term->term }}</span>
+                    </h1>
+                @endif
+            @empty
+            @endforelse
+        </div>
+        
+>>>>>>> main
         <x-table.title tableTitle="Sections" :isSelectedAll="$this->selectAll" :count="count($this->selected)">
             @can('create', App\Models\Section::class)
                 <x-table.nav-button wire:click.prevent="$emit('modalAddingSection')">
@@ -11,6 +27,7 @@
         </x-table.title>
 
         <x-table.filter>
+<<<<<<< HEAD
             <x-table.filter-slot title="Program">
                 <select wire:model="programId" wire:loading.attr="disabled" name="program" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
                     @forelse ($this->programs as $program)
@@ -24,6 +41,12 @@
                 </select>
             </x-table.filter-slot>
         </x-table.filter>
+=======
+            <div name='slot'>
+                <livewire:partials.prospectus-filter>
+            </div>
+         </x-table.filter>
+>>>>>>> main
 
         <x-table.main>
 
@@ -109,7 +132,11 @@
                     <x-table.no-result>No sections found.🤔</x-table.no-result>
                 @endforelse
             </x-slot>
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> main
         </x-table.main>
 
         @include('livewire.admin.section-component.section-bulk-action')
