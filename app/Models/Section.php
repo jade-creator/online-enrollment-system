@@ -20,10 +20,19 @@ class Section extends Model
     public $with = [
         'prospectus:id,level_id,program_id,term_id',
         'prospectus.level:id,level',
-        'prospectus.program:id,program',
+        'prospectus.program:id,code',
         'prospectus.term:id,term',
         'room:id,name',
     ];
+
+    public function scopeFilterWithProspectusByProgram($query, $programId)
+    {
+        return $query->when(filled($programId), function($query) use ($programId) {
+            return $query->WhereHas('prospectus', function($query) use ($programId){
+                return $query->where('program_id', $programId);
+            });
+        });
+    }
 
     public function scopeDateFiltered($query, $dateMin, $dateMax) //TODO: create baseModel and inherit this to every child models
     {

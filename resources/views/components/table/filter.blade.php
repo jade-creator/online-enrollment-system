@@ -23,6 +23,15 @@
                         <input wire:model.debounce.300ms="dateMax" type="date" class="block w-52 bg-white border-0 focus:outline-none focus:ring focus:ring-gray-100 focus:ring-opacity-0">
                     </div>
                 </div>
+<<<<<<< HEAD
+            </div>
+        </div>
+
+        <div class="flex-grow md:ml-5 lg:ml-10">
+            {{ $slot }}
+        </div>
+    </div>
+=======
             </div>
         </div>
 
@@ -41,4 +50,5 @@
             <input type="text" wire:model.debounce.300ms="search" placeholder="Search..." class="block w-52 pl-8 pr-4 bg-white border-0 focus:outline-none focus:ring focus:ring-gray-100 focus:ring-opacity-0">
         </div>
     </div> -->
+>>>>>>> main
 </div>

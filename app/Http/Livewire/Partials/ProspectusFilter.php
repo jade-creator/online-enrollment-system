@@ -8,7 +8,7 @@ use Livewire\Component;
 class ProspectusFilter extends Component
 {
     public bool $confirmingTerm = false;
-    public $programId, $prospectusId, $prospectusCollection;
+    public $programId, $prospectusId = '', $prospectusCollection;
 
     protected $queryString = [
         'prospectusId' => [ 'except' => '' ],
@@ -24,7 +24,6 @@ class ProspectusFilter extends Component
     {
         $this->fill([
             'programId' => '',
-            'prospectusId' => '',
             'prospectusCollection' => $this->prospectuses
         ]);
     }

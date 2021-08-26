@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin\SectionComponent;
 
 use App\Exports\SectionsExport;
 use App\Models;
+use App\Services\RegistrationService;
 use App\Traits;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire;
@@ -11,13 +12,14 @@ use Livewire;
 class SectionIndexComponent extends Livewire\Component
 {
     use AuthorizesRequests;
-    use Livewire\WithPagination, Traits\WithBulkActions, Traits\WithSorting, Traits\WithFilters, Traits\WithExporting;
+    use Livewire\WithPagination, Traits\WithBulkActions, Traits\WithSorting, Traits\WithFilters, Traits\WithExporting,
+        Traits\WithSweetAlert;
 
     public Models\Section $section;
-    public int $paginateValue = 10, $currentNumberOfStudents = 0;
-    public string $prospectusId = '';
-//    public bool $addingSection = false, $viewingSection = false, $addingSchedule = false;
-    public $registrations;
+    public Models\Status $status;
+    private RegistrationService $registrationService;
+    public int $paginateValue = 10;
+    public string $programId = '';
 
     protected $queryString = [
         'search' => [ 'except' => '' ],
@@ -25,34 +27,30 @@ class SectionIndexComponent extends Livewire\Component
         'dateMax',
         'sortBy' => [ 'except' => 'created_at' ],
         'sortDirection' => [ 'except' => 'desc' ],
+        'programId' => [ 'except' => '' ],
     ];
 
     protected $updatesQueryString = [
         'search',
+        'programId',
     ];
 
-    protected $listeners = ['DeselectPage' => 'updatedSelectPage', 'setProspectusId', 'releaseStudents'];
+    protected $listeners = [
+        'DeselectPage' => 'updatedSelectPage',
+        'refresh' => '$refresh',
+        'releaseStudents',
+        'removeConfirm',
+    ];
 
     protected array $allowedSorts = [
         'id',
         'name',
     ];
 
-    public function rules()
+    public function mount()
     {
-        return [
-            'section.name' => ['required', 'string'],
-            'section.room_id' => ['required', 'integer'],
-            'section.seat' => ['required', 'integer', 'min:1', 'gte:currentNumberOfStudents'],
-            'currentNumberOfStudents' => ['integer', 'min:0'],
-        ];
-    }
-
-    public function mount() {
-        $this->fill([
-            'section' => new Models\Section(),
-            'registrations' => collect(),
-        ]);
+        $this->status = Models\Status::where('name', 'released')->firstOrFail();
+        $this->registrationService = new RegistrationService($this->status->id);
     }
 
     public function render() { return
@@ -73,136 +71,50 @@ class SectionIndexComponent extends Livewire\Component
                     return $query->enrolled();
                 },
             ])
-            ->when(filled($this->prospectusId), function($query) {
-                return $query->where('prospectus_id', $this->prospectusId);
-            })
+            ->filterWithProspectusByProgram($this->programId)
             ->orderBy($this->sortBy, $this->sortDirection)
             ->dateFiltered($this->dateMin, $this->dateMax);
     }
 
-    public function setProspectusId($value) { $this->prospectusId = $value; }
-
-    public function updatedProspectusId(){ $this->resetPage(); }
-
-    public function save()
+    public function removeConfirm(Models\Section $section)
     {
-//        $this->authorize('create', Models\Section::class);
-//        $this->validate();
-//
-//        $this->prospectus = Models\Prospectus::select(['id'])
-//            ->with('subjects')
-//            ->when(!empty($this->levelId), function($query) {
-//                return $query->where('level_id', $this->levelId);
-//            })
-//            ->when(!empty($this->programId), function($query) {
-//                return $query->where('program_id', $this->programId);
-//            })
-//            ->when(!empty($this->termId), function($query) {
-//                return $query->where('term_id', $this->termId);
-//            })
-//            ->firstOrFail();
-//
-//        if ($this->prospectus->subjects->isEmpty()) {
-//            return $this->dispatchBrowserEvent('swal:modal', [
-//                'title' => "Warning",
-//                'type' => "error",
-//                'text' => "Please add subject/s first under this prospectus.",
-//            ]);
-//        }
-//
-//        $this->section->prospectus_id = $this->prospectus->id;
-//        $this->section->save();
-//
-//        $sectionId = $this->section->id;
-//
-//        $this->prospectus->subjects->map(function ($subject) use ($sectionId) {
-//            $schedule = Models\Schedule::create([
-//                'subject_id' => $subject->id,
-//                'created_at' => now(),
-//                'updated_at' => now(),
-//            ]);
-//
-//            $schedule->sections()->attach([$sectionId]);
-//        });
+        if (!$section->registrations->isEmpty()) return $this->warning("There are students enrolled under ".$section->name);
 
-//        $this->resetFields(false);
+        $this->confirmDelete($section, $section->name);
     }
 
-    //TODO : make it a trait.
-//    public function addingSection() {
-//
-//        if (empty($this->levelId) || empty($this->programId) || empty($this->termId)) {
-//            return $this->dispatchBrowserEvent('swal:modal', [
-//                'title' => "Oops Sorry..",
-//                'type' => "error",
-//                'text' => "Please selected the necessary fields (Level, Program, and Term).",
-//            ]);
-//        }
-//
-//        $this->resetFields(true);
-//    }
-    //TODO : test
-    public function viewSection(Models\Section $section)
+    public function releaseConfirm(Models\Section $section)
     {
-        \Debugbar::info($section);
-//        $this->fill([
-//            'section' => $section,
-//            'currentNumberOfStudents' => $section->registrations->count(),
-//            'viewingSection' => true,
-//        ]);
+        $this->section = $section;
+
+        $this->dispatchBrowserEvent('swal:confirmRelease', [
+            'type' => 'warning',
+            'title' => 'Are you sure?',
+            'text' => 'Students under this section will be removed. Their registration will be moved to history once successfull.',
+        ]);
     }
 
-//    public function updateSection()
-//    {
-//        $this->authorize('update', $this->section);
-//        $this->validate();
-//
-//        $this->section->save();
-//        $this->fill([ 'viewingSection' => false, ]);
-//
-//        $this->dispatchBrowserEvent('swal:success', [
-//            'text' => "The section has been updated.",
-//        ]);
-//    }
+    public function release(string $method, $argument)
+    {
+        try {
+            $this->registrationService->$method($argument);
+            $this->success('The students have been released.');
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
+        }
+    }
 
-//    public function getRoomsProperty() { return
-//        Models\Room::get(['id', 'name']);
-//    }
+    public function releaseStudents() { $this->release('release', $this->section->registrations); }
 
-//    public function getLevelsProperty()
-//    {
-//        $college = Models\SchoolType::select(['id', 'type'])
-//            ->where('type', 'College')
-//            ->with('levels:id,level,school_type_id')
-//            ->first();
-//
-//        return $college->levels;
-//    }
+    public function releaseAll() { $this->release('releaseAll', $this->selected); }
 
-//    public function getProgramsProperty() { return
-//        Models\Program::get(['id', 'code']);
-//    }
+    public function getRoomsProperty() { return
+        Models\Room::get(['id', 'name']);
+    }
 
-//    public function getTermsProperty() { return
-//        Models\Term::get(['id', 'term']);
-//    }
-
-//    public function updatedViewingSection($value)
-//    {
-//        if (!$value) {
-//            $this->fill([ 'section' => new Models\Section() ]);
-//        }
-//        $this->resetValidation();
-//    }
-
-//    public function updatedAddingSection() { $this->fill([ 'section' => new Models\Section() ]); }
-
-//    public function resetFields($bool) {
-//        $this->fill([
-//            'addingSection' => $bool,
-//            'section' => new Models\Section(),
-//        ]);
-//    }
+    public function getProgramsProperty() { return
+        Models\Program::get(['id', 'code']);
+    }
 
     public function fileExport() { return
         $this->excelFileExport((new SectionsExport($this->selected)), 'section-collection.xlsx');
