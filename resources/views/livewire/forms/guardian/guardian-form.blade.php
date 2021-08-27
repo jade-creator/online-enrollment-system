@@ -68,12 +68,10 @@
             <x-jet-action-message class="mr-3 text-red-500 font-bold" on="error">
                 {{ __('Failed! Please try again.') }}
             </x-jet-action-message>
-            
+
             <x-jet-button class="w-20 tracking-widest bg-indigo-700 hover:bg-indigo-800" wire:loading.attr="disabled">
                 {{ __('Save') }}
             </x-jet-button>
-
-            @include('partials.alerts')
         </x-slot>
     {{-- @endcannot --}}
 </x-jet-form-section>

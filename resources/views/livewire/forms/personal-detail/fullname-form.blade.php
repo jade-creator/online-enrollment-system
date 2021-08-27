@@ -50,7 +50,5 @@
         <x-jet-button class="bg-indigo-700 hover:bg-indigo-800" wire:loading.attr="disabled">
             {{ __('Save fullname') }}
         </x-jet-button>
-
-        @include('partials.alerts')
     </x-slot>
 </x-jet-form-section>
