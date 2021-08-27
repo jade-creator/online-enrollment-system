@@ -28,11 +28,12 @@ trait WithSweetAlert
         $this->modal($this->successTitle, $this->successType, $text);
     }
 
-    public function confirmDelete(object $item, string $text)
+    public function confirmDelete(string $method, object $item, string $text)
     {
         return $this->dispatchBrowserEvent('swal:confirmDelete', [
             'type' => $this->warningType,
             'title' => $this->warningTitle,
+            'method' => $method,
             'text' => 'Deleting '.$text.' cannot be retrievable.',
             'item' => $item,
         ]);

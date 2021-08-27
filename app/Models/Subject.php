@@ -2,19 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Subject extends Model
+class Subject extends BaseModel
 {
-    use HasFactory, SoftDeletes;
+    use SoftDeletes;
 
     protected $fillable = [
         'code',
         'title',
-        'unit',
-    ];  
+        'description',
+    ];
 
     public function grades() { return
         $this->hasMany(Grade::class);
@@ -28,7 +26,7 @@ class Subject extends Model
         $this->belongsToMany(Prospectus::class)->withTimestamps();
     }
 
-    public function requisites() { return
+    public function requisites() { return //TODO will be moved to prospectys relationship.
         $this->belongsToMany(Subject::class, 'requisite_subject', 'subject_id', 'requisite_id')
             ->withTimestamps();
     }
@@ -41,7 +39,8 @@ class Subject extends Model
             : static::where(function ($query) use ($search){
                 return $query
                 ->where('code', 'LIKE', $search)
-                ->orWhere('title', 'LIKE', $search);
+                ->orWhere('title', 'LIKE', $search)
+                ->orWhere('description', 'LIKE', $search);
             });
     }
 }

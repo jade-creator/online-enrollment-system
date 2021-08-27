@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Admin\SectionComponent;
 
 use App\Exports\SectionsExport;
 use App\Models;
-use App\Services\RegistrationService;
+use App\Services\Registration\RegistrationReleaseService;
 use App\Traits;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire;
@@ -17,7 +17,7 @@ class SectionIndexComponent extends Livewire\Component
 
     public Models\Section $section;
     public Models\Status $status;
-    private RegistrationService $registrationService;
+    private RegistrationReleaseService $registrationReleaseService;
     public int $paginateValue = 10;
     public string $programId = '';
 
@@ -50,7 +50,7 @@ class SectionIndexComponent extends Livewire\Component
     public function mount()
     {
         $this->status = Models\Status::where('name', 'released')->firstOrFail();
-        $this->registrationService = new RegistrationService($this->status->id);
+        $this->registrationReleaseService = new RegistrationReleaseService($this->status->id);
     }
 
     public function render() { return
@@ -78,9 +78,9 @@ class SectionIndexComponent extends Livewire\Component
 
     public function removeConfirm(Models\Section $section)
     {
-        if (!$section->registrations->isEmpty()) return $this->warning("There are students enrolled under ".$section->name);
+        if ($section->registrations->isNotEmpty()) return $this->warning("There are students enrolled under ".$section->name);
 
-        $this->confirmDelete($section, $section->name);
+        $this->confirmDelete('removeSection', $section, $section->name);
     }
 
     public function releaseConfirm(Models\Section $section)
@@ -97,7 +97,7 @@ class SectionIndexComponent extends Livewire\Component
     public function release(string $method, $argument)
     {
         try {
-            $this->registrationService->$method($argument);
+            $this->registrationReleaseService->$method($argument);
             $this->success('The students have been released.');
         } catch (\Exception $e) {
             $this->error($e->getMessage());

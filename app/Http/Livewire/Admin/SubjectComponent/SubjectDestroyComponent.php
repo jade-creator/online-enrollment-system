@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Livewire\Admin\SectionComponent;
+namespace App\Http\Livewire\Admin\SubjectComponent;
 
-use App\Models\Section;
-use App\Services\Section\SectionService;
+use App\Models\Subject;
+use App\Services\SubjectService;
 use App\Traits\WithSweetAlert;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
-class SectionDestroyComponent extends Component
+class SubjectDestroyComponent extends Component
 {
     use AuthorizesRequests;
     use WithSweetAlert;
 
-    protected $listeners = [ 'removeSection' ];
+    protected $listeners = [ 'removeSubject' ];
 
     public function render()
     {
@@ -23,15 +23,15 @@ class SectionDestroyComponent extends Component
         blade;
     }
 
-    public function removeSection(Section $section)
+    public function removeSubject(Subject $subject)
     {
-        $this->authorize('destroy', $section);
+        $this->authorize('destroy', $subject);
 
         try {
-            $section = (new SectionService())->destroy($section);
+            (new SubjectService())->destroy($subject);
 
             $this->emitUp('refresh');
-            $this->success($section->name." has been deleted.");
+            $this->success($subject->code." has been deleted.");
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }

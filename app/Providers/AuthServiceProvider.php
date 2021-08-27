@@ -9,6 +9,7 @@ use App\Models\Prospectus;
 use App\Models\Registration;
 use App\Models\Section;
 use App\Models\Schedule;
+use App\Models\Subject;
 use App\Policies\AttendedSchoolPolicy;
 use App\Policies\GuardianPolicy;
 use App\Policies\PersonPolicy;
@@ -16,6 +17,7 @@ use App\Policies\ProspectusPolicy;
 use App\Policies\RegistrationPolicy;
 use App\Policies\SchedulePolicy;
 use App\Policies\SectionPolicy;
+use App\Policies\SubjectPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -29,11 +31,12 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         AttendedSchool::class => AttendedSchoolPolicy::class,
         Guardian::class => GuardianPolicy::class,
-        Section::class => SectionPolicy::class,
+        Person::class => PersonPolicy::class,
         Prospectus::class => ProspectusPolicy::class,
         Registration::class => RegistrationPolicy::class,
-        Person::class => PersonPolicy::class,
         Schedule::class => SchedulePolicy::class,
+        Section::class => SectionPolicy::class,
+        Subject::class => SubjectPolicy::class,
     ];
 
     /**

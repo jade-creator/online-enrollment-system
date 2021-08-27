@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Registration;
 
 use App\Models\Section;
 
-class RegistrationService
+class RegistrationReleaseService
 {
     public int $statusId;
 
@@ -27,8 +27,8 @@ class RegistrationService
     public function releaseAll(array $selected)
     {
         $sections = Section::with(['registrations' => function($query) {
-                return $query->whereNull('released_at');
-            }])
+            return $query->whereNull('released_at');
+        }])
             ->whereIn('id', $selected)
             ->get();
 
