@@ -2,13 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Section extends Model
+class Section extends BaseModel
 {
-    use HasFactory, SoftDeletes;
+    use SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -31,13 +29,6 @@ class Section extends Model
             return $query->WhereHas('prospectus', function($query) use ($programId){
                 return $query->where('program_id', $programId);
             });
-        });
-    }
-
-    public function scopeDateFiltered($query, $dateMin, $dateMax) //TODO: create baseModel and inherit this to every child models
-    {
-        return $query->when(!is_null($dateMin), function ($query) use ($dateMin, $dateMax) {
-            return $query->whereBetween('created_at', [$dateMin, $dateMax]);
         });
     }
 

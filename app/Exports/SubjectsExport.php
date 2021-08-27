@@ -12,7 +12,7 @@ class SubjectsExport implements FromQuery, WithHeadings, WithMapping
 {
     use Exportable;
     protected $subjects;
-    
+
     public function __construct($subjects)
     {
         $this->subjects = $subjects;
@@ -28,21 +28,16 @@ class SubjectsExport implements FromQuery, WithHeadings, WithMapping
         return [
             'Code',
             'Title',
-            'Unit',
-            'Pre Requisite/s',
+            'Description',
         ];
     }
 
     public function map($subject): array
     {
-        $requisites = $subject->requisites->pluck('code')->toArray();
-        $requisites = $requisites ? implode(',', $requisites) : 'N/A';
-
         return [
             $subject->code ?? 'N/A',
             $subject->title ?? 'N/A',
-            $subject->unit ?? 'N/A',
-            $requisites,
+            $subject->description ?? 'N/A',
         ];
     }
 }

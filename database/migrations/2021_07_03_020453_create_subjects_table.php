@@ -17,7 +17,7 @@ class CreateSubjectsTable extends Migration
             $table->id();
             $table->string('code', 100);
             $table->string('title', 100);
-            $table->integer('unit')->nullable();
+            $table->text('description');
             $table->timestamps();
             $table->softDeletes();
         });

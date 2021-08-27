@@ -74,7 +74,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
 
             Route::get('/fees', FeeComponent\FeeViewComponent::class)->name('fees.view');
 
-            Route::get('/subjects', SubjectComponent\SubjectViewComponent::class)->name('subjects.view');
+            Route::get('/subjects', SubjectComponent\SubjectIndexComponent::class)->name('subjects.view');
 
             Route::group(['prefix' => 'programs', 'as' => 'programs.'], function (){
                 Route::get('', ProgramViewComponent::class)->name('view');

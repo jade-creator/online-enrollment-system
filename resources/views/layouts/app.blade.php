@@ -106,7 +106,7 @@
                 })
                 .then((willDelete) => {
                     if (willDelete) {
-                        window.livewire.emit('removeItem', event.detail.item);
+                        window.livewire.emit(event.detail.method, event.detail.item);
                     }
                 });
             });
