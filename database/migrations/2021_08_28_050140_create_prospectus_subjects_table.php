@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRequisiteSubjectTable extends Migration
+class CreateProspectusSubjectsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class CreateRequisiteSubjectTable extends Migration
      */
     public function up()
     {
-        Schema::create('requisite_subject', function (Blueprint $table) {
-            $table->unsignedBigInteger('requisite_id');
-            $table->foreign('requisite_id')->references('id')->on('subjects');
+        Schema::create('prospectus_subjects', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('prospectus_id')->constrained();
             $table->foreignId('subject_id')->constrained();
+            $table->integer('unit');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -28,6 +30,6 @@ class CreateRequisiteSubjectTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('requisite_subject');
+        Schema::dropIfExists('prospectus_subjects');
     }
 }

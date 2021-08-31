@@ -6,6 +6,7 @@ use App\Models\AttendedSchool;
 use App\Models\Guardian;
 use App\Models\Person;
 use App\Models\Prospectus;
+use App\Models\ProspectusSubject;
 use App\Models\Registration;
 use App\Models\Section;
 use App\Models\Schedule;
@@ -14,6 +15,7 @@ use App\Policies\AttendedSchoolPolicy;
 use App\Policies\GuardianPolicy;
 use App\Policies\PersonPolicy;
 use App\Policies\ProspectusPolicy;
+use App\Policies\ProspectusSubjectPolicy;
 use App\Policies\RegistrationPolicy;
 use App\Policies\SchedulePolicy;
 use App\Policies\SectionPolicy;
@@ -37,6 +39,7 @@ class AuthServiceProvider extends ServiceProvider
         Schedule::class => SchedulePolicy::class,
         Section::class => SectionPolicy::class,
         Subject::class => SubjectPolicy::class,
+        ProspectusSubject::class => ProspectusSubjectPolicy::class,
     ];
 
     /**
