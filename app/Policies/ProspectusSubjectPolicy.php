@@ -2,10 +2,11 @@
 
 namespace App\Policies;
 
+use App\Models\ProspectusSubject;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class ProspectusPolicy
+class ProspectusSubjectPolicy
 {
     use HandlesAuthorization;
 
@@ -14,6 +15,14 @@ class ProspectusPolicy
     }
 
     public function create(User $user) { return
+        $this->isAdmin($user);
+    }
+
+    public function update(User $user, ProspectusSubject $prospectusSubject) { return
+        $this->isAdmin($user);
+    }
+
+    public function destroy(User $user, ProspectusSubject $prospectusSubject) { return
         $this->isAdmin($user);
     }
 }

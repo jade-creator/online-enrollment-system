@@ -30,7 +30,7 @@
                 </x-sidebar.item>
 
                 <x-sidebar.item title="Prospectus">
-                    <x-sidebar.link routeName="prospectuses.view" route="prospectuses" name="Prospectus">
+                    <x-sidebar.link routeName="prospectuses.view" route="prospectuses" parameter="prospectusId" value="1" name="Prospectus">
                         <x-icons.prospectus-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>

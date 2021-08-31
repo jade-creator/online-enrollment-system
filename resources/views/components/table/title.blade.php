@@ -1,4 +1,4 @@
-@props([ 'tableTitle', 'isSelectedAll', 'count' ])
+@props([ 'tableTitle', 'isSelectedAll' => false, 'count' => 0 ])
 
 <div class="mb-4 pb-3 border-b border-gray-200">
     <div class="flex items-center justify-between">
@@ -21,6 +21,8 @@
             @endif
         </div>
 
-        {{ $slot }}
+        <div class="flex items-center">
+            {{ $slot }}
+        </div>
     </div>
 </div>
