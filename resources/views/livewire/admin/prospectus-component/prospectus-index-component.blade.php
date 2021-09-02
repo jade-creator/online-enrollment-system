@@ -2,11 +2,6 @@
 
     <div class="h-content w-full py-8 px-8">
         <x-table.title tableTitle="Prospectus">
-
-            <x-table.filter :isFilterable="false">
-                <livewire:partials.prospectus-dropdown/>
-            </x-table.filter>
-
             @can('create', App\Models\ProspectusSubject::class)
                 <x-table.nav-button wire:click.prevent="$emit('modalAddingSubject')">
                     Add Subject
@@ -15,9 +10,13 @@
         </x-table.title>
 
         <x-table.main>
-
-            <x-slot name="paginationLink">
+            <x-slot name="filter">
+                <x-table.filter :isSearchable="false" :isFilterable="false">
+                    <livewire:partials.prospectus-dropdown/>
+                </x-table.filter>
             </x-slot>
+
+            <x-slot name="paginationLink"></x-slot>
 
             <x-slot name="head">
                 <x-table.column-title class="col-span-2">code</x-table.column-title>
