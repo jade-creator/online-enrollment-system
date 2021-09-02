@@ -5,8 +5,8 @@ use App\Http\Livewire\Admin\FeeComponent;
 use App\Http\Livewire\Admin\GradeComponent;
 use App\Http\Livewire\Admin\UserComponent\UserAddComponent;
 use App\Http\Livewire\Admin\UserComponent\UserViewComponent;
-use App\Http\Livewire\Admin\ProgramComponent\ProgramViewComponent;
 use App\Http\Livewire\Admin\PreEnrollmentComponent;
+use App\Http\Livewire\Admin\ProgramComponent;
 use App\Http\Livewire\Admin\SectionComponent;
 use App\Http\Livewire\Admin\SubjectComponent;
 use App\Http\Livewire\Forms\Contact\ContactShow;
@@ -16,8 +16,6 @@ use App\Http\Livewire\Forms\PersonalDetail\AdminDetailForm;
 use App\Http\Livewire\Forms\PersonalDetail\StudentDetailForm;
 use App\Http\Livewire\Forms\PersonalDetail\PersonalDetailShow;
 use App\Http\Livewire\Forms\Profile\SecuritySettingShow;
-use App\Http\Livewire\Forms\Program\ProgramCreateForm;
-use App\Http\Livewire\Forms\Program\ProgramUpdateForm;
 use App\Http\Livewire\Forms\User;
 use App\Http\Livewire\Admin\ProspectusComponent;
 use App\Http\Livewire\Student;
@@ -76,11 +74,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
 
             Route::get('/subjects', SubjectComponent\SubjectIndexComponent::class)->name('subjects.view');
 
-            Route::group(['prefix' => 'programs', 'as' => 'programs.'], function (){
-                Route::get('', ProgramViewComponent::class)->name('view');
-                Route::get('/create', ProgramCreateForm::class)->name('create');
-                Route::get('/update/{program}', ProgramUpdateForm::class)->name('update');
-            });
+            Route::get('/programs', ProgramComponent\ProgramIndexComponent::class)->name('programs.view');
 
             Route::group(['prefix' => 'users', 'as' => 'users.'], function (){
                 Route::get('', UserViewComponent::class)->name('view');

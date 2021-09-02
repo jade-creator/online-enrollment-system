@@ -67,11 +67,11 @@
                 window.livewire.emit('toggleEnrollingStudent');
             });
 
-            window.addEventListener('swal:success', event => {
-                swal(event.detail.text, {
-                    icon: "success",
-                });
-            });
+            // window.addEventListener('swal:success', event => {
+            //     swal(event.detail.text, {
+            //         icon: "success",
+            //     });
+            // });
 
             window.addEventListener('swal:modal', event => {
                 swal({
