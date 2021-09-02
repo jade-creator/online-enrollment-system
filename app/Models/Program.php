@@ -4,15 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Program extends Model
+class Program extends BaseModel
 {
-    use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'code',
         'program',
-        'description'
+        'description',
+        'year',
     ];
 
     public function prospectuses() { return

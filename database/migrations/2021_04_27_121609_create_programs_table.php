@@ -20,6 +20,7 @@ class CreateProgramsTable extends Migration
             $table->text('description');
             $table->integer('year');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
