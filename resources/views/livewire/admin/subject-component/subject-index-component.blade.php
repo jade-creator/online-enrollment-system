@@ -9,9 +9,10 @@
             @endcan
         </x-table.title>
 
-        <x-table.filter/>
-
         <x-table.main>
+            <x-slot name="filter">
+                <x-table.filter/>
+            </x-slot>
 
             <x-slot name="paginationLink">
                 {{ $subjects->links('partials.pagination-link') }}

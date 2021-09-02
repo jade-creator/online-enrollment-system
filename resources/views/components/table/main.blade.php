@@ -2,8 +2,7 @@
     <div class="h-auto py-2 align-middle inline-block min-w-full">
         <div class="overflow-hidden">
             <div class="w-full mt-3">
-                <!-- Pagination and Datatable -->
-                {{ $paginationLink }}
+                {{ $filter }}
 
                 <div class="grid grid-cols-12 gap-2">
                     {{ $head }}
@@ -12,6 +11,9 @@
                 <div class="grid mt-2">
                     {{ $body }}
                 </div>
+
+                <!-- Pagination and Datatable -->
+                {{ $paginationLink }}
             </div>
         </div>
     </div>

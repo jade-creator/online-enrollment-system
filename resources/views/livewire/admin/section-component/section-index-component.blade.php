@@ -9,22 +9,23 @@
             @endcan
         </x-table.title>
 
-        <x-table.filter>
-            <x-table.filter-slot title="Program">
-                <select wire:model="programId" wire:loading.attr="disabled" name="program" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
-                    @forelse ($this->programs as $program)
-                        @if ($loop->first)
-                            <option value="" selected>All</option>
-                        @endif
-                        <option value="{{ $program->id ?? 'N/A' }}">{{ $program->code ?? 'N/A' }}</option>
-                    @empty
-                        <option value="">No records</option>
-                    @endforelse
-                </select>
-            </x-table.filter-slot>
-        </x-table.filter>
-
         <x-table.main>
+            <x-slot name="filter">
+                <x-table.filter>
+                    <x-table.filter-slot title="Program">
+                        <select wire:model="programId" wire:loading.attr="disabled" name="program" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
+                            @forelse ($this->programs as $program)
+                                @if ($loop->first)
+                                    <option value="" selected>All</option>
+                                @endif
+                                <option value="{{ $program->id ?? 'N/A' }}">{{ $program->code ?? 'N/A' }}</option>
+                            @empty
+                                <option value="">No records</option>
+                            @endforelse
+                        </select>
+                    </x-table.filter-slot>
+                </x-table.filter>
+            </x-slot>
 
             <x-slot name="paginationLink">
                 {{ $sections->links('partials.pagination-link') }}

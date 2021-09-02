@@ -2,9 +2,6 @@
 
     <div class="h-content w-full py-8 px-8">
         <x-table.title tableTitle="Programs" :isSelectedAll="$this->selectAll" :count="count($this->selected)">
-
-            <x-table.filter/>
-
             @can('create', App\Models\Program::class)
                 <x-table.nav-button wire:click.prevent="$emit('modalAddingProgram')">
                     Add Program
@@ -13,6 +10,9 @@
         </x-table.title>
 
         <x-table.main>
+            <x-slot name="filter">
+                <x-table.filter/>
+            </x-slot>
 
             <x-slot name="paginationLink">
                 {{ $programs->links('partials.pagination-link') }}
