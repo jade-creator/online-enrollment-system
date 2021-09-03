@@ -3,12 +3,15 @@
 namespace App\Services;
 
 use App\Models\Program;
+use App\Services\Prospectus\ProspectusService;
 
 class ProgramService
 {
     public function store(Program $program) : Program
     {
-        $program->save(); //TODO: prospectus
+        $program->save();
+
+        (new ProspectusService())->store($program);
 
         return $program;
     }
