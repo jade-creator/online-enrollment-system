@@ -100,7 +100,7 @@
         @include('partials.loading')
     </div>
 
-    <livewire:admin.program-component.program-add-component key="{{ 'program-add-component-'.now() }}">
+    <livewire:admin.program-component.program-add-component key="{{ 'program-add-component-'.now() }}">{{--TODO: clear ids--}}
 
     <livewire:admin.program-component.program-update-component key="{{ 'program-update-component-'.now() }}">
 

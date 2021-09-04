@@ -12,6 +12,7 @@ use App\Models\Registration;
 use App\Models\Section;
 use App\Models\Schedule;
 use App\Models\Subject;
+use App\Models\User;
 use App\Policies\AttendedSchoolPolicy;
 use App\Policies\GuardianPolicy;
 use App\Policies\PersonPolicy;
@@ -22,6 +23,7 @@ use App\Policies\RegistrationPolicy;
 use App\Policies\SchedulePolicy;
 use App\Policies\SectionPolicy;
 use App\Policies\SubjectPolicy;
+use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -43,6 +45,7 @@ class AuthServiceProvider extends ServiceProvider
         Subject::class => SubjectPolicy::class,
         ProspectusSubject::class => ProspectusSubjectPolicy::class,
         Program::class => ProgramPolicy::class,
+        User::class => UserPolicy::class,
     ];
 
     /**
