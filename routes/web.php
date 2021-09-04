@@ -3,8 +3,7 @@
 use App\Http\Livewire\Admin\Dashboard;
 use App\Http\Livewire\Admin\FeeComponent;
 use App\Http\Livewire\Admin\GradeComponent;
-use App\Http\Livewire\Admin\UserComponent\UserAddComponent;
-use App\Http\Livewire\Admin\UserComponent\UserViewComponent;
+use App\Http\Livewire\Admin\UserComponent;
 use App\Http\Livewire\Admin\PreEnrollmentComponent;
 use App\Http\Livewire\Admin\ProgramComponent;
 use App\Http\Livewire\Admin\SectionComponent;
@@ -76,10 +75,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
 
             Route::get('/programs', ProgramComponent\ProgramIndexComponent::class)->name('programs.view');
 
-            Route::group(['prefix' => 'users', 'as' => 'users.'], function (){
-                Route::get('', UserViewComponent::class)->name('view');
-                Route::get('/create', UserAddComponent::class)->name('create');
-            });
+            Route::get('/users', UserComponent\UserIndexComponent::class)->name('users.view');
         });
     });
     // end admin

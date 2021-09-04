@@ -18,6 +18,14 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
 
+    public function scopeDateFiltered($query, $dateMin, $dateMax) { return
+        (new BaseModel())->scopeDateFiltered($query, $dateMin, $dateMax);
+    }
+
+    public function scopeMatchWithRole($query, $roleId) { return
+        $query->when(filled($roleId), fn ($query) => $query->where('role_id', $roleId));
+    }
+
     public function role(){
         return $this->belongsTo(Role::class);
     }
