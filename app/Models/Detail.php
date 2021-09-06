@@ -9,6 +9,8 @@ class Detail extends Model
 {
     use HasFactory;
 
+    public $dates = ['birthdate'];
+
     public function person(){
         return $this->belongsTo(Person::class);
     }
@@ -26,5 +28,5 @@ class Detail extends Model
         'person_id',
         'country_id',
     ];
-    
+
 }

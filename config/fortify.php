@@ -64,7 +64,7 @@ return [
     // 'home' => RouteServiceProvider::HOME,
 
     'home' => function(){
-        
+
         $role = Auth::user()->role->name;
 
         switch ($role) {
@@ -73,9 +73,9 @@ return [
                 break;
 
             case 'student':
-                return route('student.registration');
+                return route('student.registrations.index');
                 break;
-            
+
             default:
                 return RouteServiceProvider::HOME;
                 break;
