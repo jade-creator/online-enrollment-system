@@ -2,9 +2,9 @@
 
 <x-jet-modal :id="$id" :maxWidth="$maxWidth" {{ $attributes }}>
     <div class="px-6 py-4">
-        <div class="text-lg">
+        <h1 class="text-lg">
             {{ $title }}
-        </div>
+        </h1>
 
         <div class="mt-4 max-h-96 overflow-x-hidden overflow-y-auto">
             {{ $content }}
