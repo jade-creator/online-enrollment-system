@@ -9,6 +9,12 @@ class SchoolType extends Model
 {
     use HasFactory;
 
+    public $with = ['levels'];
+
+    public function scopeFilterByType($query, $type) { return
+        $query->where('type', $type)->firstOrFail();
+    }
+
     public function levels(){
         return $this->hasMany(Level::class);
     }

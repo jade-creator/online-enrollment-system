@@ -20,8 +20,8 @@ class Grade extends Model
         $this->belongsTo(Mark::class);
     }
 
-    public function subject() { return
-        $this->belongsTo(Subject::class);
+    public function prospectus_subject() { return
+        $this->belongsTo(ProspectusSubject::class, 'subject_id');
     }
 
     public function registration() { return

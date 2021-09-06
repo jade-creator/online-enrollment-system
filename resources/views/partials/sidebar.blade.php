@@ -63,7 +63,7 @@
             @if(auth()->user()->role->name === 'student')
 
                 <x-sidebar.item title="Registrations">
-                    <x-sidebar.link routeName="student.registration" route="student/registrations" name="Registrations">
+                    <x-sidebar.link routeName="student.registrations.index" route="student/registrations" name="Registrations">
                         <x-icons.pre-enrollment-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>
@@ -80,11 +80,11 @@
                     </x-sidebar.link>
                 </x-sidebar.item>
 
-                <x-sidebar.item title="Prospectus">
-                    <x-sidebar.link routeName="prospectuses.view" route="prospectuses" name="Prospectus">
-                        <x-icons.prospectus-icon/>
-                    </x-sidebar.link>
-                </x-sidebar.item>
+{{--                <x-sidebar.item title="Prospectus">--}}
+{{--                    <x-sidebar.link routeName="prospectuses.view" route="prospectuses" name="Prospectus">--}}
+{{--                        <x-icons.prospectus-icon/>--}}
+{{--                    </x-sidebar.link>--}}
+{{--                </x-sidebar.item>--}}
             @endif
             <!-- Responsive Settings Options -->
             <div class="block lg:hidden pt-4 pb-1 border-t border-gray-200">

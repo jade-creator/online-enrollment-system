@@ -17,6 +17,8 @@ class Prospectus extends Model
         'term_id',
     ];
 
+    public $with = ['subjects'];
+
     // pluck subjects in a prospectus collection.
     public function pluckSubject($prospectuses)
     {
@@ -37,7 +39,6 @@ class Prospectus extends Model
                 ['level_id', '<=', $prospectus->level_id],
                 ['program_id', '=', $prospectus->program_id],
             ])
-            ->with('subjects')
             ->get(['id', 'level_id', 'program_id']);
 
         return $this->pluckSubject($prospectuses);
@@ -47,7 +48,6 @@ class Prospectus extends Model
     public function scopeGetAllSubjectsInProgram($query, $programId)
     {
         $prospectuses = $query->where('program_id', $programId)
-            ->with('subjects')
             ->get(['id', 'program_id']);
 
         return $this->pluckSubject($prospectuses);

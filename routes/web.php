@@ -18,6 +18,7 @@ use App\Http\Livewire\Forms\Profile\SecuritySettingShow;
 use App\Http\Livewire\Forms\User;
 use App\Http\Livewire\Admin\ProspectusComponent;
 use App\Http\Livewire\Student;
+use App\Http\Livewire\Student\RegistrationComponent;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -87,7 +88,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
         Route::get('/prospectuses/{prospectusId}', ProspectusComponent\ProspectusIndexComponent::class)->name('prospectuses.view');
 
         Route::group(['prefix' => 'pre-registration', 'as' => 'pre.registration.'], function () {
-            Route::get('/{regId}', Student\PreRegistrationComponent::class)->name('view');
+            Route::get('/{regId}/details', RegistrationComponent\RegistrationViewComponent::class)->name('view');
             Route::get('/{regId}/pdf', [PreEnrollmentComponent\PreEnrollmentPdfComponent::class, 'createPDF'])->name('pdf');
         });
 
@@ -100,8 +101,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
         Route::get('/user/personal-details/student', StudentDetailForm::class)->middleware(['detail'])->name('user.personal-details.student');
 
         Route::group(['middleware' => 'user.detail', 'prefix' => 'student', 'as' => 'student.'], function (){
-            Route::get('/registrations', Student\RegistrationViewComponent::class)->name('registration');
-            Route::get('/registrations/create', Student\Registration::class)->middleware(['password.confirm'])->name('registrations.create');
+
+            Route::group(['prefix' => 'registrations', 'as' => 'registrations.'], function () {
+                Route::get('', RegistrationComponent\RegistrationIndexComponent::class)->name('index');
+                Route::get('/create', RegistrationComponent\RegistrationAddComponent::class)->middleware(['password.confirm'])->name('create');
+            });
+
             Route::get('/grades', Student\StudentGradeViewComponent::class)->name('grades.view');
         });
     });

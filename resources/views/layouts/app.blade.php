@@ -60,12 +60,12 @@
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
         <script>
-            window.addEventListener('swal:successEnroll', event => {
-                swal(event.detail.text, {
-                    icon: "success",
-                });
-                window.livewire.emit('toggleEnrollingStudent');
-            });
+            // window.addEventListener('swal:successEnroll', event => {
+            //     swal(event.detail.text, {
+            //         icon: "success",
+            //     });
+            //     window.livewire.emit('toggleEnrollingStudent');
+            // });
 
             // window.addEventListener('swal:success', event => {
             //     swal(event.detail.text, {
@@ -78,6 +78,23 @@
                     title: event.detail.title,
                     text: event.detail.text,
                     icon: event.detail.type,
+                });
+            });
+
+            window.addEventListener('swal:confirm', event => {
+                swal({
+                    title: event.detail.title,
+                    text: event.detail.text,
+                    icon: event.detail.type,
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willConfirm) => {
+                    if(! willConfirm) return;
+
+                    if(willConfirm && event.detail.item) return window.livewire.emit(event.detail.method, event.detail.item);
+
+                    return window.livewire.emit(event.detail.method);
                 });
             });
 
