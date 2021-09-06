@@ -1,4 +1,4 @@
-<div class="w-full scrolling-touch">
+<div class="w-full">
 
     <div class="h-content w-full py-8 px-8">
         <x-table.title tableTitle="Sections" :isSelectedAll="$this->selectAll" :count="count($this->selected)">
@@ -13,7 +13,7 @@
             <x-slot name="filter">
                 <x-table.filter>
                     <x-table.filter-slot title="Program">
-                        <select wire:model="programId" wire:loading.attr="disabled" name="program" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
+                        <select wire:model="programId" wire:loading.attr="disabled" name="program" class="w-full flex-1">
                             @forelse ($this->programs as $program)
                                 @if ($loop->first)
                                     <option value="" selected>All</option>
@@ -25,10 +25,6 @@
                         </select>
                     </x-table.filter-slot>
                 </x-table.filter>
-            </x-slot>
-
-            <x-slot name="paginationLink">
-                {{ $sections->links('partials.pagination-link') }}
             </x-slot>
 
             <x-slot name="head">
@@ -108,6 +104,10 @@
                 @empty
                     <x-table.no-result>No sections found.🤔</x-table.no-result>
                 @endforelse
+            </x-slot>
+
+            <x-slot name="paginationLink">
+                {{ $sections->links('partials.pagination-link') }}
             </x-slot>
         </x-table.main>
 
