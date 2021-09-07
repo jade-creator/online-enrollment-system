@@ -2,13 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Registration extends BaseModel
 {
-    use HasFactory, SoftDeletes;
+    use SoftDeletes;
 
     protected $fillable = [
         'isNew',
@@ -59,14 +57,43 @@ class Registration extends BaseModel
 
     public function scopeFilterByStudent($query, $studentId)
     {
-        return $query->select(['id', 'isNew', 'status_id', 'section_id', 'student_id', 'prospectus_id', 'created_at'])
+        return $query->select(['id', ...$this->fillable, 'created_at'])
             ->where('student_id', $studentId)
             ->with([...$this->relationships]);
     }
 
+    public function scopeSearchByStudent($query, $search)
+    {
+        return $query->when(filled($search), function($query) use ($search) {
+            return $query->orWhereHas('student', function($query) use ($search) {
+                return $query->where('custom_id', 'LIKE', '%'.$search.'%');
+            })
+            ->orWhereHas('student.user.person', function($query) use ($search) {
+                return $query->where('firstname', 'LIKE', '%'.$search.'%')
+                    ->orWhere('middlename', 'LIKE', '%'.$search.'%')
+                    ->orWhere('lastname', 'LIKE', '%'.$search.'%');
+            });
+        });
+    }
+
+    public function scopeWithGrades($query, $statuses)
+    {
+        return $query->select(['id', ...$this->fillable, 'created_at'])
+            ->with([
+                ...$this->relationships,
+                'prospectus.level.schoolType:id',
+                'student.user.person',
+                'grades:id,registration_id,subject_id,mark_id,value',
+                'grades.prospectus_subject:id,subject_id',
+                'grades.mark:id,name',
+                'grades.prospectus_subject.subject:id,code,title',
+            ])
+            ->whereIn('status_id', $statuses);
+    }
+
     public function statusEnrolled() { return
         Status::where('name', 'enrolled')->first();
-    }
+    }// TODO: find where it is used.
 
     public function scopeEnrolled($query)
     {

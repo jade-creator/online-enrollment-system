@@ -12,7 +12,11 @@ class Status extends Model
     protected $fillable = [
         'name',
     ];
- 
+
+    public function scopeEnrolledAndReleased($query) { return
+        $query->whereIn('name', ['enrolled', 'released'])->get();
+    }
+
     public function registrations() { return
         $this->hasMany(Registration::class);
     }
