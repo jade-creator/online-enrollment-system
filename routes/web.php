@@ -63,7 +63,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
         Route::group(['middleware' => 'user.detail', 'prefix' => 'admin', 'as' => 'admin.'], function (){
             Route::get('/dashboard', Dashboard::class)->name('dashboard'); // TODO : renamecomponent
 
-            Route::get('/grades', GradeComponent\GradeViewComponent::class)->name('grades.view');
+            Route::get('/grades', GradeComponent\GradeIndexComponent::class)->name('grades.view');
 
             Route::group(['prefix' => 'pre-enrollments'], function (){
                 Route::get('', PreEnrollmentComponent\PreEnrollmentViewComponent::class)->name('pre.enrollments.view');

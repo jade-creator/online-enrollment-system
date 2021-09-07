@@ -46,6 +46,10 @@ class RegistrationPolicy
         $user->role->name == 'student';
     }
 
+    public function export(User $user) { return
+        $this->isAdmin($user);
+    }
+
     public function update(User $user, Registration $registration) { return
         $this->isAdmin($user) && $registration->status->name != 'released';
     }

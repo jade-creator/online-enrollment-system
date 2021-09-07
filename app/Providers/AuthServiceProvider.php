@@ -2,30 +2,9 @@
 
 namespace App\Providers;
 
-use App\Models\AttendedSchool;
-use App\Models\Guardian;
-use App\Models\Person;
-use App\Models\Program;
-use App\Models\Prospectus;
-use App\Models\ProspectusSubject;
-use App\Models\Registration;
-use App\Models\Section;
-use App\Models\Schedule;
-use App\Models\Subject;
-use App\Models\User;
-use App\Policies\AttendedSchoolPolicy;
-use App\Policies\GuardianPolicy;
-use App\Policies\PersonPolicy;
-use App\Policies\ProgramPolicy;
-use App\Policies\ProspectusPolicy;
-use App\Policies\ProspectusSubjectPolicy;
-use App\Policies\RegistrationPolicy;
-use App\Policies\SchedulePolicy;
-use App\Policies\SectionPolicy;
-use App\Policies\SubjectPolicy;
-use App\Policies\UserPolicy;
+use App\Models;
+use App\Policies;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -35,17 +14,18 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        AttendedSchool::class => AttendedSchoolPolicy::class,
-        Guardian::class => GuardianPolicy::class,
-        Person::class => PersonPolicy::class,
-        Prospectus::class => ProspectusPolicy::class,
-        Registration::class => RegistrationPolicy::class,
-        Schedule::class => SchedulePolicy::class,
-        Section::class => SectionPolicy::class,
-        Subject::class => SubjectPolicy::class,
-        ProspectusSubject::class => ProspectusSubjectPolicy::class,
-        Program::class => ProgramPolicy::class,
-        User::class => UserPolicy::class,
+        Models\AttendedSchool::class => Policies\AttendedSchoolPolicy::class,
+        Models\Grade::class => Policies\GradePolicy::class,
+        Models\Guardian::class => Policies\GuardianPolicy::class,
+        Models\Person::class => Policies\PersonPolicy::class,
+        Models\Program::class => Policies\ProgramPolicy::class,
+        Models\Prospectus::class => Policies\ProspectusPolicy::class,
+        Models\ProspectusSubject::class => Policies\ProspectusSubjectPolicy::class,
+        Models\Registration::class => Policies\RegistrationPolicy::class,
+        Models\Schedule::class => Policies\SchedulePolicy::class,
+        Models\Section::class => Policies\SectionPolicy::class,
+        Models\Subject::class => Policies\SubjectPolicy::class,
+        Models\User::class => Policies\UserPolicy::class,
     ];
 
     /**
