@@ -20,6 +20,10 @@ class SectionPolicy
         $this->isAdmin($user);
     }
 
+    public function createClass(User $user) { return
+        $this->isAdmin($user);
+    }
+
     public function update(User $user, Section $section) { return
         $this->isAdmin($user);
     }

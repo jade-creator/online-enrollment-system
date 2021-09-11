@@ -29,7 +29,6 @@ class ProspectusSubject extends BaseModel
     //get all the subjects in the given prospectus.
     public function scopeGetAllSubjectsInProspectus($query, $prospectusId) { return
         $query->where('prospectus_id', $prospectusId)
-            ->with('prerequisites')
             ->get($this->select);
     }
 

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateScheduleSectionTable extends Migration
+class CreateDaysTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateScheduleSectionTable extends Migration
      */
     public function up()
     {
-        Schema::create('schedule_section', function (Blueprint $table) {
-            $table->foreignId('schedule_id')->constrained();
-            $table->foreignId('section_id')->constrained();
+        Schema::create('days', function (Blueprint $table) {
+            $table->id();
+            $table->string('name', 10);
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ class CreateScheduleSectionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('schedule_section');
+        Schema::dropIfExists('days');
     }
 }

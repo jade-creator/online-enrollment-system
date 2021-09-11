@@ -30,7 +30,7 @@ class SectionUpdateComponent extends Component
         ];
     }
 
-    public function mount() { $this->setSection(new Models\Section()); }
+//    public function mount() { $this->setSection(new Models\Section()); }
 
     public function render() { return
         view('livewire.admin.section-component.section-update-component');

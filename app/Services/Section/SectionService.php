@@ -6,10 +6,9 @@ use App\Models;
 
 class SectionService
 {
-    public function store(int $programId, $levelId, $termId, Models\Section $section) : void
+    public function store(int $programId, $levelId, $termId, Models\Section $section) : Models\Section
     {
         $prospectus = Models\Prospectus::select(['id'])
-            ->with('subjects:id')
             ->where([
                 'program_id' => $programId,
                 'level_id' => $levelId,
@@ -22,15 +21,17 @@ class SectionService
         $section->prospectus_id = $prospectus->id;
         $section->save();
 
-        $prospectus->subjects->map(function ($subject) use ($section) {
-            $schedule = Models\Schedule::create([
-                'subject_id' => $subject->id,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+        return $section;
 
-            $schedule->sections()->attach([$section->id]);
-        });
+//        $prospectus->subjects->map(function ($subject) use ($section) {
+//            $schedule = Models\Schedule::create([
+//                'subject_id' => $subject->id,
+//                'created_at' => now(),
+//                'updated_at' => now(),
+//            ]);
+//
+//            $schedule->sections()->attach([$section->id]);
+//        });
     }
 
     public function update(Models\Section $section) : Models\Section

@@ -26,9 +26,11 @@ class RegistrationReleaseService
 
     public function releaseAll(array $selected)
     {
-        $sections = Section::with(['registrations' => function($query) {
-            return $query->whereNull('released_at');
-        }])
+        $sections = Section::with([
+                'registrations' => function($query) {
+                    return $query->enrolled();
+                },
+            ])
             ->whereIn('id', $selected)
             ->get();
 

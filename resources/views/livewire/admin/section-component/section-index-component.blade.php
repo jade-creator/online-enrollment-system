@@ -51,7 +51,7 @@
                     <div wire:key="table-row-{{$section->id}}" x-data="{ open: false }">
                         <x-table.row :active="$this->isSelected($section->id)">
                             <div name="slot" class="grid grid-cols-12 gap-2">
-                                <x-table.cell-checkbox :value="$section->id"/>
+                                <x-table.cell-checkbox :value="$section->id">{{ $section->id ?? 'N/A' }}</x-table.cell-checkbox>
                                 <x-table.cell class="justify-start md:col-span-2">{{ $section->name ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell class="justify-start md:col-span-1">{{ $section->prospectus->program->code ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell class="justify-start md:col-span-1">{{ $section->prospectus->level->level ?? 'N/A' }}</x-table.cell>
@@ -83,6 +83,12 @@
                                                         </x-table.cell-button>
                                                     @endcan
 
+                                                    @can ('createClass', $section)
+                                                        <x-table.cell-button wire:click.prevent="$emit('modalAddingSchedule', {{$section}})" title="Add Class">
+                                                            <x-icons.release-icon/>
+                                                        </x-table.cell-button>
+                                                    @endcan
+
                                                     @can ('destroy', $section)
                                                         <x-table.cell-button wire:click.prevent="$emitSelf('removeConfirm', {{$section}})" title="Delete">
                                                             <x-icons.delete-icon/>
@@ -99,7 +105,7 @@
                                 </x-table.cell-action>
                             </div>
                         </x-table.row>
-                        <livewire:admin.schedule-component.schedule-view-component :section="$section" :wire:key="'schedule-view-component-'.$section->id">
+                        <livewire:admin.schedule-component.schedule-view-component :section="$section" key="{{ 'schedule-view-component-'.now() }}">
                     </div>
                 @empty
                     <x-table.no-result>No sections found.🤔</x-table.no-result>
@@ -111,7 +117,17 @@
             </x-slot>
         </x-table.main>
 
-        @include('livewire.admin.section-component.section-bulk-action')
+        <x-table.bulk-action-bar :count="count($selected)">
+            @can('create', App\Models\Section::class)
+                <x-table.bulk-action-button nameButton="Export" event="$toggle('confirmingExport')">
+                    <x-icons.export-icon/>
+                </x-table.bulk-action-button>
+
+                <x-table.bulk-action-button nameButton="Release" event="releaseAll">
+                    <x-icons.release-icon/>
+                </x-table.bulk-action-button>
+            @endcan
+        </x-table.bulk-action-bar>
     </div>
 
     <div wire:loading>
@@ -124,5 +140,8 @@
 
     <livewire:admin.section-component.section-destroy-component>
 
-    <livewire:admin.schedule-component.schedule-update-component>
+    <livewire:admin.schedule-component.schedule-add-component key="{{ 'schedule-add-component-'.now() }}" :days="$this->days">
+
+    <livewire:admin.schedule-component.schedule-update-component key="{{ 'schedule-update-component-'.now() }}" :days="$this->days">
+
 </div>

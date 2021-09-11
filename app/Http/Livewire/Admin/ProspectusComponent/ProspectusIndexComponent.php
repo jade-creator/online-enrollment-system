@@ -37,7 +37,7 @@ class ProspectusIndexComponent extends Component
 
     //populate table: get all subjects in a given prospectus
     public function getProspectusSubjects() { return
-        Models\ProspectusSubject::getAllSubjectsInProspectus($this->prospectusId);
+        Models\ProspectusSubject::with('prerequisites')->getAllSubjectsInProspectus($this->prospectusId);
     }
 
     //populate dropdown subjects: get all subjects in program except the subject/s that is already added.

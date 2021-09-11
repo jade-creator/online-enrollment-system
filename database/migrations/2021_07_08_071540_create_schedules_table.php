@@ -16,17 +16,12 @@ class CreateSchedulesTable extends Migration
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
             $table->foreignId('subject_id')->constrained();
-            $table->time('start_time_monday')->nullable();
-            $table->time('end_time_monday')->nullable();
-            $table->time('start_time_tuesday')->nullable();
-            $table->time('end_time_tuesday')->nullable();
-            $table->time('start_time_wednesday')->nullable();
-            $table->time('end_time_wednesday')->nullable();
-            $table->time('start_time_thursday')->nullable();
-            $table->time('end_time_thursday')->nullable();
-            $table->time('start_time_friday')->nullable();
-            $table->time('end_time_friday')->nullable();
+            $table->foreignId('day_id')->constrained();
+            $table->foreignId('section_id')->constrained();
+            $table->time('start_time');
+            $table->time('end_time');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
