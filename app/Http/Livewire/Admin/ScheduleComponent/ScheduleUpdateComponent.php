@@ -2,38 +2,37 @@
 
 namespace App\Http\Livewire\Admin\ScheduleComponent;
 
-use App\Models\Schedule;
+use App\Models;
+use App\Services\Schedule;
 use App\Traits\WithSweetAlert;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
 class ScheduleUpdateComponent extends Component
 {
-    use AuthorizesRequests;
-    use WithSweetAlert;
+    use AuthorizesRequests, WithSweetAlert;
 
-    public Schedule $schedule;
+    public Models\Section $section;
+    public Models\Schedule $schedule;
+    public array $schedules = [];
     public bool $viewingSchedule = false;
+    public $prospectusSubjects, $days;
 
     protected $listeners = [ 'modalViewingSchedule' ];
 
     public function rules()
     {
         return [
-            'schedule.start_time_monday' => ['nullable'],
-            'schedule.end_time_monday' => ['nullable', 'after:schedule.start_time_monday'],
-            'schedule.start_time_tuesday' => ['nullable'],
-            'schedule.end_time_tuesday' => ['nullable', 'after:schedule.start_time_tuesday'],
-            'schedule.start_time_wednesday' => ['nullable'],
-            'schedule.end_time_wednesday' => ['nullable', 'after:schedule.start_time_wednesday'],
-            'schedule.start_time_thursday' => ['nullable'],
-            'schedule.end_time_thursday' => ['nullable', 'after:schedule.start_time_thursday'],
-            'schedule.start_time_friday' => ['nullable'],
-            'schedule.end_time_friday' => ['nullable', 'after:schedule.start_time_friday'],
+            'schedule.subject_id' => ['required'],
+            'schedule.day_id' => ['required'],
+            'schedule.start_time' => ['required'],
+            'schedule.end_time' => ['required', 'after:schedule.start_time'],
         ];
     }
 
-    public function mount() { $this->setSchedule(new Schedule()); }
+    public function mount() {
+        $this->prospectusSubjects = collect();
+    }
 
     public function render() { return
         view('livewire.admin.schedule-component.schedule-update-component');
@@ -45,27 +44,38 @@ class ScheduleUpdateComponent extends Component
         $this->validate();
 
         try {
-            $this->schedule->update();
+            $schedule = (new Schedule\ScheduleService())->update($this->schedule, $this->schedules);
+
+            $this->toggleViewingSchedule();
+            $this->success($this->schedule->subject->code."'s time period in ".$this->section->name." has been updated.");
             $this->emitUp('refresh');
-            $this->success($this->schedule->subject->code." has been updated.");
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }
-
-        $this->toggleViewingSchedule();
     }
 
-    public function modalViewingSchedule(Schedule $schedule)
-    {
-        $this->setSchedule($schedule);
-        $this->toggleViewingSchedule();
-    }
-
-    public function toggleViewingSchedule()
+    public function modalViewingSchedule(Models\Section $section, Models\Schedule $schedule)
     {
         $this->resetValidation();
-        $this->viewingSchedule = !$this->viewingSchedule;
+        $this->fill([
+            'section' => $section,
+            'schedule' => $schedule,
+            'prospectusSubjects' => Models\ProspectusSubject::getAllSubjectsInProspectus($section->prospectus->id),
+        ]);
+        $this->toggleViewingSchedule();
+
+        try {
+            $scheduleMergeabilityService = new Schedule\ScheduleMergeabilityService();
+
+            $blocks = $scheduleMergeabilityService->populateBlocks($this->schedule);
+            $this->schedules = $scheduleMergeabilityService->unsetSchedule($this->section, $blocks, $this->days);
+        } catch (\Exception $e) {
+            $this->toggleViewingSchedule();
+            $this->error($e->getMessage());
+        }
     }
 
-    public function setSchedule(Schedule $schedule) { $this->schedule = $schedule; }
+    public function toggleViewingSchedule() {
+        $this->viewingSchedule = !$this->viewingSchedule;
+    }
 }

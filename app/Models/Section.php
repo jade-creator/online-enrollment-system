@@ -23,6 +23,18 @@ class Section extends BaseModel
         'room:id,name',
     ];
 
+    public function scopeWithSortedSchedules($query) { return
+        $query->select(['id', ...$this->fillable, 'created_at'])
+            ->with([
+                'schedules' => function($query) { return
+                    $query->orderBy('day_id','ASC')
+                        ->orderBy('start_time', 'ASC');
+                },
+                'schedules.subject',
+                'schedules.day',
+            ]);
+    }
+
     public function scopeFilterWithProspectusByProgram($query, $programId)
     {
         return $query->when(filled($programId), function($query) use ($programId) {
@@ -37,7 +49,7 @@ class Section extends BaseModel
     }
 
     public function schedules() { return
-        $this->belongsToMany(Schedule::class)->withTimestamps();
+        $this->hasMany(Schedule::class);
     }
 
     public function room() { return

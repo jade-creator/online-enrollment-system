@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             StudentSeeder::class,
             GuardianSeeder::class,
             SectionSeeder::class,
+            DaySeeder::class,
         ]);
     }
 }

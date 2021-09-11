@@ -17,7 +17,6 @@ class SectionIndexComponent extends Livewire\Component
 
     public Models\Section $section;
     public Models\Status $status;
-    private RegistrationReleaseService $registrationReleaseService;
     public int $paginateValue = 10;
     public string $programId = '';
 
@@ -47,10 +46,8 @@ class SectionIndexComponent extends Livewire\Component
         'name',
     ];
 
-    public function mount()
-    {
+    public function mount() {
         $this->status = Models\Status::where('name', 'released')->firstOrFail();
-        $this->registrationReleaseService = new RegistrationReleaseService($this->status->id);
     }
 
     public function render() { return
@@ -64,9 +61,8 @@ class SectionIndexComponent extends Livewire\Component
     public function getRowsQueryProperty()
     {
         return Models\Section::search($this->search)
-            ->select(['id', 'name', 'prospectus_id', 'room_id', 'seat', 'created_at'])
+            ->withSortedSchedules()
             ->with([
-                'schedules.subject',
                 'registrations' => function($query) {
                     return $query->enrolled();
                 },
@@ -87,17 +83,13 @@ class SectionIndexComponent extends Livewire\Component
     {
         $this->section = $section;
 
-        $this->dispatchBrowserEvent('swal:confirmRelease', [
-            'type' => 'warning',
-            'title' => 'Are you sure?',
-            'text' => 'Students under this section will be removed. Their registration will be moved to history once successfull.',
-        ]);
+        $this->confirm('releaseStudents', 'Students under this section will be removed. Their registration will be moved to history once successful.');
     }
 
     public function release(string $method, $argument)
     {
         try {
-            $this->registrationReleaseService->$method($argument);
+            (new RegistrationReleaseService($this->status->id))->$method($argument);
             $this->success('The students have been released.');
         } catch (\Exception $e) {
             $this->error($e->getMessage());
@@ -114,6 +106,10 @@ class SectionIndexComponent extends Livewire\Component
 
     public function getProgramsProperty() { return
         Models\Program::get(['id', 'code']);
+    }
+
+    public function getDaysProperty() { return
+        Models\Day::get(['id', 'name']);
     }
 
     public function fileExport() { return

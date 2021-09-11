@@ -1,4 +1,4 @@
-<x-jet-dialog-modal wire:model="viewingSchedule">
+<x-jet-dialog-modal wire:model="addingSchedule">
     <x-slot name="title">
         {{ __('Schedule Maintenance') }}
     </x-slot>
@@ -49,12 +49,12 @@
     </x-slot>
 
     <x-slot name="footer">
-        <x-jet-secondary-button wire:click="$toggle('viewingSchedule')" wire:loading.attr="disabled">
+        <x-jet-secondary-button wire:click="$toggle('addingSchedule')" wire:loading.attr="disabled">
             {{ __('Cancel') }}
         </x-jet-secondary-button>
 
-        <x-jet-button class="ml-2 bg-blue-500 hover:blue-700" wire:click="update" wire:loading.attr="disabled">
-            {{ __('Update') }}
+        <x-jet-button class="ml-2 bg-blue-500 hover:blue-700" wire:click="save" wire:loading.attr="disabled">
+            {{ __('Save') }}
         </x-jet-button>
     </x-slot>
 </x-jet-dialog-modal>

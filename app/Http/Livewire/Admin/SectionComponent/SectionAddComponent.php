@@ -55,7 +55,7 @@ class SectionAddComponent extends Component
 
             $this->emitUp('refresh');
             $this->success($this->section->name.' has been added.');
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->error($e->getMessage());
         }
 
