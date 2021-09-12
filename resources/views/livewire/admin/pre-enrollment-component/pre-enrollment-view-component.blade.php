@@ -1,24 +1,4 @@
 <div class="w-full flex flex-1 scrolling-touch">
-    <x-table.filter>
-        <div name='slot'>
-            <div class="my-4">
-                <h3 class="font-bold text-md">{{ __('Status')}}</h3>
-                <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
-                    <select wire:model="statusId" wire:loading.attr="disabled" id="status" aria-label="statuses" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
-                        @forelse ($this->statuses as $status)
-                            @if ($loop->first)
-                                <option value="">-- choose a status --</option>
-                            @endif
-                            <option value="{{ $status->id }}">{{ $status->name }}</option>
-                        @empty
-                            <option value="">No records</option>
-                        @endforelse
-                    </select>
-                </div>
-            </div>
-        </div>
-    </x-table.filter>
-
     <!-- Module -->
     <div class="min-h-screen w-full py-8 px-8">
 
@@ -57,6 +37,26 @@
         </div>
 
         <x-table.main>
+            <x-slot name="filter">
+                <x-table.filter>
+                    <div class="my-4">
+                        <h3 class="font-bold text-md">{{ __('Status')}}</h3>
+                        <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
+                            <select wire:model="statusId" wire:loading.attr="disabled" id="status" aria-label="statuses" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
+                                @forelse ($this->statuses as $status)
+                                    @if ($loop->first)
+                                        <option value="">-- choose a status --</option>
+                                    @endif
+                                    <option value="{{ $status->id }}">{{ $status->name }}</option>
+                                @empty
+                                    <option value="">No records</option>
+                                @endforelse
+                            </select>
+                        </div>
+                    </div>
+                </x-table.filter>
+            </x-slot>
+
             <x-slot name="paginationLink">
                 {{ $registrations->links() }}
             </x-slot>
