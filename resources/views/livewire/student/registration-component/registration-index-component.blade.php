@@ -55,6 +55,14 @@
                                                     <div class="block px-4 py-3 text-sm text-gray-500 font-bold">
                                                         {{ __('Actions') }}
                                                     </div>
+                                                    @can ('view', $registration)
+                                                        <a href="{{ route('pre.registration.view', $registration->id) }}">
+                                                            <x-table.cell-button title="View Registration">
+                                                                <x-icons.pre-enrollment-icon/>
+                                                            </x-table.cell-button>
+                                                        </a>
+                                                    @endcan
+
                                                     @can ('viewGrade', $registration)
                                                         <x-table.cell-button title="View Grade">
                                                             <x-icons.lock-icon/>

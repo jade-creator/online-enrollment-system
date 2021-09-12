@@ -102,9 +102,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
 
         Route::group(['middleware' => 'user.detail', 'prefix' => 'student', 'as' => 'student.'], function (){
 
-            Route::group(['prefix' => 'registrations', 'as' => 'registrations.'], function () {
+            Route::group(['prefix' => 'pre-registrations', 'as' => 'registrations.'], function () {
                 Route::get('', RegistrationComponent\RegistrationIndexComponent::class)->name('index');
                 Route::get('/create', RegistrationComponent\RegistrationAddComponent::class)->middleware(['password.confirm'])->name('create');
+                Route::get('/{prospectusId}/regular', RegistrationComponent\RegularAddComponent::class)->name('regular.create');
             });
 
             Route::get('/grades', Student\StudentGradeViewComponent::class)->name('grades.view');

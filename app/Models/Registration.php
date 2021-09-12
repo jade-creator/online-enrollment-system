@@ -9,6 +9,7 @@ class Registration extends BaseModel
     use SoftDeletes;
 
     protected $fillable = [
+        'isRegular',
         'isNew',
         'status_id',
         'section_id',

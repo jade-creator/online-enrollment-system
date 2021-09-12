@@ -19,6 +19,16 @@ class Prospectus extends Model
 
     public $with = ['subjects'];
 
+    public function scopeFindSpecificProspectus($query, $programId, $levelId, $termId) { return
+        $query->with('subjects.prerequisites')
+            ->where([
+                ['program_id', $programId],
+                ['level_id', $levelId],
+                ['term_id', $termId],
+            ])
+            ->firstOrFail();
+    }
+
     // pluck subjects in a prospectus collection.
     public function pluckSubject($prospectuses)
     {
