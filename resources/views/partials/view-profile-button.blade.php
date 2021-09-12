@@ -12,7 +12,7 @@
     @auth
        <a href="{{ route('user.personal.profile.view', ['userId' => auth()->user()->id]) }}">
             <x-jet-secondary-button class="">
-                {{ __('Go to personal profile')}}
+                {{ __('View profile')}}
             </x-jet-secondary-button>
        </a>
     @endauth

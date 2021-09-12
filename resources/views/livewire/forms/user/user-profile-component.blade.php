@@ -1,23 +1,22 @@
-<div x-data="{ openTab: 1 }" class="w-full h-screen bg-white">
-    <div class="w-full flex border-b bg-white border-gray-200 sticky top-12">
-        <div class="w-96">&nbsp;</div>
-        <nav class="flex items-end pt-10">
-            <ul class="flex list-none">
+<div x-data="{ openTab: 1 }" class="w-full h-screen bg-gray-50">
+    <div class="w-full border-b bg-white border-gray-200 sticky top-12 ">
+        <nav class="flex">
+            <ul class="flex flex-col space-y-2 sm:space-y-0 sm:flex-row list-none pt-5">
                 <li>
-                    <button @click="openTab = 1" :class="{ 'border-red-500':  openTab == 1, 'hover:border-gray-400':  openTab != 1}" class="flex h-full pb-3 border-b-2 px-4 py-1 text-base font-bold text-black transition duration-500 ease-in-out transform focus:shadow-outline focus:outline-none">
+                    <button @click="openTab = 1" :class="{ 'text-red-500 sm:text-black sm:border-red-500':  openTab == 1, 'sm:hover:border-gray-400':  openTab != 1}" class="flex h-full pb-3 sm:border-b-2 px-4 py-1 text-base font-bold text-black transition duration-500 ease-in-out transform focus:shadow-outline focus:outline-none">
                         <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="mx-2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                         Personal Details
                     </button>
                 </li>
                 <li>
-                    <button @click="openTab = 2" :class="{ 'border-red-500':  openTab == 2, 'hover:border-gray-400':  openTab != 2}" class="flex h-full pb-3 border-b-2 px-4 py-1 text-base font-bold text-black transition duration-500 ease-in-out transform focus:shadow-outline focus:outline-none">
+                    <button @click="openTab = 2" :class="{ 'text-red-500 sm:text-black sm:border-red-500':  openTab == 2, 'sm:hover:border-gray-400':  openTab != 2}" class="flex h-full pb-3 sm:border-b-2 px-4 py-1 text-base font-bold text-black transition duration-500 ease-in-out transform focus:shadow-outline focus:outline-none">
                         <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="mx-2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                         Contacts
                     </button>
                 </li>
                 @if ($user->role_id == 2)
                     <li>
-                        <button @click="openTab = 3" :class="{ 'border-red-500':  openTab == 3, 'hover:border-gray-400':  openTab != 3}" class="flex h-full pb-3 border-b-2 px-4 py-1 text-base font-bold text-black transition duration-500 ease-in-out transform focus:shadow-outline focus:outline-none">
+                        <button @click="openTab = 3" :class="{ 'text-red-500 sm:text-black sm:border-red-500':  openTab == 3, 'sm:hover:border-gray-400':  openTab != 3}" class="flex h-full pb-3 sm:border-b-2 px-4 py-1 text-base font-bold text-black transition duration-500 ease-in-out transform focus:shadow-outline focus:outline-none">
                             <svg xmlns="http://www.w3.org/2000/svg" class="mx-2" width="18" height="18" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <circle cx="9" cy="7" r="4"></circle>
@@ -29,7 +28,7 @@
                         </button>
                     </li>
                     <li>
-                        <button @click="openTab = 4" :class="{ 'border-red-500':  openTab == 4, 'hover:border-gray-400':  openTab != 4}" class="flex h-full pb-3 border-b-2 px-4 py-1 text-base font-bold text-black transition duration-500 ease-in-out transform focus:shadow-outline focus:outline-none">
+                        <button @click="openTab = 4" :class="{ 'text-red-500 sm:text-black sm:border-red-500':  openTab == 4, 'sm:hover:border-gray-400':  openTab != 4}" class="flex h-full pb-3 sm:border-b-2 px-4 py-1 text-base font-bold text-black transition duration-500 ease-in-out transform focus:shadow-outline focus:outline-none">
                             <svg xmlns="http://www.w3.org/2000/svg" class="mx-2" width="22" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <path d="M22 9l-10 -4l-10 4l10 4l10 -4v6"></path>
@@ -42,10 +41,10 @@
             </ul>
         </nav>
     </div>
-    <div class="flex flex-1">
-        <div class="max-w-sm sm:px-6 lg:px-12">
+    <div class="flex flex-col md:flex-row pb-4">
+        <div class="flex flex-row md:flex-col justify-around items-center md:justify-start md:items-start md:max-w-sm md:px-12">
             <div class="flex flex-col">
-                <img class="mt-6 w-96 rounded-full object-cover" src="{{ $user->profile_photo_url }}" alt="{{ $user->name }}"/>
+                <img class="mt-6 w-40 rounded-full object-cover" src="{{ $user->profile_photo_url }}" alt="{{ $user->name }}"/>
                 <p class="mt-4 text-3xl font-semibold">{{ $user->name }}</p>
                 <p class="mt-2 text-gray-400 text-xl">{{ $user->email }}</p>
                 @can('update', $person)
@@ -142,7 +141,8 @@
                 @endforelse
             @endif
         </div>
-        <div x-show="openTab == 1" class="sm:px-6 lg:px-8 w-full">
+
+        <div x-show="openTab == 1" class="px-6 lg:px-8 w-full">
             <div class="my-6 text-lg font-semibold">Fullname</div>
             <div class="grid grid-cols-8 gap-6">
                 <div class="mt-4 col-span-4">
@@ -213,7 +213,7 @@
             @endif
         </div>
 
-        <div x-show="openTab == 2" x-cloak class="sm:px-6 lg:px-8 w-full">
+        <div x-show="openTab == 2" x-cloak class="px-6 lg:px-8 w-full">
             <div class="my-6 text-lg font-semibold">Contacts</div>
             <div class="grid grid-cols-8 gap-6">
                 <div class="mt-4 col-span-8">
@@ -227,7 +227,7 @@
             </div>
         </div>
 
-        <div x-show="openTab == 3" x-cloak class="sm:px-6 lg:px-8 w-full">
+        <div x-show="openTab == 3" x-cloak class="px-6 lg:px-8 w-full">
             <div class="my-6 text-lg font-semibold">{{ $guardian->relationship ?? 'N/A' }}</div>
             <div class="grid grid-cols-8 gap-6">
                 <div class="mt-4 col-span-4">
@@ -260,7 +260,7 @@
             </div>
         </div>
 
-        <div x-show="openTab == 4" x-cloak class="sm:px-6 lg:px-8 w-full">
+        <div x-show="openTab == 4" x-cloak class="px-6 lg:px-8 w-full">
             <div class="my-6 text-lg font-semibold">Education</div>
             <div class="grid grid-cols-8 gap-6">
                 <div class="mt-4 col-span-4">
