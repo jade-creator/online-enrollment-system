@@ -15,6 +15,7 @@ class CreateRegistrationsTable extends Migration
     {
         Schema::create('registrations', function (Blueprint $table) {
             $table->id();
+            $table->boolean('isRegular')->default(1);
             $table->boolean('isNew')->default(0);
             $table->foreignId('status_id')->default(1)->constrained();
             $table->foreignId('section_id')->nullable()->constrained();

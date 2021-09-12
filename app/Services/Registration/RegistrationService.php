@@ -7,25 +7,24 @@ use App\Models;
 
 class RegistrationService
 {
+    public function pluckSubjectsId($data) : array {
+        return $data->pluck('id')->toArray();
+    }
+
     /**
      * @throws \Exception
      */
-    public function store(array $selected, Models\Registration $registration, Models\Prospectus $prospectus, int $studentId) : Models\Registration
+    public function store(array $selected, Models\Registration $registration) : Models\Registration
     {
         if (empty($selected)) throw new \Exception('No Selected Subject/s.');
 
-        $registration->student_id = $studentId;
-        $registration->prospectus_id = $prospectus->id;
-
-        $status = Models\Status::where('name', 'pending')->first();
-        $mark = Models\Mark::where('name', 'tba')->first();
-        if (is_null($status) || is_null($mark)) throw new \Exception("Registration Unsuccessful.");
+        $status = Models\Status::where('name', 'pending')->firstOrFail();
+        $mark = Models\Mark::where('name', 'tba')->firstOrFail();
 
         $registration->status_id = $status->id;
         $registration->save();
 
         $grades = [];
-
         foreach ($selected as $id) {
             $grades[] = new Models\Grade([
                 'subject_id' => $id,
