@@ -106,6 +106,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
                 Route::get('', RegistrationComponent\RegistrationIndexComponent::class)->name('index');
                 Route::get('/create', RegistrationComponent\RegistrationAddComponent::class)->middleware(['password.confirm'])->name('create');
                 Route::get('/{prospectusId}/regular', RegistrationComponent\RegularAddComponent::class)->name('regular.create');
+                Route::get('/{prospectusSlug}/irregular', RegistrationComponent\IrregularAddComponent::class)->name('irregular.create');
             });
 
             Route::get('/grades', Student\StudentGradeViewComponent::class)->name('grades.view');

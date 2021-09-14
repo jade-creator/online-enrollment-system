@@ -11,6 +11,7 @@ class Registration extends BaseModel
     protected $fillable = [
         'isRegular',
         'isNew',
+        'isExtension',
         'status_id',
         'section_id',
         'student_id',
@@ -60,6 +61,7 @@ class Registration extends BaseModel
     {
         return $query->select(['id', ...$this->fillable, 'created_at'])
             ->where('student_id', $studentId)
+            ->where('isExtension', 0)
             ->with([...$this->relationships]);
     }
 
@@ -100,6 +102,10 @@ class Registration extends BaseModel
     {
         return $query->where('status_id', $this->statusEnrolled()->id)
             ->whereNull('released_at');
+    }
+
+    public function extensions() { return
+        $this->hasMany(Extension::class);
     }
 
     public function grades() { return
