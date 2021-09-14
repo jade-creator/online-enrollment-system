@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
+    <div class="max-w-5xl mx-auto px-4 pb-4 lg:px-8">
         @include('partials.view-profile-button')
 
         <div class="flex flex-col md:flex-row">
