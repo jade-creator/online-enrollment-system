@@ -17,7 +17,12 @@ class Prospectus extends Model
         'term_id',
     ];
 
-    public $with = ['subjects'];
+    public $with = [
+        'level',
+        'program',
+        'term',
+        'subjects',
+    ];
 
     public function scopeFindSpecificProspectus($query, $programId, $levelId, $termId) { return
         $query->with('subjects.prerequisites')
@@ -42,14 +47,19 @@ class Prospectus extends Model
         return $subjects->map(fn($prospectus) => $prospectus->subject);
     }
 
+    //get all preceding prospectus less than/less than or equal to current.
+    public function scopeGetAllPrecedingProspectuses($query, $prospectus, $includeCurrent = false) { return
+        $query->where([
+            ['id', $includeCurrent ? '<=' : '<', $prospectus->id],
+            ['level_id', '<=', $prospectus->level_id],
+            ['program_id', '=', $prospectus->program_id],
+        ])
+        ->get(['id', ...$this->fillable]);
+    }
+
     // get all subjects in all preceding prospectuses.
     public function scopeGetAllSubjectsInPrecedingProspectuses($query, $prospectus) {
-        $prospectuses = $query->where([
-                ['id', '<', $prospectus->id],
-                ['level_id', '<=', $prospectus->level_id],
-                ['program_id', '=', $prospectus->program_id],
-            ])
-            ->get(['id', 'level_id', 'program_id']);
+        $prospectuses = $query->getAllPrecedingProspectuses($prospectus);
 
         return $this->pluckSubject($prospectuses);
     }

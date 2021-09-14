@@ -15,12 +15,13 @@ class CreateRegistrationsTable extends Migration
     {
         Schema::create('registrations', function (Blueprint $table) {
             $table->id();
-            $table->boolean('isRegular')->default(1);
-            $table->boolean('isNew')->default(0);
             $table->foreignId('status_id')->default(1)->constrained();
             $table->foreignId('section_id')->nullable()->constrained();
             $table->foreignId('student_id')->constrained();
             $table->foreignId('prospectus_id')->constrained();
+            $table->boolean('isRegular')->default(1);
+            $table->boolean('isNew')->default(0);
+            $table->boolean('isExtension')->default(0);
             $table->timestamp('released_at')->nullable();
             $table->timestamps();
             $table->softDeletes();

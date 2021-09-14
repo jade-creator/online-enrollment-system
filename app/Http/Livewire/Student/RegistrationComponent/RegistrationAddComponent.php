@@ -71,7 +71,7 @@ class RegistrationAddComponent extends Component
              $prospectus = Models\Prospectus::select('id')
                 ->findSpecificProspectus($this->programId, $this->levelId, $this->termId);
 
-            return redirect()->route('student.registrations.'.$this->classification.'.create', [$prospectus->id.'-'.$this->type]);
+            return redirect()->route('student.registrations.'.$this->classification.'.create', $prospectus->id.'-'.$this->type);
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }
