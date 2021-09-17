@@ -1,4 +1,4 @@
-<div class="pt-5 pl-5 lg:pl-6 w-full h-full overflow-y-auto scrolling-touch flex-1">
+<div class="pt-5 px-5  lg:pl-6 w-full h-full overflow-y-auto scrolling-touch flex-1">
     <div class="w-full mb-6 pt-3">
         <div>
             <div class="flex flex-row items-top justify-between mb-4">
@@ -8,9 +8,9 @@
                 </div>
             </div>
 
-            <div class="flex flex-col lg:flex-row w-full lg:space-x-2 space-y-2 lg:space-y-0 mb-2 lg:mb-4">
+            <div class="flex flex-col lg:flex-row w-full lg:space-x-4 space-y-2 lg:space-y-0 mb-2 lg:mb-4">
                 <div class="w-full lg:w-1/4">
-                    <div class="widget w-full p-4 rounded-lg bg-white border border-gray-100 dark:bg-gray-900 dark:border-gray-800">
+                    <div class="widget w-full p-4 rounded-lg bg-white border border-gray-100 shadow dark:bg-gray-900 dark:border-gray-800">
                         <div class="flex flex-row items-center justify-between">
                             <div class="flex flex-col">
                                 <div class="text-xs uppercase font-light text-gray-500">Users</div>
@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <div class="w-full lg:w-1/4">
-                    <div class="widget w-full p-4 rounded-lg bg-white border border-gray-100 dark:bg-gray-900 dark:border-gray-800">
+                    <div class="widget w-full p-4 rounded-lg bg-white border border-gray-100 shadow dark:bg-gray-900 dark:border-gray-800">
                         <div class="flex flex-row items-center justify-between">
                             <div class="flex flex-col">
                                 <div class="text-xs uppercase font-light text-gray-500">Pre Enrollments</div>
@@ -32,7 +32,7 @@
                     </div>
                 </div>
                 <div class="w-full lg:w-1/4">
-                    <div class="widget w-full p-4 rounded-lg bg-white border border-gray-100 dark:bg-gray-900 dark:border-gray-800">
+                    <div class="widget w-full p-4 rounded-lg bg-white border border-gray-100 shadow dark:bg-gray-900 dark:border-gray-800">
                         <div class="flex flex-row items-center justify-between">
                             <div class="flex flex-col">
                                 <div class="text-xs uppercase font-light text-gray-500">Sections</div>
@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <div class="w-full lg:w-1/4">
-                    <div class="widget w-full p-4 rounded-lg bg-white border border-gray-100 dark:bg-gray-900 dark:border-gray-800">
+                    <div class="widget w-full p-4 rounded-lg bg-white border border-gray-100 shadow dark:bg-gray-900 dark:border-gray-800">
                         <div class="flex flex-row items-center justify-between">
                             <div class="flex flex-col">
                                 <div class="text-xs uppercase font-light text-gray-500">Subjects</div>
@@ -66,9 +66,11 @@
                     </div>
                 </div>
             </div>
-            <div class="flex flex-col lg:flex-row w-full lg:space-x-2 space-y-2 lg:space-y-0 mb-2 lg:mb-4">
+
+            <div class="flex flex-col lg:flex-row w-full lg:space-x-4 space-y-2 lg:space-y-0 mb-2 lg:mb-4">
+                
                 <div class="w-full lg:w-3/4">
-                    <div class="flex flex-col">
+                    <!-- <div class="flex flex-col">
                         <div class="-my-2 overflow-x-auto">
                             <div class="py-2 align-middle inline-block min-w-full ">
                                 <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg h-screen bg-gray-50">
@@ -139,10 +141,22 @@
                                 </div>
                             </div>
                         </div>
+                    </div> -->
+                    <div class="flex flex-wrap justify-around bg-white rounded-lg p-4 border border-gray-100 shadow overflow-hidden dark:bg-gray-900 dark:border-gray-800">
+                        <div class="w-60 h-60">
+                            <canvas id="genderChart"></canvas>
+                        </div>
+                        <div class="w-60 h-60">
+                            <canvas id="oldNewChart"></canvas>
+                        </div>
+                        <div class="w-60 h-60">
+                            <canvas id="statusChart"></canvas>
+                        </div>
                     </div>
                 </div>
+
                 <div class="w-full lg:w-1/4">
-                    <div class="widget w-full p-4 rounded-lg bg-white border border-gray-100 dark:bg-gray-900 dark:border-gray-800">
+                    <div class="widget w-full h-full p-4 rounded-lg bg-white border border-gray-100 shadow dark:bg-gray-900 dark:border-gray-800">
                         <div class="flex flex-row justify-between mb-6">
                             <div class="flex flex-col">
                                 <div class="text-sm font-light text-gray-500">Recently Enrolled</div>
@@ -167,6 +181,12 @@
                             </div>
                         @endforeach
                     </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col lg:flex-row w-full lg:space-x-2 space-y-2 lg:space-y-0 mb-2 lg:mb-4">
+                <div class="flex flex-wrap w-full justify-around bg-white rounded-lg p-4 border border-gray-100 shadow overflow-hidden dark:bg-gray-900 dark:border-gray-800">
+                    <canvas id="programChart" height="150"></canvas>
                 </div>
             </div>
         </div>
