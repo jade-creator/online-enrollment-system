@@ -14,11 +14,11 @@ class RegularAddComponent extends Component
 
     public Models\Registration $registration;
     public Models\Prospectus $prospectus;
-    public string $prospectusId, $type = '';
+    public string $prospectusSlug, $prospectusId, $type = '';
 
     public function mount()
     {
-        list($this->prospectusId, $this->type) = explode( '-', $this->prospectusId);
+        list($this->prospectusId, $this->type) = explode( '-', $this->prospectusSlug);
 
         $this->prospectus = Models\Prospectus::with('subjects.prerequisites')->findOrFail($this->prospectusId);
     }

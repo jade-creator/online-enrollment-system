@@ -3,10 +3,12 @@
 namespace App\Services\Registration;
 
 use App\Models;
+use App\Services\Schedule\ScheduleMergeabilityService;
 use App\Services\Section\SectionAvailabilityService;
 
 class RegistrationStatusService
 {
+    /*change registration status*/
     public function setStatus(Models\Registration $registration, Models\Status $status) : Models\Registration
     {
         $registration->status_id = $status->id;
@@ -15,7 +17,7 @@ class RegistrationStatusService
         return $registration;
     }
 
-    /**
+    /**Query status
      * @throws \Exception
      */
     public function findStatus(string $name) : Models\Status
@@ -27,7 +29,38 @@ class RegistrationStatusService
         return $status;
     }
 
-    /**
+    /**student submit registration for assessment.
+     * @throws \Exception
+     */
+    public function submit(Models\Registration $registration) : Models\Registration
+    {
+        $status = $this->findStatus('confirming');
+
+        if (is_null($registration->section_id)) throw new \Exception('Please select a section.');
+
+        if ($registration->extensions->isNotEmpty()) {
+            $registrationService = new ScheduleMergeabilityService();
+            $days = Models\Day::get('name');
+            $schedules = $registrationService->populateSchedules($registration->section, $days);
+
+            foreach ($registration->extensions as $extension) {
+                if (is_null($extension->registration->section_id)) throw new \Exception('Please select a section.');
+
+                $blocks = $registrationService->populateSchedules($extension->registration->section, $days);
+
+                if ($registrationService->checkBlock($schedules, $blocks)) throw new \Exception('Unable to submit. Conflict on schedule was detected.');
+
+                $registration_t = $this->submit($extension->registration);
+            }
+        }
+
+        $registration->status_id = $status->id;
+        $registration->update();
+
+        return $registration;
+    }
+
+    /**admin reject student's registration.
      * @throws \Exception
      */
     public function reject(Models\Registration $registration) : Models\Registration

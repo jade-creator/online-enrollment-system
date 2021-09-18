@@ -1,5 +1,17 @@
 <div>
     <div class="w-full mb-10 flex items-center justify-start">
+        @if ($registration->status->name == 'confirming')
+            <x-jet-button class="bg-indigo-600 disabled:opacity-50 cursor-not-allowed" disabled="disabled">
+                <span>{{ __('Submitted') }}</span>
+            </x-jet-button>
+        @else
+            @can ('selectSection', $registration)
+                <x-jet-button wire:click.prevent="submit" wire:loading.attr="disabled" class="ml-2 bg-indigo-500 hover:bg-indigo-700 flex items-end">
+                    <span>{{ __('Submit') }}</span>
+                </x-jet-button>
+            @endcan
+        @endif
+
         @can('enroll', $registration)
             <x-jet-button wire:click.prevent="$toggle('enrollingStudent')" wire:loading.attr="disabled" class="ml-2 bg-indigo-500 hover:bg-indigo-700 flex items-end">
                 <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="22" height="22" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">

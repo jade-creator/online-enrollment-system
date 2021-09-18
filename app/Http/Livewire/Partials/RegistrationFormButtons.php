@@ -20,12 +20,8 @@ class RegistrationFormButtons extends Component
     protected $listeners = [
         'pending',
         'reject',
+        'submitSchedule',
     ];
-
-    public function rules()
-    {
-        return ['registration.section_id' => ['required', 'integer']];
-    }
 
     public function mount() {
         $this->studentId = $this->registration->student->custom_id;
@@ -37,17 +33,28 @@ class RegistrationFormButtons extends Component
 
     public function authorizeAction(string $action, string $message)
     {
-        $this->authorize($action, $this->registration);
-
         try {
+            $this->authorize($action, $this->registration);
             (new RegistrationStatusService())->$action($this->registration);
 
             $this->enrollingStudent = false;
-            $this->emitUp('refresh');
             $this->success($message);
+            $this->emitUp('refresh');
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }
+    }
+
+    //submit confirm student submit reg for assessment.
+    public function submit() { return
+        $this->confirm('submitSchedule', "Are you sure? Registration's status will be change to 'confirming'.
+        Section under this status cannot be changed.");
+    }
+
+    //student submit reg for assessment.
+    public function submitSchedule() {
+        $this->authorizeAction('submit', "Hi! ".$this->registration->student->user->person->full_name.' your registration is submitted
+        please wait for the assessment. Thank you!');
     }
 
     public function rejectConfirm() { return

@@ -26,9 +26,19 @@ class RegistrationPolicy
         $this->isAdmin($user) && $registration->status->name == 'pending';
     }
 
-    public function viewSection(User $user, Registration $registration) { return
-        $this->isAdmin($user) && $registration->section_id;
+    /*student submitting registration for assessment.*/
+    public function submit(User $user, Registration $registration) { return
+        ($user->role->name == 'student' || $this->isAdmin($user)) && $registration->status->name == 'pending';
     }
+
+    /*student selecting a section*/
+    public function selectSection(User $user, Registration $registration) { return
+        ($user->role->name == 'student' || $this->isAdmin($user)) && $registration->status->name == 'pending';
+    }
+
+//    public function viewSection(User $user, Registration $registration) { return
+//        $this->isAdmin($user) && $registration->section_id;
+//    }
 
     public function updateGrade(User $user, Registration $registration) { return
         $this->isAdmin($user) && $registration->status->name == "enrolled";
