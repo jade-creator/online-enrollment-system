@@ -105,7 +105,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
             Route::group(['prefix' => 'pre-registrations', 'as' => 'registrations.'], function () {
                 Route::get('', RegistrationComponent\RegistrationIndexComponent::class)->name('index');
                 Route::get('/create', RegistrationComponent\RegistrationAddComponent::class)->middleware(['password.confirm'])->name('create');
-                Route::get('/{prospectusId}/regular', RegistrationComponent\RegularAddComponent::class)->name('regular.create');
+                Route::get('/{prospectusSlug}/regular', RegistrationComponent\RegularAddComponent::class)->name('regular.create');
                 Route::get('/{prospectusSlug}/irregular', RegistrationComponent\IrregularAddComponent::class)->name('irregular.create');
             });
 

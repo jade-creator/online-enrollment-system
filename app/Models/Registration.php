@@ -104,6 +104,10 @@ class Registration extends BaseModel
             ->whereNull('released_at');
     }
 
+    public function classes() { return
+        $this->belongsToMany(Schedule::class, 'classes', 'registration_id', 'schedule_id')->withTimestamps();
+    }
+
     public function extensions() { return
         $this->hasMany(Extension::class);
     }

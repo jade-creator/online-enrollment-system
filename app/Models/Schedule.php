@@ -18,6 +18,10 @@ class Schedule extends Model
         'end_time',
     ];
 
+    public function classes() { return
+        $this->belongsToMany(Registration::class, 'classes', 'schedule_id', 'registration_id')->withTimestamps();
+    }
+
     public function day() { return
         $this->belongsTo(Day::class);
     }
@@ -26,7 +30,7 @@ class Schedule extends Model
         $this->belongsTo(Section::class);
     }
 
-    public function subject() { return
-        $this->belongsTo(Subject::class);
+    public function prospectusSubject() { return
+        $this->belongsTo(ProspectusSubject::class);
     }
 }

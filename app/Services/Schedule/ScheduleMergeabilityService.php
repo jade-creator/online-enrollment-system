@@ -11,6 +11,7 @@ class ScheduleMergeabilityService
         explode( '-', preg_replace( '/:/', '.', $blockTime ) );
     }
 
+    //compare schedule and blocks if collides/overlaps.
     public function checkBlock(array $schedule, array $blocks) : bool
     {
         foreach ($blocks as $day => $blockTimes) {
@@ -41,6 +42,7 @@ class ScheduleMergeabilityService
         return Carbon::parse($time)->format('H:i');
     }
 
+    /*get current block for update*/
     public function populateBlocks(Models\Schedule $schedule) : array
     {
         $block = [];
@@ -50,6 +52,7 @@ class ScheduleMergeabilityService
         return $blocks;
     }
 
+    //get schedule of selected section
     public function populateSchedules(Models\Section $section, $days = null) : array
     {
         $schedules = [];
@@ -84,7 +87,7 @@ class ScheduleMergeabilityService
         return $this->checkBlock($schedules, $blocks);
     }
 
-    //unset block time period to schedule.
+    //unset selected block time period to schedule.
     public function unsetSchedule(Models\Section $section, array $blocks = [], $days = null) : array
     {
         $schedules = $this->populateSchedules($section, $days);
