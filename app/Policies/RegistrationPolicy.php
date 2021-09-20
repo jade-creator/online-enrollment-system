@@ -30,6 +30,11 @@ class RegistrationPolicy
         $this->isAdmin($user) && ($registration->status->name == 'confirming' || $registration->status->name == 'denied');
     }
 
+    /*student submitted registration for assessment.*/
+    public function submitted(User $user, Registration $registration) { return
+        $user->role->name == 'student' && $registration->status->name !== 'pending';
+    }
+
     /*student submitting registration for assessment.*/
     public function submit(User $user, Registration $registration) { return
         ($user->role->name == 'student' || $this->isAdmin($user)) && ($registration->status->name == 'pending' || $registration->status->name == 'confirming');

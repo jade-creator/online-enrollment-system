@@ -85,7 +85,7 @@
                                 <div class="flex items-center">
                                     <input wire:loading.attr="disabled" type="checkbox" id="{{ $registration->id }}" value="{{ $registration->id }}" wire:model="selected" class="cursor-pointer border-gray-500 border-opacity-50 focus:outline-none focus:ring focus:ring-transparent ml-3 mr-5 rounded-sm">
                                     <div class="h-10 flex items-center">
-                                        {{ $registration->student->isStudent ? $registration->student->custom_id : '--' }}
+                                        {{ $registration->student->custom_id ?? '--' }}
                                     </div>
                                 </div>
                             </div>

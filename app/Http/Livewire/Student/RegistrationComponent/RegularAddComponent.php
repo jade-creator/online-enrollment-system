@@ -37,6 +37,7 @@ class RegularAddComponent extends Component
                 'registration.isNew' => $this->type === 'new' ? 1 : 0,
                 'registration.prospectus_id' => $this->prospectusId,
                 'registration.student_id' => auth()->user()->student->id,
+                'registration.total_unit' => $this->prospectus->subjects->sum('unit'),
             ]);
 
             $subjectsId = $registrationService->pluckSubjectsId($this->prospectus->subjects);
