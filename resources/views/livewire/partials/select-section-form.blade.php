@@ -54,7 +54,7 @@
         </x-jet-secondary-button>
 
         <x-jet-button class="ml-2 bg-blue-500 hover:blue-700" wire:click="save" wire:loading.attr="disabled">
-            {{ __('Applu Schedule') }}
+            {{ __('Apply Schedule') }}
         </x-jet-button>
     </x-slot>
 </x-jet-dialog-modal>

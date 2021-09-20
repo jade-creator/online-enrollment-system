@@ -25,7 +25,7 @@
 
         <!-- Scripts -->
         <script src="{{ mix('js/app.js') }}" defer></script>
-        
+
         {{-- <script src="{{ asset('js/main.js') }}"></script> --}}
         <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" data-auto-replace-svg="nest"></script>
         <!-- Alpine JS-->
@@ -33,7 +33,7 @@
         <!-- Chart.js -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js" defer integrity="sha512-Wt1bJGtlnMtGP0dqNFH1xlkLBNpEodaiQ8ZN5JLA5wpc1sUlk/O5uuOMNgvzddzkpvZ9GLyYNa8w2s7rqiTk5Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="{{ asset('js/chart.js') }}" defer></script>
-        
+
     </head>
     <body class="font-sans antialiased">
         <x-jet-banner />
@@ -65,19 +65,6 @@
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
         <script>
-            // window.addEventListener('swal:successEnroll', event => {
-            //     swal(event.detail.text, {
-            //         icon: "success",
-            //     });
-            //     window.livewire.emit('toggleEnrollingStudent');
-            // });
-
-            // window.addEventListener('swal:success', event => {
-            //     swal(event.detail.text, {
-            //         icon: "success",
-            //     });
-            // });
-
             window.addEventListener('swal:modal', event => {
                 swal({
                     title: event.detail.title,
@@ -102,51 +89,18 @@
                     return window.livewire.emit(event.detail.method);
                 });
             });
-
-            window.addEventListener('swal:confirmReject', event => {
-                swal({
-                    title: event.detail.title,
-                    text: event.detail.text,
-                    icon: event.detail.type,
-                    buttons: true,
-                    dangerMode: true,
-                })
-                .then((willReject) => {
-                    if (willReject) {
-                        window.livewire.emit('reject');
-                    }
-                });
-            });
-
-            window.addEventListener('swal:confirmDelete', event => {
-                swal({
-                    title: event.detail.title,
-                    text: event.detail.text,
-                    icon: event.detail.type,
-                    buttons: true,
-                    dangerMode: true,
-                })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        window.livewire.emit(event.detail.method, event.detail.item);
-                    }
-                });
-            });
-
-            window.addEventListener('swal:confirmRelease', event => {
-                swal({
-                    title: event.detail.title,
-                    text: event.detail.text,
-                    icon: event.detail.type,
-                    buttons: true,
-                    dangerMode: true,
-                })
-                .then((willRelease) => {
-                    if (willRelease) {
-                        window.livewire.emit('releaseStudents');
-                    }
-                });
-            });
         </script>
+
+        @if(session()->has('swal:modal'))
+            <script>
+                window.onload = function() {
+                    swal({
+                        title: '{{ session("swal:modal")['title'] }}',
+                        text: '{{ session("swal:modal")['text'] }}',
+                        icon: '{{ session("swal:modal")['type'] }}',
+                    });
+                };
+            </script>
+        @endif
     </body>
 </html>

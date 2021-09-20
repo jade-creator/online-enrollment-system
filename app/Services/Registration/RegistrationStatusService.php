@@ -29,6 +29,20 @@ class RegistrationStatusService
         return $status;
     }
 
+    //assessment
+    public function confirm(Models\Registration $registration) : Models\Registration
+    {
+        $status = $this->findStatus('finalized');
+
+        if($registration->extensions->isNotEmpty()) {
+            foreach ($registration->extensions as $extension) {
+                $this->confirm($extension->registration);
+            }
+        }
+
+        return $this->setStatus($registration, $status);
+    }
+
     /**student submit registration for assessment.
      * @throws \Exception
      */
@@ -44,20 +58,15 @@ class RegistrationStatusService
             $schedules = $registrationService->populateSchedules($registration->section, $days);
 
             foreach ($registration->extensions as $extension) {
-                if (is_null($extension->registration->section_id)) throw new \Exception('Please select a section.');
-
                 $blocks = $registrationService->populateSchedules($extension->registration->section, $days);
 
-                if ($registrationService->checkBlock($schedules, $blocks)) throw new \Exception('Unable to submit. Conflict on schedule was detected.');
+                if ($registrationService->checkBlock($schedules, $blocks)) throw new \Exception('Unable to submit, conflict on schedule was detected.');
 
                 $registration_t = $this->submit($extension->registration);
             }
         }
 
-        $registration->status_id = $status->id;
-        $registration->update();
-
-        return $registration;
+        return $this->setStatus($registration, $status);
     }
 
     /**admin reject student's registration.
@@ -67,7 +76,12 @@ class RegistrationStatusService
     {
         $status = $this->findStatus('denied');
 
-        $registration->section_id = null;
+        if($registration->extensions->isNotEmpty()) {
+            foreach ($registration->extensions as $extension) {
+                $this->reject($extension->registration);
+            }
+        }
+
         return $this->setStatus($registration, $status);
     }
 
@@ -79,6 +93,13 @@ class RegistrationStatusService
         $status = $this->findStatus('pending');
 
         $registration->section_id = null;
+
+        if($registration->extensions->isNotEmpty()) {
+            foreach ($registration->extensions as $extension) {
+                $this->pending($extension->registration);
+            }
+        }
+
         return $this->setStatus($registration, $status);
     }
 
@@ -87,18 +108,19 @@ class RegistrationStatusService
      */
     public function enroll(Models\Registration $registration) : Models\Registration
     {
-        (new SectionAvailabilityService())->isFull($registration->section_id);
+        //TODO: change countings
+        //(new SectionAvailabilityService())->isFull($registration->section_id);
 
         $status = $this->findStatus('enrolled');
 
         $registration->released_at = null;
-        $registration = $this->setStatus($registration, $status);
 
-        if (! $registration->student->isStudent) {
-            $registration->student->isStudent = true;
-            $registration->student->save();
+        if($registration->extensions->isNotEmpty()) {
+            foreach ($registration->extensions as $extension) {
+                $this->enroll($extension->registration);
+            }
         }
 
-        return $registration;
+        return $this->setStatus($registration, $status);
     }
 }

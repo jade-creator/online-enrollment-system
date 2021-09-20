@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             GuardianSeeder::class,
             SectionSeeder::class,
             DaySeeder::class,
+            CategorySeeder::class,
         ]);
     }
 }

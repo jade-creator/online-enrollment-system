@@ -18,6 +18,8 @@ class StatusSeeder extends Seeder
 
         $statuses = [
             ['name' => 'pending', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'confirming', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'finalized', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'enrolled', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'denied', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'released', 'created_at' => now(), 'updated_at' => now()],
