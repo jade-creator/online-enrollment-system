@@ -17,6 +17,10 @@ class Program extends BaseModel
         'year',
     ];
 
+    public function fees() { return
+        $this->hasMany(Fee::class);
+    }
+
     public function prospectuses() { return
         $this->hasMany(Prospectus::class);
     }

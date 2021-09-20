@@ -5,7 +5,7 @@
                 <div class="w-full text-sm font-semibold flex items-center justify-between">
                     <p><span>{{ $registration->prospectus->level->level . ' - ' ?? 'N/A' }}</span>
                         <span>{{ $registration->prospectus->term->term . ' - ' ?? 'N/A' }}</span>Selected subject/s</p>
-                    <p class="font-normal text-xs">Total Units: {{ $registration->grades->sum('prospectus_subject.unit') }}</p>
+                    <p class="font-normal text-xs">Total Units: {{ $registration->total_unit }}</p>
                 </div>
             </x-slot>
 

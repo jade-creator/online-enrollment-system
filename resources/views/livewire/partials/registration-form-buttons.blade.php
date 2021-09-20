@@ -21,15 +21,15 @@
                 <span>{{ __('Pending') }}</span>
             </x-jet-button>
         @elsecan ('selectSection', $registration)
-            @if ($registration->status->name == 'confirming')
-                <x-jet-button class="bg-indigo-600 disabled:opacity-50 cursor-not-allowed" disabled="disabled">
-                    <span>{{ __('Submitted') }}</span>
-                </x-jet-button>
-            @else
-                <x-jet-button wire:click.prevent="submit" wire:loading.attr="disabled" class="ml-2 bg-indigo-500 hover:bg-indigo-700 flex items-end">
-                    <span>{{ __('Submit') }}</span>
-                </x-jet-button>
-            @endif
+            <x-jet-button wire:click.prevent="submit" wire:loading.attr="disabled" class="ml-2 bg-indigo-500 hover:bg-indigo-700 flex items-end">
+                <span>{{ __('Submit') }}</span>
+            </x-jet-button>
+        @endcan
+
+        @can ('submitted', $registration)
+            <x-jet-button class="bg-indigo-600 disabled:opacity-50 cursor-not-allowed" disabled="disabled">
+                <span>{{ __('Submitted') }}</span>
+            </x-jet-button>
         @endcan
 
         @can('enroll', $registration)

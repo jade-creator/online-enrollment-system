@@ -6,13 +6,21 @@ use App\Models;
 
 class RegistrationIrregularService
 {
-    public function createNewRegistration(int $prospectusId, int $studentId,  int $isExtension = 0) : Models\Registration
+    public function calculateTotalUnit(Models\Prospectus $prospectus, array $selected) : int
+    {
+        $subjects = $prospectus->subjects->filter(fn ($subject) => in_array($subject->id, $selected));
+
+        return $subjects->sum('unit');
+    }
+
+    public function createNewRegistration(int $prospectusId, int $studentId, int $total_unit = 0,  int $isExtension = 0) : Models\Registration
     {
         $registration = new Models\Registration();
         $registration->prospectus_id = $prospectusId;
         $registration->student_id = $studentId;
         $registration->isRegular = 0;
         $registration->isExtension = $isExtension;
+        $registration->total_unit = $total_unit;
 
         return $registration;
     }
@@ -32,10 +40,10 @@ class RegistrationIrregularService
             if (is_array($selected) && empty($selected[$index])) continue;
 
             if ($index == 0) {
-                $registration = $this->createNewRegistration($prospectus->id, $studentId);
+                $registration = $this->createNewRegistration($prospectus->id, $studentId, $this->calculateTotalUnit($prospectus, $selected[0]));
                 $registrationMain = $registrationService->store($selected[0], $registration);
             } else {
-                $registration = $this->createNewRegistration($prospectus->id, $studentId, 1);
+                $registration = $this->createNewRegistration($prospectus->id, $studentId, $this->calculateTotalUnit($prospectus, $selected[$index]), 1);
                 $registration = $registrationService->store($selected[$index], $registration);
 
                 $extension = new Models\Extension();

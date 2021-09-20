@@ -11,11 +11,16 @@ class Schedule extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'subject_id',
+        'prospectus_subject_id',
         'day_id',
         'section_id',
         'start_time',
         'end_time',
+    ];
+
+    public $with = [
+        'section',
+        'day',
     ];
 
     public function classes() { return

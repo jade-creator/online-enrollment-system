@@ -77,6 +77,7 @@ class PreEnrollmentViewComponent extends Component
                                 ->orWhere('lastname', 'LIKE', '%'.$this->search.'%');
                         });
             })
+            ->where('isExtension', 0)
             ->whereNull('released_at')
             ->when(!empty($this->statusId), function ($query) {
                 return $query->where('status_id', $this->statusId);

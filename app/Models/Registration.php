@@ -12,6 +12,7 @@ class Registration extends BaseModel
         'isRegular',
         'isNew',
         'isExtension',
+        'total_unit',
         'status_id',
         'section_id',
         'student_id',
@@ -40,11 +41,11 @@ class Registration extends BaseModel
         return $query->select(['id', ...$this->fillable, 'released_at', 'created_at'])
             ->with([
                 ...$this->relationships,
-                'prospectus.fees',
+                'classes.prospectusSubject',
                 'student.user.person.contact',
                 'student.user.person.detail.country',
                 'grades:id,registration_id,subject_id',
-                'grades.prospectus_subject:id,subject_id,unit',
+                'grades.prospectus_subject',
                 'grades.prospectus_subject.subject:id,code,title',
                 'grades.prospectus_subject.prerequisites',
             ])

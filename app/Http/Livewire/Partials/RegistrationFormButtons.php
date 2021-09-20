@@ -30,7 +30,7 @@ class RegistrationFormButtons extends Component
     }
 
     public function render() { return
-        view('livewire.partials.registration-form-buttons', ['sections' => $this->getSections()]);
+        view('livewire.partials.registration-form-buttons');
     }
 
     public function authorizeAction(string $action, string $message)
