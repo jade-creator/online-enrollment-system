@@ -21,6 +21,8 @@ class RegistrationFormButtons extends Component
         'pending',
         'reject',
         'submitSchedule',
+        'finalize',
+        'enroll',
     ];
 
     public function mount() {
@@ -45,10 +47,33 @@ class RegistrationFormButtons extends Component
         }
     }
 
+    public function enrollConfirm() { return
+        $this->confirm('enroll', "Are you sure?. ");
+    }
+
+    public function enroll() {
+        $this->authorizeAction('enroll', $this->registration->student->user->person->full_name.' has been enrolled');
+    }
+
+    public function finalizeConfirm() { return
+        $this->confirm('finalize', "Are you sure? Click 'OK' for assessment.");
+    }
+
+    public function finalize() {
+        $this->authorizeAction('confirm', $this->registration->student->user->person->full_name."'s registration has been finalized. Please pay the fee/s.");
+    }
+
+    public function pendingConfirm() { return
+        $this->confirm('pending', "Are you sure? Registration's status will be changed to 'pending'.");
+    }
+
+    public function pending() {
+        $this->authorizeAction('pending', $this->registration->student->user->person->full_name."'s registration is on pending.");
+    }
+
     //submit confirm student submit reg for assessment.
     public function submit() { return
-        $this->confirm('submitSchedule', "Are you sure? Registration's status will be change to 'confirming'.
-        Section under this status cannot be changed.");
+        $this->confirm('submitSchedule', "Are you sure? Please check the schedule, it will not be submitted if there's a conflict. Section/s cannot be change once submitted.");
     }
 
     //student submit reg for assessment.
@@ -63,20 +88,6 @@ class RegistrationFormButtons extends Component
 
     public function reject() {
         $this->authorizeAction('reject', $this->registration->student->user->person->full_name."'s registration was rejected.");
-    }
-
-    public function pendingConfirm() { return
-        $this->confirm('pending', "Are you sure? Registration's status will be on pending.");
-    }
-
-    public function pending() {
-        $this->authorizeAction('pending', $this->registration->student->user->person->full_name."'s registration is on pending.");
-    }
-
-    public function enroll()
-    {
-        $this->validate();
-        $this->authorizeAction('enroll', $this->registration->student->user->person->full_name.' has been enrolled');
     }
 
     public function getSections() { return

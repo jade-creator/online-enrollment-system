@@ -27,8 +27,11 @@ class FeesExport implements FromQuery, WithHeadings, WithMapping
     {
         return [
             'Fee Id',
-            'Name',
-            'Price',
+            'Category',
+            'Program',
+            'Description',
+            'Amount',
+            'Added at',
         ];
     }
 
@@ -36,8 +39,11 @@ class FeesExport implements FromQuery, WithHeadings, WithMapping
     {
         return [
             $fee->id ?? 'N/A',
-            $fee->name ?? 'N/A',
+            $fee->category->name ?? 'N/A',
+            $fee->program->code ?? 'N/A',
+            $fee->description ?? 'N/A',
             $fee->price ?? 'N/A',
+            $fee->created_at ?? 'N/A',
         ];
     }
 }

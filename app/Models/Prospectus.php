@@ -85,10 +85,6 @@ class Prospectus extends Model
         $this->hasMany(Section::class);
     }
 
-    public function fees() { return
-        $this->belongsToMany(Fee::class)->withTimestamps();
-    }
-
     public function level() { return
         $this->belongsTo(Level::class);
     }

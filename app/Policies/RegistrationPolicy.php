@@ -15,20 +15,24 @@ class RegistrationPolicy
     }
 
     public function reject(User $user, Registration $registration) { return
-        $this->isAdmin($user);
+        $this->isAdmin($user) && ($registration->status->name == 'finalized' || $registration->status->name == 'enrolled');
     }
 
     public function pending(User $user, Registration $registration) { return
-        $this->isAdmin($user) && $registration->status->name !== 'pending';
+        $this->isAdmin($user) && ($registration->status->name == 'confirming' || $registration->status->name == 'denied');
     }
 
     public function enroll(User $user, Registration $registration) { return
-        $this->isAdmin($user) && $registration->status->name == 'pending';
+        $this->isAdmin($user) && $registration->status->name == 'finalized';
+    }
+
+    public function confirm(User $user, Registration $registration) { return
+        $this->isAdmin($user) && ($registration->status->name == 'confirming' || $registration->status->name == 'denied');
     }
 
     /*student submitting registration for assessment.*/
     public function submit(User $user, Registration $registration) { return
-        ($user->role->name == 'student' || $this->isAdmin($user)) && $registration->status->name == 'pending';
+        ($user->role->name == 'student' || $this->isAdmin($user)) && ($registration->status->name == 'pending' || $registration->status->name == 'confirming');
     }
 
     /*student selecting a section*/

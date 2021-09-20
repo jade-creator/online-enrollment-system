@@ -2,31 +2,57 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Fee extends Model
+class Fee extends BaseModel
 {
-    use HasFactory, SoftDeletes;
+    use SoftDeletes;
 
     protected $fillable = [
-        'name',
+        'program_id',
+        'category_id',
         'price',
+        'description',
     ];
 
-    public function getPriceAttribute($value) { 
-        $value = $value / 100;
+    public $with = [
+        'category',
+        'program',
+    ];
+
+    public function scopeFilterByCategory($query, $categoryId) {
+        return $query->when(filled($categoryId), function ($query) use ($categoryId) {
+            return $query->where('category_id', $categoryId);
+        });
+    }
+
+    public function scopeFilterByProgram($query, $programId) {
+        return $query->when(filled($programId), function ($query) use ($programId) {
+            return $query->where('program_id', $programId);
+        });
+    }
+
+    public function getFormattedPriceAttribute($value) { return
+        'PHP '.number_format($value, 2, '.', ',');
+    }
+
+    public function getPriceAttribute() {
+        $value = $this->attributes['price'] / 100;
         return number_format((float)$value, 2, '.', '');
     }
 
-    public function setPriceAttribute($value) 
-    { 
+    public function setPriceAttribute($value)
+    {
         $this->attributes['price'] = $value * 100;
     }
 
-    public function prospectuses() { return
-        $this->belongsToMany(Prospectus::class)->withTimestamps();
+    public function category() { return
+        $this->belongsTo(Category::class);
+    }
+
+    public function program() { return
+        $this->belongsTo(Program::class);
     }
 
     public static function search(?string $search)
@@ -37,7 +63,8 @@ class Fee extends Model
             : static::where(function ($query) use ($search){
                 return $query
                 ->where('id', 'LIKE', $search)
-                ->orWhere('name', 'LIKE', $search);
+                ->orWhere('price', 'LIKE', $search)
+                ->orWhere('description', 'LIKE', $search);
             });
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFeeProspectusTable extends Migration
+class CreateFeeRegistrationTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class CreateFeeProspectusTable extends Migration
      */
     public function up()
     {
-        Schema::create('fee_prospectus', function (Blueprint $table) {
-            $table->foreignId('fee_id')->constrained();
-            $table->foreignId('prospectus_id')->constrained();
+        Schema::create('fee_registration', function (Blueprint $table) {
+            $table->id();
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ class CreateFeeProspectusTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('fee_prospectus');
+        Schema::dropIfExists('fee_registration');
     }
 }

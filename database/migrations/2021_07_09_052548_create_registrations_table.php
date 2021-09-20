@@ -19,6 +19,7 @@ class CreateRegistrationsTable extends Migration
             $table->foreignId('section_id')->nullable()->constrained();
             $table->foreignId('student_id')->constrained();
             $table->foreignId('prospectus_id')->constrained();
+            $table->integer('total_unit')->default(0);
             $table->boolean('isRegular')->default(1);
             $table->boolean('isNew')->default(0);
             $table->boolean('isExtension')->default(0);

@@ -70,7 +70,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
                 Route::get('/released', PreEnrollmentComponent\ReleasedPreEnrollmentComponent::class)->name('released.enrollments.view');
             });
 
-            Route::get('/fees', FeeComponent\FeeViewComponent::class)->name('fees.view');
+            Route::group(['prefix' => 'fees', 'as' => 'fees.'], function (){
+                Route::get('', FeeComponent\FeeIndexComponent::class)->name('view');
+                Route::get('/create', FeeComponent\FeeAddComponent::class)->name('create');
+                Route::get('{fee}/update', FeeComponent\FeeUpdateComponent::class)->name('update');
+                Route::get('{fee}/destroy', FeeComponent\FeeDestroyComponent::class)->name('destroy');
+            });
 
             Route::get('/subjects', SubjectComponent\SubjectIndexComponent::class)->name('subjects.view');
 
