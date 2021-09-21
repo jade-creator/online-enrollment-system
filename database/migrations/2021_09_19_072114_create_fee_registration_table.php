@@ -14,7 +14,9 @@ class CreateFeeRegistrationTable extends Migration
     public function up()
     {
         Schema::create('fee_registration', function (Blueprint $table) {
-            $table->id();
+            $table->foreignId('fee_id')->constrained();
+            $table->foreignId('registration_id')->constrained();
+            $table->bigInteger('total_fee');
             $table->timestamps();
         });
     }
