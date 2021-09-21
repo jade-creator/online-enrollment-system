@@ -19,6 +19,7 @@ use App\Http\Livewire\Forms\User;
 use App\Http\Livewire\Admin\ProspectusComponent;
 use App\Http\Livewire\Student;
 use App\Http\Livewire\Student\RegistrationComponent;
+use App\Http\Controllers\RegistrationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -42,7 +43,17 @@ require_once __DIR__ . '/jetstream.php';
 //------START GUEST----
 Route::get('/', function () {
     return redirect()->route('login');
+
 });
+
+// View pdf
+Route::get('/view-pdf', function () {
+    return view('pdf.registration');
+
+});
+
+// Downlaod pdf
+Route::get('/download-pdf', [RegistrationController::class, 'downloadPDF'])->name('download.pdf');
 //------END GUEST-------
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function (){
@@ -82,6 +93,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
             Route::get('/programs', ProgramComponent\ProgramIndexComponent::class)->name('programs.view');
 
             Route::get('/users', UserComponent\UserIndexComponent::class)->name('users.view');
+
         });
     });
     // end admin
