@@ -105,6 +105,15 @@ class Registration extends BaseModel
             ->whereNull('released_at');
     }
 
+    public function assessment() { return
+        $this->hasOne(Assessment::class);
+    }
+
+    public function fees() { return
+        $this->belongsToMany(Fee::class)->withPivot(['total_fee'])
+            ->withTimestamps();
+    }
+
     public function classes() { return
         $this->belongsToMany(Schedule::class, 'classes', 'registration_id', 'schedule_id')->withTimestamps();
     }

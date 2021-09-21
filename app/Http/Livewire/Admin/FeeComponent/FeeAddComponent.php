@@ -14,6 +14,8 @@ class FeeAddComponent extends Component
 
     public Models\Fee $fee;
 
+    protected $listeners = ['refresh' => '$refresh'];
+
     public function rules()
     {
         return [

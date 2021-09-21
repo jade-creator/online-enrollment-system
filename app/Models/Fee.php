@@ -47,6 +47,11 @@ class Fee extends BaseModel
         $this->attributes['price'] = $value * 100;
     }
 
+    public function registrations() { return
+        $this->belongsToMany(Registration::class)->withPivot(['total_fee'])
+            ->withTimestamps();
+    }
+
     public function category() { return
         $this->belongsTo(Category::class);
     }

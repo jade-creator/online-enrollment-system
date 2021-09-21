@@ -4,9 +4,24 @@ namespace App\Services\Registration;
 
 
 use App\Models;
+use FontLib\TrueType\Collection;
 
 class RegistrationService
 {
+    public function saveFees(Models\Registration $registration, array $fees = []) : Models\Registration
+    {
+        if (count($fees) == 0) return $registration;
+
+        $registration->fees()->detach();
+
+        foreach ($fees as $key => $fee) {
+            if ($fee[0]) $registration->fees()->attach($key, ['total_fee' => $fee[1]]);
+        }
+
+        return $registration;
+    }
+
+
     public function selectSection(Models\Registration $registration, int $sectionId, $schedules) : Models\Registration
     {
         $registration->section_id = $sectionId;

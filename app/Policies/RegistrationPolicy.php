@@ -23,7 +23,7 @@ class RegistrationPolicy
     }
 
     public function enroll(User $user, Registration $registration) { return
-        $this->isAdmin($user) && $registration->status->name == 'finalized';
+        $this->isAdmin($user) && $registration->status->name == 'finalized'; //TODO: CHECK FOR FINAL ASSESSMENT
     }
 
     public function confirm(User $user, Registration $registration) { return
