@@ -5,152 +5,133 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <style type="text/css" media="all">
-        body{
+    <title>Registration</title>
+    <style>
+        body {
+            position: relative;
             font-family: Arial, Helvetica, sans-serif;
         }
 
-        .container{
+        .container {
             width: 100%;
             margin-bottom: 10px;
-        }
-
-        .title{
-            position: relative;
-            width: 100%;
-            background-color: rgb(71, 120, 185, 0.2);
-            padding-top: 2px;
-            padding-bottom: 2px;
-            padding-left: 10px;
+            border: 1px solid #ecf0f1;
             border-top-left-radius: 0.375rem;
             border-top-right-radius: 0.375rem;
+            overflow: hidden;
+        }
+
+        .title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: rgba(71, 120, 185, 0.2);
+            padding: 0 1.5rem;
             font-weight: 600;
         }
 
-        .title .right-portion{
+        .title .right-portion {
             font-weight: 400;
             font-size: 0.75rem;
-            position: absolute;
-            right: 10px;
-            top: 23px;
         }
 
-        .table-container{
+        .table-container {
             padding: 1rem;
             font-size: 0.75rem;
             line-height: 1rem;
         }
 
-        table{
+        table {
             width: 100%;
         }
 
-        td{
-            padding-bottom: 1rem;
+        td {
+            padding-bottom: 0.2rem;
         }
 
-        .td-center{
+        .td-center {
             text-align: center;
         }
 
-        .td-bold{
+        .td-bold {
             font-weight: bold;
         }
 
-        td span{
+        td span {
             color: rgba(107, 114, 128, 1);
             padding-left: 0.5rem;
         }
 
-        .logo-container{
-            text-align: left;
+        .assessment-signatures {
+            display: flex;
+            align-items: flex-start;
         }
 
-        .container-flexy{
-            position:  relative;
-        }
-
-        .assessment-container{
+        .assessment,
+        .signatures {
             width: 50%;
         }
 
-        .approved-container{
-            position: absolute;
-            top: 0;
-            right: 0;
-            font-size: 12px;
+        .assessment {
+            height: auto;
+        }
+
+        .signatures {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
             text-align: right;
+            font-size: 10px;
         }
 
-        .sign-container{
-            margin-top: 10px;
-            position: absolute;
-            right: 0;
+        .signature-line {
+        width: 50%;
         }
 
-        /* #sign-1{
-            top: 5px;
-        } */
-
-        #sign-line-1{
-            top: 10px;
-        }
-        #sign-line-2{
-            top: 10px;
-        }
-        #sign-2{
-            top: 90px;
+        .signature-line p {
+            text-align: center;
+            padding-top: 5px;
+            margin-top: 2rem;
+            text-transform: uppercase;
+            border-top: 1px solid black;
         }
 
-        .signs{
-            height: 1px;
-            width: 150px;
-            position: absolute;
-            right: 0;
-            background-color: black;
-        }
-
-        footer{
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
             text-align: left;
             font-size: 12px;
             font-weight: bolder;
-        }
-        
-        .sign-approved{
-            margin-top: 10px;
         }
     </style>
 </head>
 
 <body>
-    <div class="container logo-container">
+    <div class="logo-container">
         <img src="https://drive.google.com/uc?id=1OBzJloHutLsDw2E9V-VTLc26ZIetJLrW" alt="logo">
     </div>
     <div class="container">
         <div class="title">
             <p>Pre Registration Info</p>
-            <p class="right-portion">{{ Carbon\Carbon::parse($registration->created_at)->format('F j, Y') }}</p>
+            <p class="right-portion">Lorem ipsum dolor sit amet.</p>
         </div>
         <div class="table-container">
             <table>
                     <tr>
-                        <td>Registration ID: <span>{{ $registration->id ?? 'N/A' }}</span></td>
-                        <td>Status: <span>{{ $registration->status->name ?? 'N/A'  }}</span></td>
+                        <td>Registration ID: <span>Lorem ipsum dolor sit amet.</span></td>
+                        <td>Status: <span>Enrolled</span></td>
                     </tr>
                     <tr>
-                        <td>Level: <span>{{ $registration->prospectus->level->level ?? 'N/A' }}</span></td>
-                        <td>Program: <span>{{ $registration->prospectus->program->code ?? 'N/A'  }}</span></td>
+                        <td>Level: <span>1st Year</span></td>
+                        <td>Program: <span>BSIT</span></td>
                     </tr>
                     <tr>
-                        <td>Track: <span>{{ $registration->prospectus->strand->track->track ?? 'N/A' }}</span></td>
-                        <td>Strand: <span>{{ $registration->prospectus->strand->code ?? 'N/A'  }}</span></td>
+                        <td>Term: <span>First term</span></td>
+                        <td>School Year: <span>2020-2021</span></td>
                     </tr>
                     <tr>
-                        <td>Term: <span class="text-gray-500 pl-2">{{ $registration->prospectus->term->term ?? 'N/A' }}</span></td>
-                        <td>School Year: <span>{{ Carbon\Carbon::parse($registration->created_at)->format('Y') .' - '. Carbon\Carbon::parse($registration->created_at)->addYear()->format('Y') }}</span></td>
-                    </tr>
-                    <tr>
-                        <td>Section: <span>{{ $registration->section->name ?? 'N/A' }}</span></td>
+                        <td>Section: <span>1E</span></td>
                     </tr>
             </table>
         </div>
@@ -163,28 +144,28 @@
         <div class="table-container">
             <table>
                 <tr>
-                    <td>Student ID: <span>{{ $registration->student->isStudent ? $registration->student->custom_student_id : 'N/A' }}</span></td>
-                    <td>Type: <span>{{ $registration->isNew ? 'New' : 'Old' }}</span></td>
+                    <td>Student ID: <span>STD-0001</span></td>
+                    <td>Type: <span>New</span></td>
                 </tr>
                 <tr>
-                    <td>Name: <span>{{ $registration->student->user->person->full_name ?? 'N/A' }}</span></td>
-                    <td>Email: <span>{{ $registration->student->user->email ?? 'N/A'  }}</span></td>
+                    <td>Name: <span>Andrew E. Ferrer</span></td>
+                    <td>Email: <span>andrewferrer80@gmail.com</span></td>
                 </tr>
                 <tr>
-                    <td>Mobile Number: <span>{{ $registration->student->user->person->contact->mobile_number ?? 'N/A' }}</span></td>
-                    <td>Address: <span>{{ $registration->student->user->person->contact->address ?? 'N/A'  }}</span></td>
+                    <td>Mobile Number: <span>09696969696</span></td>
+                    <td>Address: <span>#69 Trust st., Orange Carbon Fiber City</span></td>
                 </tr>
                 <tr>
-                    <td>Birthdate: <span>{{ Carbon\Carbon::parse($registration->student->user->person->detail->birthdate)->format('F j, Y') ?? 'N/A' }}</span></td>
-                    <td>Birthplace: <span>{{ $registration->student->user->person->detail->birthplace ?? 'N/A'  }}</span></td>
+                    <td>Birthdate: <span>June 6, 1969</span></td>
+                    <td>Birthplace: <span>Fiber City</span></td>
                 </tr>
                 <tr>
-                    <td>Gender: <span>{{ $registration->student->user->person->detail->gender ?? 'N/A' }}</span></td>
-                    <td>Civil Status: <span>{{ $registration->student->user->person->detail->civil_status ?? 'N/A'  }}</span></td>
+                    <td>Gender: <span>Male</span></td>
+                    <td>Civil Status: <span>Single</span></td>
                 </tr>
                 <tr>
-                    <td>Religion: <span>{{ $registration->student->user->person->detail->religion ?? 'N/A' }}</span></td>
-                    <td>Nationality: <span>{{ $registration->student->user->person->detail->country->name ?? 'N/A'  }}</span></td>
+                    <td>Religion: <span>Atheist</span></td>
+                    <td>Nationality: <span>Philippines</span></td>
                 </tr>
             </table>
         </div>
@@ -192,8 +173,8 @@
 
     <div class="container">
         <div class="title">
-            <p>Subjects</p>
-            <p class="right-portion">Total Units: {{ $registration->prospectus->subjects->sum('unit') }}</p>
+            <p>Class Schedules</p>
+            <p class="right-portion">Total Units: 69</p>
         </div>
         <div class="table-container">
             <table>
@@ -204,62 +185,46 @@
                     <th>Unit</th>
                     <th>Pre Requisite</th>
                 </tr>
-                @forelse ($registration->prospectus->subjects as $subject)
-                    <tr>
-                        <td class="td-center">{{ $subject->id ?? 'N/A' }}</td>
-                        <td class="td-center">{{ $subject->code ?? 'N/A' }}</td>
-                        <td class="td-center">{{ $subject->title ?? 'N/A' }}</td>
-                        <td class="td-center">{{ $subject->unit ?? 'N/A' }}</td>
-                        <td class="td-center">
-                            @forelse ($subject->requisites as $requisite)
-                                {{ $loop->first ? '' : ', '  }}
-                                <span>&nbsp;{{ $requisite->code }}</span>
-                            @empty
 
-                            @endforelse
+                    <tr>
+                        <td class="td-center">ICT</td>
+                        <td class="td-center">IT49</td>
+                        <td class="td-center">Lorem ipsum dolor sit amet.</td>
+                        <td class="td-center">3</td>
+                        <td class="td-center">
+
+                                <span>IT48</span>
+
                         </td>
                     </tr>
-                @empty
-                    <tr>
-                        <td rowspan="4">No Subject Found.</td>
-                    </tr>
-                @endforelse
+
             </table>
         </div>
     </div>
 
-    <div class="container container-flexy">
-        <div class="assessment-container">
+    <div class="assessment-signatures">
+        <div class="container assessment">
             <div class="title">
                 <p>Assessment</p>
-                <p class="right-portion">Total: PHP {{ number_format((float)$registration->prospectus->fees->sum('price'), 2, '.', '') }}</p>
+                <p class="right-portion"><b>Total: PHP 234,304</b></p>
             </div>
             <div class="table-container">
                 <table>
-                    @forelse ($registration->prospectus->fees as $fee)
                         <tr>
-                            <td >{{ $fee->name ?? 'N/A' }}</td>
-                            <td>PHP{{ $fee->price ?? 'N/A' }}</td>
+                            <td >Computer lab</td>
+                            <td>PHP 333.00</td>
                         </tr>
-                    @empty
-                        <tr>
+                        <!-- <tr>
                             <td rowspan="2">No Payment Found.</td>
-                        </tr>
-                    @endforelse
+                        </tr> -->
                 </table>
             </div>
         </div>
-        <div class="approved-container">
-            <p>Present this certificate for any transaction within the University.</p>
-            <div class="">
-                <div id="sign-1" class="sign-container">
-                    <div id="sign-line-1" class="signs">&nbsp;</div>
-                    <p>STUDENT'S SIGNATURE</p>
-                </div>
-                <div id="sign-2" class="sign-container">
-                    <div id="sign-line-2" class="signs">&nbsp;</div>
-                    <p>APPROVED BY</p>
-                </div>
+        <div class="signatures">
+            <h4>Present this certificate for any transaction within the University.</h4>
+            <div class="signature-line">
+                <p>Student Signature</p>
+                <p>Approved By:</p>
             </div>
         </div>
     </div>
