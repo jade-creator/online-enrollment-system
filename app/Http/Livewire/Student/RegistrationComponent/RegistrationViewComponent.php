@@ -11,7 +11,7 @@ class RegistrationViewComponent extends Component
     use AuthorizesRequests;
 
     public Registration $registration;
-    public int $totalUnit = 0;
+    public float $totalUnit = 0;
     public $regId;
 
     protected $listeners = ['refresh' => '$refresh'];

@@ -17,6 +17,7 @@ class AssessmentIndexComponent extends Component
     public Models\Registration $registration;
     public Models\Assessment $assessment;
     public ?float $grandTotal = null;
+    public float $totalUnit = 0;
     public string $additional = '0';
     public array $fees = [];
 
@@ -31,24 +32,28 @@ class AssessmentIndexComponent extends Component
     }
 
     public function mount() {
-        if ($this->registration->prospectus->program->fees->isNotEmpty()) {
-            $category = Models\Category::where('name', 'Tuition Fee (multiplied by unit/s)')->first();
+        try {
+            if ($this->registration->prospectus->program->fees->isNotEmpty()) {
+                $category = Models\Category::where('name', 'Tuition Fee (multiplied by unit/s)')->first();
 
-            foreach ($this->registration->prospectus->program->fees as $fee) {
-                $totalFee = $fee->price;
-                if ($category && $fee->category_id == $category->id) $totalFee = $this->registration->total_unit * $fee->price;
+                foreach ($this->registration->prospectus->program->fees as $fee) {
+                    $totalFee = $fee->price;
+                    if ($category && $fee->category_id == $category->id) $totalFee = $this->totalUnit * $fee->price;
 
-                $this->fees[$fee->id] = [TRUE, $totalFee];
+                    $this->fees[$fee->id] = [TRUE, $totalFee];
+                }
             }
+
+            $this->fill([
+                'assessment' => new Models\Assessment(),
+                'assessment.isPercentage' => null,
+                'assessment.discount_amount' => 0,
+            ]);
+
+            if (isset($this->registration->assessment)) $this->assessment = $this->registration->assessment;
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
         }
-
-        $this->fill([
-            'assessment' => new Models\Assessment(),
-            'assessment.isPercentage' => null,
-            'assessment.discount_amount' => 0,
-        ]);
-
-        if (isset($this->registration->assessment)) $this->assessment = $this->registration->assessment;
     }
 
     public function render() { return
@@ -78,7 +83,7 @@ class AssessmentIndexComponent extends Component
         try {
             $this->authorize('create', $this->assessment);
 
-            $this->grandTotal = (new AssessmentComputationService())->computeGrandTotal($this->additional, $this->registration->total_unit, $this->fees, $this->assessment);
+            $this->grandTotal = (new AssessmentComputationService())->computeGrandTotal($this->additional, $this->totalUnit, $this->fees, $this->assessment);
 
             $this->registration = (new RegistrationService())->saveFees($this->registration, $this->fees);
         } catch (\Exception $e) {
