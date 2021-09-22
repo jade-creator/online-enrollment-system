@@ -147,7 +147,7 @@
             @endforelse
 
         {{-- ASSESSMENT OF FEES --}}
-        <livewire:student.assessment-component.assessment-index-component :registration="$registration" key="{{ 'student-assessment-index-component'.now() }}"/>
+        <livewire:student.assessment-component.assessment-index-component :registration="$registration" :totalUnit="$totalUnit" key="{{ 'student-assessment-index-component'.now() }}"/>
 
         {{--Main action buttons: submit,confirm,enroll,pending,reject--}}
         <livewire:partials.registration-form-buttons :registration="$registration" key="{{ 'registration-form-buttons-'.now() }}">
