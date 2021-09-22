@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PaypalPaymentController;
 use App\Http\Livewire\Admin\Dashboard;
 use App\Http\Livewire\Admin\FeeComponent;
 use App\Http\Livewire\Admin\GradeComponent;
@@ -39,17 +40,18 @@ require_once __DIR__ . '/jetstream.php';
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('paywithpaypal', [PaypalPaymentController::class, 'payWithPaypal'])->name('paywithpaypal');
+Route::post('paypal', [PaypalPaymentController::class, 'postPaymentWithpaypal'])->name('paypal');
+Route::get('paypal', [PaypalPaymentController::class, 'getPaymentStatus'])->name('status');
 
 //------START GUEST----
 Route::get('/', function () {
     return redirect()->route('login');
-
 });
 
 // View pdf
 Route::get('/view-pdf', function () {
     return view('pdf.registration');
-
 });
 
 // Downlaod pdf
