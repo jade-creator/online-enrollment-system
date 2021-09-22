@@ -8,7 +8,7 @@
             <div class="grid grid-cols-8 gap-6">
                 <div class="mt-4 col-span-8">
                     <x-jet-label for="subject" value="{{ __('Subject') }}" />
-                    <select wire:model.defer="schedule.subject_id" name="subject" class="w-full mt-1 bg-white flex-1 p-2 tracking-wide border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" autofocus required>
+                    <select wire:model.defer="schedule.prospectus_subject_id" name="subject" class="w-full mt-1 bg-white flex-1 p-2 tracking-wide border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" autofocus required>
                         @forelse ($prospectusSubjects as $prospectus_subject)
                             @if ($loop->first)
                                 <option value="" selected>-- choose a subject --</option>
@@ -18,7 +18,7 @@
                             <option value="">No records</option>
                         @endforelse
                     </select>
-                    <x-jet-input-error for="schedule.subject_id" class="mt-2"/>
+                    <x-jet-input-error for="schedule.prospectus_subject_id" class="mt-2"/>
                 </div>
                 <div class="mt-4 col-span-8">
                     <x-jet-label for="day" value="{{ __('Day') }}" />
