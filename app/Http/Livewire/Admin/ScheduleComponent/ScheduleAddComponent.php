@@ -22,7 +22,7 @@ class ScheduleAddComponent extends Component
     public function rules()
     {
         return [
-            'schedule.subject_id' => ['required'],
+            'schedule.prospectus_subject_id' => ['required'],
             'schedule.day_id' => ['required'],
             'schedule.start_time' => ['required'],
             'schedule.end_time' => ['required', 'after:schedule.start_time'],
