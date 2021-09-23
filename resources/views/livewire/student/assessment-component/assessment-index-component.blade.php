@@ -62,10 +62,10 @@
                         @else
                             {{--STUDENT: DISPLAY ONLY FOR INITIAL ASSESSMENT.--}}
                             @can ('submitted', $registration)
-                                @forelse ($registration->fees as $index => $fee)
+                                @forelse ($registration->prospectus->program->fees as $index => $fee)
                                     <div class="col-span-6 flex items-center justify-between">
                                         <p class="text-gray-600 text-base">{{ $fee->category->name ?? 'N/A' }}</p>
-                                        <p class="text-black font-semibold">{{ $fee->getFormattedPriceAttribute($fee->pivot->total_fee) ?? 'N/A' }}</p>
+                                        <p class="text-black font-semibold">{{ $fee->getFormattedPriceAttribute($fee->price) ?? 'N/A' }}</p>
                                     </div>
                                 @empty
                                     <p>No calculated fees.</p>
