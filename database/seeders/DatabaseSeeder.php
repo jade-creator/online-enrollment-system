@@ -32,6 +32,10 @@ class DatabaseSeeder extends Seeder
             SectionSeeder::class,
             DaySeeder::class,
             CategorySeeder::class,
+
+            /*test*/
+            ProspectusSubjectSeeder::class,
+            ScheduleSeeder::class,
         ]);
     }
 }
