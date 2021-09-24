@@ -40,9 +40,6 @@ require_once __DIR__ . '/jetstream.php';
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('paywithpaypal', [PaypalPaymentController::class, 'payWithPaypal'])->name('paywithpaypal');
-Route::post('paypal', [PaypalPaymentController::class, 'postPaymentWithpaypal'])->name('paypal');
-Route::get('paypal', [PaypalPaymentController::class, 'getPaymentStatus'])->name('status');
 
 //------START GUEST----
 Route::get('/', function () {
@@ -123,12 +120,18 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
 
             Route::group(['prefix' => 'pre-registrations', 'as' => 'registrations.'], function () {
                 Route::get('', RegistrationComponent\RegistrationIndexComponent::class)->name('index');
-                Route::get('/create', RegistrationComponent\RegistrationAddComponent::class)->middleware(['password.confirm'])->name('create');
+                Route::get('/create', RegistrationComponent\RegistrationAddComponent::class)->name('create');
                 Route::get('/{prospectusSlug}/regular', RegistrationComponent\RegularAddComponent::class)->name('regular.create');
                 Route::get('/{prospectusSlug}/irregular', RegistrationComponent\IrregularAddComponent::class)->name('irregular.create');
             });
 
             Route::get('/grades', Student\StudentGradeViewComponent::class)->name('grades.view');
+
+            //paypal routes
+            Route::get('paywithpaypal/{registrationId?}', [PaypalPaymentController::class, 'payWithPaypal'])->name('paywithpaypal');
+            Route::post('paypal', [PaypalPaymentController::class, 'postPaymentWithpaypal'])->name('paypal');
+            Route::get('paypal', [PaypalPaymentController::class, 'getPaymentStatus'])->name('status');
+            Route::get('/payments', Student\Payment\PaymentIndexComponent::class)->name('payments.view');
         });
     });
     // end student

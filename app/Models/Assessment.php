@@ -30,15 +30,15 @@ class Assessment extends Model
     }
 
     public function getBalanceAttribute($value) { return
-        $this->attributes['balance'] = $this->formatTwoDecimalPlaces($value);
+        $this->formatTwoDecimalPlaces($value);
     }
 
     public function getGrandTotalAttribute($value) { return
-        $this->attributes['grand_total'] = $this->formatTwoDecimalPlaces($value);
+        $this->formatTwoDecimalPlaces($value);
     }
 
     public function getAdditionalAttribute($value) { return
-        $this->attributes['additional'] = $this->formatTwoDecimalPlaces($value);
+        $this->formatTwoDecimalPlaces($value);
     }
 
     public function addTwoZeroDigits($value) { return

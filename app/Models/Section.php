@@ -30,7 +30,7 @@ class Section extends BaseModel
                     $query->orderBy('day_id','ASC')
                         ->orderBy('start_time', 'ASC');
                 },
-                'schedules.prospectusSubject',
+                'schedules.prospectusSubject.subject',
                 'schedules.day',
             ]);
     }

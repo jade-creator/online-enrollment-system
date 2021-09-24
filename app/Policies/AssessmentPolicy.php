@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Assessment;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -13,7 +14,13 @@ class AssessmentPolicy
         $user->role->name == 'admin';
     }
 
-    public function view(User $user) { return true; }
+    public function proceedToPayment(User $user, Assessment $assessment) { return
+        $user->role->name == 'student' && filled($assessment);
+    }
+
+    public function view(User $user) { return
+        $this->isAdmin($user);
+    }
 
     public function create(User $user) { return
         $this->isAdmin($user);

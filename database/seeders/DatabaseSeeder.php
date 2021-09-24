@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
             /*test*/
             ProspectusSubjectSeeder::class,
             ScheduleSeeder::class,
+            FeeSeeder::class,
         ]);
     }
 }

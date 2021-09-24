@@ -25,7 +25,7 @@
                             @forelse ($registration->fees as $index => $fee)
                                 <div class="col-span-6 flex items-center justify-between">
                                     <p class="text-gray-600 text-base">{{ $fee->category->name ?? 'N/A' }}</p>
-                                    <p class="text-black font-semibold">{{ $fee->getFormattedPriceAttribute($fee->pivot->total_fee) ?? 'N/A' }}</p>
+                                    <p class="text-black font-semibold">{{ $fee->getFormattedPriceAttribute($fee->formatTwoDecimalPlaces($fee->pivot->total_fee)) ?? 'N/A' }}</p>
                                 </div>
 
                                 @if ($loop->last)
@@ -76,7 +76,7 @@
                                     @forelse ($registration->fees as $index => $fee)
                                         <div class="col-span-6 flex items-center justify-between">
                                             <p class="text-gray-600 text-base">{{ $fee->category->name ?? 'N/A' }}</p>
-                                            <p class="text-black font-semibold">{{ $fee->getFormattedPriceAttribute($fee->pivot->total_fee) ?? 'N/A' }}</p>
+                                            <p class="text-black font-semibold">{{ $fee->getFormattedPriceAttribute($fee->formatTwoDecimalPlaces($fee->pivot->total_fee)) ?? 'N/A' }}</p>
                                         </div>
 
                                         @if ($loop->last)
@@ -156,14 +156,16 @@
 
                     <x-slot name="actions">
                         @isset ($registration->assessment)
-                            <x-jet-button class="w-full bg-green-500 hover:bg-green-600 flex items-center justify-center">
-                                <x-icons.fee-icon/>
-                                <span class="mx-2">{{ __('PROCEED TO PAYMENT') }}</span>
-                            </x-jet-button>
-{{--                            <x-jet-button class="w-full bg-green-500 hover:bg-green-600 flex items-center justify-center">--}}
-{{--                                <span class="mx-2">{{ __('PAID AMOUNT: PHP 250.00') }}</span>--}}
-{{--                                <span class="animate-pulse"><x-icons.right-arrow-icon/></span>--}}
-{{--                            </x-jet-button>--}}
+                            @can ('proceedToPayment', $registration->assessment)
+                                <a href="{{ route('student.paywithpaypal', ['registrationId' => $this->registration->id]) }}">
+                                    Balance X,XXX.XX: Proceed to Payment
+                                </a>
+                            @elsecan ('view', $registration->assessment)
+                                <x-jet-button class="w-full bg-indigo-500 hover:bg-indigo-800 flex items-center justify-center">
+                                    <x-icons.fee-icon/>
+                                    <span class="mx-2">{{ __('Balance X,XXX.XX') }}</span>
+                                </x-jet-button>
+                            @endcan
                         @else
                             @if (! isset($grandTotal))
                                 @can ('enroll', $registration)

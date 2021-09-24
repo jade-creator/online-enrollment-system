@@ -37,14 +37,22 @@ class Fee extends BaseModel
         'PHP '.number_format($value, 2, '.', ',');
     }
 
-    public function getPriceAttribute() {
-        $value = $this->attributes['price'] / 100;
+    public function formatTwoDecimalPlaces($value) {
+        $value = $value / 100;
         return number_format((float)$value, 2, '.', '');
+    }
+
+    public function getPriceAttribute($value) { return
+        $this->formatTwoDecimalPlaces($value);
+    }
+
+    public function addTwoZeroDigits($value) { return
+        $value * 100;
     }
 
     public function setPriceAttribute($value)
     {
-        $this->attributes['price'] = $value * 100;
+        $this->attributes['price'] =$this->addTwoZeroDigits($value);
     }
 
     public function registrations() { return

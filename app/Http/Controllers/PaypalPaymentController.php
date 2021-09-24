@@ -3,7 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests;
+use App\Models\Registration;
+use App\Services\PaypalPaymentService;
+use App\Traits\WithSweetAlert;
 use Illuminate\Http\Request;
+use PayPal\Api\InputFields;
+use PayPal\Api\WebProfile;
 use Validator;
 use URL;
 use Session;
@@ -24,28 +29,48 @@ use PayPal\Api\Transaction;
 
 class PaypalPaymentController extends Controller
 {
+    use WithSweetAlert;
+
+    public ?Registration $registration;
     private $_api_context;
 
     public function __construct()
     {
+        $this->registration = new Registration();
+
         $paypal_configuration = \Config::get('paypal');
         $this->_api_context = new ApiContext(new OAuthTokenCredential($paypal_configuration['client_id'], $paypal_configuration['secret']));
         $this->_api_context->setConfig($paypal_configuration['settings']);
     }
 
-    public function payWithPaypal()
+    public function payWithPaypal($registrationId = null)
     {
-        return view('paywithpaypal');
+        $this->registration = Registration::with('assessment')->find($registrationId);
+        if (is_null($this->registration)) {
+            return redirect()->route('student.payments.view');
+        }
+
+        Session::put('registration_id', $this->registration->id);
+        return view('paywithpaypal', ['registration' => $this->registration]);
     }
 
     public function postPaymentWithpaypal(Request $request)
     {
+        $validatedData = $request->validate([
+            'amount' => ['required', 'numeric', 'min:1'],
+            'balance' => ['required', 'numeric', 'min:1'],
+        ]);
+
+        $registration_id = Session::get('registration_id');
+        Session::put('amount', $request->get('amount'));
+
+
         $payer = new Payer();
         $payer->setPaymentMethod('paypal');
 
         $item_1 = new Item();
 
-        $item_1->setName('Product 1')
+        $item_1->setName('Registration ID: '.$registration_id)
             ->setCurrency('PHP')
             ->setQuantity(1)
             ->setPrice($request->get('amount'));
@@ -60,31 +85,48 @@ class PaypalPaymentController extends Controller
         $transaction = new Transaction();
         $transaction->setAmount($amount)
             ->setItemList($item_list)
-            ->setDescription('Enter Your transaction description');
+            ->setDescription("Registration's Payment");
 
         $redirect_urls = new RedirectUrls();
-        $redirect_urls->setReturnUrl(URL::route('status'))
-            ->setCancelUrl(URL::route('status'));
+        $redirect_urls->setReturnUrl(URL::route('student.status'))
+            ->setCancelUrl(URL::route('student.status'));
+
+        //remove shipping option
+        $inputFields = new InputFields();
+        $inputFields->setNoShipping(1);
+
+        $webProfile = new WebProfile();
+        $webProfile->setName('test'.uniqid())->setInputFields($inputFields);
+
+        $webProfileId = $webProfile->create($this->_api_context)->getId();
 
         $payment = new Payment();
+        $payment->setExperienceProfileId($webProfileId); //remove no shipping
         $payment->setIntent('Sale')
             ->setPayer($payer)
             ->setRedirectUrls($redirect_urls)
             ->setTransactions(array($transaction));
+
         try {
             $payment->create($this->_api_context);
         } catch (\PayPal\Exception\PPConnectionException $ex) {
             if (\Config::get('app.debug')) {
-                \Session::put('error','Connection timeout');
-                return Redirect::route('paywithpaypal');
+                return redirect()->route('student.paywithpaypal', $registration_id)->with('swal:modal', [
+                    'title' => $this->errorTitle,
+                    'type' => $this->errorType,
+                    'text' => 'Connection timeout!',
+                ]);
             } else {
-                \Session::put('error','Some error occur, sorry for inconvenient');
-                return Redirect::route('paywithpaypal');
+                return redirect()->route('student.paywithpaypal', $registration_id)->with('swal:modal', [
+                    'title' => $this->errorTitle,
+                    'type' => $this->errorType,
+                    'text' => 'Some error occur, sorry for inconvenience :(',
+                ]);
             }
         }
 
-        foreach($payment->getLinks() as $link) {
-            if($link->getRel() == 'approval_url') {
+        foreach ($payment->getLinks() as $link) {
+            if ($link->getRel() == 'approval_url') {
                 $redirect_url = $link->getHref();
                 break;
             }
@@ -92,34 +134,62 @@ class PaypalPaymentController extends Controller
 
         Session::put('paypal_payment_id', $payment->getId());
 
-        if(isset($redirect_url)) {
+        if (isset($redirect_url)) {
             return Redirect::away($redirect_url);
         }
 
-        \Session::put('error','Unknown error occurred');
-        return Redirect::route('paywithpaypal');
+        return redirect()->route('student.paywithpaypal', $registration_id)->with('swal:modal', [
+            'title' => $this->errorTitle,
+            'type' => $this->errorType,
+            'text' => 'Unknown error occurred!',
+        ]);
     }
 
     public function getPaymentStatus(Request $request)
     {
         $payment_id = Session::get('paypal_payment_id');
+        $registration_id = Session::get('registration_id');
+        $amount = Session::get('amount');
 
-        Session::forget('paypal_payment_id');
+        Session::forget(['paypal_payment_id', 'registration_id', 'amount']);
+
         if (empty($request->input('PayerID')) || empty($request->input('token'))) {
-            \Session::put('error','Payment failed');
-            return Redirect::route('paywithpaypal');
+            return redirect()->route('student.paywithpaypal', $registration_id)->with('swal:modal', [
+                'title' => $this->errorTitle,
+                'type' => $this->errorType,
+                'text' => 'Payment cancelled!',
+            ]);
         }
+
         $payment = Payment::get($payment_id, $this->_api_context);
         $execution = new PaymentExecution();
         $execution->setPayerId($request->input('PayerID'));
         $result = $payment->execute($execution, $this->_api_context);
 
-        if ($result->getState() == 'approved') {
-            \Session::put('success','Payment success !!');
-            return Redirect::route('paywithpaypal');
+        try {
+            $registration = new Registration();
+            $registration = Registration::with('assessment')->findOrFail(strval($registration_id));
+            $registration = (new PaypalPaymentService())->store($registration, $amount);
+        } catch (\Exception $e) {
+            return redirect()->route('student.payments.view')->with('swal:modal', [
+                'title' => $this->errorTitle,
+                'type' => $this->errorType,
+                'text' => $e->getMessage(),
+            ]);
         }
 
-        \Session::put('error','Payment failed !!');
-        return Redirect::route('paywithpaypal');
+        if ($result->getState() == 'approved') {
+            return redirect()->route('student.payments.view')->with('swal:modal', [
+                'title' => $this->successTitle,
+                'type' => $this->successType,
+                'text' => 'Payment success!',
+            ]);
+        }
+
+        return redirect()->route('student.paywithpaypal', $registration_id)->with('swal:modal', [
+            'title' => $this->errorTitle,
+            'type' => $this->errorType,
+            'text' => 'Payment failed!',
+        ]);
     }
 }

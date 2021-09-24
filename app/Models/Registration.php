@@ -105,6 +105,10 @@ class Registration extends BaseModel
             ->whereNull('released_at');
     }
 
+    public function transactions() { return
+        $this->hasMany(Transaction::class);
+    }
+
     public function assessment() { return
         $this->hasOne(Assessment::class);
     }

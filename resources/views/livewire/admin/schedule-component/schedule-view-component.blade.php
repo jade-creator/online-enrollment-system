@@ -11,8 +11,8 @@
 
         <div class="grid grid-cols-12 gap-2">
             @forelse ($section->schedules as $schedule)
-                <x-table.cell class="md:col-span-2">{{ $schedule->subject->code ?? 'N/A' }}</x-table.cell>
-                <x-table.cell class="md:col-span-3">{{ $schedule->subject->title ?? 'N/A' }}</x-table.cell>
+                <x-table.cell class="md:col-span-2">{{ $schedule->prospectusSubject->subject->code ?? 'N/A' }}</x-table.cell>
+                <x-table.cell class="md:col-span-3">{{ $schedule->prospectusSubject->subject->title ?? 'N/A' }}</x-table.cell>
                 <x-table.cell class="md:col-span-2">{{ $schedule->day->name ?? 'N/A' }}</x-table.cell>
                 <x-table.cell class="md:col-span-2">{{ \Carbon\Carbon::parse($schedule->start_time)->format('h:i a') ?? 'N/A' }}</x-table.cell>
                 <x-table.cell class="md:col-span-2">{{ \Carbon\Carbon::parse($schedule->end_time)->format('h:i a') ?? 'N/A' }}</x-table.cell>
