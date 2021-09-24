@@ -21,8 +21,7 @@
              x-transition:leave-start="transform opacity-100 scale-100"
              x-transition:leave-end="transform opacity-0 scale-95"
              class="grid place-items-center fixed w-screen h-screen left-0 top-0 z-50 bg-gray-500 bg-opacity-75 overflow-hidden"
-             style="display: none;"
-             @click="open = false">
+             style="display: none;">
             <div class="max-h-96 w-96 py-4 space-y-4 rounded-lg ring-1 ring-black ring-opacity-5 border border-gray-300 bg-white p-4 overflow-y-auto">
                 <h1 class="w-full text-lg ">Filter</h1>
                 @if($isFilterable)

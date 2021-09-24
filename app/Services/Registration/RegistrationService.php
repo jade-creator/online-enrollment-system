@@ -15,12 +15,11 @@ class RegistrationService
         $registration->fees()->detach();
 
         foreach ($fees as $key => $fee) {
-            if ($fee[0]) $registration->fees()->attach($key, ['total_fee' => $fee[1]]);
+            if ($fee[0]) $registration->fees()->attach($key, ['total_fee' => $fee[1] * 100]);
         }
 
         return $registration;
     }
-
 
     public function selectSection(Models\Registration $registration, int $sectionId, $schedules) : Models\Registration
     {

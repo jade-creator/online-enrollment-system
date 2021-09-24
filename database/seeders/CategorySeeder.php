@@ -15,7 +15,7 @@ class CategorySeeder extends Seeder
     public function run()
     {
         $categories = [
-            ['name' => 'Tuition Fee', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Tuition Fee (multiplied by unit/s)', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Miscellaneous Fee', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Other Fees', 'created_at' => now(), 'updated_at' => now()],
         ];
