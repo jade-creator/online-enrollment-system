@@ -13,18 +13,18 @@
             <!-- type -->
             <div class="col-span-3">
                 <x-jet-label for="selectedType" value="{{ __('School Type') }}" />
-                    <select name="selectedType" id="selectedType" class="w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" required wire:model="attended.school_type_id" wire:loading.attr="disabled">
-                        <option value="" selected>Choose a Type</option>
-                        @foreach ($types as $type)
-                            <option value="{{ $type->id }}">{{ $type->type }}</option>
-                        @endforeach
-                    </select>
+                <select wire:model="attended.school_type_id" wire:loading.attr="disabled" name="selectedType" id="selectedType" required>
+                    <option value="" selected>Choose a Type</option>
+                    @foreach ($types as $type)
+                        <option value="{{ $type->id }}">{{ $type->type }}</option>
+                    @endforeach
+                </select>
                 <x-jet-input-error for="attended.school_type_id" class="mt-2"/>
             </div>
             <!-- level -->
             <div class="col-span-3">
                 <x-jet-label for="selectedLevel" value="{{ __('Year / Grade / Level') }}" />
-                <select name="selectedLevel" id="selectedLevel" class="w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" required wire:model="attended.level_id">
+                <select wire:model="attended.level_id" name="selectedLevel" id="selectedLevel" required>
                     <option value="" selected>Choose a Level</option>
                     @foreach ($levels as $level)
                         <option value="{{ $level->id }}">{{ $level->level }}</option>
@@ -34,20 +34,20 @@
             </div>
             <!-- name of school -->
             <div class="col-span-6">
-                <x-jet-label for="name" value="{{ __('School Name') }}" />
-                <x-jet-input id="name" type="text" class="mt-1 block w-full" autocomplete="name" required wire:model.defer="attended.name"/>
+                <x-jet-label for="name" value="{{ __('School Name') }}"/>
+                <x-jet-input wire:model.defer="attended.name" id="name" type="text" autocomplete="name" required/>
                 <x-jet-input-error for="attended.name" class="mt-2"/>
             </div>
             <!-- program -->
             <div class="col-span-6">
                 <x-jet-label for="program" value="{{ __('Program / Track and Strand / Specialization (Optional)') }}" />
-                <x-jet-input id="program" type="text" class="mt-1 block w-full" autocomplete="program" required wire:model.defer="attended.program"/>
+                <x-jet-input wire:model.defer="attended.program" id="program" type="text" autocomplete="program" required/>
                 <x-jet-input-error for="attended.program" class="mt-2"/>
             </div>
             {{-- data of grad --}}
             <div class="col-span-3">
                 <x-jet-label for="date_graduated" value="{{ __('Date Graduated') }}" />
-                <x-jet-input id="date_graduated" type="date" class="mt-1 block w-full" autocomplete="date_graduated" required wire:model.defer="attended.date_graduated"/>
+                <x-jet-input wire:model.defer="attended.date_graduated" id="date_graduated" type="date" autocomplete="date_graduated" required/>
                 <x-jet-input-error for="attended.date_graduated" class="mt-2"/>
             </div>
         </x-slot>

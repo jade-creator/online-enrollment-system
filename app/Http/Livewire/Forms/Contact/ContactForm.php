@@ -4,14 +4,17 @@ namespace App\Http\Livewire\Forms\Contact;
 
 use App\Models\Contact;
 use App\Rules\MobileNumber;
+use App\Traits\WithSweetAlert;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class ContactForm extends Component
 {
+    use WithSweetAlert;
+
     public Contact $contact;
 
-    public function rules() 
+    public function rules()
     {
         return [
             'contact.address' => [ 'required', 'string', 'max:255' ],
@@ -19,9 +22,8 @@ class ContactForm extends Component
         ];
     }
 
-    public function render()
-    {
-        return view('livewire.forms.contact.contact-form');
+    public function render() { return
+        view('livewire.forms.contact.contact-form');
     }
 
     public function mount()
@@ -33,23 +35,24 @@ class ContactForm extends Component
         $this->contact = $contact ?? new Contact();
     }
 
-    public function updateContact() 
+    public function updateContact()
     {
         $this->validate();
 
-        if (!$this->contact->exists) {
-            $this->contact->person_id = Auth::user()->person_id;
-            $this->contact->save();
-        } else {
-            $this->contact->update();
+        try {
+            if (! $this->contact->exists) {
+                $this->contact->person_id = Auth::user()->person_id;
+                $this->contact->save();
+            } else {
+                $this->contact->update();
+            }
+
+            $this->emit('saved');
+            $this->emit('proceed', 4);
+
+            if (Auth::user()->role->name == 'admin') $this->emit('completed');
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
         }
-
-        $this->emit('saved');
-        
-        $this->emit('proceed', 4);
-
-        if (Auth::user()->role->name == 'admin') {
-            $this->emit('completed');
-        };
-    }  
+    }
 }

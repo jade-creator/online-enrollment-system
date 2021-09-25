@@ -4,8 +4,8 @@ namespace App\Traits;
 
 trait WithSweetAlert
 {
-    public string $errorTitle = "Error!", $warningTitle = "Warning!", $successTitle = "Success!";
-    public string $errorType = "error", $warningType = "warning", $successType = "success";
+    public string $errorTitle = "Error!", $warningTitle = "Warning!", $successTitle = "Success!", $infoTitle = 'Notice!';
+    public string $errorType = "error", $warningType = "warning", $successType = "success", $infoType = 'info';
 
     public function modal(string $title, string $type, string $text)
     {
@@ -26,6 +26,10 @@ trait WithSweetAlert
 
     public function success(string $text) { return
         $this->modal($this->successTitle, $this->successType, $text);
+    }
+
+    public function info(string $text) { return
+        $this->modal($this->infoTitle, $this->infoType, $text);
     }
 
     public function confirm(string $method, string $text, object $item = null)

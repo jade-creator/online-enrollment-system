@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Traits\WithSweetAlert;
 use Closure;
 use App\Models\Person;
 use Illuminate\Http\Request;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class UserDetailMiddleware
 {
+    use WithSweetAlert;
     /**
      * Handle an incoming request.
      *
@@ -25,14 +27,22 @@ class UserDetailMiddleware
         $role = Auth::user()->role->name;
 
         if (!Auth::user()->person_id) {
-            return redirect('user/personal-details/'.$role);
+            return redirect('user/personal-details/'.$role)->with('swal:modal', [
+                'title' => $this->infoTitle,
+                'type' => $this->infoType,
+                'text' => 'Welcome, Please fill out required information. Thank you!',
+            ]);
         }
-        
+
         // $person = Person::select('isCompleteDetail')->where('id', Auth::user()->person_id)->first();
         $isCompleteDetail = Auth::user()->person->isCompleteDetail;
 
         if(!$isCompleteDetail){
-            return redirect('user/personal-details/'.$role);
+            return redirect('user/personal-details/'.$role)->with('swal:modal', [
+                'title' => $this->infoTitle,
+                'type' => $this->infoType,
+                'text' => 'Please complete the process. Thank you!',
+            ]);
         }
 
         return $next($request);

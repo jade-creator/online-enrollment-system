@@ -4,11 +4,14 @@ namespace App\Http\Livewire\Forms\PersonalDetail;
 
 use App\Models\Detail;
 use App\Models\Country;
+use App\Traits\WithSweetAlert;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 
 class OtherInfoForm extends Component
 {
+    use WithSweetAlert;
+
     public Detail $detail;
     public ?iterable $countries = null;
 
@@ -21,15 +24,14 @@ class OtherInfoForm extends Component
         'detail.birthplace' => [ 'required', 'string', 'max:255'],
     ];
 
-    public function render() 
-    {
-        return view('livewire.forms.personal-detail.other-info-form');
+    public function render() { return
+        view('livewire.forms.personal-detail.other-info-form');
     }
 
-    public function mount() 
+    public function mount()
     {
         $this->countries = Country::get(['id', 'name']);
-        
+
         $detail = Detail::select([
                 'id',
                 'gender',
@@ -41,23 +43,26 @@ class OtherInfoForm extends Component
             ])
             ->where('person_id', Auth::user()->person_id)
             ->first();
-        
+
         $this->detail = $detail ?? new Detail();
     }
 
-    public function updateOtherInfo() 
+    public function updateOtherInfo()
     {
         $this->validate();
 
-        if (!$this->detail->exists) {
-            $this->detail->person_id = Auth::user()->person_id;
-            $this->detail->save();
-        } else {
-            $this->detail->update();
-        }
+        try {
+            if (!$this->detail->exists) {
+                $this->detail->person_id = Auth::user()->person_id;
+                $this->detail->save();
+            } else {
+                $this->detail->update();
+            }
 
-        $this->emit('saved');
-        
-        $this->emit('proceed', 3);
+            $this->emit('saved');
+            $this->emit('proceed', 3);
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
+        }
     }
 }

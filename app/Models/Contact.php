@@ -9,9 +9,6 @@ class Contact extends Model
 {
     use HasFactory;
 
-    public function person(){
-        return $this->belongsTo(Person::class);
-    }
     /**
      * The attributes that are mass assignable.
      *
@@ -22,4 +19,8 @@ class Contact extends Model
         'mobile_number',
         'person_id',
     ];
+
+    public function person(){
+        return $this->belongsTo(Person::class);
+    }
 }

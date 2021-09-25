@@ -9,7 +9,7 @@ class Detail extends Model
 {
     use HasFactory;
 
-    public $dates = ['birthdate'];
+//    public $dates = ['birthdate'];
 
     public function person(){
         return $this->belongsTo(Person::class);

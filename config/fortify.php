@@ -61,26 +61,7 @@ return [
     |
     */
 
-    // 'home' => RouteServiceProvider::HOME,
-
-    'home' => function(){
-
-        $role = Auth::user()->role->name;
-
-        switch ($role) {
-            case 'admin':
-                return route('admin.dashboard');
-                break;
-
-            case 'student':
-                return route('student.registrations.index');
-                break;
-
-            default:
-                return RouteServiceProvider::HOME;
-                break;
-        }
-    },
+     'home' => RouteServiceProvider::HOME,
 
     /*
     |--------------------------------------------------------------------------
@@ -153,7 +134,7 @@ return [
     'features' => [
         Features::registration(),
         Features::resetPasswords(),
-        // Features::emailVerification(),
+        Features::emailVerification(),
         Features::updateProfileInformation(),
         Features::updatePasswords(),
         Features::twoFactorAuthentication([

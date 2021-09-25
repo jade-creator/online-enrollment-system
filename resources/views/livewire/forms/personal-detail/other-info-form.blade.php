@@ -11,7 +11,7 @@
         <!-- gender -->
         <div class="col-span-3">
             <x-jet-label for="gender" value="{{ __('Gender') }}" />
-            <select name="gender" id="gender" class="w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" required wire:model.defer="detail.gender" wire:loading.attr="disabled">
+            <select  wire:model.defer="detail.gender" wire:loading.attr="disabled" name="gender" id="gender" required>
                 <option value="">Choose a gender</option>
                 <option value="Other">Other</option>
                 <option value="Male">Male</option>
@@ -23,7 +23,7 @@
 
         <div class="col-span-3">
             <x-jet-label for="civil_status" value="{{ __('Civil Status') }}" />
-            <select name="civil_status" id="civil_status" class="w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" required wire:model.defer="detail.civil_status" wire:loading.attr="disabled">
+            <select wire:model.defer="detail.civil_status" wire:loading.attr="disabled" name="civil_status" id="civil_status" required>
                 <option value="">Choose a civil status</option>
                 <option value="Single">Single</option>
                 <option value="Married">Married</option>
@@ -36,7 +36,7 @@
 
         <div class="col-span-3">
             <x-jet-label for="religion" value="{{ __('Religion') }}" />
-            <select name="religion" id="religion" class="w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" required wire:model.defer="detail.religion" wire:loading.attr="disabled">
+            <select wire:model.defer="detail.religion" wire:loading.attr="disabled" name="religion" id="religion" required>
                 <option value="">Choose a religion</option>
                 <option value="Other">Other</option>
                 <option value="Catholic Christianity">Catholic Christianity</option>
@@ -50,23 +50,26 @@
 
         <div class="col-span-3">
             <x-jet-label for="nationality" value="{{ __('Country of Citizenship') }}" />
-            <select name="nationality" id="nationality" class="w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" required wire:model.defer="detail.country_id" wire:loading.attr="disabled">
-                @foreach ($countries as $country)
+            <select wire:model.defer="detail.country_id" wire:loading.attr="disabled" name="nationality" id="nationality" required>
+                <option value="" selected>-- select a nationality --</option>
+                @forelse ($countries as $country)
                     <option value="{{$country->id}}">{{$country->name}}</option>
-                @endforeach
+                @empty
+                    <option value="">No records</option>
+                @endforelse
             </select>
             <x-jet-input-error for="detail.country_id" class="mt-2"/>
         </div>
 
         <div class="col-span-3">
             <x-jet-label for="birthdate" value="{{ __('Birthdate') }}" />
-            <x-jet-input id="birthdate" type="date" class="mt-1 block w-full" autocomplete="birthdate" required wire:model.defer="detail.birthdate" wire:loading.attr="disabled"/>
+            <x-jet-input wire:model.defer="detail.birthdate" wire:loading.attr="disabled" id="birthdate" type="date" autocomplete="birthdate" required/>
             <x-jet-input-error for="detail.birthdate" class="mt-2"/>
         </div>
 
         <div class="col-span-3">
             <x-jet-label for="birthplace" value="{{ __('Birthplace') }}" />
-            <x-jet-input id="birthplace" type="text" class="mt-1 block w-full" autocomplete="birthplace" required wire:model.defer="detail.birthplace" wire:loading.attr="disabled"/>
+            <x-jet-input wire:model.defer="detail.birthplace" wire:loading.attr="disabled" id="birthplace" type="text" autocomplete="birthplace" required/>
             <x-jet-input-error for="detail.birthplace" class="mt-2"/>
         </div>
     </x-slot>
