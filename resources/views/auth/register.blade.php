@@ -3,7 +3,7 @@
         <x-slot name="logo">
             <x-jet-authentication-card-logo />
             <p class="mt-4 text-xl font-extrabold">{{ __('Create an account')}}</p>
-            <p class="text-sm"> 
+            <p class="text-sm">
                 <a class="font-medium text-indigo-700 hover:text-indigo-800" href="{{ route('login') }}">
                     {{ __('already registered?') }}
                 </a>
@@ -16,6 +16,16 @@
             @csrf
 
             <div>
+                <x-jet-label for="role" value="{{ __('Role') }}"/>
+                <select id="role" class="block mt-1 w-full" name="role" :value="old('role')" autofocus autocomplete="role">
+                    <option value="2">Student</option>
+{{--                    <option value="3">Registrar</option> TODO: --}}
+{{--                    <option value="4">Dean</option>--}}
+{{--                    <option value="5">Faculty Member</option>--}}
+                </select>
+            </div>
+
+            <div class="mt-4">
                 <x-jet-label for="name" value="{{ __('Name') }}" />
                 <x-jet-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" autofocus autocomplete="name" placeholder="eg. John Doe"/>
             </div>

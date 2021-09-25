@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Forms\PersonalDetail;
 
+use App\Traits\WithSweetAlert;
 use Exception;
 use Carbon\Carbon;
 use App\Models\Person;
@@ -11,8 +12,10 @@ use Illuminate\Support\Facades\Auth;
 
 class FullnameForm extends Component
 {
+    use WithSweetAlert;
+
     public Person $person;
-    
+
     protected $rules = [
         'person.firstname' => [ 'required', 'string', 'max:255'],
         'person.middlename' => [ 'required', 'string', 'max:255'],
@@ -20,18 +23,20 @@ class FullnameForm extends Component
         'person.suffix' => [ 'nullable', 'string', 'max:255'],
     ];
 
-    public function render() 
-    {
-        return view('livewire.forms.personal-detail.fullname-form');
+    public function render() { return
+        view('livewire.forms.personal-detail.fullname-form');
     }
 
-    public function mount() 
+    public function mount()
     {
         $user = Auth::user()->load('person:id,firstname,middlename,lastname,suffix');
 
         $this->person = $user->person ?? new Person();
     }
 
+    /**
+     * @throws Exception
+     */
     public function insert()
     {
         DB::beginTransaction();
@@ -49,9 +54,9 @@ class FullnameForm extends Component
 
             DB::table('users')
                 ->where('id', auth()->user()->id)
-                ->update([  
+                ->update([
                     'person_id' => $person_id,
-                    "updated_at" => Carbon::now()->toDateTimeString()    
+                    "updated_at" => Carbon::now()->toDateTimeString()
                 ]);
 
             DB::commit();
@@ -59,28 +64,27 @@ class FullnameForm extends Component
         } catch (\Throwable $th) {
             DB::rollBack();
 
-            throw new Exception("error");
+            throw new Exception("Internal Error");
         }
     }
 
-    public function updateOrCreateFullname() 
+    public function updateOrCreateFullname()
     {
         $this->validate();
-        
-        if (empty(trim($this->person->suffix))) { $this->person->suffix = null; }
+
+        if (empty(trim($this->person->suffix))) $this->person->suffix = null;
 
         try {
-            if (!$this->person->exists) {
+            if (! $this->person->exists) {
                 $this->insert();
             } else {
                 $this->person->update();
             }
+
+            $this->emit('saved');
+            $this->emit('proceed', 2);
         } catch (Exception $e) {
-            return $this->emit($e->getMessage());
+            $this->error($e->getMessage());
         }
-
-        $this->emit('saved');
-
-        $this->emit('proceed', 2);
     }
 }

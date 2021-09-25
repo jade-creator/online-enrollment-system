@@ -9,6 +9,12 @@ class Guardian extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'relationship',
+        'person_id',
+        'student_id',
+    ];
+
     public function person(){
         return $this->belongsTo(Person::class);
     }
@@ -16,10 +22,4 @@ class Guardian extends Model
     public function student(){
         return $this->belongsTo(Student::class);
     }
-
-    protected $fillable = [
-        'relationship',
-        'person_id',
-        'student_id',
-    ];
 }

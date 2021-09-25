@@ -13,49 +13,49 @@
             <!-- fName -->
             <div class="col-span-6">
                 <x-jet-label for="firstname" value="{{ __('First Name') }}" />
-                <x-jet-input id="firstname" type="text" class="mt-1 block w-full" autocomplete="firstname" required wire:model.defer="person.firstname"/>
+                <x-jet-input wire:model.defer="person.firstname" wire:loading.attr="disabled" id="firstname" type="text" autocomplete="firstname" required/>
                 <x-jet-input-error for="person.firstname" class="mt-2"/>
             </div>
 
             <!-- mname -->
             <div class="col-span-6">
                 <x-jet-label for="middlename" value="{{ __('Middle Name') }}"/>
-                <x-jet-input id="middlename" type="text" class="mt-1 block w-full" autocomplete="middlename" required wire:model.defer="person.middlename"/>
+                <x-jet-input wire:model.defer="person.middlename" wire:loading.attr="disabled" id="middlename" type="text"  autocomplete="middlename" required/>
                 <x-jet-input-error for="person.middlename" class="mt-2"/>
             </div>
 
             <!-- lname -->
             <div class="col-span-6">
                 <x-jet-label for="lastname" value="{{ __('Last Name') }}" />
-                <x-jet-input id="lastname" type="text" class="mt-1 block w-full" autocomplete="lastname" required wire:model.defer="person.lastname"/>
+                <x-jet-input wire:model.defer="person.lastname" wire:loading.attr="disabled" id="lastname" type="text" class="mt-1 block w-full" autocomplete="lastname" required/>
                 <x-jet-input-error for="person.lastname" class="mt-2"/>
             </div>
 
             <!-- suffix -->
             <div class="col-span-6">
                 <x-jet-label for="suffix" value="{{ __('Suffix (Optional)') }}" />
-                <x-jet-input id="suffix" type="text" class="mt-1 block w-full" autocomplete="suffix" wire:model.defer="person.suffix"/>
+                <x-jet-input wire:model.defer="person.suffix" wire:loading.attr="disabled" id="suffix" type="text" autocomplete="suffix"/>
                 <x-jet-input-error for="person.suffix" class="mt-2"/>
             </div>
 
             <!-- relationship -->
             <div class="col-span-6">
                 <x-jet-label for="relationship" value="{{ __('Relationship') }}"/>
-                <x-jet-input id="relationship" type="text" class="mt-1 block w-full" autocomplete="relationship" required wire:model.defer="guardian.relationship"/>
+                <x-jet-input wire:model.defer="guardian.relationship" wire:loading.attr="disabled" id="relationship" type="text" autocomplete="relationship" required/>
                 <x-jet-input-error for="guardian.relationship" class="mt-2"/>
             </div>
 
             <!-- address -->
             <div class="col-span-6">
                 <x-jet-label for="address" value="{{ __('Home Address') }}" />
-                <x-jet-input id="address" type="text" class="mt-1 block w-full" autocomplete="address" required wire:model.defer="contact.address"/>
+                <x-jet-input wire:model.defer="contact.address" wire:loading.attr="disabled" id="address" type="text" autocomplete="address" required/>
                 <x-jet-input-error for="contact.address" class="mt-2"/>
             </div>
 
             <!-- mobile_number -->
             <div class="col-span-6">
                 <x-jet-label for="mobile_number" value="{{ __('Mobile Number') }}" />
-                <x-jet-input id="mobile_number" type="text" class="mt-1 block w-full" autocomplete="mobile_number" required wire:model.defer="contact.mobile_number"/>
+                <x-jet-input wire:model.defer="contact.mobile_number" wire:loading.attr="disabled" id="mobile_number" type="text" autocomplete="mobile_number" required/>
                 <x-jet-input-error for="contact.mobile_number" class="mt-2"/>
             </div>
         </x-slot>

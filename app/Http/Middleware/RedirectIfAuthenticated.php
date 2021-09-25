@@ -32,9 +32,9 @@ class RedirectIfAuthenticated
                         break;
 
                     case 'student':
-                        return redirect('/student/registration');
+                        return redirect('/student/pre-registrations');
                         break;
-                    
+
                     default:
                         return redirect(RouteServiceProvider::HOME);
                         break;

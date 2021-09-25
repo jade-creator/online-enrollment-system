@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Forms\Guardian;
 
+use App\Traits\WithSweetAlert;
 use Exception;
 use Carbon\Carbon;
 use App\Models\Person;
@@ -15,14 +16,14 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class GuardianForm extends Component
 {
-    use AuthorizesRequests;
+    use AuthorizesRequests, WithSweetAlert;
 
     public ?int $studentId = null;
     public Guardian $guardian;
     public Person $person;
     public Contact $contact;
 
-    public function rules() 
+    public function rules()
     {
         return [
             'person.firstname' => [ 'required', 'string', 'max:255'],
@@ -35,15 +36,15 @@ class GuardianForm extends Component
         ];
     }
 
-    public function mount() 
-    {    
+    public function mount()
+    {
         $guardian = Auth::user()->studentGuardian;
 
-        if (!is_null($guardian)) {
-            $guardian->load([ 
+        if (! is_null($guardian)) {
+            $guardian->load([
                 'person' => function ($query){
                     $query->select(['id', 'firstname', 'middlename', 'lastname', 'suffix']);
-                }, 
+                },
                 'person.contact' => function ($query){
                     $query->select(['id', 'address', 'mobile_number', 'person_id']);
                 }]);
@@ -56,15 +57,16 @@ class GuardianForm extends Component
         }
 
         $this->person = $guardian->person ?? new Person();
-
         $this->contact = $guardian->person->contact ?? new Contact();
     }
 
-    public function render()
-    {
-        return view('livewire.forms.guardian.guardian-form');
+    public function render() { return
+        view('livewire.forms.guardian.guardian-form');
     }
 
+    /**
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function insert()
     {
         $this->authorize('create', Guardian::class);
@@ -102,10 +104,13 @@ class GuardianForm extends Component
         } catch (\Throwable $th) {
             DB::rollBack();
 
-            throw new Exception("error");
+            throw new Exception("Internal Error!");
         }
     }
 
+    /**
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function update()
     {
         $this->authorize('update', $this->guardian);
@@ -142,11 +147,11 @@ class GuardianForm extends Component
         } catch (\Throwable $th) {
             DB::rollBack();
 
-            throw new Exception("error");
+            throw new Exception("Internal Error!");
         }
     }
 
-    public function updateOrCreateGuardian() 
+    public function updateOrCreateGuardian()
     {
         $this->validate();
 
@@ -158,13 +163,11 @@ class GuardianForm extends Component
             } else {
                 $this->update();
             }
-            
+
+            $this->emit('saved');
+            $this->emit('proceed', 5);
         } catch (Exception $e) {
-            return $this->emit($e->getMessage());
+            $this->error($e->getMessage());
         }
-
-        $this->emit('saved');
-
-        $this->emit('proceed', 5);
     }
 }

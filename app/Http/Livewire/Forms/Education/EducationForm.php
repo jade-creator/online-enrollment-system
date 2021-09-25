@@ -5,13 +5,14 @@ namespace App\Http\Livewire\Forms\Education;
 use App\Models\Level;
 use App\Models\SchoolType;
 use App\Models\AttendedSchool;
+use App\Traits\WithSweetAlert;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
 class EducationForm extends Component
 {
-    use AuthorizesRequests;
+    use AuthorizesRequests, WithSweetAlert;
 
     public ?int $studentId = null;
     public ?iterable $types = null;
@@ -50,14 +51,14 @@ class EducationForm extends Component
             ->where('student_id', $this->studentId)
             ->first();
 
-        if(!is_null($attended)){
+        if(! is_null($attended)) {
             $this->attended = $attended;
             $this->levels =  Level::where('school_type_id', $this->attended->school_type_id)->get();
-        }else {
+        } else {
             $this->attended = new AttendedSchool();
         }
     }
-    
+
     public function updatedAttendedSchoolTypeId($type)
     {
         $this->levels = Level::where('school_type_id', $type)->get();
@@ -69,19 +70,20 @@ class EducationForm extends Component
     {
         $this->validate();
 
-        if (!$this->attended->exists) {
-            $this->attended->student_id = $this->studentId;
-            $this->attended->save();
-        } else {
-            $this->attended->update();
+        try {
+            if (! $this->attended->exists) {
+                $this->attended->student_id = $this->studentId;
+                $this->attended->save();
+            } else {
+                $this->attended->update();
+            }
+
+            $this->emit('saved');
+            $this->emit('proceed', 6);
+
+            if (Auth::user()->role->name == 'student') $this->emit('completed');
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
         }
-        
-        $this->emit('saved');
-
-        $this->emit('proceed', 6);
-
-        if (Auth::user()->role->name == 'student') {
-            $this->emit('completed');
-        };
     }
 }

@@ -14,7 +14,7 @@
                         Contacts
                     </button>
                 </li>
-                @if ($user->role_id == 2)
+                @if ($user->role->name == 'student')
                     <li>
                         <button @click="openTab = 3" :class="{ 'text-red-500 sm:text-black sm:border-red-500':  openTab == 3, 'sm:hover:border-gray-400':  openTab != 3}" class="flex h-full pb-3 sm:border-b-2 px-4 py-1 text-base font-bold text-black transition duration-500 ease-in-out transform focus:shadow-outline focus:outline-none">
                             <svg xmlns="http://www.w3.org/2000/svg" class="mx-2" width="18" height="18" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -47,7 +47,7 @@
                 <img class="mt-6 w-40 rounded-full object-cover" src="{{ $user->profile_photo_url }}" alt="{{ $user->name }}"/>
                 <p class="mt-4 text-3xl font-semibold">{{ $user->name }}</p>
                 <p class="mt-2 text-gray-400 text-xl">{{ $user->email }}</p>
-                @can('update', $person)
+                @can ('update', $person)
                     <a href="{{ route('profile.show') }}" class="mt-4">
                         <button class="w-full px-5 py-1 border-2 border-gray-300 hover:bg-gray-100 rounded-md font-bold outline-none">
                             Edit Profile
@@ -67,7 +67,7 @@
                             <line x1="15" y1="12" x2="17" y2="12"></line>
                             <line x1="7" y1="16" x2="17" y2="16"></line>
                         </svg>
-                        <p class="font-bold text-indigo-500">{{ $user->student->isStudent ? $user->student->custom_id : 'N/A' }}</p>
+                        <p class="font-bold text-indigo-500">{{ $user->student->custom_id ?? 'N/A' }}</p>
                     </div>
                 </div>
                 @forelse ($this->registrations as $registration)
@@ -86,7 +86,7 @@
                                     <path d="M6 21v-18"></path>
                                  </svg>
                                 <p class="font-bold text-red-500">{{ $registration->prospectus->level->level ?? 'N/A' }}</p>
-                            </div>  
+                            </div>
                         </div>
                         @if ( $registration->prospectus->level->schoolType->type == 'Senior High School')
                             <div class="pt-2">
@@ -99,7 +99,7 @@
                                         <path d="M14.828 3.515a4 4 0 1 0 5.657 5.657"></path>
                                      </svg>
                                     <p class="font-bold text-green-500">{{ $registration->prospectus->strand->code ?? 'N/A' }}</p>
-                                </div>  
+                                </div>
                             </div>
                         @endif
                         @if ( $registration->prospectus->level->schoolType->type == 'College')
@@ -113,7 +113,7 @@
                                         <line x1="14" y1="4" x2="10" y2="20"></line>
                                      </svg>
                                     <p class="font-bold text-green-500">{{ $registration->prospectus->program->code ?? 'N/A' }}</p>
-                                </div>  
+                                </div>
                             </div>
                         @endif
                         @if ($registration->prospectus->term_id)
@@ -132,12 +132,12 @@
                                         <line x1="14.5" y1="18" x2="20" y2="18"></line>
                                     </svg>
                                     <p class="font-bold text-yellow-500">{{ $registration->prospectus->term->term ?? 'N/A' }}</p>
-                                </div>  
+                                </div>
                             </div>
                         @endif
                     @endif
                 @empty
-                    
+
                 @endforelse
             @endif
         </div>
@@ -190,7 +190,7 @@
                 </div>
             </div>
 
-            @if ($user->role_id == 2)
+            @if ($user->role->name == 'student')
                 <div class="mt-12 mb-6 text-lg font-semibold">Recent Activity</div>
                 <div class="grid grid-cols-8 gap-6 mb-12">
                     @foreach ($this->registrations as $registration)

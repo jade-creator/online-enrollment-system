@@ -3,13 +3,13 @@
         <div class="border-b border-gray-200">
             <p class="py-3 px-5 font-bold text-sm">Account settings</p>
         </div>
-        
+
         <div class="border-b border-gray-200">
             <a href="{{ route('profile.show') }}">
                 <p class="py-3 text-sm {{ request()->is('user/profile') ? 'border-l-4 border-indigo-500 px-4' : 'px-5 hover:bg-gray-200'}}">Profile</p>
             </a>
         </div>
-        
+
         <div class="border-b border-gray-200">
             <a href="{{ route('user.personal-details') }}">
                 <p class="py-3 text-sm {{ request()->is('user/personal-details') ? 'border-l-4 border-indigo-500 px-4' : 'px-5 hover:bg-gray-200'}}">Personal details</p>

@@ -11,14 +11,14 @@
         <!-- address -->
         <div class="col-span-6">
             <x-jet-label for="address" value="{{ __('Home Address') }}" />
-            <x-jet-input id="address" type="text" class="mt-1 block w-full" autocomplete="address" required wire:model.defer="contact.address"/>
+            <x-jet-input wire:model.defer="contact.address" wire:loading.attr="disabled" id="address" type="text" autocomplete="address" required/>
             <x-jet-input-error for="contact.address" class="mt-2"/>
         </div>
 
         <!-- mobile -->
         <div class="col-span-6">
             <x-jet-label for="mobile_number" value="{{ __('Mobile Number') }}"/>
-            <x-jet-input id="mobile_number" type="text" class="mt-1 block w-full" autocomplete="mobile_number" required wire:model.defer="contact.mobile_number"/>
+            <x-jet-input wire:model.defer="contact.mobile_number" wire:loading.attr="disabled" id="mobile_number" type="text" autocomplete="mobile_number" required/>
             <x-jet-input-error for="contact.mobile_number" class="mt-2"/>
         </div>
     </x-slot>
