@@ -34,9 +34,9 @@ class FeeCategoryAddComponent extends Component
         try {
             $this->category->save();
 
+            $this->success($this->category->name.' has been added.');
             $this->toggleModal();
             $this->emitUp('refresh');
-            $this->success($this->category->name.' has been added.');
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }

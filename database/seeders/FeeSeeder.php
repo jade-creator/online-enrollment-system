@@ -22,7 +22,7 @@ class FeeSeeder extends Seeder
         $fees = [];
 
         foreach ($categories as $category) {
-            $fees[] = [ 'program_id' => $program->id, 'category_id' => $category->id, 'price' => round(rand(100000, 300000)),
+            $fees[] = [ 'program_id' => $program->id, 'category_id' => $category->id, 'price' => (floor(rand(100000, 900000) / 100000)) * 100000,
                 'description' => 'N/A', 'created_at' => now(), 'updated_at' => now()];
         }
 

@@ -55,13 +55,13 @@
                                 </div>
                                 <div class="col-span-6">
                                     <x-jet-label value="{{ __('Description (optional)') }}"/>
-                                    <textarea wire:model.defer="fee.description" wire:loading.attr="disabled" name="description"></textarea>
-                                    <x-jet-input-error for="fee.description" class="mt-2"/>
+                                    <textarea wire:model.defer="description" wire:loading.attr="disabled" name="description"></textarea>
+                                    <x-jet-input-error for="description" class="mt-2"/>
                                 </div>
                                 <div class="col-span-3">
                                     <x-jet-label value="{{ __('Amount') }}"/>
-                                    <input wire:model.defer="fee.price" wire:loading.attr="disabled" name="amount" type="number" min="1">
-                                    <x-jet-input-error for="fee.price" class="mt-2"/>
+                                    <input wire:model.defer="price" wire:loading.attr="disabled" name="amount" type="number" min="1">
+                                    <x-jet-input-error for="price" class="mt-2"/>
                                 </div>
                             </form>
                         </x-slot>
