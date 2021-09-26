@@ -16,22 +16,17 @@ class StudentDetailForm extends Component
     public $step = 1;
     protected $listeners = ['proceed', 'completed'];
 
-    public function render()
-    {
-        return view('livewire.forms.personal-detail.student-detail-form');
+    public function render() { return
+        view('livewire.forms.personal-detail.student-detail-form');
     }
 
     public function mount()
     {
         $this->student = Auth::user()->student()
             ->firstOr(function () {
-                $this->student = Student::create([
+                return Student::create([
                     'user_id' => auth()->user()->id,
                 ]);
-
-                $this->student->update(['custom_id' => $this->student->id]);
-
-                return $this->student;
             });
     }
 

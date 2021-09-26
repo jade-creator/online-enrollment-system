@@ -56,7 +56,7 @@ Route::get('/download-pdf', [RegistrationController::class, 'downloadPDF'])->nam
 //------END GUEST-------
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function (){
-    // start guard
+    // account settings
     Route::group(['middleware' => 'user.detail', 'prefix' => 'user', 'as' => 'user.'], function (){
         Route::get('/personal-details', PersonalDetailShow::class)->name('personal-details');
         Route::get('/contacts', ContactShow::class)->name('contacts');
@@ -64,13 +64,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
         Route::get('/education', EducationShow::class)->name('education');
         Route::get('/security-settings', SecuritySettingShow::class)->name('security-settings');
     });
-    // end guard
 
     // start admin
-    Route::middleware(['role:admin'])->group(function () {
-        Route::get('/user/personal-details/admin', AdminDetailForm::class)->middleware(['detail'])->name('user.personal-details.admin');
+    Route::middleware(['role:admin|faculty member'])->group(function () {
+        Route::get('/user/personal-details/employee', AdminDetailForm::class)->middleware(['detail'])->name('user.personal-details.admin');
 
-        Route::group(['middleware' => 'user.detail', 'prefix' => 'admin', 'as' => 'admin.'], function (){
+        Route::group(['middleware' => ['user.detail', 'approved'], 'prefix' => 'admin', 'as' => 'admin.'], function (){
             Route::get('/dashboard', Dashboard::class)->name('dashboard'); // TODO : renamecomponent
 
             Route::get('/grades', GradeComponent\GradeIndexComponent::class)->name('grades.view');
@@ -98,14 +97,16 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
     // end admin
 
     // admin and student
-    Route::middleware(['role:admin|student', 'user.detail'])->group(function (){
-        Route::get('/sections', SectionComponent\SectionIndexComponent::class)->name('sections.view');
+    Route::middleware(['role:admin|student|faculty member', 'user.detail'])->group(function (){
+        Route::middleware('approved')->group(function () {
+            Route::get('/sections', SectionComponent\SectionIndexComponent::class)->name('sections.view');
 
-        Route::get('/prospectuses/{prospectusId}', ProspectusComponent\ProspectusIndexComponent::class)->name('prospectuses.view');
+            Route::get('/prospectuses/{prospectusId}', ProspectusComponent\ProspectusIndexComponent::class)->name('prospectuses.view');
 
-        Route::group(['prefix' => 'pre-registration', 'as' => 'pre.registration.'], function () {
-            Route::get('/{regId}/details', RegistrationComponent\RegistrationViewComponent::class)->name('view');
-            Route::get('/{regId}/pdf', [PreEnrollmentComponent\PreEnrollmentPdfComponent::class, 'createPDF'])->name('pdf');
+            Route::group(['prefix' => 'pre-registration', 'as' => 'pre.registration.'], function () {
+                Route::get('/{regId}/details', RegistrationComponent\RegistrationViewComponent::class)->name('view');
+                Route::get('/{regId}/pdf', [PreEnrollmentComponent\PreEnrollmentPdfComponent::class, 'createPDF'])->name('pdf');
+            });
         });
 
         Route::get('/user/personal-profile/{userId}', User\UserProfileComponent::class)->name('user.personal.profile.view');
@@ -116,7 +117,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
     Route::middleware(['role:student'])->group(function (){
         Route::get('/user/personal-details/student', StudentDetailForm::class)->middleware(['detail'])->name('user.personal-details.student');
 
-        Route::group(['middleware' => 'user.detail', 'prefix' => 'student', 'as' => 'student.'], function (){
+        Route::group(['middleware' => ['user.detail', 'approved'], 'prefix' => 'student', 'as' => 'student.'], function (){
 
             Route::group(['prefix' => 'pre-registrations', 'as' => 'registrations.'], function () {
                 Route::get('', RegistrationComponent\RegistrationIndexComponent::class)->name('index');

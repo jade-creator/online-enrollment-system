@@ -107,7 +107,7 @@
                     </div>
                     <div class="col-span-3">
                         <x-jet-label value="{{ __('Birthdate:') }}"/>
-                        <x-jet-input type="text" class="mt-1" value="{{ $registration->student->user->person->detail->birthdate->format('F j, Y') ?? 'N/A' }}" readonly/>
+                        <x-jet-input type="text" class="mt-1" value="{{ \Carbon\Carbon::parse($registration->student->user->person->detail->birthdate)->format('F j, Y') ?? 'N/A' }}" readonly/>
                     </div>
                     <div class="col-span-3">
                         <x-jet-label value="{{ __('Birthplace:') }}"/>

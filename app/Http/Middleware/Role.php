@@ -28,12 +28,5 @@ class Role
         }
 
         return $next($request);
-
-        // $user_role = Auth::user()->role->name;
-        // if($user_role == $role){
-        //     return $next($request);
-        // }
-
-        // abort(403);
     }
 }
