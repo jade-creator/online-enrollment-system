@@ -48,8 +48,8 @@
 
             <x-slot name="head">
                 <x-table.column-title class="col-span-2">ID</x-table.column-title>
-                <x-table.column-title class="col-span-2">Category</x-table.column-title>
                 <x-table.column-title class="col-span-2">Program</x-table.column-title>
+                <x-table.column-title class="col-span-2">Category</x-table.column-title>
                 <x-table.column-title class="col-span-3">Description</x-table.column-title>
                 <x-table.column-title class="col-span-2">amount</x-table.column-title>
                 <x-table.column-title class="col-span-1">latest</x-table.column-title>
@@ -61,8 +61,8 @@
                         <x-table.row :active="$this->isSelected($fee->id)">
                             <div name="slot" class="grid grid-cols-12 gap-2">
                                 <x-table.cell-checkbox :value="$fee->id">{{ $fee->id ?? 'N/A' }}</x-table.cell-checkbox>
-                                <x-table.cell class="justify-start md:col-span-2">{{ $fee->category->name ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell class="justify-start md:col-span-2">{{ $fee->program->code ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell class="justify-start md:col-span-2">{{ $fee->category->name ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell class="justify-start md:col-span-3">{{ $fee->description ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell class="justify-start md:col-span-2">{{ $fee->getFormattedPriceAttribute($fee->price) ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell-action>

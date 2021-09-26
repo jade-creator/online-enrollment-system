@@ -37,6 +37,10 @@ class FeeUpdateComponent extends Component
     {
         $this->validate();
 
+        $fee = (new FeeService())->find($this->fee);
+
+        if ($fee) return $this->error("Program's fee already exists. Unable to update.");
+
         try {
             $this->authorize('update', $this->fee);
             $fee = (new FeeService())->update($this->fee);
@@ -44,7 +48,7 @@ class FeeUpdateComponent extends Component
             session()->flash('swal:modal', [
                 'title' => $this->successTitle,
                 'type' => $this->successType,
-                'text' => $fee->category->name.' has been updated.',
+                'text' => $fee->category->name." has been updated.",
             ]);
             return redirect(route('admin.fees.view'));
         } catch (\Exception $e) {
