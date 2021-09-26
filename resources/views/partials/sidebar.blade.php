@@ -1,8 +1,8 @@
 <!-- Responsive Navigation Menu -->
 <div @click="open = ! open" :class="{'w-full': open, 'lg:w-12': ! open}" class="pb-14 w-0 h-full bg-gray-500 bg-opacity-50 fixed">
 
-    <div @click.stop :class="{'w-full sm:w-1/2 lg:w-64 shadow-lg sidebar scrolling-touch': open, 'w-0 lg:w-12': ! open}" class="overflow-y-auto overflow-x-hidden transition-width transition-slowest ease h-full bg-white border-r border-gray-200">
-        <ul class="pt-3 flex flex-col space-y-1 h-content w-full">
+    <div @click.stop :class="{'w-full sm:w-1/2 lg:w-64 shadow-lg': open, 'w-0 lg:w-12': ! open}" class="overflow-y-auto overflow-x-hidden transition-width transition-slowest ease h-full bg-white border-r border-gray-200">
+        <ul class="flex flex-col h-content w-full">
             @if(auth()->user()->role->name === 'admin')
 
                 <x-sidebar.item title="Dashboard">
@@ -55,7 +55,7 @@
 
                 <x-sidebar.item title="Users">
                     <x-sidebar.link routeName="admin.users.view" route="admin/users" name="Users">
-                        <x-icons.user-icon/>
+                        <x-icons.users-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>
             @endif
@@ -63,7 +63,7 @@
             @if(auth()->user()->role->name === 'student')
 
                 <x-sidebar.item title="Registrations">
-                    <x-sidebar.link routeName="student.registrations.index" route="student/registrations" name="Registrations">
+                    <x-sidebar.link routeName="student.registrations.index" route="student/pre-registrations" name="Registrations">
                         <x-icons.pre-enrollment-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>
@@ -77,6 +77,12 @@
                 <x-sidebar.item title="Grades">
                     <x-sidebar.link routeName="student.grades.view" route="student/grades" name="Grades">
                         <x-icons.grade-icon/>
+                    </x-sidebar.link>
+                </x-sidebar.item>
+
+                <x-sidebar.item title="Payments">
+                    <x-sidebar.link routeName="student.payments.view" route="student/payments" name="Payments">
+                        <x-icons.credit-card-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>
 

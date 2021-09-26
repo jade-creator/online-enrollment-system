@@ -28,4 +28,8 @@
     h3 {
         @apply font-bold text-base;
     }
+
+    svg {
+        @apply w-6 h-6;
+    }
 }

@@ -1,7 +1,7 @@
-@props([ 'routeName' => 'N/A', 'route' => 'N/A', 'parameter' => '', 'value' => 'N/A', 'name' => 'N/A' ])
-
-<a href="{{filled($parameter) ? route($routeName, [$parameter => $value]) : route($routeName)}}" class="{{ request()->is($route.'/*') || request()->is($route) ? 'text-indigo-500 h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700'
-    : 'text-gray-800 h-11 relative flex flex-row items-center focus:outline-none hover:bg-gray-200 focus:bg-gray-200 font-bold hover:text-gray-700'}}">
+@props([ 'routeName' => 'N/A', 'route' => 'N/A', 'parameter' => '', 'value' => 'N/A', 'name' => 'N/A'])
+<a href="{{filled($parameter) ? route($routeName, [$parameter => $value]) : route($routeName)}}" 
+    class="flex flex-row items-center py-3 font-bold focus:outline-none hover:bg-indigo-100 hover:text-black transition-colors  {{ request()->is($route.'/*') || request()->is($route) ? 'bg-indigo-500 text-white'
+    : 'bg-white'}} ">
     <x-sidebar.icon>
         {{ $slot }}
     </x-sidebar.icon>
