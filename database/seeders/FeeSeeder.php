@@ -16,13 +16,13 @@ class FeeSeeder extends Seeder
      */
     public function run()
     {
-//        DB::table('fees')->delete();
+        DB::table('fees')->delete();
         $program = Program::where('code', 'BSIT')->first();
         $categories = Category::get('id');
         $fees = [];
 
         foreach ($categories as $category) {
-            $fees[] = [ 'program_id' => $program->id, 'category_id' => $category->id, 'price' => rand(100000, 300000),
+            $fees[] = [ 'program_id' => $program->id, 'category_id' => $category->id, 'price' => round(rand(100000, 300000)),
                 'description' => 'N/A', 'created_at' => now(), 'updated_at' => now()];
         }
 

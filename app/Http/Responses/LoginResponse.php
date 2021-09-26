@@ -18,6 +18,10 @@ class LoginResponse implements LoginResponseContract
                 return '/student/pre-registrations';
                 break;
 
+            case 'faculty member':
+                return '/admin/dashboard';
+                break;
+
             default:
                 return RouteServiceProvider::HOME;
                 break;

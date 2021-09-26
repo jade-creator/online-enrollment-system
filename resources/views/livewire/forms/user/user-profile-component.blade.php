@@ -88,57 +88,53 @@
                                 <p class="font-bold text-red-500">{{ $registration->prospectus->level->level ?? 'N/A' }}</p>
                             </div>
                         </div>
-                        @if ( $registration->prospectus->level->schoolType->type == 'Senior High School')
-                            <div class="pt-2">
-                                <h1 class="font-bold">Strand</h1>
-                                <div class="flex items-center py-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 text-gray-500" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                        <circle transform="rotate(-45 12 12)" cx="12" cy="12" r="4"></circle>
-                                        <path d="M9.172 20.485a4 4 0 1 0 -5.657 -5.657"></path>
-                                        <path d="M14.828 3.515a4 4 0 1 0 5.657 5.657"></path>
-                                     </svg>
-                                    <p class="font-bold text-green-500">{{ $registration->prospectus->strand->code ?? 'N/A' }}</p>
-                                </div>
+                        <div class="pt-2">
+                            <h1 class="font-bold">Program</h1>
+                            <div class="flex items-center py-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 text-gray-500" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <polyline points="7 8 3 12 7 16"></polyline>
+                                    <polyline points="17 8 21 12 17 16"></polyline>
+                                    <line x1="14" y1="4" x2="10" y2="20"></line>
+                                 </svg>
+                                <p class="font-bold text-green-500">{{ $registration->prospectus->program->code ?? 'N/A' }}</p>
                             </div>
-                        @endif
-                        @if ( $registration->prospectus->level->schoolType->type == 'College')
-                            <div class="pt-2">
-                                <h1 class="font-bold">Program</h1>
-                                <div class="flex items-center py-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 text-gray-500" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                        <polyline points="7 8 3 12 7 16"></polyline>
-                                        <polyline points="17 8 21 12 17 16"></polyline>
-                                        <line x1="14" y1="4" x2="10" y2="20"></line>
-                                     </svg>
-                                    <p class="font-bold text-green-500">{{ $registration->prospectus->program->code ?? 'N/A' }}</p>
-                                </div>
+                        </div>
+                        <div class="pt-2">
+                            <h1 class="font-bold">Term</h1>
+                            <div class="flex items-center py-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 text-gray-500" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <line x1="4" y1="6" x2="9.5" y2="6"></line>
+                                    <line x1="4" y1="10" x2="9.5" y2="10"></line>
+                                    <line x1="4" y1="14" x2="9.5" y2="14"></line>
+                                    <line x1="4" y1="18" x2="9.5" y2="18"></line>
+                                    <line x1="14.5" y1="6" x2="20" y2="6"></line>
+                                    <line x1="14.5" y1="10" x2="20" y2="10"></line>
+                                    <line x1="14.5" y1="14" x2="20" y2="14"></line>
+                                    <line x1="14.5" y1="18" x2="20" y2="18"></line>
+                                </svg>
+                                <p class="font-bold text-yellow-500">{{ $registration->prospectus->term->term ?? 'N/A' }}</p>
                             </div>
-                        @endif
-                        @if ($registration->prospectus->term_id)
-                            <div class="pt-2">
-                                <h1 class="font-bold">Term</h1>
-                                <div class="flex items-center py-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 text-gray-500" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                        <line x1="4" y1="6" x2="9.5" y2="6"></line>
-                                        <line x1="4" y1="10" x2="9.5" y2="10"></line>
-                                        <line x1="4" y1="14" x2="9.5" y2="14"></line>
-                                        <line x1="4" y1="18" x2="9.5" y2="18"></line>
-                                        <line x1="14.5" y1="6" x2="20" y2="6"></line>
-                                        <line x1="14.5" y1="10" x2="20" y2="10"></line>
-                                        <line x1="14.5" y1="14" x2="20" y2="14"></line>
-                                        <line x1="14.5" y1="18" x2="20" y2="18"></line>
-                                    </svg>
-                                    <p class="font-bold text-yellow-500">{{ $registration->prospectus->term->term ?? 'N/A' }}</p>
-                                </div>
-                            </div>
-                        @endif
+                        </div>
                     @endif
                 @empty
-
                 @endforelse
+            @else
+                <div class="mt-10">
+                    <h1 class="font-bold">Employee ID (<span>{{ $user->role->name }}</span>)</h1>
+                    <div class="flex items-center py-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 text-gray-500" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <rect x="3" y="4" width="18" height="16" rx="3"></rect>
+                            <circle cx="9" cy="10" r="2"></circle>
+                            <line x1="15" y1="8" x2="17" y2="8"></line>
+                            <line x1="15" y1="12" x2="17" y2="12"></line>
+                            <line x1="7" y1="16" x2="17" y2="16"></line>
+                        </svg>
+                        <p class="font-bold text-indigo-500">{{ 'ASW-@2313-ASDJS' }}</p>
+                    </div>
+                </div>
             @endif
         </div>
 

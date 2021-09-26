@@ -24,9 +24,9 @@ class UserDetailMiddleware
             return redirect('/login');
         }
 
-        $role = Auth::user()->role->name;
+        $role = Auth::user()->role->name == 'student' ? 'student' : 'employee';
 
-        if (!Auth::user()->person_id) {
+        if (! Auth::user()->person_id) {
             return redirect('user/personal-details/'.$role)->with('swal:modal', [
                 'title' => $this->infoTitle,
                 'type' => $this->infoType,
@@ -37,7 +37,7 @@ class UserDetailMiddleware
         // $person = Person::select('isCompleteDetail')->where('id', Auth::user()->person_id)->first();
         $isCompleteDetail = Auth::user()->person->isCompleteDetail;
 
-        if(!$isCompleteDetail){
+        if(! $isCompleteDetail){
             return redirect('user/personal-details/'.$role)->with('swal:modal', [
                 'title' => $this->infoTitle,
                 'type' => $this->infoType,

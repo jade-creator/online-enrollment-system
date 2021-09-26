@@ -23,9 +23,9 @@ class RedirectIfDetailed
         }
 
         $person = Person::select('isCompleteDetail')->where('id', Auth::user()->person_id)->first();
-        
+
         if(Auth::user()->person_id && $person->isCompleteDetail){
-            return redirect('user/personal-details');
+            return redirect()->route('user.personal.profile.view', Auth::user()->id);
         }
 
         return $next($request);

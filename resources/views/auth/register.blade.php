@@ -12,17 +12,26 @@
 
         <x-jet-validation-errors class="mb-4" />
 
-        <form method="POST" action="{{ route('register') }}">
+        <form method="POST" action="{{ route('register') }}" x-data="{role_id: 0}">
             @csrf
 
             <div>
                 <x-jet-label for="role" value="{{ __('Role') }}"/>
-                <select id="role" class="block mt-1 w-full" name="role" :value="old('role')" autofocus autocomplete="role">
+                <select x-model="role_id" id="role" class="block mt-1 w-full" name="role" autofocus autocomplete="role">
+                    <option value="0" selected>-- select a role --</option>
                     <option value="2">Student</option>
-{{--                    <option value="3">Registrar</option> TODO: --}}
-{{--                    <option value="4">Dean</option>--}}
-{{--                    <option value="5">Faculty Member</option>--}}
+                    <option value="5">Faculty Member</option>
                 </select>
+            </div>
+
+            <div x-show="role_id == 2" class="mt-4">
+                <x-jet-label for="student_id" value="{{ __('Student ID') }}" />
+                <x-jet-input id="student_id" class="block mt-1 w-full" type="text" name="student_id" :value="old('student_id')" autofocus autocomplete="student_id"/>
+            </div>
+
+            <div x-show="role_id == 5" class="mt-4">
+                <x-jet-label for="employee_id" value="{{ __('Employee ID') }}" />
+                <x-jet-input id="employee_id" class="block mt-1 w-full" type="text" name="employee_id" :value="old('employee_id')" autofocus autocomplete="employee_id"/>
             </div>
 
             <div class="mt-4">
@@ -49,7 +58,7 @@
                 <div class="mt-4">
                     <x-jet-label for="terms">
                         <div class="flex items-center">
-                            <x-jet-checkbox name="terms" id="terms"/>
+                            <x-jet-checkbox name="terms" id="terms" checked="checked"/>
 
                             <div class="ml-2">
                                 {!! __('I agree to the :terms_of_service and :privacy_policy', [

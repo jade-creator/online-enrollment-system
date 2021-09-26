@@ -50,7 +50,7 @@ class ContactForm extends Component
             $this->emit('saved');
             $this->emit('proceed', 4);
 
-            if (Auth::user()->role->name == 'admin') $this->emit('completed');
+            if (Auth::user()->role->name !== 'student') $this->emit('completed');
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }
