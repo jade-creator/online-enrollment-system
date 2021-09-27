@@ -10,10 +10,12 @@ use Livewire\Component;
 
 class SectionDestroyComponent extends Component
 {
-    use AuthorizesRequests;
-    use WithSweetAlert;
+    use AuthorizesRequests, WithSweetAlert;
 
-    protected $listeners = [ 'removeSection' ];
+    protected $listeners = [
+        'removeSection',
+        'removeConfirm',
+    ];
 
     public function render()
     {
@@ -23,15 +25,25 @@ class SectionDestroyComponent extends Component
         blade;
     }
 
+    public function removeConfirm(Section $section)
+    {
+        if ($section->registrations()->enrolled()->count() > 0) return $this->warning("Not allowed! There are students enrolled under ".$section->name);
+
+        $this->confirm('removeSection', 'Are you sure you want this deleted?', $section);
+    }
+
     public function removeSection(Section $section)
     {
-        $this->authorize('destroy', $section);
-
         try {
+            $this->authorize('destroy', $section);
             $section = (new SectionService())->destroy($section);
 
-            $this->emitUp('refresh');
-            $this->success($section->name." has been deleted.");
+            session()->flash('swal:modal', [
+                'title' => $this->successTitle,
+                'type' => $this->successType,
+                'text' => $section->name.' has been deleted.',
+            ]);
+            return redirect(route('sections.view'));
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }

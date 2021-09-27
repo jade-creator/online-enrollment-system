@@ -1,4 +1,4 @@
-<x-jet-dialog-modal wire:model="addingSchedule">
+<x-jet-dialog-modal wire:model="addingSchedule" maxWidth="md">
     <x-slot name="title">
         {{ __('Schedule Maintenance') }}
     </x-slot>
@@ -34,12 +34,12 @@
                     </select>
                     <x-jet-input-error for="schedule.day_id" class="mt-2"/>
                 </div>
-                <div class="mt-4 col-span-8">
+                <div class="mt-4 col-span-4">
                     <x-jet-label for="start_time" value="{{ __('Start Time') }}" />
                     <x-jet-input wire:model.defer="schedule.start_time" id="start_time" class="block mt-1 w-full" type="time" autofocus required/>
                     <x-jet-input-error for="schedule.start_time" class="mt-2"/>
                 </div>
-                <div class="mt-4 col-span-8">
+                <div class="mt-4 col-span-4">
                     <x-jet-label for="end_time" value="{{ __('End Time') }}" />
                     <x-jet-input wire:model.defer="schedule.end_time" id="end_time" class="block mt-1 w-full" type="time" autofocus required/>
                     <x-jet-input-error for="schedule.end_time" class="mt-2"/>

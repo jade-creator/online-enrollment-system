@@ -3,9 +3,11 @@
     <div class="h-content w-full py-8 px-8">
         <x-table.title tableTitle="Sections" :isSelectedAll="$this->selectAll" :count="count($this->selected)">
             @can('create', App\Models\Section::class)
-                <x-table.nav-button wire:click.prevent="$emit('modalAddingSection')">
-                    Add Section
-                </x-table.nav-button>
+                <a href="{{ route('admin.sections.create') }}">
+                    <x-table.nav-button>
+                        Add Section
+                    </x-table.nav-button>
+                </a>
             @endcan
         </x-table.title>
 
@@ -39,7 +41,9 @@
                 <x-table.column-title class="col-span-1">level</x-table.column-title>
                 <x-table.column-title class="col-span-1">term</x-table.column-title>
                 <x-table.column-title class="col-span-1">room</x-table.column-title>
-                <x-table.column-title class="col-span-1 text-center">seats</x-table.column-title>
+                <div class="col-span-1 text-center" id="seats-col">
+                    <x-table.sort-button event="sortFieldSelected('seat')">seats</x-table.sort-button>
+                </div>
                 <x-table.column-title class="col-span-2 text-center">current no. of students</x-table.column-title>
                 <div class="col-span-1">
                     <x-table.sort-button event="sortFieldSelected('created_at')">latest</x-table.sort-button>
@@ -72,9 +76,11 @@
                                                         {{ __('Actions') }}
                                                     </div>
                                                     @can ('update', $section)
-                                                        <x-table.cell-button wire:click.prevent="$emit('modalViewingSection', {{ $section }})" title="View">
-                                                            <x-icons.view-icon/>
-                                                        </x-table.cell-button>
+                                                        <a href="{{ route('admin.sections.update', $section) }}">
+                                                            <x-table.cell-button title="View">
+                                                                <x-icons.view-icon/>
+                                                            </x-table.cell-button>
+                                                        </a>
                                                     @endcan
 
                                                     @can ('release', $section)
@@ -90,7 +96,7 @@
                                                     @endcan
 
                                                     @can ('destroy', $section)
-                                                        <x-table.cell-button wire:click.prevent="$emitSelf('removeConfirm', {{$section}})" title="Delete">
+                                                        <x-table.cell-button wire:click.prevent="$emit('removeConfirm', {{$section}})" title="Delete">
                                                             <x-icons.delete-icon/>
                                                         </x-table.cell-button>
                                                     @elsecan ('view', App\Models\Section::class)
@@ -119,7 +125,7 @@
 
         <x-table.bulk-action-bar :count="count($selected)">
             @can('create', App\Models\Section::class)
-                <x-table.bulk-action-button nameButton="Export" event="$toggle('confirmingExport')">
+                <x-table.bulk-action-button nameButton="Export" event="confirmFileExport">
                     <x-icons.export-icon/>
                 </x-table.bulk-action-button>
 
@@ -134,14 +140,9 @@
         @include('partials.loading')
     </div>
 
-    <livewire:admin.section-component.section-add-component :rooms="$this->rooms" :programs="$this->programs">
-
-    <livewire:admin.section-component.section-update-component :rooms="$this->rooms">
-
     <livewire:admin.section-component.section-destroy-component>
 
     <livewire:admin.schedule-component.schedule-add-component key="{{ 'schedule-add-component-'.now() }}" :days="$this->days">
 
     <livewire:admin.schedule-component.schedule-update-component key="{{ 'schedule-update-component-'.now() }}" :days="$this->days">
-
 </div>

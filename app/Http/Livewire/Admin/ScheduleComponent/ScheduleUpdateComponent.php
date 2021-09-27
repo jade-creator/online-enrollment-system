@@ -23,7 +23,7 @@ class ScheduleUpdateComponent extends Component
     public function rules()
     {
         return [
-            'schedule.subject_id' => ['required'],
+            'schedule.prospectus_subject_id' => ['required'],
             'schedule.day_id' => ['required'],
             'schedule.start_time' => ['required'],
             'schedule.end_time' => ['required', 'after:schedule.start_time'],
@@ -40,14 +40,14 @@ class ScheduleUpdateComponent extends Component
 
     public function update()
     {
-        $this->authorize('update', $this->schedule);
         $this->validate();
 
         try {
+            $this->authorize('update', $this->schedule);
             $schedule = (new Schedule\ScheduleService())->update($this->schedule, $this->schedules);
 
+            $this->success($this->schedule->prospectusSubject->subject->code."'s time period in ".$this->section->name." has been updated.");
             $this->toggleViewingSchedule();
-            $this->success($this->schedule->subject->code."'s time period in ".$this->section->name." has been updated.");
             $this->emitUp('refresh');
         } catch (\Exception $e) {
             $this->error($e->getMessage());

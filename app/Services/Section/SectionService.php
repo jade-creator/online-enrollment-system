@@ -6,7 +6,10 @@ use App\Models;
 
 class SectionService
 {
-    public function store(int $programId, $levelId, $termId, Models\Section $section) : Models\Section
+    /**
+     * @throws \Exception
+     */
+    public function find($programId, $levelId, $termId) : Models\Prospectus
     {
         $prospectus = Models\Prospectus::select(['id'])
             ->where([
@@ -14,28 +17,36 @@ class SectionService
                 'level_id' => $levelId,
                 'term_id' => $termId,
             ])
-            ->firstOrFail();
+            ->first();
+
+        if (is_null($prospectus)) throw new \Exception("Prospectus doesn't exists.");
 
         if ($prospectus->subjects->isEmpty()) throw new \Exception('Please add subject/s first under this prospectus.');
+
+        return $prospectus;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function store($programId, $levelId, $termId, Models\Section $section) : Models\Section
+    {
+        $prospectus = $this->find($programId, $levelId, $termId);
 
         $section->prospectus_id = $prospectus->id;
         $section->save();
 
         return $section;
-
-//        $prospectus->subjects->map(function ($subject) use ($section) {
-//            $schedule = Models\Schedule::create([
-//                'subject_id' => $subject->id,
-//                'created_at' => now(),
-//                'updated_at' => now(),
-//            ]);
-//
-//            $schedule->sections()->attach([$section->id]);
-//        });
     }
 
-    public function update(Models\Section $section) : Models\Section
+    /**
+     * @throws \Exception
+     */
+    public function update($programId, $levelId, $termId, Models\Section $section) : Models\Section
     {
+        $prospectus = $this->find($programId, $levelId, $termId);
+
+        $section->prospectus_id = $prospectus->id;
         $section->update();
 
         return $section;
