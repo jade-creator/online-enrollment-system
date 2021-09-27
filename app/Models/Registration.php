@@ -97,12 +97,16 @@ class Registration extends BaseModel
 
     public function statusEnrolled() { return
         Status::where('name', 'enrolled')->first();
-    }// TODO: find where it is used.
+    }
 
+    //section index
     public function scopeEnrolled($query)
     {
-        return $query->where('status_id', $this->statusEnrolled()->id)
-            ->whereNull('released_at');
+        return $query->where([
+                'status_id' => $this->statusEnrolled()->id,
+                'isExtension' => 0,
+                'released_at' => null,
+            ]);
     }
 
     public function transactions() { return

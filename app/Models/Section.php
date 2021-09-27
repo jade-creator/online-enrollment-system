@@ -44,6 +44,14 @@ class Section extends BaseModel
         });
     }
 
+    public function scopeEnrolledStudents($query) { return
+        $query->registrations()->where([
+            'status_id' => 4,
+            'isExtension' => 0,
+            'released_at' => null,
+        ])->get();
+    }
+
     public function registrations() { return
         $this->hasMany(Registration::class);
     }

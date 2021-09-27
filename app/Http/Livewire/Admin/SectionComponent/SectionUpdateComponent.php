@@ -10,15 +10,11 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class SectionUpdateComponent extends Component
 {
-    use AuthorizesRequests;
-    use WithSweetAlert;
+    use AuthorizesRequests, WithSweetAlert;
 
     public Models\Section $section;
-    public int $currentNumberOfStudents = 0;
-    public bool $viewingSection = false;
-    public $rooms;
-
-    protected $listeners = [ 'modalViewingSection' ];
+    public $currentNumberOfStudents;
+    public string $programId = '', $levelId = '', $termId = '';
 
     public function rules()
     {
@@ -27,10 +23,30 @@ class SectionUpdateComponent extends Component
             'section.room_id' => ['required', 'integer'],
             'section.seat' => ['required', 'integer', 'min:1', 'gte:currentNumberOfStudents'],
             'currentNumberOfStudents' => ['integer', 'min:0'],
+            'programId' => ['required'],
+            'levelId' => ['required'],
+            'termId' => ['required'],
         ];
     }
 
-//    public function mount() { $this->setSection(new Models\Section()); }
+    protected $messages = [
+        'section.name' => 'The name field cannot be empty.',
+        'section.room_id.required' => 'The room field cannot be empty.',
+        'section.seat.required' => 'The seat field cannot be empty.',
+        'programId.required' => 'The program field cannot be empty.',
+        'levelId.required' => 'The level field cannot be empty.',
+        'termId.required' => 'The term field cannot be empty.',
+    ];
+
+    public function mount()
+    {
+        $this->fill([
+            'programId' => $this->section->prospectus->program_id,
+            'levelId' => $this->section->prospectus->level_id,
+            'termId' => $this->section->prospectus->term_id,
+            'currentNumberOfStudents' => $this->section->registrations()->enrolled()->count(),
+        ]);
+    }
 
     public function render() { return
         view('livewire.admin.section-component.section-update-component');
@@ -38,33 +54,38 @@ class SectionUpdateComponent extends Component
 
     public function update()
     {
-        $this->authorize('update', $this->section);
         $this->validate();
 
         try {
-            $this->section = (new SectionService())->update($this->section);
+            $this->authorize('update', $this->section);
+            $this->section = (new SectionService())->update($this->programId, $this->levelId, $this->termId, $this->section);
 
-            $this->emitUp('refresh');
-            $this->success($this->section->name.' has been updated.');
+            session()->flash('swal:modal', [
+                'title' => $this->successTitle,
+                'type' => $this->successType,
+                'text' => $this->section->name.' has been updated.',
+            ]);
+            return redirect(route('sections.view'));
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }
-
-        $this->toggleViewingSection();
     }
 
-    public function modalViewingSection(Models\Section $section)
+    public function getRoomsProperty() { return
+        Models\Room::get(['id', 'name']);
+    }
+
+    public function getProgramsProperty() { return
+        Models\Program::get(['id', 'code']);
+    }
+
+    public function getLevelsProperty()
     {
-        $this->setSection($section);
-        $this->currentNumberOfStudents = $this->section->registrations->count();
-        $this->toggleViewingSection();
+        $schoolType = Models\SchoolType::with('levels')->where('type', 'College')->first();
+        return $schoolType->levels;
     }
 
-    public function toggleViewingSection()
-    {
-        $this->resetValidation();
-        $this->viewingSection = !$this->viewingSection;
+    public function getTermsProperty() { return
+        Models\Term::get(['id', 'term']);
     }
-
-    public function setSection(Models\Section $section) { $this->section = $section; }
 }

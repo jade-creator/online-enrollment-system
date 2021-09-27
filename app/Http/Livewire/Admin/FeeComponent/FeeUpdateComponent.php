@@ -26,6 +26,13 @@ class FeeUpdateComponent extends Component
         ];
     }
 
+    protected $messages = [
+        'fee.program_id.required' => 'The program field cannot be empty.',
+        'fee.category_id.required' => 'The category field cannot be empty.',
+        'price.required' => 'The seat field cannot be empty.',
+        'price.min' => 'The amount must be at least 1.',
+    ];
+
     public function render() { return
         view('livewire.admin.fee-component.fee-update-component', [
             'programs' => $this->getPrograms(),

@@ -38,12 +38,14 @@ class SectionIndexComponent extends Livewire\Component
         'DeselectPage' => 'updatedSelectPage',
         'refresh' => '$refresh',
         'releaseStudents',
-        'removeConfirm',
+        'releaseConfirm',
+        'fileExport',
     ];
 
     protected array $allowedSorts = [
         'id',
         'name',
+        'seat',
     ];
 
     public function mount() {
@@ -72,18 +74,11 @@ class SectionIndexComponent extends Livewire\Component
             ->dateFiltered($this->dateMin, $this->dateMax);
     }
 
-    public function removeConfirm(Models\Section $section)
-    {
-        if ($section->registrations->isNotEmpty()) return $this->warning("There are students enrolled under ".$section->name);
-
-        $this->confirmDelete('removeSection', $section, $section->name);
-    }
-
     public function releaseConfirm(Models\Section $section)
     {
         $this->section = $section;
 
-        $this->confirm('releaseStudents', 'Students under this section will be removed. Their registration will be moved to history once successful.');
+        $this->confirm('releaseStudents', 'Students under this section will be removed. Their registration will be archived once successful.');
     }
 
     public function release(string $method, $argument)

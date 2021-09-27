@@ -39,14 +39,14 @@ class ScheduleAddComponent extends Component
 
     public function save()
     {
-        $this->authorize('create', $this->schedule);
         $this->validate();
 
         try {
+            $this->authorize('create', $this->schedule);
             (new ScheduleService())->store($this->section, $this->schedule, $this->days);
 
-            $this->toggleAddingSchedule();
             $this->success("A class has been added in ".$this->section->name);
+            $this->toggleAddingSchedule();
             $this->emitUp('refresh');
         } catch (\Exception $e) {
             $this->error($e->getMessage());

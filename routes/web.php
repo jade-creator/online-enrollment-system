@@ -79,11 +79,17 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
                 Route::get('/released', PreEnrollmentComponent\ReleasedPreEnrollmentComponent::class)->name('released.enrollments.view');
             });
 
+            //admin fee routes
             Route::group(['prefix' => 'fees', 'as' => 'fees.'], function (){
                 Route::get('', FeeComponent\FeeIndexComponent::class)->name('view');
                 Route::get('/create', FeeComponent\FeeAddComponent::class)->name('create');
                 Route::get('{fee}/update', FeeComponent\FeeUpdateComponent::class)->name('update');
-                Route::get('{fee}/destroy', FeeComponent\FeeDestroyComponent::class)->name('destroy');
+            });
+
+            //admin section routes
+            Route::group(['prefix' => 'sections', 'as' => 'sections.'], function (){
+                Route::get('/create', SectionComponent\SectionAddComponent::class)->name('create');
+                Route::get('{section}/update', SectionComponent\SectionUpdateComponent::class)->name('update');
             });
 
             Route::get('/subjects', SubjectComponent\SubjectIndexComponent::class)->name('subjects.view');
