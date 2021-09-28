@@ -5,7 +5,7 @@
             @can('create', App\Models\Section::class)
                 <a href="{{ route('admin.sections.create') }}">
                     <x-table.nav-button>
-                        Add Section
+                        Create New Section
                     </x-table.nav-button>
                 </a>
             @endcan

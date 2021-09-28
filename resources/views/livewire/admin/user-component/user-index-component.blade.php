@@ -3,9 +3,11 @@
     <div class="h-content w-full py-8 px-8">
         <x-table.title tableTitle="Users" :isSelectedAll="$this->selectAll" :count="count($this->selected)">
             @can('create', App\Models\User::class)
-                <x-table.nav-button wire:click.prevent="$emit('modalAddingUser')">
-                    Add User
-                </x-table.nav-button>
+                <a href="{{ route('admin.users.create') }}">
+                    <x-table.nav-button>
+                        Creat New User
+                    </x-table.nav-button>
+                </a>
             @endcan
         </x-table.title>
 
@@ -77,9 +79,15 @@
                                                     <div class="block px-4 py-3 text-sm text-gray-500 font-bold">
                                                         {{ __('Actions') }}
                                                     </div>
-                                                    <x-table.cell-button title="No Options">
-                                                        <x-icons.lock-icon/>
-                                                    </x-table.cell-button>
+                                                    @can ('activate', $user)
+                                                        <x-table.cell-button wire:click="confirmAction('deactivate', {{ $user }})" title="Deactivate">
+                                                            <x-icons.view-icon/>
+                                                        </x-table.cell-button>
+                                                    @elsecan('deactivate', $user)
+                                                        <x-table.cell-button wire:click="confirmAction('activate', {{ $user }})" title="Activate">
+                                                            <x-icons.view-icon/>
+                                                        </x-table.cell-button>
+                                                    @endcan
                                                 </div>
                                             </x-slot>
                                         </x-jet-dropdown>
@@ -106,6 +114,4 @@
     <div wire:loading>
         @include('partials.loading')
     </div>
-
-    <livewire:admin.user-component.user-add-component :roles="$this->roles">
 </div>
