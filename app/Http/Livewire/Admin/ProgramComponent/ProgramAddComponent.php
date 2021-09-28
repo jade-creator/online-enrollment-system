@@ -10,13 +10,9 @@ use Livewire\Component;
 
 class ProgramAddComponent extends Component
 {
-    use AuthorizesRequests;
-    use WithSweetAlert;
+    use AuthorizesRequests, WithSweetAlert;
 
     public Program $program;
-    public bool $addingProgram = false;
-
-    protected $listeners = ['modalAddingProgram'];
 
     public function rules()
     {
@@ -28,34 +24,37 @@ class ProgramAddComponent extends Component
         ];
     }
 
+    protected $messages = [
+        'program.code.required' => 'The code field cannot be empty.',
+        'program.program.required' => 'The program field cannot be empty.',
+        'program.description.required' => 'The description field cannot be empty.',
+        'program.year.required' => 'The year/s field cannot be empty.',
+    ];
+
+    public function mount() {
+        $this->program = new Program();
+    }
+
     public function render() { return
         view('livewire.admin.program-component.program-add-component');
     }
 
-    public function modalAddingProgram()
-    {
-        $this->resetValidation();
-        $this->program = new Program();
-        $this->toggleModal();
-    }
-
     public function save()
     {
-        $this->authorize('create', Program::class);
         $this->validate();
 
         try {
+            $this->authorize('create', Program::class);
             (new ProgramService())->store($this->program);
 
-            $this->toggleModal();
-            $this->emitUp('refresh');
-            $this->success($this->program->code.' has been added.');
+            session()->flash('swal:modal', [
+                'title' => $this->successTitle,
+                'type' => $this->successType,
+                'text' => $this->program->program.' has been added.',
+            ]);
+            return redirect(route('admin.programs.view'));
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }
-    }
-
-    public function toggleModal() : bool { return
-        $this->addingProgram = !$this->addingProgram;
     }
 }

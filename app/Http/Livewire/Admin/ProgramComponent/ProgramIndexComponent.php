@@ -38,16 +38,11 @@ class ProgramIndexComponent extends Livewire\Component
     protected $listeners = [
         'refresh' => '$refresh',
         'DeselectPage' => 'updatedSelectPage',
-        'removeConfirm',
         'fileExport',
     ];
 
     public function render() { return
         view('livewire.admin.program-component.program-index-component', ['programs' => $this->rows]);
-    }
-
-    public function removeConfirm(Program $program) {
-        $this->confirmDelete('removeProgram', $program, $program->code);
     }
 
     public function getRowsProperty() { return
@@ -65,7 +60,6 @@ class ProgramIndexComponent extends Livewire\Component
     public function fileExport()
     {
         try {
-            $this->modal('Downloading...','info','Please wait for the file to be downloaded.');
             return $this->excelFileExport((new ProgramsExport($this->selected)), 'program-collection.xlsx');
         } catch (\Exception $e) {
             $this->error($e->getMessage());

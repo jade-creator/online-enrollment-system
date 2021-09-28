@@ -105,7 +105,7 @@
 
         <x-table.bulk-action-bar :count="count($selected)">
             @can('export', App\Models\Fee::class)
-                <x-table.bulk-action-button nameButton="Export" event="$emitSelf('fileExport')">
+                <x-table.bulk-action-button nameButton="Export" event="confirmFileExport">
                     <x-icons.export-icon/>
                 </x-table.bulk-action-button>
             @endcan

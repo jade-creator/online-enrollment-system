@@ -13,7 +13,10 @@ class ProgramDestroyComponent extends Component
     use AuthorizesRequests;
     use WithSweetAlert;
 
-    protected $listeners = [ 'removeProgram' ];
+    protected $listeners = [
+        'removeProgram',
+        'removeConfirm',
+    ];
 
     public function render()
     {
@@ -23,15 +26,22 @@ class ProgramDestroyComponent extends Component
         blade;
     }
 
+    public function removeConfirm(Program $program) {
+        $this->confirm('removeProgram', 'Are you sure you want this deleted?', $program);
+    }
+
     public function removeProgram(Program $program)
     {
-        $this->authorize('destroy', $program);
-
         try {
-            (new ProgramService())->destroy($program);
+            $this->authorize('destroy', $program);
+            $program = (new ProgramService())->destroy($program);
 
-            $this->emitUp('refresh');
-            $this->success($program->code." has been deleted.");
+            session()->flash('swal:modal', [
+                'title' => $this->successTitle,
+                'type' => $this->successType,
+                'text' => $program->program.' has been deleted.',
+            ]);
+            return redirect(route('admin.programs.view'));
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }

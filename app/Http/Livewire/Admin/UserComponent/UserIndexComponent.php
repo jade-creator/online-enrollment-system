@@ -107,7 +107,7 @@ class UserIndexComponent extends Livewire\Component
 
     public function updatingPaginateValue() { $this->resetPage(); }
 
-    public function fileExport() // TODO:
+    public function fileExport()
     {
         try {
             return $this->excelFileExport((new UsersExport($this->selected)), 'user-collection.xlsx');

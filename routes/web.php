@@ -94,7 +94,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
 
             Route::get('/subjects', SubjectComponent\SubjectIndexComponent::class)->name('subjects.view');
 
-            Route::get('/programs', ProgramComponent\ProgramIndexComponent::class)->name('programs.view');
+            //admin user routes
+            Route::group(['prefix' => 'programs', 'as' => 'programs.'], function (){
+                Route::get('', ProgramComponent\ProgramIndexComponent::class)->name('view');
+                Route::get('/create', ProgramComponent\ProgramAddComponent::class)->name('create');
+                Route::get('/{program}/update', ProgramComponent\ProgramUpdateComponent::class)->name('update');
+            });
 
             //admin user routes
             Route::group(['prefix' => 'users', 'as' => 'users.'], function (){
