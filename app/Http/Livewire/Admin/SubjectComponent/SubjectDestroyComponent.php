@@ -10,10 +10,12 @@ use Livewire\Component;
 
 class SubjectDestroyComponent extends Component
 {
-    use AuthorizesRequests;
-    use WithSweetAlert;
+    use AuthorizesRequests, WithSweetAlert;
 
-    protected $listeners = [ 'removeSubject' ];
+    protected $listeners = [
+        'removeSubject',
+        'removeConfirm',
+    ];
 
     public function render()
     {
@@ -23,15 +25,22 @@ class SubjectDestroyComponent extends Component
         blade;
     }
 
+    public function removeConfirm(Subject $subject) { return
+        $this->confirm('removeSubject', 'Are you sure you want this deleted?', $subject);
+    }
+
     public function removeSubject(Subject $subject)
     {
-        $this->authorize('destroy', $subject);
-
         try {
-            (new SubjectService())->destroy($subject);
+            $this->authorize('destroy', $subject);
+            $subject = (new SubjectService())->destroy($subject);
 
-            $this->emitUp('refresh');
-            $this->success($subject->code." has been deleted.");
+            session()->flash('swal:modal', [
+                'title' => $this->successTitle,
+                'type' => $this->successType,
+                'text' => $subject->code.' has been deleted.',
+            ]);
+            return redirect(route('admin.subjects.view'));
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }

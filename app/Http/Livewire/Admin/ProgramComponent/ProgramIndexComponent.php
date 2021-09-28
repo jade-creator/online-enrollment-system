@@ -14,7 +14,6 @@ class ProgramIndexComponent extends Livewire\Component
     use Livewire\WithPagination, Traits\WithBulkActions, Traits\WithSorting, Traits\WithFilters, Traits\WithExporting,
         Traits\WithSweetAlert;
 
-    public Program $program;
     public int $paginateValue = 10;
 
     protected $queryString = [

@@ -10,13 +10,9 @@ use Livewire\Component;
 
 class SubjectUpdateComponent extends Component
 {
-    use AuthorizesRequests;
-    use WithSweetAlert;
+    use AuthorizesRequests, WithSweetAlert;
 
     public Subject $subject;
-    public bool $viewingSubject = false;
-
-    protected $listeners = [ 'modalViewingSubject' ];
 
     public function rules()
     {
@@ -27,7 +23,11 @@ class SubjectUpdateComponent extends Component
         ];
     }
 
-    public function mount() { $this->setSubject(new Subject()); }
+    protected $messages = [
+        'subject.code.required' => 'The code field cannot be empty.',
+        'subject.title.required' => 'The program field cannot be empty.',
+        'subject.description.required' => 'The description field cannot be empty.',
+    ];
 
     public function render() { return
         view('livewire.admin.subject-component.subject-update-component');
@@ -35,32 +35,20 @@ class SubjectUpdateComponent extends Component
 
     public function update()
     {
-        $this->authorize('update', $this->subject);
         $this->validate();
 
         try {
-            (new SubjectService())->update($this->subject);
+            $this->authorize('update', $this->subject);
+            $subject = (new SubjectService())->update($this->subject);
 
-            $this->emitUp('refresh');
-            $this->success($this->subject->code.' has been updated.');
+            session()->flash('swal:modal', [
+                'title' => $this->successTitle,
+                'type' => $this->successType,
+                'text' => $subject->code.' has been updated.',
+            ]);
+            return redirect(route('admin.subjects.view'));
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }
-
-        $this->toggleViewingSubject();
     }
-
-    public function modalViewingSubject(Subject $subject)
-    {
-        $this->setSubject($subject);
-        $this->toggleViewingSubject();
-    }
-
-    public function toggleViewingSubject()
-    {
-        $this->resetValidation();
-        $this->viewingSubject = !$this->viewingSubject;
-    }
-
-    public function setSubject(Subject $subject) { $this->subject = $subject; }
 }

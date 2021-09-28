@@ -92,7 +92,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
                 Route::get('{section}/update', SectionComponent\SectionUpdateComponent::class)->name('update');
             });
 
-            Route::get('/subjects', SubjectComponent\SubjectIndexComponent::class)->name('subjects.view');
+            //admin subject routes
+            Route::group(['prefix' => 'subjects', 'as' => 'subjects.'], function (){
+                Route::get('', SubjectComponent\SubjectIndexComponent::class)->name('view');
+                Route::get('/create', SubjectComponent\SubjectAddComponent::class)->name('create');
+                Route::get('{subject}/update', SubjectComponent\SubjectUpdateComponent::class)->name('update');
+            });
 
             //admin user routes
             Route::group(['prefix' => 'programs', 'as' => 'programs.'], function (){

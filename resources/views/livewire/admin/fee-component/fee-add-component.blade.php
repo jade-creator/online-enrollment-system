@@ -21,7 +21,7 @@
                             Create New Fee
                         </x-slot>
 
-                        <x-slot name="description">lorem ipsum woalala beng beng iskiri</x-slot>
+                        <x-slot name="description">Please fill out the form with correct data.</x-slot>
 
                         <x-slot name="form">
                             <form>
