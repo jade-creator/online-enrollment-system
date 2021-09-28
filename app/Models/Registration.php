@@ -28,6 +28,18 @@ class Registration extends BaseModel
         'prospectus.term:id,term',
     ];
 
+    public function scopeFilterByProgram($query, $programId) { return
+        $query->whereBetween('created_at', [
+                now()->startOfYear(),
+                now()->endOfYear(),
+            ])
+            ->when(filled($programId), function ($query) use ($programId) {
+            return $query->whereHas('prospectus', function($query) use ($programId){
+                return $query->where('program_id', $programId);
+            });
+        });
+    }
+
     public function getSchoolYearAttribute() { return
         $this->created_at->format('Y').'-'.$this->created_at->addYear()->format('Y');
     }
@@ -97,6 +109,36 @@ class Registration extends BaseModel
 
     public function statusEnrolled() { return
         Status::where('name', 'enrolled')->first();
+    }
+
+    //dashboard
+    public function scopeFinalized($query)
+    {
+        return $query->where([
+            'status_id' => 3,
+            'isExtension' => 0,
+            'released_at' => null,
+        ])->get();
+    }
+
+    //dashboard
+    public function scopeConfirming($query)
+    {
+        return $query->where([
+            'status_id' => 2,
+            'isExtension' => 0,
+            'released_at' => null,
+        ])->get();
+    }
+
+    //dashboard
+    public function scopePending($query)
+    {
+        return $query->where([
+            'status_id' => 1,
+            'isExtension' => 0,
+            'released_at' => null,
+        ])->get();
     }
 
     //section index

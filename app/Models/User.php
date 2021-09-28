@@ -61,6 +61,44 @@ class User extends Authenticatable implements MustVerifyEmail
         'profile_photo_url',
     ];
 
+    public function scopeStudent($query) { return
+        $query->whereHas('role', function($query) {
+            return $query->where('name', 'student');
+        });
+    }
+
+    public function scopeNone($query) { return
+        $query->student()
+            ->whereHas('person.detail', function($query) {
+                return $query->where('gender', 'Prefer not to say');
+            })
+            ->get(['id', 'role_id', 'person_id']);
+    }
+
+    public function scopeOther($query) { return
+        $query->student()
+            ->whereHas('person.detail', function($query) {
+                return $query->where('gender', 'Other');
+            })
+            ->get(['id', 'role_id', 'person_id']);
+    }
+
+    public function scopeFemale($query) { return
+        $query->student()
+            ->whereHas('person.detail', function($query) {
+                return $query->where('gender', 'Female');
+            })
+            ->get(['id', 'role_id', 'person_id']);
+    }
+
+    public function scopeMale($query) { return
+        $query->student()
+            ->whereHas('person.detail', function($query) {
+                return $query->where('gender', 'Male');
+            })
+            ->get(['id', 'role_id', 'person_id']);
+    }
+
     public function scopeDateFiltered($query, $dateMin, $dateMax) { return
         (new BaseModel())->scopeDateFiltered($query, $dateMin, $dateMax);
     }
