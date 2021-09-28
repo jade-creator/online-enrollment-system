@@ -10,13 +10,9 @@ use Livewire\Component;
 
 class SubjectAddComponent extends Component
 {
-    use AuthorizesRequests;
-    use WithSweetAlert;
+    use AuthorizesRequests, WithSweetAlert;
 
     public Subject $subject;
-    public bool $addingSubject = false;
-
-    protected $listeners = [ 'modalAddingSubject' ];
 
     public function rules()
     {
@@ -27,33 +23,36 @@ class SubjectAddComponent extends Component
         ];
     }
 
+    protected $messages = [
+        'subject.code.required' => 'The code field cannot be empty.',
+        'subject.title.required' => 'The program field cannot be empty.',
+        'subject.description.required' => 'The description field cannot be empty.',
+    ];
+
+    public function mount() {
+        $this->subject = new Subject();
+    }
+
     public function render() { return
         view('livewire.admin.subject-component.subject-add-component');
     }
 
-    public function modalAddingSubject()
-    {
-        $this->resetValidation();
-        $this->fill([
-            'subject' => new Subject(),
-            'addingSubject' => !$this->addingSubject,
-        ]);
-    }
-
     public function save()
     {
-        $this->authorize('create', Subject::class);
         $this->validate();
 
         try {
-            (new SubjectService())->store($this->subject);
+            $this->authorize('create', Subject::class);
+            $subject = (new SubjectService())->store($this->subject);
 
-            $this->emitUp('refresh');
-            $this->success($this->subject->code." has been added.");
+            session()->flash('swal:modal', [
+                'title' => $this->successTitle,
+                'type' => $this->successType,
+                'text' => $subject->code.' has been added.',
+            ]);
+            return redirect(route('admin.subjects.view'));
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }
-
-        $this->modalAddingSubject();
     }
 }

@@ -3,9 +3,11 @@
     <div class="h-content w-full py-8 px-8">
         <x-table.title tableTitle="Subjects" :isSelectedAll="$this->selectAll" :count="count($this->selected)">
             @can('create', App\Models\Subject::class)
-                <x-table.nav-button wire:click.prevent="$emit('modalAddingSubject')">
-                    Add Subject
-                </x-table.nav-button>
+                <a href="{{ route('admin.subjects.create') }}">
+                    <x-table.nav-button>
+                        Create New Subject
+                    </x-table.nav-button>
+                </a>
             @endcan
         </x-table.title>
 
@@ -40,7 +42,7 @@
                     <div wire:key="table-row-{{$subject->id}}" x-data="{ open: false }">
                         <x-table.row :active="$this->isSelected($subject->id)">
                             <div name="slot" class="grid grid-cols-12 gap-2">
-                                <x-table.cell-checkbox :value="$subject->id"/>
+                                <x-table.cell-checkbox :value="$subject->id">{{ $subject->id ?? 'N/A' }}</x-table.cell-checkbox>
                                 <x-table.cell class="justify-start md:col-span-2">{{ $subject->code ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell class="justify-start md:col-span-3">{{ $subject->title ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell class="justify-start md:col-span-4">{{ $subject->description ?? 'N/A' }}</x-table.cell>
@@ -57,20 +59,22 @@
                                                         {{ __('Actions') }}
                                                     </div>
                                                     @can ('update', $subject)
-                                                        <x-table.cell-button wire:click.prevent="$emit('modalViewingSubject', {{ $subject }})" title="View">
-                                                            <x-icons.view-icon/>
-                                                        </x-table.cell-button>
+                                                        <a href="{{ route('admin.subjects.update', $subject) }}">
+                                                            <x-table.cell-button title="View">
+                                                                <x-icons.view-icon/>
+                                                            </x-table.cell-button>
+                                                        </a>
                                                     @endcan
 
-{{--                                                    @can ('destroy', $section)--}}
-                                                        <x-table.cell-button wire:click.prevent="$emitSelf('removeConfirm', {{$subject}})" title="Delete">
+                                                    @can ('destroy', $subject)
+                                                        <x-table.cell-button wire:click.prevent="$emit('removeConfirm', {{$subject}})" title="Delete">
                                                             <x-icons.delete-icon/>
                                                         </x-table.cell-button>
-{{--                                                    @elsecan ('view', App\Models\Section::class)--}}
-{{--                                                        <x-table.cell-button title="Administrative Access">--}}
-{{--                                                            <x-icons.lock-icon/>--}}
-{{--                                                        </x-table.cell-button>--}}
-{{--                                                    @endcan--}}
+                                                    @elsecan ('view', App\Models\Section::class)
+                                                        <x-table.cell-button title="Administrative Access">
+                                                            <x-icons.lock-icon/>
+                                                        </x-table.cell-button>
+                                                    @endcan
                                                 </div>
                                             </x-slot>
                                         </x-jet-dropdown>
@@ -84,15 +88,19 @@
                 @endforelse
             </x-slot>
         </x-table.main>
+
+        <x-table.bulk-action-bar :count="count($selected)">
+            @can('export', App\Models\Subject::class)
+                <x-table.bulk-action-button nameButton="Export" event="confirmFileExport">
+                    <x-icons.export-icon/>
+                </x-table.bulk-action-button>
+            @endcan
+        </x-table.bulk-action-bar>
     </div>
 
     <div wire:loading>
         @include('partials.loading')
     </div>
-
-    <livewire:admin.subject-component.subject-add-component>
-
-    <livewire:admin.subject-component.subject-update-component>
 
     <livewire:admin.subject-component.subject-destroy-component>
 </div>

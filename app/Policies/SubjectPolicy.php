@@ -25,4 +25,8 @@ class SubjectPolicy
     public function destroy(User $user, Subject $subject) { return
         $this->isAdmin($user);
     }
+
+    public function export(User $user) { return
+        $this->isAdmin($user);
+    }
 }

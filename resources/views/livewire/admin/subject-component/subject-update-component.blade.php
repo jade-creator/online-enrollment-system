@@ -1,39 +1,56 @@
-<x-jet-dialog-modal wire:model="viewingSubject">
-    <x-slot name="title">
-        {{ __('Subject Maintenance') }}
-    </x-slot>
+<div class="w-full scrolling-touch">
+    <div class="h-content w-full py-8 px-8">
+        <x-table.title tableTitle="Subject Maintenance"></x-table.title>
 
-    <x-slot name="content">
-        <form>
-            <div class="grid grid-cols-8 gap-6">
-                <div class="mt-3 col-span-8">
-                    <div class="mt-4">
-                        <x-jet-label for="subject-code" value="{{ __('Code') }}" />
-                        <x-jet-input wire:model.defer="subject.code" id="subject-code" class="block mt-1 w-full" type="text" name="subject-code" autofocus required/>
-                        <x-jet-input-error for="subject.code" class="mt-2"/>
-                    </div>
-                    <div class="mt-4">
-                        <x-jet-label for="subject-title" value="{{ __('Title') }}" />
-                        <x-jet-input wire:model.defer="subject.title" id="subject-title" class="block mt-1 w-full" type="text" name="subject-title" autofocus required/>
-                        <x-jet-input-error for="subject.title" class="mt-2"/>
-                    </div>
-                    <div class="mt-4">
-                        <x-jet-label for="subject-description" value="{{ __('Description') }}" />
-                        <textarea wire:model.defer="subject.description" id="subject-description" class="block mt-1 w-full" name="subject-description" autofocus required></textarea>
-                        <x-jet-input-error for="subject.description" class="mt-2"/>
-                    </div>
+        <x-table.main>
+            <x-slot name="filter"></x-slot>
+            <x-slot name="paginationLink"></x-slot>
+            <x-slot name="head"></x-slot>
+
+            <x-slot name="body">
+                <div class="grid place-items-center">
+                    <x-jet-form-section submit="" class="w-3/4">
+                        <x-slot name="title">
+                            <p class="capitalize">{{ $subject->title }}</p>
+                        </x-slot>
+
+                        <x-slot name="description">Please fill out the form with correct data.</x-slot>
+
+                        <x-slot name="form">
+                            <form>
+                                <div class="col-span-6">
+                                    <x-jet-label for="subject-code" value="{{ __('Code') }}" />
+                                    <x-jet-input wire:model.defer="subject.code" id="subject-code" type="text" name="subject-code" autofocus/>
+                                    <x-jet-input-error for="subject.code" class="mt-2"/>
+                                </div>
+                                <div class="col-span-6">
+                                    <x-jet-label for="subject-title" value="{{ __('Title') }}" />
+                                    <x-jet-input wire:model.defer="subject.title" id="subject-title" type="text" name="subject-title" autofocus/>
+                                    <x-jet-input-error for="subject.title" class="mt-2"/>
+                                </div>
+                                <div class="col-span-6">
+                                    <x-jet-label for="subject-description" value="{{ __('Description') }}" />
+                                    <textarea wire:model.defer="subject.description" id="subject-description" name="subject-description" autofocus></textarea>
+                                    <x-jet-input-error for="subject.description" class="mt-2"/>
+                                </div>
+                            </form>
+                        </x-slot>
+
+                        <x-slot name="actions">
+                            <a href="{{ route('admin.subjects.view') }}">
+                                <x-jet-secondary-button>
+                                    {{ __('Cancel') }}
+                                </x-jet-secondary-button>
+                            </a>
+
+                            <x-jet-button class="ml-2 bg-blue-500 hover:blue-700" wire:click="update" wire:loading.attr="disabled">
+                                {{ __('Update') }}
+                            </x-jet-button>
+                        </x-slot>
+                    </x-jet-form-section>
+                    <x-jet-section-border/>
                 </div>
-            </div>
-        </form>
-    </x-slot>
-
-    <x-slot name="footer">
-        <x-jet-secondary-button wire:click="$toggle('viewingSubject')" wire:loading.attr="disabled">
-            {{ __('Cancel') }}
-        </x-jet-secondary-button>
-
-        <x-jet-button class="ml-2 bg-blue-500 hover:blue-700" wire:click="update" wire:loading.attr="disabled">
-            {{ __('Update') }}
-        </x-jet-button>
-    </x-slot>
-</x-jet-dialog-modal>
+            </x-slot>
+        </x-table.main>
+    </div>
+</div>
