@@ -23,5 +23,15 @@ class UserPolicy
         $this->isAdmin($user);
     }
 
+    public function update(User $user) { return
+        $this->isAdmin($user);
+    }
 
+    public function activate(User $user, User $userAccount) { return
+        $this->isAdmin($user) && $userAccount->approved_at != null;
+    }
+
+    public function deactivate(User $user, User $userAccount) { return
+        $this->isAdmin($user) && $userAccount->approved_at == null;
+    }
 }

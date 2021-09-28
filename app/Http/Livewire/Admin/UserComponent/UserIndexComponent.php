@@ -39,6 +39,8 @@ class UserIndexComponent extends Livewire\Component
         'refresh' => '$refresh',
         'DeselectPage' => 'updatedSelectPage',
         'fileExport',
+        'activate',
+        'deactivate',
     ];
 
     public function render() { return
@@ -52,11 +54,49 @@ class UserIndexComponent extends Livewire\Component
     public function getRowsQueryProperty()
     {
         return Models\User::search($this->search)
-            ->select(['id','name', 'email', 'role_id', 'profile_photo_path'])
+            ->select(['id','name', 'email', 'role_id', 'profile_photo_path', 'approved_at'])
             ->with('role')
             ->matchWithRole($this->roleId)
             ->orderBy($this->sortBy, $this->sortDirection)
             ->dateFiltered($this->dateMin, $this->dateMax);
+    }
+
+    public function confirmAction(string $action, Models\User $user) {
+        return $this->confirm($action, 'Are you sure?', $user);
+    }
+
+    public function activate(Models\User $user)
+    {
+        try {
+            $user->approved_at = now();
+            $user->update();
+
+            session()->flash('swal:modal', [
+                'title' => $this->successTitle,
+                'type' => $this->successType,
+                'text' => $user->name.' has been activated.',
+            ]);
+            return redirect(route('admin.users.view'));
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
+        }
+    }
+
+    public function deactivate(Models\User $user)
+    {
+        try {
+            $user->approved_at = null;
+            $user->update();
+
+            session()->flash('swal:modal', [
+                'title' => $this->successTitle,
+                'type' => $this->successType,
+                'text' => $user->name.' has been deactivated.',
+            ]);
+            return redirect(route('admin.users.view'));
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
+        }
     }
 
     public function getRolesProperty() { return
@@ -67,10 +107,9 @@ class UserIndexComponent extends Livewire\Component
 
     public function updatingPaginateValue() { $this->resetPage(); }
 
-    public function fileExport()
+    public function fileExport() // TODO:
     {
         try {
-            $this->modal('Downloading...','info','Users record is downloading.');
             return $this->excelFileExport((new UsersExport($this->selected)), 'user-collection.xlsx');
         } catch (\Exception $e) {
             $this->error($e->getMessage());

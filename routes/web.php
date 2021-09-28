@@ -70,7 +70,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
         Route::get('/user/personal-details/employee', AdminDetailForm::class)->middleware(['detail'])->name('user.personal-details.admin');
 
         Route::group(['middleware' => ['user.detail', 'approved'], 'prefix' => 'admin', 'as' => 'admin.'], function (){
-            Route::get('/dashboard', Dashboard::class)->name('dashboard'); // TODO : renamecomponent
+            Route::get('/dashboard', Dashboard::class)->name('dashboard');
 
             Route::get('/grades', GradeComponent\GradeIndexComponent::class)->name('grades.view');
 
@@ -96,8 +96,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
 
             Route::get('/programs', ProgramComponent\ProgramIndexComponent::class)->name('programs.view');
 
-            Route::get('/users', UserComponent\UserIndexComponent::class)->name('users.view');
-
+            //admin user routes
+            Route::group(['prefix' => 'users', 'as' => 'users.'], function (){
+                Route::get('', UserComponent\UserIndexComponent::class)->name('view');
+                Route::get('/create', UserComponent\UserAddComponent::class)->name('create');
+            });
         });
     });
     // end admin
