@@ -10,13 +10,10 @@ use Livewire\Component;
 
 class ProgramUpdateComponent extends Component
 {
-    use AuthorizesRequests;
-    use WithSweetAlert;
+    use AuthorizesRequests, WithSweetAlert;
 
     public Program $program;
-    public bool $viewingProgram = false;
-
-    protected $listeners = ['modalViewingProgram'];
+    public $years;
 
     public function rules()
     {
@@ -27,34 +24,36 @@ class ProgramUpdateComponent extends Component
         ];
     }
 
+    protected $messages = [
+        'program.code.required' => 'The code field cannot be empty.',
+        'program.program.required' => 'The program field cannot be empty.',
+        'program.description.required' => 'The description field cannot be empty.',
+    ];
+
+    public function mount() {
+        $this->years = $this->program->year;
+    }
+
     public function render() { return
         view('livewire.admin.program-component.program-update-component');
     }
 
-    public function modalViewingProgram(Program $program)
-    {
-        $this->resetValidation();
-        $this->program = $program;
-        $this->toggleModal();
-    }
-
     public function update()
     {
-        $this->authorize('update', $this->program);
         $this->validate();
 
         try {
-            (new ProgramService())->update($this->program);
+            $this->authorize('update', $this->program);
+            $program = (new ProgramService())->update($this->program);
 
-            $this->toggleModal();
-            $this->emitUp('refresh');
-            $this->success($this->program->code.' has been updated.');
+            session()->flash('swal:modal', [
+                'title' => $this->successTitle,
+                'type' => $this->successType,
+                'text' => $program->program.' has been updated.',
+            ]);
+            return redirect(route('admin.programs.view'));
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }
-    }
-
-    public function toggleModal() : bool { return
-        $this->viewingProgram = !$this->viewingProgram;
     }
 }

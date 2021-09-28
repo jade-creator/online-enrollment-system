@@ -2,11 +2,13 @@
 
     <div class="h-content w-full py-8 px-8">
         <x-table.title tableTitle="Programs" :isSelectedAll="$this->selectAll" :count="count($this->selected)">
-            @can('create', App\Models\Program::class)
-                <x-table.nav-button wire:click.prevent="$emit('modalAddingProgram')">
-                    Add Program
-                </x-table.nav-button>
-            @endcan
+            <a href="{{ route('admin.programs.create') }}">
+                @can('create', App\Models\Program::class)
+                    <x-table.nav-button>
+                        Create New Program
+                    </x-table.nav-button>
+                @endcan
+            </a>
         </x-table.title>
 
         <x-table.main>
@@ -59,13 +61,15 @@
                                                         {{ __('Actions') }}
                                                     </div>
                                                     @can ('update', $program)
-                                                        <x-table.cell-button wire:click.prevent="$emit('modalViewingProgram', {{ $program }})" title="View">
-                                                            <x-icons.view-icon/>
-                                                        </x-table.cell-button>
+                                                        <a href="{{ route('admin.programs.update', $program) }}">
+                                                            <x-table.cell-button title="View">
+                                                                <x-icons.view-icon/>
+                                                            </x-table.cell-button>
+                                                        </a>
                                                     @endcan
 
                                                     @can ('destroy', $program)
-                                                        <x-table.cell-button wire:click.prevent="$emitSelf('removeConfirm', {{$program}})" title="Delete">
+                                                        <x-table.cell-button wire:click.prevent="$emit('removeConfirm', {{$program}})" title="Delete">
                                                             <x-icons.delete-icon/>
                                                         </x-table.cell-button>
                                                     @elsecan ('view', App\Models\Program::class)
@@ -89,7 +93,7 @@
 
         <x-table.bulk-action-bar :count="count($selected)">
             @can('export', App\Models\Program::class)
-                <x-table.bulk-action-button nameButton="Export" event="$emitSelf('fileExport')">
+                <x-table.bulk-action-button nameButton="Export" event="confirmFileExport">
                     <x-icons.export-icon/>
                 </x-table.bulk-action-button>
             @endcan
@@ -99,10 +103,6 @@
     <div wire:loading>
         @include('partials.loading')
     </div>
-
-    <livewire:admin.program-component.program-add-component key="{{ 'program-add-component-'.now() }}">{{--TODO: clear ids--}}
-
-    <livewire:admin.program-component.program-update-component key="{{ 'program-update-component-'.now() }}">
 
     <livewire:admin.program-component.program-destroy-component>
 </div>
