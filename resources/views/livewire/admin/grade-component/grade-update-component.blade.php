@@ -7,14 +7,28 @@
         <form>
             <div class="col-span-6 mb-2">
                 <x-jet-label for="code" value="{{ __('Subject Code') }}" class="my-2" />
-                <input wire:model="code" readonly type="text" id="code" class="w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
+                <input wire:model="code" readonly type="text" id="code">
             </div>
 
             <div class="col-span-6">
-                <x-jet-label for="grade" value="{{ __('Grade') }}" class="my-2"/>
-                <input wire:model.defer="grade.value" type="number" id="grade" class="w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
-                <x-jet-input-error for="grade.value" class="mt-2"/>
+                <x-jet-label for="type" value="{{ __('Grade') }}" class="my-2"/>
+                <select wire:model="type" wire:loading.attr="disabled" name="type">
+                    <option value="">-- select a grade --</option>
+                    <option value="scale">Scale</option>
+                    <option value="Incomplete">Incomplete</option>
+                    <option value="Dropped">Dropped</option>
+                    <option value="TBA">TBA</option>
+                </select>
+                <x-jet-input-error for="type" class="mt-2"/>
             </div>
+
+            @if ($type == 'scale')
+                <div class="col-span-6">
+                    <x-jet-label for="value" value="" class="my-2"/>
+                    <input wire:model.defer="value" wire:loading.attr="disabled" type="number" id="value" name="value" step="0.01" min="1" max="100">
+                    <x-jet-input-error for="value" class="mt-2"/>
+                </div>
+            @endif
         </form>
     </x-slot>
 

@@ -7,14 +7,13 @@ use Illuminate\Database\Eloquent\Collection;
 
 class GradeRemarkService
 {
-    private $remarks;
-
     /**
      * @throws \Exception
      */
     public function findRemark(string $name) : int
     {
-        $remark = $this->remarks->where('name', $name)->first();
+        $remarks = Mark::get(['id', 'name']);
+        $remark = $remarks->where('name', $name)->first();
 
         if(is_null($remark)) throw new \Exception('Remark is missing');
 
@@ -24,22 +23,14 @@ class GradeRemarkService
     /**
      * @throws \Exception
      */
-    public function getMark($grade) : int
+    public function getMark($grade, string $type) : int
     {
-        $this->remarks = Mark::get(['id', 'name']);
-
         switch($grade) {
-            case $grade <= 50:
-                return $this->findRemark('Dropped');
-                break;
-
-            case $grade > 50 && $grade < 75:
-                return $this->findRemark('Failed');
-                break;
-
-            case $grade >= 75 && $grade <= 100:
+            case $grade >= 1.00 && $grade <= 3.00:
                 return $this->findRemark('Passed');
-                break;
+
+            case $grade > 3.00:
+                return $this->findRemark('Failed');
 
             default:
                 throw new \Exception('Error: unremarked grade.');

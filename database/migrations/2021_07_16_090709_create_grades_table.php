@@ -19,7 +19,8 @@ class CreateGradesTable extends Migration
             $table->unsignedBigInteger('subject_id');
             $table->foreign('subject_id')->references('id')->on('prospectus_subjects');
             $table->foreignId('mark_id')->constrained();
-            $table->unsignedInteger('value')->nullable();
+            $table->boolean('isScale')->default(0);
+            $table->unsignedDecimal('value', '3', '2')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

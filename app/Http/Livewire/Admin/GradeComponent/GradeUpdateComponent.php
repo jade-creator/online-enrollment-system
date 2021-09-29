@@ -13,7 +13,8 @@ class GradeUpdateComponent extends Component
     use AuthorizesRequests, WithSweetAlert;
 
     public Grade $grade;
-    public string $code = '';
+    public string $code = '', $type = 'scale';
+    public ?string $value = '';
     public bool $viewingGrade = false;
 
     protected $listeners = ['modalViewingGrade'];
@@ -21,9 +22,14 @@ class GradeUpdateComponent extends Component
     public function rules()
     {
         return [
-            'grade.value' => ['required', 'integer', 'min:0', 'max:100'],
+            'type' => ['required'],
+            'value' => ['required_if:type,scale'],
         ];
     }
+
+    protected $messages = [
+        'value.required_if' => 'The value is required.',
+    ];
 
     public function render() { return
         view('livewire.admin.grade-component.grade-update-component');
@@ -31,6 +37,12 @@ class GradeUpdateComponent extends Component
 
     public function modalViewingGrade(Grade $grade)
     {
+        if ($grade->isScale) {
+            $this->type = 'scale';
+        } else {
+            $this->type = $grade->mark->name ?? '';
+        }
+
         $this->resetValidation();
         $this->fill([
             'grade' => $grade,
@@ -41,15 +53,16 @@ class GradeUpdateComponent extends Component
 
     public function update()
     {
-        $this->authorize('update', $this->grade);
         $this->validate();
 
         try {
-            $grade = (new GradeService())->update($this->grade);
+            $this->authorize('update', $this->grade);
+            $this->grade->value = $this->value;
+            $grade = (new GradeService())->update($this->grade, $this->type);
 
+            $this->success('Equivalent: '.$grade->value.' ('.$grade->mark->name.')');
             $this->toggleModal();
             $this->emitUp('refresh');
-            $this->success('Remark: '.$grade->mark->name);
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }

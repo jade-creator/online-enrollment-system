@@ -20,7 +20,7 @@ class ProspectusIndexComponent extends Component
     ];
 
     public function mount() {
-        $this->prospectus = Models\Prospectus::select(['id', 'level_id', 'program_id'])->findOrFail($this->prospectusId);
+        $this->prospectus = Models\Prospectus::select(['id', 'level_id', 'program_id', 'term_id'])->findOrFail($this->prospectusId);
     }
 
     public function render() { return
