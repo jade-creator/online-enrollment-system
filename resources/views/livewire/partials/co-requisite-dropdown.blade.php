@@ -1,15 +1,15 @@
 <div class="grid grid-cols-8 col-span-8">
-    @if(filled($preRequisites))
+    @if(filled($coRequisites))
         <div class="mt-4 col-span-8">
-            <x-jet-label for="pre-requisite" value="{{ __('Pre-requisite') }}" />
+            <x-jet-label for="pre-requisite" value="{{ __('Co-requisite') }}" />
             <div class="flex flex-wrap mt-2">
-                @foreach ($preRequisiteSubjects as $index => $requisite)
+                @foreach ($coRequisiteSubjects as $index => $requisite)
                     <div class="mr-2 my-2">
                         <div class="flex">
-                            <select wire:model="preRequisiteSubjects.{{ $index }}" name="preRequisiteSubjects[{{ $index }}]" class="bg-white flex-1 p-2 tracking-wide border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-l-md shadow-sm">
+                            <select wire:model="coRequisiteSubjects.{{ $index }}" name="coRequisiteSubjects[{{ $index }}]" class="bg-white flex-1 p-2 tracking-wide border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-l-md shadow-sm">
                                 <option value="">-- choose a pre-requisite --</option>
-                                @forelse ($preRequisites as $preRequisite)
-                                    <option value="{{ $preRequisite->id }}">{{ $preRequisite->title }}</option>
+                                @forelse ($coRequisites as $coRequisite)
+                                    <option value="{{ $coRequisite->subject->id }}">{{ $coRequisite->subject->title }}</option>
                                 @empty
                                     <option value="">No records</option>
                                 @endforelse
@@ -23,9 +23,9 @@
             </div>
         </div>
         <div class="mt-2 col-span-8 flex">
-            @if (count($preRequisites) > count($preRequisiteSubjects))
+            @if (count($coRequisites) > count($coRequisiteSubjects))
                 <x-jet-button class="flex items-end border border-indigo-500 hover:bg-gray-200 text-indigo-500" wire:click.prevent="addSubject" wire:loading.attr="disabled">
-                    <span>{{ __('Add Pre Requisite') }}</span>
+                    <span>{{ __('Add Co Requisite') }}</span>
                 </x-jet-button>
             @endif
         </div>

@@ -13,7 +13,7 @@
                     @if($loop->odd)
                         <h5 class="text-sm text-indigo-500 font-bold">{{$prospectus->level->level}}</h5>
                     @endif
-                    <a href="{{ route('prospectuses.view', ['prospectusId' => $prospectus->id]) }}">
+                    <a href="{{ route('admin.prospectuses.view', ['prospectusId' => $prospectus->id]) }}">
                         <h4 class="pl-4 py-1">{{$prospectus->term->term}}</h4>
                     </a>
                 @empty
