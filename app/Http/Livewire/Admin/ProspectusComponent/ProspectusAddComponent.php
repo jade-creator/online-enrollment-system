@@ -16,21 +16,27 @@ class ProspectusAddComponent extends Component
     public ProspectusSubject $prospectusSubject;
     public bool $addingSubject = false;
     public string $prospectusId = '';
-    public array $preRequisiteSubjects = [];
-    public $subjects, $preRequisites;
+    public array $preRequisiteSubjects = [], $coRequisiteSubjects = [];
+    public $subjects, $preRequisites, $coRequisites;
 
     protected $listeners = [
         'modalAddingSubject',
-        'updatePreRequisiteSubjects' => 'setPreRequisiteSubjects'
+        'updatePreRequisiteSubjects' => 'setPreRequisiteSubjects',
+        'updateCoRequisiteSubjects' => 'setCoRequisiteSubjects'
     ];
 
     public function rules()
     {
         return [
-            'prospectusSubject.subject_id' => ['required', 'integer'],
+            'prospectusSubject.subject_id' => ['required'],
             'prospectusSubject.unit' => ['required', 'integer', 'min:1'],
         ];
     }
+
+    protected $messages = [
+        'prospectusSubject.subject_id.required' => 'The subject field cannot be empty.',
+        'prospectusSubject.unit.required' => 'The unit field cannot be empty.',
+    ];
 
     public function render() { return
         view('livewire.admin.prospectus-component.prospectus-add-component');
@@ -43,23 +49,24 @@ class ProspectusAddComponent extends Component
             'prospectusSubject' => new ProspectusSubject(),
             'addingSubject' => !$this->addingSubject,
             'preRequisiteSubjects' => [],
+            'coRequisiteSubjects' => [],
         ]);
     }
 
-    public function setPreRequisiteSubjects($value) {
-        $this->preRequisiteSubjects = $value;
-    }
+    public function setCoRequisiteSubjects($value) { $this->coRequisiteSubjects = $value; }
+
+    public function setPreRequisiteSubjects($value) { $this->preRequisiteSubjects = $value; }
 
     public function save()
     {
-        $this->authorize('create', ProspectusSubject::class);
         $this->validate();
 
         try {
-            (new ProspectusSubjectService())->store($this->prospectusSubject, $this->prospectusId, $this->preRequisiteSubjects);
+            $this->authorize('create', ProspectusSubject::class);
+            $prospectusSubject = (new ProspectusSubjectService())->store($this->prospectusSubject, $this->prospectusId, $this->preRequisiteSubjects, $this->coRequisiteSubjects);
 
             $this->emitUp('refresh');
-            $this->success($this->prospectusSubject->subject->code.' has been added.');
+            $this->success($prospectusSubject->subject->code.' has been added.');
         }catch (\Exception $e) {
             $this->error($e->getMessage());
         }

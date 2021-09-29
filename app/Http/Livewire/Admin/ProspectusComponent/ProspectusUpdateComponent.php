@@ -15,12 +15,13 @@ class ProspectusUpdateComponent extends Component
 
     public ProspectusSubject $prospectusSubject;
     public bool $viewingSubject = false;
-    public array $preRequisiteSubjects = [];
-    public $subjects, $preRequisites;
+    public array $preRequisiteSubjects = [], $coRequisiteSubjects = [];
+    public $subjects, $preRequisites, $coRequisites;
 
     protected $listeners = [
         'modalViewingSubject',
-        'updatePreRequisiteSubjects' => 'setPreRequisiteSubjects'
+        'updatePreRequisiteSubjects' => 'setPreRequisiteSubjects',
+        'updateCoRequisiteSubjects' => 'setCoRequisiteSubjects',
     ];
 
     public function rules()
@@ -31,26 +32,33 @@ class ProspectusUpdateComponent extends Component
         ];
     }
 
-    public function mount() { $this->setSubject(new ProspectusSubject()); }
+    protected $messages = [
+        'prospectusSubject.subject_id.required' => 'The subject field cannot be empty.',
+        'prospectusSubject.unit.required' => 'The unit field cannot be empty.',
+    ];
+
+    public function mount() {
+        $this->setSubject(new ProspectusSubject());
+    }
 
     public function render() { return
         view('livewire.admin.prospectus-component.prospectus-update-component');
     }
 
-    public function setPreRequisiteSubjects($value) {
-        $this->preRequisiteSubjects = $value;\Debugbar::info($value);
-    }
+    public function setCoRequisiteSubjects($value) { $this->coRequisiteSubjects = $value; }
+
+    public function setPreRequisiteSubjects($value) { $this->preRequisiteSubjects = $value; }
 
     public function update()
     {
-        $this->authorize('update', $this->prospectusSubject);
         $this->validate();
 
         try {
-            (new ProspectusSubjectService())->update($this->prospectusSubject, $this->preRequisiteSubjects);
+            $this->authorize('update', $this->prospectusSubject);
+            (new ProspectusSubjectService())->update($this->prospectusSubject, $this->preRequisiteSubjects, $this->coRequisiteSubjects);
 
-            $this->emitUp('refresh');
             $this->success($this->prospectusSubject->subject->code.' has been updated.');
+            $this->emitUp('refresh');
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }
@@ -61,11 +69,24 @@ class ProspectusUpdateComponent extends Component
         $this->setSubject($prospectusSubject);
 
         $this->preRequisiteSubjects = [];
+        $this->coRequisiteSubjects = [];
+
         // populate dropdown pre-requisites: if subject has at least a pre-requisite.
         if ($prospectusSubject->prerequisites->isNotEmpty()) {
             $preRequisites = $prospectusSubject->prerequisites->pluck('id')->toArray();
             $this->preRequisiteSubjects = array_map(fn($value) => (string)$value, $preRequisites);
         }
+
+        // populate dropdown co-requisites: if subject has at least a co-requisite.
+        if ($prospectusSubject->corequisites->isNotEmpty()) {
+            $coRequisites = $prospectusSubject->corequisites->pluck('id')->toArray();
+            $this->coRequisiteSubjects = array_map(fn($value) => (string)$value, $coRequisites);
+        }
+
+        // unset selected subject
+        $this->coRequisites = $this->coRequisites->filter(function ($requisite) use ($prospectusSubject) {
+            return $requisite->subject->id != $prospectusSubject->subject_id;
+        });
 
         $this->toggleViewingSubject();
     }

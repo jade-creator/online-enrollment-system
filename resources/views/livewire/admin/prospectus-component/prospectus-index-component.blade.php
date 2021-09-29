@@ -20,20 +20,29 @@
 
             <x-slot name="head">
                 <x-table.column-title class="col-span-2">code</x-table.column-title>
-                <x-table.column-title class="col-span-4">title</x-table.column-title>
+                <x-table.column-title class="col-span-3">title</x-table.column-title>
                 <x-table.column-title class="col-span-2">unit</x-table.column-title>
-                <x-table.column-title class="col-span-3">pre-requisite</x-table.column-title>
+                <x-table.column-title class="col-span-2">co-requisite</x-table.column-title>
+                <x-table.column-title class="col-span-2">pre-requisite</x-table.column-title>
                 <x-table.column-title class="col-span-1">option</x-table.column-title>
             </x-slot>
 
             <x-slot name="body">
-                @forelse ($this->getProspectusSubjects() as $prospectus_subject)
+                @forelse ($coRequisites as $prospectus_subject)
                     <x-table.row>
                         <div name="slot" class="grid grid-cols-12 gap-2">
                             <x-table.cell class="h-10 justify-start md:col-span-2">{{ $prospectus_subject->subject->code ?? 'N/A' }}</x-table.cell>
-                            <x-table.cell class="justify-start md:col-span-4">{{ $prospectus_subject->subject->title ?? 'N/A' }}</x-table.cell>
+                            <x-table.cell class="justify-start md:col-span-3">{{ $prospectus_subject->subject->title ?? 'N/A' }}</x-table.cell>
                             <x-table.cell class="justify-start md:col-span-2">{{ $prospectus_subject->unit ?? 'N/A' }}</x-table.cell>
-                            <x-table.cell class="justify-start md:col-span-3">
+                            <x-table.cell class="justify-start md:col-span-2">
+                                @forelse ($prospectus_subject->corequisites as $subject)
+                                    {{ $loop->first ? '' : ', '  }}
+                                    <a href="{{ route('admin.subjects.view', ['search' => $subject->title]) }}" class="text-indigo-500 underline">{{ $subject->code }}</a>
+                                @empty
+                                    N/A
+                                @endforelse
+                            </x-table.cell>
+                            <x-table.cell class="justify-start md:col-span-2">
                                 @forelse ($prospectus_subject->prerequisites as $subject)
                                     {{ $loop->first ? '' : ', '  }}
                                     <a href="{{ route('admin.subjects.view', ['search' => $subject->title]) }}" class="text-indigo-500 underline">{{ $subject->code }}</a>
@@ -59,7 +68,7 @@
                                             @endcan
 
                                             @can ('destroy', $prospectus_subject)
-                                                <x-table.cell-button wire:click.prevent="$emitSelf('removeConfirm', {{$prospectus_subject}})" title="Delete">
+                                                <x-table.cell-button wire:click.prevent="$emit('removeConfirm', {{$prospectus_subject}})" title="Delete">
                                                     <x-icons.delete-icon/>
                                                 </x-table.cell-button>
                                             @endcan
@@ -80,10 +89,10 @@
         @include('partials.loading')
     </div>
 
-    <livewire:admin.prospectus-component.prospectus-add-component :prospectusId="$prospectusId" :preRequisites="$preRequisites" :subjects="$allSubjects"
+    <livewire:admin.prospectus-component.prospectus-add-component :prospectusId="$prospectusId" :coRequisites="$coRequisites" :preRequisites="$preRequisites" :subjects="$allSubjects"
                                                                   key="{{ 'prospectus-add-component-'.now() }}">
 
-    <livewire:admin.prospectus-component.prospectus-update-component :preRequisites="$preRequisites" :subjects="$allSubjects" key="{{ 'prospectus-update-component-'.now() }}">
+    <livewire:admin.prospectus-component.prospectus-update-component :coRequisites="$coRequisites" :preRequisites="$preRequisites" :subjects="$allSubjects" key="{{ 'prospectus-update-component-'.now() }}">
 
     <livewire:admin.prospectus-component.prospectus-destroy-component>
 </div>

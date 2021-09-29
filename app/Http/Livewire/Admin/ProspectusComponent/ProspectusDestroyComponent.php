@@ -13,7 +13,10 @@ class ProspectusDestroyComponent extends Component
     use AuthorizesRequests;
     use WithSweetAlert;
 
-    protected $listeners = [ 'removeSubject' ];
+    protected $listeners = [
+        'removeSubject',
+        'removeConfirm',
+    ];
 
     public function render()
     {
@@ -21,6 +24,10 @@ class ProspectusDestroyComponent extends Component
             <div>
             </div>
         blade;
+    }
+
+    public function removeConfirm(ProspectusSubject $prospectusSubject) {
+        $this->confirm('removeSubject', 'Are you sure?', $prospectusSubject);
     }
 
     public function removeSubject(ProspectusSubject $prospectusSubject)
