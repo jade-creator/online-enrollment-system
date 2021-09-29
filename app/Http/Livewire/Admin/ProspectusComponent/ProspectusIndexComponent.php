@@ -17,7 +17,6 @@ class ProspectusIndexComponent extends Component
 
     protected $listeners = [
         'refresh' => '$refresh',
-        'removeConfirm',
     ];
 
     public function mount() {
@@ -27,17 +26,14 @@ class ProspectusIndexComponent extends Component
     public function render() { return
         view('livewire.admin.prospectus-component.prospectus-index-component', [
             'allSubjects' => $this->getAllSubjects(),
+            'coRequisites' => $this->getProspectusSubjects(),
             'preRequisites' => $this->getPreRequisites(),
         ]);
     }
 
-    public function removeConfirm(Models\ProspectusSubject $prospectusSubject) {
-        $this->confirmDelete('removeSubject', $prospectusSubject, $prospectusSubject->subject->code);
-    }
-
     //populate table: get all subjects in a given prospectus
     public function getProspectusSubjects() { return
-        Models\ProspectusSubject::with('prerequisites')->getAllSubjectsInProspectus($this->prospectusId);
+        Models\ProspectusSubject::with(['prerequisites', 'corequisites', 'subject'])->getAllSubjectsInProspectus($this->prospectusId);
     }
 
     //populate dropdown subjects: get all subjects in program except the subject/s that is already added.

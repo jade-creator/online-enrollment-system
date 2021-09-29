@@ -32,6 +32,11 @@ class ProspectusSubject extends BaseModel
             ->get($this->select);
     }
 
+    public function corequisites() { return
+        $this->belongsToMany(Subject::class, 'prospectus_subject_corequisite', 'prospectus_subject_id', 'corequisite_id')
+            ->withTimestamps();
+    }
+
     public function prerequisites() { return
         $this->belongsToMany(Subject::class, 'prospectus_subject_prerequisite', 'prospectus_subject_id', 'prerequisite_id')
             ->withTimestamps();

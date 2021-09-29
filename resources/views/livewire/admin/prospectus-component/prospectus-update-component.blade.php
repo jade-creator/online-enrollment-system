@@ -28,6 +28,8 @@
                 </div>
 
                 <livewire:partials.pre-requisite-dropdown :preRequisiteSubjects="$preRequisiteSubjects" :preRequisites="$preRequisites" key="{{ 'pre-requisite-dropdown-update-'.now() }}">
+
+                <livewire:partials.co-requisite-dropdown :coRequisiteSubjects="$coRequisiteSubjects" :coRequisites="$coRequisites" key="{{ 'co-requisite-dropdown-add-'.now() }}">
             </div>
         </form>
     </x-slot>

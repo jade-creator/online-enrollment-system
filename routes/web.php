@@ -79,18 +79,13 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
                 Route::get('/released', PreEnrollmentComponent\ReleasedPreEnrollmentComponent::class)->name('released.enrollments.view');
             });
 
-            //admin fee routes
-            Route::group(['prefix' => 'fees', 'as' => 'fees.'], function (){
-                Route::get('', FeeComponent\FeeIndexComponent::class)->name('view');
-                Route::get('/create', FeeComponent\FeeAddComponent::class)->name('create');
-                Route::get('{fee}/update', FeeComponent\FeeUpdateComponent::class)->name('update');
-            });
-
             //admin section routes
             Route::group(['prefix' => 'sections', 'as' => 'sections.'], function (){
                 Route::get('/create', SectionComponent\SectionAddComponent::class)->name('create');
                 Route::get('{section}/update', SectionComponent\SectionUpdateComponent::class)->name('update');
             });
+
+            Route::get('/prospectuses/{prospectusId}', ProspectusComponent\ProspectusIndexComponent::class)->name('prospectuses.view');
 
             //admin subject routes
             Route::group(['prefix' => 'subjects', 'as' => 'subjects.'], function (){
@@ -99,11 +94,18 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
                 Route::get('{subject}/update', SubjectComponent\SubjectUpdateComponent::class)->name('update');
             });
 
-            //admin user routes
+            //admin program routes
             Route::group(['prefix' => 'programs', 'as' => 'programs.'], function (){
                 Route::get('', ProgramComponent\ProgramIndexComponent::class)->name('view');
                 Route::get('/create', ProgramComponent\ProgramAddComponent::class)->name('create');
                 Route::get('/{program}/update', ProgramComponent\ProgramUpdateComponent::class)->name('update');
+            });
+
+            //admin fee routes
+            Route::group(['prefix' => 'fees', 'as' => 'fees.'], function (){
+                Route::get('', FeeComponent\FeeIndexComponent::class)->name('view');
+                Route::get('/create', FeeComponent\FeeAddComponent::class)->name('create');
+                Route::get('{fee}/update', FeeComponent\FeeUpdateComponent::class)->name('update');
             });
 
             //admin user routes
@@ -119,8 +121,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
     Route::middleware(['role:admin|student|faculty member', 'user.detail'])->group(function (){
         Route::middleware('approved')->group(function () {
             Route::get('/sections', SectionComponent\SectionIndexComponent::class)->name('sections.view');
-
-            Route::get('/prospectuses/{prospectusId}', ProspectusComponent\ProspectusIndexComponent::class)->name('prospectuses.view');
 
             Route::group(['prefix' => 'pre-registration', 'as' => 'pre.registration.'], function () {
                 Route::get('/{regId}/details', RegistrationComponent\RegistrationViewComponent::class)->name('view');

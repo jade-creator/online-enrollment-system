@@ -7,21 +7,23 @@ use App\Models\ProspectusSubject;
 
 class ProspectusSubjectService
 {
-    public function store(ProspectusSubject $prospectusSubject, string $prospectusId, array $preRequisites) : ProspectusSubject
+    public function store(ProspectusSubject $prospectusSubject, string $prospectusId, array $preRequisites, array $coRequisites) : ProspectusSubject
     {
         $prospectusSubject->prospectus_id = $prospectusId;
         $prospectusSubject->save();
 
         (new PreRequisiteService())->store($prospectusSubject, $preRequisites);
+        (new CoRequisiteService())->store($prospectusSubject, $coRequisites);
 
         return $prospectusSubject;
     }
 
-    public function update(ProspectusSubject $prospectusSubject, array $preRequisites) : ProspectusSubject
+    public function update(ProspectusSubject $prospectusSubject, array $preRequisites, array $coRequisites) : ProspectusSubject
     {
         $prospectusSubject->update();
 
         (new PreRequisiteService())->update($prospectusSubject, $preRequisites);
+        (new CoRequisiteService())->update($prospectusSubject, $coRequisites);
 
         return $prospectusSubject;
     }
