@@ -58,6 +58,7 @@ class ProspectusUpdateComponent extends Component
             (new ProspectusSubjectService())->update($this->prospectusSubject, $this->preRequisiteSubjects, $this->coRequisiteSubjects);
 
             $this->success($this->prospectusSubject->subject->code.' has been updated.');
+            $this->toggleViewingSubject();
             $this->emitUp('refresh');
         } catch (\Exception $e) {
             $this->error($e->getMessage());

@@ -34,7 +34,7 @@
                         <x-table.row>
                             <div name="slot" class="grid grid-cols-12 gap-2">
                                 <x-table.cell class="justify-start md:col-span-2">{{ $registration->id ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-2">{{ $registration->student_id ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell class="justify-start md:col-span-2">{{ $registration->student->custom_id ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell class="justify-start md:col-span-2">{{ $registration->student->user->person->full_name ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell class="justify-start md:col-span-1">{{ $registration->prospectus->program->code ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell class="justify-start md:col-span-1">{{ $registration->prospectus->level->level ?? 'N/A' }}</x-table.cell>
@@ -74,5 +74,5 @@
         @include('partials.loading')
     </div>
 
-    <livewire:admin.grade-component.grade-update-component>
+    <livewire:admin.grade-component.grade-update-component key="'grade-update-component-'{{ now() }}">
 </div>

@@ -16,8 +16,8 @@ class TermSeeder extends Seeder
     {
         DB::table('terms')->delete();
         $terms = [
-            [ 'term' => '1st Term',  'created_at' => now(), 'updated_at' => now()],
-            [ 'term' => '2nd Term',  'created_at' => now(), 'updated_at' => now()],
+            [ 'term' => '1st Semester',  'created_at' => now(), 'updated_at' => now()],
+            [ 'term' => '2nd Semester',  'created_at' => now(), 'updated_at' => now()],
         ];
 
         DB::table('terms')->insert($terms);

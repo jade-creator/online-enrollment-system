@@ -47,10 +47,10 @@ class ProspectusAddComponent extends Component
         $this->resetValidation();
         $this->fill([
             'prospectusSubject' => new ProspectusSubject(),
-            'addingSubject' => !$this->addingSubject,
             'preRequisiteSubjects' => [],
             'coRequisiteSubjects' => [],
         ]);
+        $this->toggleAddingSubject();
     }
 
     public function setCoRequisiteSubjects($value) { $this->coRequisiteSubjects = $value; }
@@ -65,10 +65,17 @@ class ProspectusAddComponent extends Component
             $this->authorize('create', ProspectusSubject::class);
             $prospectusSubject = (new ProspectusSubjectService())->store($this->prospectusSubject, $this->prospectusId, $this->preRequisiteSubjects, $this->coRequisiteSubjects);
 
-            $this->emitUp('refresh');
             $this->success($prospectusSubject->subject->code.' has been added.');
+            $this->toggleAddingSubject();
+            $this->emitUp('refresh');
         }catch (\Exception $e) {
             $this->error($e->getMessage());
         }
+    }
+
+    public function toggleAddingSubject()
+    {
+        $this->resetValidation();
+        $this->addingSubject = !$this->addingSubject;
     }
 }

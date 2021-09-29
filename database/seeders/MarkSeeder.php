@@ -21,6 +21,7 @@ class MarkSeeder extends Seeder
             ['name' => 'Dropped', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Failed', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Passed', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Incomplete', 'created_at' => now(), 'updated_at' => now()],
         ];
 
         DB::table('marks')->insert($marks);

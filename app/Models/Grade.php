@@ -13,8 +13,15 @@ class Grade extends Model
         'registration_id',
         'subject_id',
         'mark_id',
+        'isScale',
         'value',
     ];
+
+//    public function setValueAttribute($value)
+//    {
+//        if ($value == null) return;
+//        $this->attributes['value'] = round($value, 2);
+//    }
 
     public function mark() { return
         $this->belongsTo(Mark::class);
