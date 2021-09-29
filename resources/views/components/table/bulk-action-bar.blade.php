@@ -1,7 +1,7 @@
 @props(['count'])
 
 @if ( $count > 0)
-    <div class="fixed right-0 bottom-0 pb-3 w-full bg-white bg-opacity-40 border-t border-gray-200" style="backdrop-filter: blur(20px);">
+    <div class="fixed right-0 bottom-0 w-full bg-white border-t border-gray-200">
         <div class="flex items-center justify-end min-full">
             <div class="flex pr-5">
                 <x-table.bulk-action-button nameButton="Cancel" event="$emit('DeselectPage', false)">
