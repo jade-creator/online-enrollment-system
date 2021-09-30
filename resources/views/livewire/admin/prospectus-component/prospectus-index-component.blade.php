@@ -20,7 +20,7 @@
                             <x-icons.right-arrow-icon/>
                             <span>{{ $prospectus->term->term ?? 'N/A' }}</span>
                         </p>
-                    @endissett 
+                    @endisset
                     <x-table.filter :isSearchable="false" :isFilterable="false">
                         <livewire:partials.prospectus-dropdown/>
                     </x-table.filter>
