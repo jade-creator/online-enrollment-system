@@ -24,7 +24,7 @@ class Registration extends BaseModel
         'section:id,name',
         'prospectus:id,level_id,program_id,term_id',
         'prospectus.level:id,level',
-        'prospectus.program:id,code',
+        'prospectus.program:id,code,program',
         'prospectus.term:id,term',
     ];
 
@@ -60,7 +60,8 @@ class Registration extends BaseModel
                 'classes.prospectusSubject',
                 'student.user.person.contact',
                 'student.user.person.detail.country',
-                'grades:id,registration_id,subject_id',
+                'grades:id,registration_id,subject_id,mark_id,value',
+                'grades.mark',
                 'grades.prospectus_subject',
                 'grades.prospectus_subject.subject:id,code,title',
                 'grades.prospectus_subject.prerequisites',

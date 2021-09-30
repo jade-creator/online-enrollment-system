@@ -65,6 +65,10 @@ class RegistrationPolicy
         $user->role->name == 'student';
     }
 
+    public function exportGrade(User $user, Registration $registration) { return
+        $registration->isRegular;
+    }
+
     public function export(User $user) { return
         $this->isAdmin($user);
     }

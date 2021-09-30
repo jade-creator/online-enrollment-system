@@ -52,11 +52,20 @@
                                                 <div class="block px-4 py-3 text-sm text-gray-500 font-bold">
                                                     {{ __('Actions') }}
                                                 </div>
+
                                                 <a href="{{ route('pre.registration.view', $registration->id) }}">
-                                                    <x-table.cell-button title="View">
-                                                        <x-icons.view-icon/>
+                                                    <x-table.cell-button title="View Details">
+                                                        <x-icons.pre-enrollment-icon/>
                                                     </x-table.cell-button>
                                                 </a>
+
+                                                @can ('exportGrade', $registration)
+                                                    <a href="{{ route('admin.grades.pdf', $registration->id) }}">
+                                                        <x-table.cell-button title="Grade Report">
+                                                            <x-icons.grade-icon/>
+                                                        </x-table.cell-button>
+                                                    </a>
+                                                @endcan
                                             </div>
                                         </x-slot>
                                     </x-jet-dropdown>
