@@ -28,6 +28,10 @@ class Registration extends BaseModel
         'prospectus.term:id,term',
     ];
 
+    public function getClassificationAttribute() { return
+        $this->attributes['isRegular'] ? 'Regular' : 'Irregular';
+    }
+
     public function scopeFilterByProgram($query, $programId) { return
         $query->whereBetween('created_at', [
                 now()->startOfYear(),
