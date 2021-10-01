@@ -3,11 +3,9 @@
         <div class="py-10">
             <div class="flex items-center justify-between">
                 <p class="font-bold text-lg"><span>{{ $registration->student->user->person->full_name ?? 'N/A' }} </span>- Pre Registration</p>
-                <x-jet-button wire:click.prevent="createPDF" wire:loading.attr="disabled" class="bg-indigo-700 hover:bg-indigo-800 flex items-end">
-                    <span class="mr-2">
-                        <x-icons.export-icon />
-                    </span>
-                    <span>{{ __('Export to PDF')}}</span>
+                <x-jet-button wire:click.prevent="createPdf" wire:loading.attr="disabled" class="bg-indigo-700 hover:bg-indigo-800 flex items-end">
+                    <x-icons.export-icon/>
+                    <span>{{ __('Export as PDF')}}</span>
                 </x-jet-button>
             </div>
             <x-jet-section-border/>
@@ -57,6 +55,10 @@
                     <div class="col-span-3">
                         <x-jet-label value="{{ __('Total Unit:') }}"/>
                         <x-jet-input type="text" class="mt-1" value="{{ $totalUnit ?? 'N/A' }}" readonly/>
+                    </div>
+                    <div class="col-span-3">
+                        <x-jet-label value="{{ __('Classification:') }}"/>
+                        <x-jet-input type="text" class="mt-1" value="{{  $registration->classification ?? 'N/A' }}" readonly/>
                     </div>
                 </form>
             </x-slot>
@@ -119,10 +121,10 @@
                     </div>
                     <div class="col-span-3">
                         <x-jet-label value="{{ __('Religion:') }}"/>
-                        <x-jet-input type="text" class="mt-1" value="{{ $registration->student->user->person->detail->civil_status ?? 'N/A' }}" readonly/>
+                        <x-jet-input type="text" class="mt-1" value="{{ $registration->student->user->person->detail->religion ?? 'N/A' }}" readonly/>
                     </div>
                     <div class="col-span-3">
-                        <x-jet-label value="{{ __('Nationality:') }}"/>
+                        <x-jet-label value="{{ __('Country of Citizenship:') }}"/>
                         <x-jet-input type="text" class="mt-1" value="{{ $registration->student->user->person->detail->country->name ?? 'N/A' }}" readonly/>
                     </div>
                 </form>

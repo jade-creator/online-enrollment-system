@@ -119,19 +119,19 @@
         <div class="table-container">
             <table>
                     <tr>
-                        <td>Registration ID: <span>Lorem ipsum dolor sit amet.</span></td>
-                        <td>Status: <span>Enrolled</span></td>
+                        <td>Registration ID: <span>{{ $registration->id ?? 'N/A' }}</span></td>
+                        <td>Status: <span>{{ $registration->status->name ?? 'N/A' }}</span></td>
                     </tr>
                     <tr>
-                        <td>Level: <span>1st Year</span></td>
-                        <td>Program: <span>BSIT</span></td>
+                        <td>Level: <span>{{ $registration->prospectus->level->level ?? 'N/A' }}</span></td>
+                        <td>Program: <span>{{ $registration->prospectus->program->code ?? 'N/A' }}</span></td>
                     </tr>
                     <tr>
-                        <td>Term: <span>First term</span></td>
-                        <td>School Year: <span>2020-2021</span></td>
+                        <td>Sem: <span>{{ $registration->prospectus->term->term ?? 'N/A' }}</span></td>
+                        <td>School Year: <span>{{ $registration->school_year ?? 'N/A' }}</span></td>
                     </tr>
                     <tr>
-                        <td>Section: <span>1E</span></td>
+                        <td>Section: <span>{{ $registration->section->name ?? 'N/A' }}</span></td>
                     </tr>
             </table>
         </div>
@@ -144,28 +144,28 @@
         <div class="table-container">
             <table>
                 <tr>
-                    <td>Student ID: <span>STD-0001</span></td>
-                    <td>Type: <span>New</span></td>
+                    <td>Student ID: <span>{{ $registration->student->custom_id ?? 'N/A' }}</span></td>
+                    <td>Type: <span>{{ $registration->is_new ?? 'N/A' }}</span></td>
                 </tr>
                 <tr>
-                    <td>Name: <span>Andrew E. Ferrer</span></td>
-                    <td>Email: <span>andrewferrer80@gmail.com</span></td>
+                    <td>Name: <span>{{ $registration->student->user->person->full_name ?? 'N/A' }}</span></td>
+                    <td>Email: <span>{{ $registration->student->user->email ?? 'N/A' }}</span></td>
                 </tr>
                 <tr>
-                    <td>Mobile Number: <span>09696969696</span></td>
-                    <td>Address: <span>#69 Trust st., Orange Carbon Fiber City</span></td>
+                    <td>Mobile Number: <span>{{ $registration->student->user->person->contact->mobile_number ?? 'N/A' }}</span></td>
+                    <td>Address: <span>{{ $registration->student->user->person->contact->address ?? 'N/A' }}</span></td>
                 </tr>
                 <tr>
-                    <td>Birthdate: <span>June 6, 1969</span></td>
-                    <td>Birthplace: <span>Fiber City</span></td>
+                    <td>Birthdate: <span>{{ \Carbon\Carbon::parse($registration->student->user->person->detail->birthdate)->format('F j, Y') ?? 'N/A' }}</span></td>
+                    <td>Birthplace: <span>{{ $registration->student->user->person->detail->birthplace ?? 'N/A' }}</span></td>
                 </tr>
                 <tr>
-                    <td>Gender: <span>Male</span></td>
-                    <td>Civil Status: <span>Single</span></td>
+                    <td>Gender: <span>{{ $registration->student->user->person->detail->gender ?? 'N/A' }}</span></td>
+                    <td>Civil Status: <span>{{ $registration->student->user->person->detail->civil_status ?? 'N/A' }}</span></td>
                 </tr>
                 <tr>
-                    <td>Religion: <span>Atheist</span></td>
-                    <td>Nationality: <span>Philippines</span></td>
+                    <td>Religion: <span>{{ $registration->student->user->person->detail->religion ?? 'N/A' }}</span></td>
+                    <td>Country of Citizenship: <span>{{ $registration->student->user->person->detail->country->name ?? 'N/A' }}</span></td>
                 </tr>
             </table>
         </div>

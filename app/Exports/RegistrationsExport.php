@@ -12,7 +12,7 @@ class RegistrationsExport implements FromQuery, WithHeadings, WithMapping
 {
     use Exportable;
     protected $registrations;
-    
+
     public function __construct($registrations)
     {
         $this->registrations = $registrations;
@@ -26,22 +26,28 @@ class RegistrationsExport implements FromQuery, WithHeadings, WithMapping
     public function headings(): array
     {
         return [
+            'Registration Id',
             'Student Id',
-            'Name',
-            'Level',
-            'Section',
+            'Full Name',
             'Status',
+            'Program',
+            'Level',
+            'Term',
+            'Section',
         ];
     }
 
     public function map($registration): array
     {
         return [
-            $registration->student->custom_student_id ?? '--',
+            $registration->id ?? 'N/A',
+            $registration->student->custom_id ?? 'N/A',
             $registration->student->user->person->full_name ?? 'N/A',
-            $registration->prospectus->level->level ?? 'N/A',
-            $registration->section->name ?? '--',
             $registration->status->name ?? 'N/A',
+            $registration->prospectus->program->code ?? 'N/A',
+            $registration->prospectus->level->level ?? 'N/A',
+            $registration->prospectus->term->term ?? 'N/A',
+            $registration->section->name ?? 'N/A',
         ];
     }
 }

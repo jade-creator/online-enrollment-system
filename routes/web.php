@@ -125,11 +125,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
         Route::middleware('approved')->group(function () {
             Route::get('/sections', SectionComponent\SectionIndexComponent::class)->name('sections.view');
 
-            //TODO: pdf route deprecated
-            Route::group(['prefix' => 'pre-registration', 'as' => 'pre.registration.'], function () {
-                Route::get('/{regId}/details', RegistrationComponent\RegistrationViewComponent::class)->name('view');
-                Route::get('/{regId}/pdf', [PreEnrollmentComponent\PreEnrollmentPdfComponent::class, 'createPDF'])->name('pdf');
-            });
+            Route::get('/pre-registration/{regId}/details', RegistrationComponent\RegistrationViewComponent::class)->name('pre.registration.view');
         });
 
         Route::get('/user/personal-profile/{userId}', User\UserProfileComponent::class)->name('user.personal.profile.view');
