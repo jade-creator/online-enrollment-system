@@ -13,7 +13,7 @@
             <x-slot name="filter">
                 <div class="flex items-center justify-between">
                     @isset ($prospectus)
-                        <p class="flex items-center justify-between">
+                        <p class="flex items-center justify-between text-indigo-500">
                             <span>{{ $prospectus->program->code ?? 'N/A' }}</span>
                             <x-icons.right-arrow-icon/>
                             <span>{{ $prospectus->level->level ?? 'N/A' }}</span>

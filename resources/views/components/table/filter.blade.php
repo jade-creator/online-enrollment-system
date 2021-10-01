@@ -1,6 +1,6 @@
 @props(['isSearchable' => true, 'isFilterable' => true])
 
-<div class="flex justify-between items-center mb-4">
+<div class="flex justify-between items-center pb-2">
     @if ($isSearchable)
         <div class="my-4 w-full md:w-52 relative">
             <input type="text" wire:model.debounce.300ms="search" placeholder="Search...">
@@ -8,8 +8,10 @@
     @endif
 
     <div x-data="{ open: false }" @close.stop="open = false">
-        <button @click="open = true" :class="{'bg-gray-200': open, 'bg-white': ! open }" class="flex items-center focus:ring-2 focus:ring-opacity-50 hover:bg-gray-200 text-blue-500 mx-1 py-2.5 px-4 font-bold text-xs rounded-lg border border-blue-500">
-            <svg xmlns="http://www.w3.org/2000/svg" class="mr-2" width="20" height="16" viewBox="0 0 20 20" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M5.5 5h13a1 1 0 0 1 .5 1.5l-5 5.5l0 7l-4 -3l0 -4l-5 -5.5a1 1 0 0 1 .5 -1.5"></path></svg>
+        <button @click="open = true" :class="{'bg-gray-200': open, 'bg-white': ! open }" class="flex items-center focus:ring-2 focus:ring-opacity-50 hover:bg-gray-200 text-blue-500 mx-1 py-2 px-4 font-bold text-xs rounded-lg border border-blue-500">
+            <span class="mr-2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M5.5 5h13a1 1 0 0 1 .5 1.5l-5 5.5l0 7l-4 -3l0 -4l-5 -5.5a1 1 0 0 1 .5 -1.5"></path></svg>
+            </span>
             <span>Filter</span>
         </button>
 
