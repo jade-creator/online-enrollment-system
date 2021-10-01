@@ -77,8 +77,7 @@ class RegistrationPolicy
         $this->isAdmin($user) && $registration->status->name != 'released';
     }
 
-    public function delete(User $user, Registration $registration)
-    {
-        //
+    public function destroy(User $user, Registration $registration) { return
+        $this->isAdmin($user);
     }
 }

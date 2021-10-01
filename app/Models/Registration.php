@@ -32,6 +32,22 @@ class Registration extends BaseModel
         $this->attributes['isRegular'] ? 'Regular' : 'Irregular';
     }
 
+    public function scopeFilterByTerm($query, $termId) { return
+        $query->when(filled($termId), function ($query) use ($termId) {
+            return $query->whereHas('prospectus', function($query) use ($termId){
+                return $query->where('term_id', $termId);
+            });
+        });
+    }
+
+    public function scopeFilterByLevel($query, $levelId) { return
+        $query->when(filled($levelId), function ($query) use ($levelId) {
+                return $query->whereHas('prospectus', function($query) use ($levelId){
+                    return $query->where('level_id', $levelId);
+                });
+            });
+    }
+
     public function scopeFilterByProgram($query, $programId) { return
         $query->whereBetween('created_at', [
                 now()->startOfYear(),
