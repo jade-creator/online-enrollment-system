@@ -14,6 +14,20 @@
                 <x-table.filter :isSearchable="false" :isFilterable="false">
                     <livewire:partials.prospectus-dropdown/>
                 </x-table.filter>
+                <div class="flex items-center justify-between">
+                    @isset ($prospectus)
+                        <p class="flex items-center justify-between text-indigo-500">
+                            <span>{{ $prospectus->program->code ?? 'N/A' }}</span>
+                            <x-icons.right-arrow-icon/>
+                            <span>{{ $prospectus->level->level ?? 'N/A' }}</span>
+                            <x-icons.right-arrow-icon/>
+                            <span>{{ $prospectus->term->term ?? 'N/A' }}</span>
+                        </p>
+                    @endisset
+                    <x-table.filter :isSearchable="false" :isFilterable="false">
+                        <livewire:partials.prospectus-dropdown/>
+                    </x-table.filter>
+                </div>
             </x-slot>
 
             <x-slot name="paginationLink"></x-slot>

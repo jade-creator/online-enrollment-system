@@ -157,8 +157,9 @@
                     <x-slot name="actions">
                         @isset ($registration->assessment)
                             @can ('proceedToPayment', $registration->assessment)
-                                <a href="{{ route('student.paywithpaypal', ['registrationId' => $this->registration->id]) }}">
-                                    Balance X,XXX.XX: Proceed to Payment
+                                <a class="w-full text-white py-2 rounded-md bg-indigo-500 hover:bg-indigo-800 flex items-center justify-center" href="{{ route('student.paywithpaypal', ['registrationId' => $this->registration->id]) }}">
+                                    <span>Proceed to Payment</span>
+                                    <x-icons.right-arrow-icon />
                                 </a>
                             @elsecan ('view', $registration->assessment)
                                 <x-jet-button class="w-full bg-indigo-500 hover:bg-indigo-800 flex items-center justify-center">
@@ -180,7 +181,7 @@
                                     </x-jet-button>
                                 @endcan
                             @else
-                                <div class="w-full block flex flex-col">
+                                <div class="w-full flex flex-col">
                                     <x-jet-button wire:click="save" wire:loading.attr="disabled" class="w-full bg-green-500 hover:bg-green-600 flex items-center justify-center">
                                         <x-icons.fee-icon/>
                                         <span class="mx-2">{{ __('PLACE FEES') }}</span>
