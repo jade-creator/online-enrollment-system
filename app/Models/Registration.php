@@ -151,7 +151,7 @@ class Registration extends BaseModel
     {
         return $query->where([
                 'status_id' => $this->statusEnrolled()->id,
-                'isExtension' => 0,
+//                'isExtension' => 0,
                 'released_at' => null,
             ]);
     }

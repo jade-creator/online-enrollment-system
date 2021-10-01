@@ -58,30 +58,31 @@ class PreEnrollmentViewComponent extends Component
     public function getRowsQueryProperty()
     {
         return Registration::search($this->search)
-            ->select(['id', 'isNew', 'status_id', 'section_id', 'student_id', 'prospectus_id', 'created_at', 'released_at'])
+            ->select(['id', 'isNew', 'status_id', 'section_id', 'student_id', 'isRegular', 'prospectus_id', 'created_at', 'released_at'])
             ->with([
                 'student.user.person',
                 'status:id,name',
                 'section:id,name',
-                'prospectus:id,level_id',
-                'prospectus.level:id,level,school_type_id',
-                'prospectus.level.schoolType:id',
+                'prospectus:id,level_id,program_id,term_id',
+                'prospectus.level:id,level',
+                'prospectus.program:id,code,program',
+                'prospectus.term:id,term',
             ])
-            ->when(!empty($this->search), function($query) {
-                return $query->orWhereHas('student', function($query) {
-                            return $query->where('custom_id', 'LIKE', '%'.$this->search.'%');
-                        })
-                        ->orWhereHas('student.user.person', function($query) {
-                            return $query->where('firstname', 'LIKE', '%'.$this->search.'%')
-                                ->orWhere('middlename', 'LIKE', '%'.$this->search.'%')
-                                ->orWhere('lastname', 'LIKE', '%'.$this->search.'%');
-                        });
-            })
+//            ->when(!empty($this->search), function($query) {
+//                return $query->orWhereHas('student', function($query) {
+//                            return $query->where('custom_id', 'LIKE', '%'.$this->search.'%');
+//                        })
+//                        ->orWhereHas('student.user.person', function($query) {
+//                            return $query->where('firstname', 'LIKE', '%'.$this->search.'%')
+//                                ->orWhere('middlename', 'LIKE', '%'.$this->search.'%')
+//                                ->orWhere('lastname', 'LIKE', '%'.$this->search.'%');
+//                        });
+//            })
             ->where('isExtension', 0)
             ->whereNull('released_at')
-            ->when(!empty($this->statusId), function ($query) {
-                return $query->where('status_id', $this->statusId);
-            })
+//            ->when(!empty($this->statusId), function ($query) {
+//                return $query->where('status_id', $this->statusId);
+//            })
             ->orderBy($this->sortBy, $this->sortDirection)
             ->when(!is_null($this->dateMin), function($query) {
                 return $query->whereBetween('created_at', [$this->dateMin, $this->dateMax]);
