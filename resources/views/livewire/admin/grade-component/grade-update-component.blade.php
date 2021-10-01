@@ -25,7 +25,7 @@
             @if ($type == 'scale')
                 <div class="col-span-6">
                     <x-jet-label for="value" value="" class="my-2"/>
-                    <input wire:model.defer="value" wire:loading.attr="disabled" type="number" id="value" name="value" step="0.01" min="1" max="100">
+                    <input wire:model.defer="value" wire:loading.attr="disabled" type="number" id="value" name="value" step="0.01" min="1" max="100" placeholder="0 - 100">
                     <x-jet-input-error for="value" class="mt-2"/>
                 </div>
             @endif

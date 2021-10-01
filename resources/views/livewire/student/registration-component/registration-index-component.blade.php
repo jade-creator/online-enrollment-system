@@ -4,7 +4,7 @@
         <x-table.title tableTitle="Registrations">
             <a href="{{ route('student.registrations.create') }}">
                 <x-table.nav-button>
-                    Add Registration
+                    Create New Registration
                 </x-table.nav-button>
             </a>
         </x-table.title>

@@ -91,7 +91,7 @@
 
                                                     @can ('createClass', $section)
                                                         <x-table.cell-button wire:click.prevent="$emit('modalAddingSchedule', {{$section}})" title="Add Class">
-                                                            <x-icons.release-icon/>
+                                                            <x-icons.section-icon/>
                                                         </x-table.cell-button>
                                                     @endcan
 

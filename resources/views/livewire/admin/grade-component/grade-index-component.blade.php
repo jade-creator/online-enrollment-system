@@ -21,7 +21,7 @@
                 <x-table.column-title class="col-span-2">classification</x-table.column-title>
                 <x-table.column-title class="col-span-1">program</x-table.column-title>
                 <x-table.column-title class="col-span-1">level</x-table.column-title>
-                <x-table.column-title class="col-span-1">term</x-table.column-title>
+                <x-table.column-title class="col-span-1">sem</x-table.column-title>
                 <x-table.column-title class="col-span-1">section</x-table.column-title>
                 <div class="col-span-1">
                     <x-table.sort-button event="sortFieldSelected('created_at')">latest</x-table.sort-button>
@@ -54,8 +54,8 @@
                                                 </div>
 
                                                 <a href="{{ route('pre.registration.view', $registration->id) }}">
-                                                    <x-table.cell-button title="View Details">
-                                                        <x-icons.pre-enrollment-icon/>
+                                                    <x-table.cell-button title="View">
+                                                        <x-icons.view-icon/>
                                                     </x-table.cell-button>
                                                 </a>
 
