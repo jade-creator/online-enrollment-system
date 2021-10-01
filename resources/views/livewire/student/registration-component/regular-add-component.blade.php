@@ -14,7 +14,7 @@
             <x-slot name="form">
                 <x-jet-label class="font-bold text-indigo-500 text-xs" for="subjects" value="{{ __('Subjects') }}" />
                 <div class="col-span-6" id="subjects">
-                    <div class="mb-4 grid grid-cols-8 gap-2 col-span-6">
+                    <div class="mb-4 pb-2 grid grid-cols-8 gap-2 col-span-6 border-b">
                         <div class="col-span-2 font-bold text-xs text-gray-400 uppercase tracking-widest text-left">code</div>
                         <div class="col-span-1 font-bold text-xs text-gray-400 uppercase tracking-widest text-left">title</div>
                         <div class="col-span-2 font-bold text-xs text-gray-400 uppercase tracking-widest text-center">description</div>
@@ -23,8 +23,8 @@
                     </div>
 
                     @forelse ($prospectus->subjects as $index => $prospectus_subject)
-                        <div class="mb-2 py-2 grid grid-cols-8 gap-2 col-span-6 border-b-2 border-gray-200">
-                            <div class="col-span-2 text-center">{{ $prospectus_subject->subject->code ?? 'N/A' }}</div>
+                        <div class="mb-2 py-2 grid grid-cols-8 gap-2 col-span-6">
+                            <div class="col-span-2 ">{{ $prospectus_subject->subject->code ?? 'N/A' }}</div>
                             <div class="col-span-1"><p class="truncate">{{ $prospectus_subject->subject->title ?? 'N/A' }}</p></div>
                             <div class="col-span-2 text-center">{{ $prospectus_subject->subject->description ?? 'N/A' }}</div>
                             <div class="col-span-1 text-center">{{ $prospectus_subject->unit ?? 'N/A' }}</div>

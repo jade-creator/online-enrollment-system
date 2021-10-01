@@ -22,23 +22,23 @@
 
                 <div class="mt-4 col-span-8">
                     <x-jet-label for="schedules" value="{{ __('Schedules') }}"/>
-                    <div class="mb-4 grid grid-cols-8 gap-2 col-span-8">
-                        <div class="col-span-2 font-bold text-xs text-gray-400 uppercase tracking-widest text-left">subject code</div>
-                        <div class="col-span-2 font-bold text-xs text-gray-400 uppercase tracking-widest text-left">subject name</div>
-                        <div class="col-span-1 font-bold text-xs text-gray-400 uppercase tracking-widest text-left">day</div>
-                        <div class="col-span-1 font-bold text-xs text-gray-400 uppercase tracking-widest text-left">start time</div>
-                        <div class="col-span-1 font-bold text-xs text-gray-400 uppercase tracking-widest text-left">end time</div>
-                        <div class="col-span-1 font-bold text-xs text-gray-400 uppercase tracking-widest text-left">unit</div>
+                    <div class="mb-4 grid grid-cols-8 gap-2 col-span-8 font-bold text-xs text-gray-400 uppercase tracking-widest text-left">
+                        <div class="col-span-2">subject code</div>
+                        <div class="hidden sm:block sm:col-span-2">subject name</div>
+                        <div class="col-span-1">day</div>
+                        <div class="col-span-2 sm:col-span-1">start time</div>
+                        <div class="col-span-2 sm:col-span-1">end time</div>
+                        <div class="col-span-1">unit</div>
                     </div>
 
-                    <div class="grid grid-cols-8 gap-2 col-span-8 border-b-2 border-gray-200 py-2">
+                    <div class="grid grid-cols-8 gap-2 col-span-8 py-2 text-left">
                         @forelse ($schedules as $schedule)
-                            <div class="col-span-2 text-left">{{ $schedule->prospectusSubject->subject->code ?? 'N/A' }}</div>
-                            <div class="col-span-2 text-left">{{ $schedule->prospectusSubject->subject->title ?? 'N/A' }}</div>
-                            <div class="col-span-1 text-left">{{ $schedule->day->name ?? 'N/A' }}</div>
-                            <div class="col-span-1 text-left">{{ \Carbon\Carbon::parse($schedule->start_time)->format('g: ia') ?? 'N/A' }}</div>
-                            <div class="col-span-1 text-left">{{ \Carbon\Carbon::parse($schedule->end_time)->format('g: ia') ?? 'N/A' }}</div>
-                            <div class="col-span-1 text-left">{{ $schedule->prospectusSubject->unit ?? 'N/A' }}</div>
+                            <div class="col-span-2">{{ $schedule->prospectusSubject->subject->code ?? 'N/A' }}</div>
+                            <div class="hidden sm:block sm:col-span-2">{{ $schedule->prospectusSubject->subject->title ?? 'N/A' }}</div>
+                            <div class="col-span-1 truncate">{{ $schedule->day->name ?? 'N/A' }}</div>
+                            <div class="col-span-2 sm:col-span-1">{{ \Carbon\Carbon::parse($schedule->start_time)->format('g: ia') ?? 'N/A' }}</div>
+                            <div class="col-span-2 sm:col-span-1">{{ \Carbon\Carbon::parse($schedule->end_time)->format('g: ia') ?? 'N/A' }}</div>
+                            <div class="col-span-1">{{ $schedule->prospectusSubject->unit ?? 'N/A' }}</div>
                         @empty
                             <x-table.no-result>No schedules found. Sorry! Unable to view schedule/s.🤔</x-table.no-result>
                         @endforelse

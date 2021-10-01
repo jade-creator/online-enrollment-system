@@ -4,8 +4,10 @@
             <div class="flex items-center justify-between">
                 <p class="font-bold text-lg"><span>{{ $registration->student->user->person->full_name ?? 'N/A' }} </span>- Pre Registration</p>
                 <x-jet-button wire:click.prevent="createPDF" wire:loading.attr="disabled" class="bg-indigo-700 hover:bg-indigo-800 flex items-end">
-                    <x-icons.export-icon/>
-                    <span>{{ __('Export as PDF')}}</span>
+                    <span class="mr-2">
+                        <x-icons.export-icon />
+                    </span>
+                    <span>{{ __('Export to PDF')}}</span>
                 </x-jet-button>
             </div>
             <x-jet-section-border/>
