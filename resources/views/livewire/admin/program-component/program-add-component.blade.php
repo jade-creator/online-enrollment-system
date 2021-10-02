@@ -30,7 +30,7 @@
                                 </div>
                                 <div class="col-span-6">
                                     <x-jet-label for="year" value="{{ __('No. of Years') }}" />
-                                    <x-jet-input wire:model.defer="program.year" id="year" type="number" name="year" autofocus required/>
+                                    <x-jet-input wire:model.defer="program.year" id="year" type="number" name="year" min="1" max="5" autofocus required/>
                                     <x-jet-input-error for="program.year" class="mt-2"/>
                                 </div>
                                 <div class="col-span-6">

@@ -36,6 +36,7 @@ class LevelSeeder extends Seeder
             [ 'level' => '2nd Year', 'school_type_id' => $school_types[3], 'created_at' => now(), 'updated_at' => now()],
             [ 'level' => '3rd Year', 'school_type_id' => $school_types[3], 'created_at' => now(), 'updated_at' => now()],
             [ 'level' => '4th Year', 'school_type_id' => $school_types[3], 'created_at' => now(), 'updated_at' => now()],
+            [ 'level' => '5th Year', 'school_type_id' => $school_types[3], 'created_at' => now(), 'updated_at' => now()],
         ];
 
         DB::table('levels')->insert($levels);
