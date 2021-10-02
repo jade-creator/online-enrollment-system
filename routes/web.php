@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PaypalPaymentController;
+use App\Http\Livewire\Admin\AdvisingComponent;
 use App\Http\Livewire\Admin\Dashboard;
 use App\Http\Livewire\Admin\FeeComponent;
 use App\Http\Livewire\Admin\GradeComponent;
@@ -70,6 +71,13 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
         Route::get('/user/personal-details/employee', AdminDetailForm::class)->middleware(['detail'])->name('user.personal-details.admin');
 
         Route::group(['middleware' => ['user.detail', 'approved'], 'prefix' => 'admin', 'as' => 'admin.'], function (){
+
+            Route::group(['prefix' => 'advising', 'as' => 'advising.'], function (){
+                Route::get('', AdvisingComponent\AdvisingIndexComponent::class)->name('view');
+                Route::get('/create', AdvisingComponent\AdvisingAddComponent::class)->name('create');
+                Route::get('/{advice}/update', AdvisingComponent\AdvisingUpdateComponent::class)->name('update');
+            });
+
             Route::get('/dashboard', Dashboard::class)->name('dashboard');
 
             Route::group(['prefix' => 'grades', 'as' => 'grades.'], function (){
