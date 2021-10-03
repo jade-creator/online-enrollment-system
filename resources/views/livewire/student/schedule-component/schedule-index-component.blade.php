@@ -14,67 +14,70 @@
             </x-slot>
 
             <x-slot name="form">
-                <table class="col-span-6">
+                <div class="col-span-6">
                     {{--  DISPLAY LIST OF ENROLLED SUBJECTS IF NO SELECTED SECTION  --}}
                     @if (! isset($registration->section->name))
-                        <thead>
-                            <tr class="text-gray-500 border-b">
-                                <th>ID</th>
-                                <th>Code</th>
-                                <th>Title</th>
-                                <th>Unit</th>
-                                <th>Pre Requisite</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        @forelse ($registration->grades as $grade)
-                            <tr>
-                                <td class="pb-2 pt-4 text-center">{{ $grade->prospectus_subject->subject->id ?? 'N/A' }}</td>
-                                <td class="pb-2 text-center">{{ $grade->prospectus_subject->subject->code ?? 'N/A' }}</td>
-                                <td class="pb-2 text-center">{{ $grade->prospectus_subject->subject->title ?? 'N/A' }}</td>
-                                <td class="pb-2 text-center">{{ $grade->prospectus_subject->unit ?? 'N/A' }}</td>
-                                <td class="pb-2 text-center">
+                        <div class="mb-4 grid grid-cols-8 gap-2 col-span-6 font-bold text-xs text-gray-400 uppercase tracking-widest text-left">
+                            <div class="col-span-1">code</div>
+                            <div class="col-span-2">title</div>
+                            <div class="col-span-1">unit</div>
+                            <div class="col-span-2">co requisite</div>
+                            <div class="col-span-2">pre requisite</div>
+                        </div>
+                        <div class="grid grid-cols-8 gap-2 col-span-6 py-2 text-left">
+                            @forelse ($registration->grades as $grade)
+                                <div class="col-span-1">{{ $grade->prospectus_subject->subject->code ?? 'N/A' }}</div>
+                                <div class="col-span-2 truncate">{{ $grade->prospectus_subject->subject->title ?? 'N/A' }}</div>
+                                <div class="col-span-1">{{ $grade->prospectus_subject->unit ?? 'N/A' }}</div>
+                                <div class="col-span-2">
+                                    @forelse ($grade->prospectus_subject->corequisites as $requisite)
+                                        {{ $loop->first ? '' : ', '  }}
+                                        <span>&nbsp;{{ $requisite->code }}</span>
+                                    @empty
+                                        N/A
+                                    @endforelse
+                                </div>
+                                <div class="col-span-2">
                                     @forelse ($grade->prospectus_subject->prerequisites as $requisite)
                                         {{ $loop->first ? '' : ', '  }}
-                                        <span>{{ $requisite->code }}</span>
+                                        <span>&nbsp;{{ $requisite->code }}</span>
                                     @empty
+                                        N/A
                                     @endforelse
-                                </td>
-                            </tr>
-                        @empty
-                            <x-table.no-result>No subjects found. 🤔</x-table.no-result>
-                        @endforelse
-                        </tbody>
+                                </div>
+                            @empty
+                                <x-table.no-result>No subjects found. Sorry! Unable to register.🤔</x-table.no-result>
+                            @endforelse
+                        </div>
+
                     {{--  DISPLAY LIST OF SCHEDULE IF THERE'S A SELECTED SECTION  --}}
                     @else
-                        <thead>
-                            <tr class="text-gray-400 border-b">
-                                <th class="pb-2">Subject Code</th>
-                                <th class="pb-2">Subject Name</th>
-                                <th class="pb-2">Section</th>
-                                <th class="pb-2">Day</th>
-                                <th class="pb-2">Start Time</th>
-                                <th class="pb-2">End Time</th>
-                                <th class="pb-2">Unit</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        @forelse ($registration->classes as $schedule)
-                            <tr class="text-center">
-                                <td class="pt-2">{{ $schedule->prospectusSubject->subject->code ?? 'N/A' }}</td>
-                                <td class="pt-2">{{ $schedule->prospectusSubject->subject->title ?? 'N/A' }}</td>
-                                <td class="pt-2">{{ $schedule->section->name ?? 'N/A' }}</td>
-                                <td class="pt-2">{{ $schedule->day->name ?? 'N/A' }}</td>
-                                <td class="pt-2">{{ \Carbon\Carbon::parse($schedule->start_time)->format('g: ia') ?? 'N/A' }}</td>
-                                <td class="pt-2">{{ \Carbon\Carbon::parse($schedule->end_time)->format('g: ia') ?? 'N/A' }}</td>
-                                <td class="pt-2">{{ $schedule->prospectusSubject->unit ?? 'N/A' }}</td>
-                            </tr>
-                        @empty
-                            <x-table.no-result>No schedules found. 🤔</x-table.no-result>
-                        @endforelse
-                        </tbody>
+                        <div class="mb-4 grid grid-cols-8 gap-2 col-span-6 font-bold text-xs text-gray-400 uppercase tracking-widest text-left">
+                            <div class="col-span-1">code</div>
+                            <div class="col-span-1">title</div>
+                            <div class="col-span-1">professor</div>
+                            <div class="col-span-1">section</div>
+                            <div class="col-span-1">day</div>
+                            <div class="col-span-1">start time</div>
+                            <div class="col-span-1">end time</div>
+                            <div class="col-span-1">unit</div>
+                        </div>
+                        <div class="grid grid-cols-8 gap-2 col-span-6 py-2 text-left text-xs">
+                            @forelse ($registration->classes as $schedule)
+                                <div class="col-span-1">{{ $schedule->prospectusSubject->subject->code ?? 'N/A' }}</div>
+                                <div class="col-span-1 truncate">{{ $schedule->prospectusSubject->subject->title ?? 'N/A' }}</div>
+                                <div class="col-span-1">{{ 'Mr. Redgy Tan' }}</div>
+                                <div class="col-span-1">{{ $schedule->section->name ?? 'N/A' }}</div>
+                                <div class="col-span-1">{{ $schedule->day->name ?? 'N/A' }}</div>
+                                <div class="col-span-1">{{ \Carbon\Carbon::parse($schedule->start_time)->format('g: ia') ?? 'N/A' }}</div>
+                                <div class="col-span-1">{{ \Carbon\Carbon::parse($schedule->end_time)->format('g: ia') ?? 'N/A' }}</div>
+                                <div class="col-span-1">{{ $schedule->prospectusSubject->unit ?? 'N/A' }}</div>
+                            @empty
+                                <x-table.no-result>No subjects found. Sorry! Unable to register.🤔</x-table.no-result>
+                            @endforelse
+                        </div>
                     @endif
-                </table>
+                </div>
             </x-slot>
 
             <x-slot name="actions">
