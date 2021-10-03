@@ -20,7 +20,10 @@ class RegularAddComponent extends Component
     {
         list($this->prospectusId, $this->type) = explode( '-', $this->prospectusSlug);
 
-        $this->prospectus = Models\Prospectus::with('subjects.prerequisites')->findOrFail($this->prospectusId);
+        $this->prospectus = Models\Prospectus::with([
+            'subjects.prerequisites',
+            'subjects.corequisites',
+        ])->findOrFail($this->prospectusId);
     }
 
     public function render() { return
@@ -29,9 +32,9 @@ class RegularAddComponent extends Component
 
     public function save(RegistrationService $registrationService)
     {
-        $this->authorize('register', $this->prospectus);
-
         try {
+            $this->authorize('register', $this->prospectus);
+
             $this->fill([
                 'registration' => new Models\Registration(),
                 'registration.isNew' => $this->type === 'new' ? 1 : 0,

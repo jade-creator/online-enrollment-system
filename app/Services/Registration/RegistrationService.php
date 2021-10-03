@@ -21,8 +21,23 @@ class RegistrationService
         return $registration;
     }
 
+    public function isSubjectsAvailable(Models\Registration $registration, $schedules) : bool
+    {
+        $subjectsEnrolled = $registration->grades->pluck('subject_id')->toArray();
+        $schedules = $schedules->pluck('prospectus_subject_id')->toArray();
+
+        if ($subjectsEnrolled == $schedules) return TRUE;
+
+        return FALSE;
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function selectSection(Models\Registration $registration, int $sectionId, $schedules) : Models\Registration
     {
+        if (! $this->isSubjectsAvailable($registration, $schedules)) throw new \Exception('Oopps! Some subject/s are not available yet under this section.');
+
         $registration->section_id = $sectionId;
         $registration->update();
 

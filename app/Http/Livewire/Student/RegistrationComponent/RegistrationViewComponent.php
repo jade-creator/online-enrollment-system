@@ -18,11 +18,8 @@ class RegistrationViewComponent extends Component
 
     protected $listeners = ['refresh' => '$refresh'];
 
-    public function mount()
-    {
+    public function mount() {
         $this->registration = new Registration();
-
-        $this->authorize('view', $this->registration);
     }
 
     public function render() { return
