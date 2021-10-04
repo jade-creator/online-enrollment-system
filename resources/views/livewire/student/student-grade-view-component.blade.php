@@ -1,24 +1,4 @@
 <div class="w-full flex flex-1 scrolling-touch">
-    <x-table.filter>
-        <div name='slot'>
-            <div class="my-4">
-                <h3 class="font-bold text-md">{{ __('Types')}}</h3>
-                <div class="relative w-full bg-white pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
-                    <select wire:model="typeId" wire:loading.attr="disabled" id="type" aria-label="types" class="w-full bg-white flex-1 px-0 py-1 tracking-wide focus:outline-none border-0 focus:ring focus:ring-white focus:ring-opacity-0">
-                        @forelse ($this->types as $type)
-                            @if ($loop->first)
-                                <option value="">-- choose a type --</option>
-                            @endif
-                            <option value="{{ $type->id }}">{{ $type->type }}</option>
-                        @empty
-                            <option value="">No records</option>
-                        @endforelse
-                    </select>
-                </div>
-            </div>
-        </div>
-    </x-table.filter>
-
     <!-- Module -->
     <div class="min-h-screen w-full py-8 px-8">
 
@@ -31,20 +11,32 @@
         </div>
 
         <x-table.main>
-            <x-slot name="paginationLink">
-                {{ $registrations->links() }} 
+            <x-slot name="filter">
+                <x-table.filter>
+                    <x-table.filter-slot title="Types">
+                        <select wire:model="typeId" wire:loading.attr="disabled" id="type" aria-label="types">
+                            <option value="">-- choose a type --</option>   
+                            @forelse ($this->types as $type)
+                                <option value="{{ $type->id }}">{{ $type->type }}</option>
+                            @empty
+                                <option value="">No records</option>
+                            @endforelse
+                        </select>
+                    </x-table.filter-slot>
+                </x-table.filter>
             </x-slot>
 
             <x-slot name="head">
-                <div class="col-span-1 pl-2" id="columnTitle">
-                    <x-table.sort-button nameButton="reg. ID" event="sortFieldSelected('id')"/>
+                <div class="col-span-2 flex items-center" id="columnTitle">
+                    <input @click.stop type="checkbox" wire:model="selectPage" class="cursor-pointer border-gray-400 focus:outline-none focus:ring-transparent mx-5 rounded-sm" title="Select Displayed Data">
+                    <x-table.sort-button event="sortFieldSelected('id')">reg. ID</x-table.sort-button>
                 </div>
-                <x-table.column-title columnTitle="stud. ID" class="col-span-3"/>
-                <x-table.column-title columnTitle="level" class="col-span-3"/>
-                <x-table.column-title columnTitle="section" class="col-span-3"/>
-                <x-table.column-title columnTitle="status" class="col-span-1"/>
+                <x-table.column-title class="col-span-3">stud. ID</x-table.column-title>
+                <x-table.column-title class="col-span-3">level</x-table.column-title>
+                <x-table.column-title class="col-span-2">section</x-table.column-title>
+                <x-table.column-title class="col-span-1">status</x-table.column-title>
                 <div class="col-span-1">
-                    <x-table.sort-button nameButton="latest" event="sortFieldSelected('created_at')"/>
+                    <x-table.sort-button event="sortFieldSelected('created_at')">latest</x-table.sort-button>
                 </div>
             </x-slot>
 
@@ -142,8 +134,12 @@
                         </div>
                     </div>
                 @empty 
-                    <x-table.no-result title="No registration found.🤔"/>
+                    <x-table.no-result>No grades found.🤔</x-table.no-result>
                 @endforelse
+            </x-slot>
+
+            <x-slot name="paginationLink">
+                {{ $registrations->links() }} 
             </x-slot>
         </x-table.main>
     </div>

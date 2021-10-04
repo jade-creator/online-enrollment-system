@@ -1,1 +1,1 @@
-<div {{ $attributes->merge(['class' => 'font-bold text-xs text-gray-400 uppercase tracking-widest']) }}>{{ $slot }}</div>
+<div {{ $attributes->merge(['class' => 'flex items-center font-bold text-xs text-gray-400 uppercase tracking-widest']) }}>{{ $slot }}</div>

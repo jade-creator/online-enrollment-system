@@ -6,113 +6,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Registration</title>
+    <link rel="stylesheet" href="{{ asset('css/pdf.css') }}">
     <style>
-        body {
-            position: relative;
-            font-family: Arial, Helvetica, sans-serif;
-        }
-
-        .container {
-            width: 100%;
-            margin-bottom: 10px;
-            border: 1px solid #ecf0f1;
-            border-top-left-radius: 0.375rem;
-            border-top-right-radius: 0.375rem;
-            overflow: hidden;
-        }
-
-        .title {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: rgba(71, 120, 185, 0.2);
-            padding: 0 1.5rem;
-            font-weight: 600;
-        }
-
-        .title .right-portion {
-            font-weight: 400;
-            font-size: 0.75rem;
-        }
-
-        .table-container {
-            padding: 1rem;
-            font-size: 0.75rem;
-            line-height: 1rem;
-        }
-
-        table {
-            width: 100%;
-        }
-
-        td {
-            padding-bottom: 0.2rem;
-        }
-
-        .td-center {
-            text-align: center;
-        }
-
-        .td-bold {
-            font-weight: bold;
-        }
-
-        td span {
-            color: rgba(107, 114, 128, 1);
-            padding-left: 0.5rem;
-        }
-
-        .assessment-signatures {
-            display: flex;
-            align-items: flex-start;
-        }
-
-        .assessment,
-        .signatures {
-            width: 50%;
-        }
-
-        .assessment {
-            height: auto;
-        }
-
-        .signatures {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            text-align: right;
-            font-size: 10px;
-        }
-
-        .signature-line {
-            width: 50%;
-        }
-
-        .signature-line p {
-            text-align: center;
-            padding-top: 5px;
-            margin-top: 2rem;
-            text-transform: uppercase;
-            border-top: 1px solid black;
-        }
-
-        footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            text-align: left;
-            font-size: 12px;
-            font-weight: bolder;
-        }
-
         /*PDF SIZE*/
         @page { size: 20cm 30cm landscape; }
     </style>
 </head>
 
 <body>
-    <p>University</p>
+    <div class="center mb-3">
+        <img src="https://drive.google.com/uc?id=1l2yy9vCB5pFaJwewAGiiOMU3BmQdsG8Q" width="100" height="100">
+    </div>
 
+    <div class="container">
+        <table class="container-title">
+            <tr>
+                <td class="center truncate-widest">REPORT OF GRADES</td>
+            </tr>
+        </table>
+        <table class="container-details">
+            <tr>
+                <td>Student ID: <span>STD-0001</span></td>
+                <td>Status: <span>ENROLLED</span></td>
+            </tr>
+            <tr>
+                <td>Student Name: <span>Patrick Henry Vervo Samson</span></td>
+                <td>Student Type: <span>Old</span></td>
+            </tr>
+            <tr>
+                <td>Section: <span>BSIT-5E</span></td>
+                <td>Year Level: <span>5</span></td>
+            </tr>
+            <tr>
+                <td>Program: <span>BSIT - Bachelor of Science in Information Technology</span></td>
+                <td>School Year: <span>2020-2021</span></td>
+            </tr>
+        </table>
+    </div>
+    <div class="container">
+        <table class="container-details center">
+            <tr class="uppercase">
+                <th>Subject</th>
+                <th class="w-6">Title</th>
+                <th>Section</th>
+                <th>Grade</th>
+                <th>Remark</th>
+                <th>Unit Earned</th>
+            </tr>
+            <tr>
+                <td>COMP 106</td>
+                <td class="whitespace-normal left">Application Development and Emerging Technologies</td>
+                <td>BSIT-5E</td>
+                <td>5.00</td>
+                <td>PSD</td>
+                <td>3.00</td>
+            </tr>
+            <tr>
+                <td>COMP 106</td>
+                <td class="whitespace-normal left">Application Development and Emerging Technologies</td>
+                <td>BSIT-5E</td>
+                <td>5.00</td>
+                <td>PSD</td>
+                <td>3.00</td>
+            </tr>
+            <tr>
+                <td>COMP 106</td>
+                <td class="whitespace-normal left">Application Development and Emerging Technologies</td>
+                <td>BSIT-5E</td>
+                <td>5.00</td>
+                <td>PSD</td>
+                <td>3.00</td>
+            </tr>
+        </table>
+    </div>
+    
+                
+                
+
+
+{{--   
+<!-- 
     <div>
         <p><span>(LOGO)</span> University Name</p>
         <p><span>{{ $registration->prospectus->program->code ?? 'N/A' }} -</span> {{ $registration->prospectus->program->program ?? 'N/A' }}</p>
@@ -149,7 +122,7 @@
         @endforelse
         </tbody>
         <p>Computed Grade: <span>{{ number_format($computedGrade, '2', '.', '') ?? 'N/A' }}</span></p>
-    </table>
+    </table> -->--}}
 </body>
 
 </html>

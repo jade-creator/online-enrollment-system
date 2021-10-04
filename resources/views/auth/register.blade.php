@@ -1,7 +1,7 @@
 <x-guest-layout>
     <x-jet-authentication-card>
         <x-slot name="logo">
-            <x-jet-authentication-card-logo />
+            <img src="https://drive.google.com/uc?id=1l2yy9vCB5pFaJwewAGiiOMU3BmQdsG8Q" width="100" height="100">
             <p class="mt-4 text-xl font-extrabold">{{ __('Create an account')}}</p>
             <p class="text-sm">
                 <a class="font-medium text-indigo-700 hover:text-indigo-800" href="{{ route('login') }}">
