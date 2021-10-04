@@ -132,18 +132,20 @@
                                     </div>
                                     <div class="col-span-6">
                                         <x-jet-label value="{{ __('Discount Type') }}"/>
-                                        <select wire:model.defer="assessment.isPercentage" wire:loading.attr="disabled">
+                                        <select wire:model="assessment.isPercentage" wire:loading.attr="disabled">
                                             <option value="" selected>N/A</option>
                                             <option value="0">Amount</option>
                                             <option value="1">Percentage</option>
                                         </select>
                                         <x-jet-input-error for="assessment.isPercentage" class="mt-2"/>
                                     </div>
-                                    <div class="col-span-6">
-                                        <x-jet-label value="{{ __('Discount Amount') }}"/>
-                                        <input wire:model.defer="assessment.discount_amount" wire:loading.attr="disabled" type="number" min="0">
-                                        <x-jet-input-error for="assessment.discount_amount" class="mt-2"/>
-                                    </div>
+                                    @if (filled($this->assessment->isPercentage))
+                                        <div class="col-span-6">
+                                            <x-jet-label value="{{ __('Discount Amount') }}"/>
+                                            <input wire:model.defer="assessment.discount_amount" type="number" min="0">
+                                            <x-jet-input-error for="assessment.discount_amount" class="mt-2"/>
+                                        </div>
+                                    @endif
                                     <div class="col-span-6">
                                         <x-jet-label value="{{ __('Remarks') }}"/>
                                         <textarea wire:model.defer="assessment.remarks" wire:loading.attr="disabled" type="number" min="0"></textarea>

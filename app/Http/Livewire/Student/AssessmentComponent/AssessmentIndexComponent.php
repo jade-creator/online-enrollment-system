@@ -81,6 +81,8 @@ class AssessmentIndexComponent extends Component
         $this->validate();
 
         try {
+            if (is_null($this->assessment->isPercentage)) $this->assessment->discount_amount = 0;
+
             $this->authorize('create', $this->assessment);
 
             $this->grandTotal = (new AssessmentComputationService())->computeGrandTotal($this->additional, $this->totalUnit, $this->fees, $this->assessment);
@@ -93,5 +95,9 @@ class AssessmentIndexComponent extends Component
 
     public function cancel() { return
         $this->redirect(route('pre.registration.view', ['regId' => $this->registration->id]));
+    }
+
+    public function updatedAssessmentIsPercentage($value) {
+        if (empty($value)) $this->assessment->discount_amount = 0;
     }
 }

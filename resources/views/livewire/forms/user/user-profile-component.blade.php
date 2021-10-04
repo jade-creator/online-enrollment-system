@@ -207,6 +207,8 @@
                     @endforeach
                 </div>
             @endif
+
+            <livewire:partials.file-upload-component :user="$user">
         </div>
 
         <div x-show="openTab == 2" x-cloak class="px-6 lg:px-8 w-full">

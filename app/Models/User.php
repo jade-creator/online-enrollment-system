@@ -108,6 +108,10 @@ class User extends Authenticatable implements MustVerifyEmail
         $query->when(filled($roleId), fn ($query) => $query->where('role_id', $roleId));
     }
 
+    public function files() { return
+        $this->hasMany(File::class);
+    }
+
     public function role(){
         return $this->belongsTo(Role::class);
     }

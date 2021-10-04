@@ -27,18 +27,17 @@ class EducationForm extends Component
         'attended.date_graduated' => ['required', 'string', 'date'],
     ];
 
-    public function render()
-    {
-        return view('livewire.forms.education.education-form');
+    public function render() { return
+        view('livewire.forms.education.education-form');
     }
 
     public function mount()
     {
-        $this->studentId ??= Auth::user()->student->id;
+        $this->studentId ??= auth()->user()->student->id;
 
-        $this->types = SchoolType::all();
+//        $this->types = SchoolType::all();
 
-        $this->levels = collect();
+//        $this->levels = collect();
 
         $attended = AttendedSchool::select([
                 'id',
@@ -47,24 +46,25 @@ class EducationForm extends Component
                 'program',
                 'school_type_id',
                 'level_id',
+                'student_id',
             ])
             ->where('student_id', $this->studentId)
             ->first();
 
         if(! is_null($attended)) {
             $this->attended = $attended;
-            $this->levels =  Level::where('school_type_id', $this->attended->school_type_id)->get();
+//            $this->levels =  Level::where('school_type_id', $this->attended->school_type_id)->get();
         } else {
             $this->attended = new AttendedSchool();
         }
     }
 
-    public function updatedAttendedSchoolTypeId($type)
-    {
-        $this->levels = Level::where('school_type_id', $type)->get();
-
-        $this->attended->level_id = null;
-    }
+//    public function updatedAttendedSchoolTypeId($type)
+//    {
+//        $this->levels = Level::where('school_type_id', $type)->get();
+//
+//        $this->attended->level_id = null;
+//    }
 
     public function updateEducationInfo()
     {
@@ -81,7 +81,7 @@ class EducationForm extends Component
             $this->emit('saved');
             $this->emit('proceed', 6);
 
-            if (Auth::user()->role->name == 'student') $this->emit('completed');
+            if (auth()->user()->role->name == 'student') $this->emit('completed');
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }

@@ -3,7 +3,7 @@
 <div class="flex justify-between items-center pb-2">
     @if ($isSearchable)
         <div class="my-4 w-full md:w-52 relative">
-            <input type="text" wire:model.debounce.300ms="search" placeholder="Search...">
+            <input type="text" wire:model.debounce.1000ms="search" placeholder="Search...">
         </div>
     @endif
 
