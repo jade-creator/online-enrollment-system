@@ -67,10 +67,6 @@
                                                         <x-table.cell-button title="View Grade">
                                                             <x-icons.lock-icon/>
                                                         </x-table.cell-button>
-                                                    @elsecan ('view', App\Models\Program::class)
-                                                        <x-table.cell-button title="No options">
-                                                            <x-icons.lock-icon/>
-                                                        </x-table.cell-button>
                                                     @endcan
                                                 </div>
                                             </x-slot>

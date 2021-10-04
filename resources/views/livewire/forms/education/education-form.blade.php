@@ -1,6 +1,6 @@
 <x-jet-form-section submit="updateEducationInfo">
     <x-slot name="title">
-        {{ __('Education') }}
+        {{ __('Previous Education') }}
     </x-slot>
 
     <x-slot name="description">
@@ -15,20 +15,25 @@
                 <x-jet-label for="selectedType" value="{{ __('School Type') }}" />
                 <select wire:model="attended.school_type_id" wire:loading.attr="disabled" name="selectedType" id="selectedType" required>
                     <option value="" selected>Choose a Type</option>
-                    @foreach ($types as $type)
-                        <option value="{{ $type->id }}">{{ $type->type }}</option>
-                    @endforeach
+                    <option value="3" selected>Senior High School</option>
+                    <option value="4" selected>College</option>
                 </select>
                 <x-jet-input-error for="attended.school_type_id" class="mt-2"/>
             </div>
             <!-- level -->
             <div class="col-span-3">
-                <x-jet-label for="selectedLevel" value="{{ __('Year / Grade / Level') }}" />
+                <x-jet-label for="selectedLevel" value="{{ __('Level') }}" />
                 <select wire:model="attended.level_id" name="selectedLevel" id="selectedLevel" required>
                     <option value="" selected>Choose a Level</option>
-                    @foreach ($levels as $level)
-                        <option value="{{ $level->id }}">{{ $level->level }}</option>
-                    @endforeach
+                    @if ($this->attended->school_type_id == '3')
+                        <option value="13">Grade 12</option>
+                    @else
+                        <option value="14">1st Year</option>
+                        <option value="15">2nd Year</option>
+                        <option value="16">3rd Year</option>
+                        <option value="17">4th Year</option>
+                        <option value="18">5th Year</option>
+                    @endif
                 </select>
                 <x-jet-input-error for="attended.level_id" class="mt-2"/>
             </div>
@@ -40,7 +45,7 @@
             </div>
             <!-- program -->
             <div class="col-span-6">
-                <x-jet-label for="program" value="{{ __('Program / Track and Strand / Specialization (Optional)') }}" />
+                <x-jet-label for="program" value="{{ __('Program / Track and Strand / Specialization') }}" />
                 <x-jet-input wire:model.defer="attended.program" id="program" type="text" autocomplete="program" required/>
                 <x-jet-input-error for="attended.program" class="mt-2"/>
             </div>
