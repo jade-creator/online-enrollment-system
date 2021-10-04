@@ -53,6 +53,12 @@
                     </x-sidebar.link>
                 </x-sidebar.item>
 
+                <x-sidebar.item title="Advising">
+                    <x-sidebar.link routeName="admin.advising.view" route="admin/advising" name="Advising">
+                        <x-icons.advising-icon/>
+                    </x-sidebar.link>
+                </x-sidebar.item>
+
                 <x-sidebar.item title="Users">
                     <x-sidebar.link routeName="admin.users.view" route="admin/users" name="Users">
                         <x-icons.users-icon/>
