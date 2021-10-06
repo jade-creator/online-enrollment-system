@@ -66,7 +66,7 @@ class GradeService
             $grade->mark_id = (new GradeRemarkService())->getMark($grade->value, $type);
         } else {
             $grade->isScale = 0;
-            $grade->value = null;
+            $grade->value = $type == 'Dropped' ? 5 : null;
             $grade->mark_id = (new GradeRemarkService())->findRemark($type);
         }
 

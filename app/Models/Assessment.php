@@ -29,6 +29,12 @@ class Assessment extends Model
         return number_format((float)$value, 2, '.', '');
     }
 
+    public function getPaidAmountAttribute()
+    {
+        $value = $this->formatTwoDecimalPlaces($this->attributes['grand_total'] - $this->attributes['balance']);
+        return $this->getFormattedPriceAttribute($value);
+    }
+
     public function getBalanceAttribute($value) { return
         $this->formatTwoDecimalPlaces($value);
     }

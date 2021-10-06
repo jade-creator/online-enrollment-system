@@ -42,7 +42,7 @@ class GradePdfComponent extends Component
         $count = 0;
 
         foreach ($this->grades as $grade) {
-            if ($grade[0]) {
+            if ($grade[0] && $grade[1] !== 0) {
                 $this->grade += $grade[1];
                 $count++;
             }

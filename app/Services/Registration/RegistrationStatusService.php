@@ -108,8 +108,7 @@ class RegistrationStatusService
      */
     public function enroll(Models\Registration $registration) : Models\Registration
     {
-        //TODO: change countings (enrolled status only)
-        //(new SectionAvailabilityService())->isFull($registration->section_id);
+        (new SectionAvailabilityService())->isFull($registration->section_id);
 
         $status = $this->findStatus('enrolled');
 

@@ -17,12 +17,6 @@ class Grade extends Model
         'value',
     ];
 
-//    public function setValueAttribute($value)
-//    {
-//        if ($value == null) return;
-//        $this->attributes['value'] = round($value, 2);
-//    }
-
     public function mark() { return
         $this->belongsTo(Mark::class);
     }

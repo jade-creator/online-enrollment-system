@@ -30,6 +30,8 @@ class RegistrationViewComponent extends Component
     {
         $this->registration = Registration::preRegistered($this->regId);
 
+        $this->authorize('view', $this->registration);
+
         $this->totalUnit = $this->registration->total_unit;
         if (! $this->registration->isExtension && $this->registration->extensions->isNotEmpty()) {
             foreach ($this->registration->extensions as $extension) {

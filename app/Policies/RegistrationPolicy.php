@@ -30,6 +30,12 @@ class RegistrationPolicy
         $this->isAdmin($user) && ($registration->status->name == 'confirming' || $registration->status->name == 'denied');
     }
 
+    /*Paypal Payment Controller*/
+    public function pay(User $user, Registration $registration) { return
+        $user->role->name == 'student' && $registration->status->name == 'enrolled' &&
+            $user->student->id == $registration->student->id;
+    }
+
     /*student submitted registration for assessment.*/
     public function submitted(User $user, Registration $registration) { return
         $user->role->name == 'student' && $registration->status->name !== 'pending';
@@ -67,6 +73,12 @@ class RegistrationPolicy
 
     public function exportGrade(User $user, Registration $registration) { return
         $registration->isRegular;
+    }
+
+    /* > registration view component
+     * */
+    public function exportRegistration(User $user, Registration $registration) { return
+        $this->isAdmin($user) && $registration->status->name == 'enrolled';
     }
 
     public function export(User $user) { return

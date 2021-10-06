@@ -2,13 +2,18 @@
     @if (isset($registration))
         <div class="py-10">
             <div class="flex items-center justify-between">
-                <p class="font-bold text-lg"><span>{{ $registration->student->user->person->full_name ?? 'N/A' }} </span>- Pre Registration</p>
-                @if ($registration->status->name=='enrolled')
+                <div>
+                    <p class="font-bold text-lg"><span>{{ $registration->student->user->person->full_name ?? 'N/A' }} </span>- Pre Registration</p>
+                    <a href="{{ route('user.personal.profile.view', $registration->student->user->id) }}" title="View Profile">
+                        <p class="text-indigo-500 font-bold hover:underline text-sm">View Profile</p>
+                    </a>
+                </div>
+                @can ('exportRegistration', $registration)
                     <x-jet-button wire:click.prevent="createPdf" wire:loading.attr="disabled" class="bg-indigo-700 hover:bg-indigo-800 flex items-end">
                         <x-icons.export-icon/>
                         <span>{{ __('Export as PDF')}}</span>
                     </x-jet-button>
-                @endif
+                @endcan
             </div>
             <x-jet-section-border/>
         </div>
@@ -43,7 +48,7 @@
                         <x-jet-input type="text" class="mt-1" value="{{ $registration->prospectus->level->level ?? 'N/A' }}" readonly/>
                     </div>
                     <div class="col-span-3">
-                        <x-jet-label value="{{ __('Term:') }}"/>
+                        <x-jet-label value="{{ __('Semester:') }}"/>
                         <x-jet-input type="text" class="mt-1" value="{{ $registration->prospectus->term->term ?? 'N/A' }}" readonly/>
                     </div>
                     <div class="col-span-3">

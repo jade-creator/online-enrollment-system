@@ -68,7 +68,8 @@ class Transaction extends BaseModel
         return empty($search) ? static::query()
             : static::where(function ($query) use ($search){
                 return $query
-                    ->where('id', 'LIKE', $search);
+                    ->where('id', 'LIKE', $search)
+                    ->orWhere('registration_id', 'LIKE', $search);
             });
     }
 }

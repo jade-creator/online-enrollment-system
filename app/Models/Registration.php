@@ -81,6 +81,7 @@ class Registration extends BaseModel
                 'grades.prospectus_subject',
                 'grades.prospectus_subject.subject:id,code,title',
                 'grades.prospectus_subject.prerequisites',
+                'grades.prospectus_subject.corequisites',
             ])
             ->findOrFail($regId);
     }

@@ -187,7 +187,12 @@
             </div>
 
             @if ($user->role->name == 'student')
-                <div class="mt-12 mb-6 text-lg font-semibold">Recent Activity</div>
+                <div class="mt-12 mb-6 text-lg font-semibold flex items-center justify-between">
+                    <p>Recent Registrations</p>
+                    <a href="{{ route('admin.pre.enrollments.view', ['search' => $registration->student->custom_id]) }}" title="See All">
+                        <p class="text-indigo-500 font-bold hover:underline text-sm">See All</p>
+                    </a>
+                </div>
                 <div class="grid grid-cols-8 gap-6 mb-12">
                     @foreach ($this->registrations as $registration)
                         <div class="p-3 col-span-8 border-b border-gray-300">
