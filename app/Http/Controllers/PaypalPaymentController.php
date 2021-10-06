@@ -6,6 +6,7 @@ use App\Http\Requests;
 use App\Models\Registration;
 use App\Services\PaypalPaymentService;
 use App\Traits\WithSweetAlert;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use PayPal\Api\InputFields;
 use PayPal\Api\WebProfile;
@@ -29,7 +30,7 @@ use PayPal\Api\Transaction;
 
 class PaypalPaymentController extends Controller
 {
-    use WithSweetAlert;
+    use AuthorizesRequests, WithSweetAlert;
 
     public ?Registration $registration;
     private $_api_context;
@@ -46,9 +47,9 @@ class PaypalPaymentController extends Controller
     public function payWithPaypal($registrationId = null)
     {
         $this->registration = Registration::with('assessment')->find($registrationId);
-        if (is_null($this->registration)) {
-            return redirect()->route('student.payments.view');
-        }
+
+        $this->authorize('pay', $this->registration);
+        if (is_null($this->registration)) return redirect()->route('student.payments.view');
 
         Session::put('registration_id', $this->registration->id);
         return view('paywithpaypal', ['registration' => $this->registration]);

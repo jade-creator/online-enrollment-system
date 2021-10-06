@@ -68,6 +68,14 @@
                                                             <x-icons.lock-icon/>
                                                         </x-table.cell-button>
                                                     @endcan
+
+                                                    @can ('pay', $registration)
+                                                        <a href="{{ route('student.paywithpaypal', $registration->id) }}">
+                                                            <x-table.cell-button title="Pay">
+                                                                <x-icons.fee-icon/>
+                                                            </x-table.cell-button>
+                                                        </a>
+                                                    @endcan
                                                 </div>
                                             </x-slot>
                                         </x-jet-dropdown>

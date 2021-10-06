@@ -60,7 +60,7 @@ class GradeUpdateComponent extends Component
             $this->grade->value = $this->value;
             $grade = (new GradeService())->update($this->grade, $this->type);
 
-            $this->success('Equivalent: '.$grade->value.' ('.$grade->mark->name.')');
+            $this->success('Equivalent: '.$grade->value ?? $grade->mark->name);
             $this->toggleModal();
             $this->emitUp('refresh');
         } catch (\Exception $e) {

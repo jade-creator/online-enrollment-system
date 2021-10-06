@@ -164,10 +164,10 @@
                                     <x-icons.right-arrow-icon />
                                 </a>
                             @elsecan ('view', $registration->assessment)
-                                <x-jet-button class="w-full bg-indigo-500 hover:bg-indigo-800 flex items-center justify-center">
+                                <a class="w-full text-white py-2 rounded-md bg-indigo-500 hover:bg-indigo-800 flex items-center justify-center" href="{{ route('admin.payments.view', ['search' => $this->registration->id]) }}">
                                     <x-icons.fee-icon/>
-                                    <span class="mx-2">{{ __('Balance X,XXX.XX') }}</span>
-                                </x-jet-button>
+                                    <span class="mx-2">PAID AMOUNT: {{ $registration->assessment->paid_amount ?? 'N/A' }}</span>
+                                </a>
                             @endcan
                         @else
                             @if (! isset($grandTotal))
