@@ -16,7 +16,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
             SettingSeeder::class,
             RoleSeeder::class,
-            UserSeeder::class,
             CountrySeeder::class,
             SchoolTypeSeeder::class,
             LevelSeeder::class,
@@ -27,12 +26,14 @@ class DatabaseSeeder extends Seeder
             RoomSeeder::class,
             StatusSeeder::class,
             MarkSeeder::class,
+            UserSeeder::class,
             AdminSeeder::class,
             StudentSeeder::class,
             GuardianSeeder::class,
             SectionSeeder::class,
             DaySeeder::class,
             CategorySeeder::class,
+            FacultySeeder::class,
 
             /*test*/
             ProspectusSubjectSeeder::class,
