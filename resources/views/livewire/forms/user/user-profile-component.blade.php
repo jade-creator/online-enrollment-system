@@ -53,6 +53,12 @@
                             Edit Profile
                         </button>
                     </a>
+                @elsecan('email', $person)
+                    <a href="{{ 'mailto:'.$user->email }}" class="mt-4">
+                        <button class="w-full px-5 py-1 border-2 border-gray-300 hover:bg-gray-100 rounded-md font-bold outline-none">
+                            Send Email
+                        </button>
+                    </a>
                 @endcan
             </div>
             @if ($user->role->name == 'student')
@@ -189,12 +195,14 @@
             @if ($user->role->name == 'student')
                 <div class="mt-12 mb-6 text-lg font-semibold flex items-center justify-between">
                     <p>Recent Registrations</p>
-                    <a href="{{ route('admin.pre.enrollments.view', ['search' => $registration->student->custom_id]) }}" title="See All">
-                        <p class="text-indigo-500 font-bold hover:underline text-sm">See All</p>
-                    </a>
+                    @if ($this->registrations->isNotEmpty())
+                        <a href="{{ route('admin.pre.enrollments.view', ['search' => $user->student->custom_id]) }}" title="See All">
+                            <p class="text-indigo-500 font-bold hover:underline text-sm">See All</p>
+                        </a>
+                    @endif
                 </div>
                 <div class="grid grid-cols-8 gap-6 mb-12">
-                    @foreach ($this->registrations as $registration)
+                    @forelse ($this->registrations as $registration)
                         <div class="p-3 col-span-8 border-b border-gray-300">
                             <div class="flex items-start justify-between">
                                 <div class="flex items-center">
@@ -209,7 +217,18 @@
                                 <p>{{ Carbon\Carbon::parse($registration->created_at)->format('F j, Y') }}</p>
                             </div>
                         </div>
-                    @endforeach
+                    @empty
+                        <div class="p-3 col-span-8 border-b border-gray-300">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-center">
+                                    <div class="bg-gray-300 rounded-full p-2 mx-2">
+                                        <x-icons.reject-icon/>
+                                    </div>
+                                    <p class="text-gray-400 italic">No registrations found.</p>
+                                </div>
+                            </div>
+                        </div>
+                    @endforelse
                 </div>
             @endif
 

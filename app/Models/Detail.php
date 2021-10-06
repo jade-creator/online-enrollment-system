@@ -9,14 +9,6 @@ class Detail extends Model
 {
     use HasFactory;
 
-    public function person(){
-        return $this->belongsTo(Person::class);
-    }
-
-    public function country(){
-        return $this->belongsTo(Country::class);
-    }
-
     protected $fillable = [
         'gender',
         'civil_status',
@@ -27,4 +19,11 @@ class Detail extends Model
         'country_id',
     ];
 
+    public function person(){
+        return $this->belongsTo(Person::class);
+    }
+
+    public function country(){
+        return $this->belongsTo(Country::class);
+    }
 }
