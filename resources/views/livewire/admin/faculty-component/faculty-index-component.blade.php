@@ -21,15 +21,15 @@
             </x-slot>
 
             <x-slot name="head">
-                <div class="col-span-2 flex items-start">
+                <div class="col-span-2 flex items-center">
                     <input wire:model="selectPage" wire:loading.attr="disabled" type="checkbox" class="cursor-pointer mx-5" title="Select Displayed Data">
                     <x-table.sort-button event="sortFieldSelected('id')">ID</x-table.sort-button>
                 </div>
                 <div class="col-span-2">
                     <x-table.sort-button event="sortFieldSelected('code')">name</x-table.sort-button>
                 </div>
-                <x-table.column-title class="col-span-2">description</x-table.column-title>
                 <x-table.column-title class="col-span-1">Program</x-table.column-title>
+                <x-table.column-title class="col-span-2">description</x-table.column-title>
                 <x-table.column-title class="col-span-2">Mission</x-table.column-title>
                 <x-table.column-title class="col-span-2">Vision</x-table.column-title>
                 <div class="col-span-1">
@@ -44,8 +44,8 @@
                             <div name="slot" class="grid grid-cols-12 md:gap-2">
                                 <x-table.cell-checkbox :value="$faculty->id">{{ $faculty->id ?? 'N/A' }}</x-table.cell-checkbox>
                                 <x-table.cell headerLabel="Name" class="justify-start md:col-span-2">{{ $faculty->name ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell headerLabel="Description" class="justify-start md:col-span-2">{{ $faculty->description ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="program" class="justify-start md:col-span-1">{{ $faculty->program->code ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Description" class="justify-start md:col-span-2">{{ $faculty->description ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="Mission" class="justify-start md:col-span-2">{{ $faculty->mission ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="Vision" class="justify-start md:col-span-2">{{ $faculty->vision ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell-action>
@@ -68,6 +68,12 @@
                                                         </a>
                                                     @endcan
 
+                                                    @can ('addMember', $faculty)
+                                                        <x-table.cell-button wire:click.prevent="$emit('modalAddingMembers', {{$faculty}})" title="Add Member">
+                                                            <x-icons.edit-icon/>
+                                                        </x-table.cell-button>
+                                                    @endcan
+
                                                     @can ('destroy', $faculty)
                                                         <x-table.cell-button wire:click.prevent="$emit('removeConfirm', {{$faculty}})" title="Delete">
                                                             <x-icons.delete-icon/>
@@ -80,6 +86,8 @@
                                 </x-table.cell-action>
                             </div>
                         </x-table.row>
+
+                        <livewire:admin.faculty-component.faculty-view-component :faculty="$faculty" key="'faculty-view-component-'{{ $faculty->id.now() }}">
                     </div>
                 @empty
                     <x-table.no-result>No faculties found.🤔</x-table.no-result>
@@ -99,6 +107,8 @@
     <div wire:loading>
         @include('partials.loading')
     </div>
+
+    <livewire:admin.faculty-component.faculty-add-member-component>
 
     <livewire:admin.faculty-component.faculty-destroy-component>
 <div>

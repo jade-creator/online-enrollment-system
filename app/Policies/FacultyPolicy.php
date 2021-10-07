@@ -16,6 +16,18 @@ class FacultyPolicy
 
     public function view(User $user) { return true; }
 
+    public function leave(User $user, Faculty $faculty) { return
+        $user->employee->faculty_id == $faculty->id;
+    }
+
+    public function addMember(User $user, Faculty $faculty) { return
+        $this->isAdmin($user) || $user->role->name == 'dean';
+    }
+
+    public function removeMember(User $user, Faculty $faculty) { return
+        $this->isAdmin($user) || $user->role->name == 'dean';
+    }
+
     public function export(User $user) { return
         $this->isAdmin($user);
     }
