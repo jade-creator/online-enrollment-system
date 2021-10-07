@@ -20,8 +20,8 @@ class Faculty extends BaseModel
         $this->belongsTo(Program::class);
     }
 
-    public function users() { return
-        $this->hasMany(User::class);
+    public function employees() { return
+        $this->hasMany(Employee::class);
     }
 
     public static function search($search)

@@ -20,7 +20,7 @@ class FullnameForm extends Component
     public Employee $employee;
 
     protected $rules = [
-        'employee.faculty_id' => ['required'],
+        'employee.faculty_id' => ['nullable'],
         'employee.salutation' => ['required'],
         'person.firstname' => [ 'required', 'string', 'max:255'],
         'person.middlename' => [ 'required', 'string', 'max:255'],

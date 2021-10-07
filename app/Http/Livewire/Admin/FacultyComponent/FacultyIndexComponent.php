@@ -51,7 +51,10 @@ class FacultyIndexComponent extends Livewire\Component
     {
         return Faculty::search($this->search)
             ->select(['id', 'name', 'program_id', 'description', 'mission', 'vision', 'created_at'])
-            ->with('program:id,code')
+            ->with([
+                'program:id,code',
+                'employees.user.person',
+            ])
             ->orderBy($this->sortBy, $this->sortDirection)
             ->dateFiltered($this->dateMin, $this->dateMax);
     }
