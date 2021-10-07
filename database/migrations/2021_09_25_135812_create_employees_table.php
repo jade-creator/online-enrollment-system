@@ -16,8 +16,9 @@ class CreateEmployeesTable extends Migration
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('faculty_id')->nullable()->constrained();
+            $table->foreignId('faculty_id')->nullable()->default(null)->constrained();
             $table->string('custom_id')->nullable();
+            $table->enum('salutation',['Mr.', 'Mrs.', 'Prof.', 'Sir', 'Ms.', 'Miss', 'Madam', 'Madame', `Ma'am`])->nullable()->default(null);
             $table->timestamps();
         });
     }
