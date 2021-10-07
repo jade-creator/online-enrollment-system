@@ -1,4 +1,4 @@
-<div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
+<div class="max-w-5xl space-y-4 md:space-x-0 mx-auto p-4 sm:px-6 lg:px-8">
     @if (isset($registration))
         <div class="py-10">
             <div class="flex items-center justify-between">

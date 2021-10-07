@@ -1,6 +1,6 @@
-<div class="w-full scrolling-touch">
+<div class="w-full">
 
-    <div class="h-content w-full py-8 px-8">
+    <div class="h-content w-full p-4 md:p-8">
         <x-table.title tableTitle="Subjects" :isSelectedAll="$this->selectAll" :count="count($this->selected)">
             @can('create', App\Models\Subject::class)
                 <a href="{{ route('admin.subjects.create') }}">
@@ -41,11 +41,11 @@
                 @forelse ($subjects as $subject)
                     <div wire:key="table-row-{{$subject->id}}" x-data="{ open: false }">
                         <x-table.row :active="$this->isSelected($subject->id)">
-                            <div name="slot" class="grid grid-cols-12 gap-2">
+                            <div name="slot" class="grid grid-cols-12 md:gap-2">
                                 <x-table.cell-checkbox :value="$subject->id">{{ $subject->id ?? 'N/A' }}</x-table.cell-checkbox>
-                                <x-table.cell class="justify-start md:col-span-2">{{ $subject->code ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-3">{{ $subject->title ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-4">{{ $subject->description ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Code" class="justify-start md:col-span-2">{{ $subject->code ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Title" class="justify-start md:col-span-3">{{ $subject->title ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Description" class="justify-start md:col-span-4">{{ $subject->description ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell-action>
                                     @if (!count($selected) > 0)
                                         <x-jet-dropdown align="right" width="60" dropdownClasses="z-10 shadow-2xl">
