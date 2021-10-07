@@ -22,7 +22,7 @@
 
             <x-slot name="head">
                 <div class="col-span-2 flex items-start">
-                    <input wire:model="selectPage" wire:loading.attr="disabled" type="checkbox"  class="cursor-pointer border-gray-400 focus:outline-none focus:ring-transparent mx-5 rounded-sm" title="Select Displayed Data">
+                    <input wire:model="selectPage" wire:loading.attr="disabled" type="checkbox" class="cursor-pointer mx-5" title="Select Displayed Data">
                     <x-table.sort-button event="sortFieldSelected('id')">ID</x-table.sort-button>
                 </div>
                 <div class="col-span-2">
