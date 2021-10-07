@@ -23,9 +23,9 @@ class Person extends Model
     ];
 
     public function getFullNameAttribute() { return
-        "{$this->firstname} {$this->middlename} {$this->lastname}";
+        "{$this->firstname} {$this->middlename} {$this->lastname} {$this->suffix}";
     }
-    
+
     public function user(){
         return $this->hasOne(User::class);
     }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\PaypalPaymentController;
 use App\Http\Livewire\Admin\AdvisingComponent;
 use App\Http\Livewire\Admin\Dashboard;
+use App\Http\Livewire\Admin\FacultyComponent;
 use App\Http\Livewire\Admin\FeeComponent;
 use App\Http\Livewire\Admin\GradeComponent;
 use App\Http\Livewire\Admin\UserComponent;
@@ -123,6 +124,13 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
                 Route::get('', FeeComponent\FeeIndexComponent::class)->name('view');
                 Route::get('/create', FeeComponent\FeeAddComponent::class)->name('create');
                 Route::get('{fee}/update', FeeComponent\FeeUpdateComponent::class)->name('update');
+            });
+
+            //admin faculty routes
+            Route::group(['prefix' => 'faculties', 'as' => 'faculties.'], function (){
+                Route::get('', FacultyComponent\FacultyIndexComponent::class)->name('view');
+                Route::get('/create', FacultyComponent\FacultyAddComponent::class)->name('create');
+                Route::get('{faculty}/update', FacultyComponent\FacultyUpdateComponent::class)->name('update');
             });
 
             //admin user routes

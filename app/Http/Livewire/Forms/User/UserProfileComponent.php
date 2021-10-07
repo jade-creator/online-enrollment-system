@@ -23,14 +23,11 @@ class UserProfileComponent extends Component
     public Guardian $guardian;
     public AttendedSchool $education;
     public $userId, $country, $guardianPerson, $guardianContact;
+    public string $fullName = '', $fullNameGuardian = '', $faculty = '';
 
     public function rules()
     {
         return [
-            'person.firstname' => ['string'],
-            'person.middlename' => ['string'],
-            'person.lastname' => ['string'],
-            'person.suffix' => ['string'],
             'detail.gender' => ['string'],
             'detail.civil_status' => ['string'],
             'detail.religion' => ['string'],
@@ -38,10 +35,6 @@ class UserProfileComponent extends Component
             'detail.birthplace' => ['string'],
             'contact.address' => ['string'],
             'contact.mobile_number' => ['string'],
-            'guardianPerson.firstname' => ['string'],
-            'guardianPerson.middlename' => ['string'],
-            'guardianPerson.lastname' => ['string'],
-            'guardianPerson.suffix' => ['string'],
             'guardianContact.address' => ['string'],
             'guardianContact.mobile_number' => ['string'],
             'education.name' => ['string'],
@@ -58,17 +51,25 @@ class UserProfileComponent extends Component
 
         $this->user = User::with('person')
             ->findOrFail($userId);
-        
+
         $this->authorize('view', $this->user->person);
+
+        $this->fullName = $this->user->person->full_name;
+
+        if ($this->user->role->name != 'student') {
+            $this->fullName = $this->user->employee->salutation.' '.$this->user->person->full_name;
+            $this->faculty = $this->user->employee->faculty->name ?? 'N/A';
+        }
 
         $this->person = $this->user->person;
         $this->detail = $this->person->detail;
         $this->country = $this->person->detail->country->name;
         $this->contact = $this->person->contact;
-        
+
         if ($this->user->role_id == 2) {
             $this->guardian  = $this->user->student->guardian ?? 'N/A';
             $this->guardianPerson  = $this->user->student->guardian->person ?? 'N/A';
+            $this->fullNameGuardian = $this->guardianPerson->full_name ?? 'N/A';
             $this->guardianContact  = $this->user->student->guardian->person->contact ?? 'N/A';
             $this->education  = $this->user->student->attendedSchool ?? 'N/A';
             $this->education->program  = $this->education->program ?? 'N/A';
@@ -76,8 +77,8 @@ class UserProfileComponent extends Component
             $this->education->level_id  = $this->education->level->level ?? 'N/A';
         }
     }
-    
-    public function render() { return 
+
+    public function render() { return
         view('livewire.forms.user.user-profile-component');
     }
 
