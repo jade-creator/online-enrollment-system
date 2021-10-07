@@ -101,4 +101,4 @@
     </div>
 
     <livewire:admin.faculty-component.faculty-destroy-component>
-</div>
+<div>

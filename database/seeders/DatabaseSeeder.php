@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             StatusSeeder::class,
             MarkSeeder::class,
             UserSeeder::class,
+            AdminSeeder::class,
             StudentSeeder::class,
             GuardianSeeder::class,
             SectionSeeder::class,
@@ -35,7 +36,6 @@ class DatabaseSeeder extends Seeder
             FacultySeeder::class,
 
             /*test*/
-            AdminSeeder::class,
             ProspectusSubjectSeeder::class,
             ScheduleSeeder::class,
             FeeSeeder::class,
