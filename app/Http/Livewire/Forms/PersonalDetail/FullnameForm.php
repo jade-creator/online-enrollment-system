@@ -2,26 +2,21 @@
 
 namespace App\Http\Livewire\Forms\PersonalDetail;
 
-use App\Models\Employee;
-use App\Models\Faculty;
-use App\Models\Person;
 use App\Traits\WithSweetAlert;
-use Carbon\Carbon;
 use Exception;
+use Carbon\Carbon;
+use App\Models\Person;
+use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Livewire\Component;
 
 class FullnameForm extends Component
 {
     use WithSweetAlert;
 
     public Person $person;
-    public Employee $employee;
 
     protected $rules = [
-        'employee.faculty_id' => ['required'],
-        'employee.salutation' => ['required'],
         'person.firstname' => [ 'required', 'string', 'max:255'],
         'person.middlename' => [ 'required', 'string', 'max:255'],
         'person.lastname' => [ 'required', 'string', 'max:255'],
@@ -34,10 +29,9 @@ class FullnameForm extends Component
 
     public function mount()
     {
-        $user = Auth::user()->load(['person:id,firstname,middlename,lastname,suffix', 'employee']);
+        $user = Auth::user()->load('person:id,firstname,middlename,lastname,suffix');
 
         $this->person = $user->person ?? new Person();
-        $this->employee = $user->employee ?? new Employee();
     }
 
     /**
@@ -76,16 +70,7 @@ class FullnameForm extends Component
 
     public function updateOrCreateFullname()
     {
-        if (auth()->user()->role->name == 'student') {
-            $this->validate([
-                'person.firstname' => [ 'required', 'string', 'max:255'],
-                'person.middlename' => [ 'required', 'string', 'max:255'],
-                'person.lastname' => [ 'required', 'string', 'max:255'],
-                'person.suffix' => [ 'nullable', 'string', 'max:255'],
-            ]);
-        } else {
-            $this->validate();
-        }
+        $this->validate();
 
         if (empty(trim($this->person->suffix))) $this->person->suffix = null;
 
@@ -96,16 +81,10 @@ class FullnameForm extends Component
                 $this->person->update();
             }
 
-            if (auth()->user()->role->name !== 'student') $this->employee->update();
-
             $this->emit('saved');
             $this->emit('proceed', 2);
         } catch (Exception $e) {
             $this->error($e->getMessage());
         }
-    }
-
-    public function getFacultiesProperty() { return
-        Faculty::get(['id', 'name']);
     }
 }
