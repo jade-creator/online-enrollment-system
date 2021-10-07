@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div class="w-full scrolling-touch">
 
     <div class="h-content w-full py-8 px-8">
@@ -101,4 +102,8 @@
     </div>
 
     <livewire:admin.faculty-component.faculty-destroy-component>
+=======
+<div>
+    {{-- The Master doesn't talk, he acts. --}}
+>>>>>>> parent of 9b00fb2 (feature: faculty maintenance)
 </div>
