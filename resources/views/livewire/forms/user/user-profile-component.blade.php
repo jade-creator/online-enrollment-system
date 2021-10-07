@@ -147,22 +147,16 @@
         <div x-show="openTab == 1" class="px-6 lg:px-8 w-full">
             <div class="my-6 text-lg font-semibold">Fullname</div>
             <div class="grid grid-cols-8 gap-6">
-                <div class="mt-4 col-span-4">
-                    <x-jet-label for="firstname" value="{{ __('First Name') }}" />
-                    <x-jet-input wire:model.defer="person.firstname" id="firstname" class="block mt-1 w-full" type="text" name="firstname" readonly/>
+                <div class="mt-4 col-span-8">
+                    <x-jet-label for="fullname" value="{{ __('Fullname') }}" />
+                    <x-jet-input wire:model="fullName" type="text" name="firstname" readonly/>
                 </div>
-                <div class="mt-4 col-span-4">
-                    <x-jet-label for="middlname" value="{{ __('Middle Name') }}" />
-                    <x-jet-input wire:model.defer="person.middlename" id="year" class="block mt-1 w-full" type="text" name="middlname" readonly/>
-                </div>
-                <div class="mt-4 col-span-4">
-                    <x-jet-label for="lastname" value="{{ __('Last Name') }}" />
-                    <x-jet-input wire:model.defer="person.lastname" id="lastname" class="block mt-1 w-full" type="text" name="lastname" readonly/>
-                </div>
-                <div class="mt-4 col-span-4">
-                    <x-jet-label for="suffix" value="{{ __('Suffix') }}" />
-                    <x-jet-input wire:model.defer="person.suffix" id="year" class="block mt-1 w-full" type="text" name="suffix" readonly/>
-                </div>
+                @if ($user->role->name !== 'student')
+                    <div class="mt-4 col-span-8">
+                        <x-jet-label for="faculty" value="{{ __('Faculty') }}" />
+                        <x-jet-input wire:model="faculty" type="text" name="faculty" readonly/>
+                    </div>
+                @endif
             </div>
             <div class="mt-12 mb-6 text-lg font-semibold">Other Details</div>
             <div class="grid grid-cols-8 gap-6">
@@ -252,21 +246,9 @@
         <div x-show="openTab == 3" x-cloak class="px-6 lg:px-8 w-full">
             <div class="my-6 text-lg font-semibold">{{ $guardian->relationship ?? 'N/A' }}</div>
             <div class="grid grid-cols-8 gap-6">
-                <div class="mt-4 col-span-4">
-                    <x-jet-label for="firstname" value="{{ __('First Name') }}" />
-                    <x-jet-input wire:model.defer="guardianPerson.firstname" id="firstname" class="block mt-1 w-full" type="text" name="firstname" readonly/>
-                </div>
-                <div class="mt-4 col-span-4">
-                    <x-jet-label for="middlname" value="{{ __('Middle Name') }}" />
-                    <x-jet-input wire:model.defer="guardianPerson.middlename" id="year" class="block mt-1 w-full" type="text" name="middlname" readonly/>
-                </div>
-                <div class="mt-4 col-span-4">
-                    <x-jet-label for="lastname" value="{{ __('Last Name') }}" />
-                    <x-jet-input wire:model.defer="guardianPerson.lastname" id="lastname" class="block mt-1 w-full" type="text" name="lastname" readonly/>
-                </div>
-                <div class="mt-4 col-span-4">
-                    <x-jet-label for="suffix" value="{{ __('Suffix') }}" />
-                    <x-jet-input wire:model.defer="guardianPerson.suffix" id="year" class="block mt-1 w-full" type="text" name="suffix" readonly/>
+                <div class="mt-4 col-span-8">
+                    <x-jet-label for="fullnameGuardian" value="{{ __('Fullname') }}" />
+                    <x-jet-input wire:model="fullNameGuardian" type="text" name="fullnameGuardian" readonly/>
                 </div>
             </div>
             <div class="my-6 text-lg font-semibold">Contacts</div>

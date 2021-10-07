@@ -46,7 +46,9 @@ class UserObserver
             default:
                 if (request()->has('employee_id')) {
                     $user->employee()->create([
+                        'faculty_id' => request()->get('faculty_id'),
                         'custom_id' => request()->get('employee_id'),
+                        'salutation' => request()->get('salutation') ?? null,
                     ]);
                 }
                 break;

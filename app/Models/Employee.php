@@ -16,6 +16,10 @@ class Employee extends Model
         'salutation',
     ];
 
+    public function faculty() { return
+        $this->belongsTo(Faculty::class);
+    }
+
     public function user() { return
         $this->belongsTo(User::class);
     }
