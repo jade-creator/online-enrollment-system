@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Contact;
 use App\Models\Detail;
+use App\Models\Employee;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Person;
@@ -30,6 +31,14 @@ class AdminSeeder extends Seeder
             $person->contact()->save(Contact::factory()->make());
 
             $person->detail()->save(Detail::factory()->make());
+
+            $employee = new Employee([
+                'custom_id' => null,
+            ]);
+
+            $person->user->employee()->save($employee);
+            $person->user->employee->custom_id = $person->user->employee->id;
+            $person->user->employee->save();
         });
     }
 }

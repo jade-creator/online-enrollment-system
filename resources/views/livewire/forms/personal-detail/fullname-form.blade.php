@@ -8,6 +8,25 @@
     </x-slot>
 
     <x-slot name="form">
+        @if (auth()->user()->role->name != 'student')
+            <div class="col-span-6">
+                <x-jet-label for="salutation" value="{{ __('Salutation') }}" />
+                <select wire:model.defer="employee.salutation" wire:loading.attr="disabled" id="salutation" name="salutation" required>
+                    <option value="" selected>-- select a salutation --</option>
+                    <option value="Mr.">Mr.</option>
+                    <option value="Mrs.">Mrs.</option>
+                    <option value="Prof.">Prof.</option>
+                    <option value="Sir">Sir</option>
+                    <option value="Ms.">Ms.</option>
+                    <option value="Miss">Miss</option>
+                    <option value="Madam">Madam</option>
+                    <option value="Madame">Madame</option>
+                    <option value="Ma'am">Ma'am</option>
+                </select>
+                <x-jet-input-error for="employee.salutation" class="mt-2"/>
+            </div>
+        @endif
+
         <!-- fName -->
         <div class="col-span-6">
             <x-jet-label for="firstname" value="{{ __('First Name') }}" />
@@ -36,6 +55,20 @@
             <p class="mt-3 text-xs text-gray-500 font-semibold">{{ __('"Suffix" is optional you can leave it blank if not applicable.')}}</p>
             <x-jet-input-error for="person.suffix" class="mt-2"/>
         </div>
+
+        @if (auth()->user()->role->name != 'student')
+            <div class="col-span-6">
+                <x-jet-label for="faculty_id" value="{{ __('Faculty') }}" />
+                <select wire:model.defer="employee.faculty_id" wire:loading.attr="disabled" id="faculty_id" name="faculty_id" required>
+                    <option value="" selected>-- select a faculty --</option>
+                    @forelse($this->faculties as $faculty)
+                        <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
+                    @empty
+                    @endforelse
+                </select>
+                <x-jet-input-error for="employee.faculty_id" class="mt-2"/>
+            </div>
+        @endif
     </x-slot>
 
     <x-slot name="actions">
