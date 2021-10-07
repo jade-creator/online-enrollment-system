@@ -1,7 +1,7 @@
 <div class="w-full mt-3">
     {{ $filter }}
 
-    <div class="grid grid-cols-12 gap-2">
+    <div class="hidden md:grid grid-cols-12 gap-2 pl-1 py-2 ">
         {{ $head }}
     </div>
 

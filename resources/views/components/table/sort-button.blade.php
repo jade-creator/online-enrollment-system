@@ -1,6 +1,6 @@
 @props([ 'event' ])
 
-<button class="flex items-center font-bold text-xs text-gray-400 hover:text-gray-500 uppercase tracking-widest focus:outline-none" wire:click="{{ $event }}" title="sort">
+<button class="flex items-center font-bold text-xs text-indigo-500 hover:text-gray-500 uppercase tracking-widest focus:outline-none" wire:click="{{ $event }}" title="sort">
     <span class="mr-1">{{ $slot }}</span>
     <span>
         <svg

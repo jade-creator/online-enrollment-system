@@ -1,6 +1,6 @@
-<div class="w-full scrolling-touch">
+<div class="w-full">
 
-    <div class="h-content w-full py-8 px-8">
+    <div class="h-content w-full p-4 md:p-8">
         <x-table.title tableTitle="Prospectus">
             @can('create', App\Models\ProspectusSubject::class)
                 <x-table.nav-button wire:click.prevent="$emit('modalAddingSubject')">
@@ -41,11 +41,11 @@
             <x-slot name="body">
                 @forelse ($coRequisites as $prospectus_subject)
                     <x-table.row>
-                        <div name="slot" class="grid grid-cols-12 gap-2">
-                            <x-table.cell class="h-10 justify-start md:col-span-2">{{ $prospectus_subject->subject->code ?? 'N/A' }}</x-table.cell>
-                            <x-table.cell class="justify-start md:col-span-3">{{ $prospectus_subject->subject->title ?? 'N/A' }}</x-table.cell>
-                            <x-table.cell class="justify-start md:col-span-2">{{ $prospectus_subject->unit ?? 'N/A' }}</x-table.cell>
-                            <x-table.cell class="justify-start md:col-span-2">
+                        <div name="slot" class="grid grid-cols-12 md:gap-2">
+                            <x-table.cell headerLabel="Code" class="justify-start md:col-span-2">{{ $prospectus_subject->subject->code ?? 'N/A' }}</x-table.cell>
+                            <x-table.cell headerLabel="Title" class="justify-start md:col-span-3">{{ $prospectus_subject->subject->title ?? 'N/A' }}</x-table.cell>
+                            <x-table.cell headerLabel="Unit" class="justify-start md:col-span-2">{{ $prospectus_subject->unit ?? 'N/A' }}</x-table.cell>
+                            <x-table.cell headerLabel="Co-requisite" class="justify-start md:col-span-2">
                                 @forelse ($prospectus_subject->corequisites as $subject)
                                     {{ $loop->first ? '' : ', '  }}
                                     <a href="{{ route('admin.subjects.view', ['search' => $subject->title]) }}" class="text-indigo-500 underline">{{ $subject->code }}</a>
@@ -53,7 +53,7 @@
                                     N/A
                                 @endforelse
                             </x-table.cell>
-                            <x-table.cell class="justify-start md:col-span-2">
+                            <x-table.cell headerLabel="Pre-requisite" class="justify-start md:col-span-2">
                                 @forelse ($prospectus_subject->prerequisites as $subject)
                                     {{ $loop->first ? '' : ', '  }}
                                     <a href="{{ route('admin.subjects.view', ['search' => $subject->title]) }}" class="text-indigo-500 underline">{{ $subject->code }}</a>

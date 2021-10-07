@@ -1,6 +1,6 @@
-<div class="w-full scrolling-touch">
+<div class="w-full">
 
-    <div class="h-content w-full py-8 px-8">
+    <div class="h-content w-full p-4 md:p-8">
         <x-table.title tableTitle="Fees">
             @can('create', App\Models\Fee::class)
                 <a href="{{ route('admin.fees.create') }}">
@@ -59,12 +59,12 @@
                 @forelse ($fees as $fee)
                     <div wire:key="table-row-{{$fee->id}}">
                         <x-table.row :active="$this->isSelected($fee->id)">
-                            <div name="slot" class="grid grid-cols-12 gap-2">
+                            <div name="slot" class="grid grid-cols-12 md:gap-2">
                                 <x-table.cell-checkbox :value="$fee->id">{{ $fee->id ?? 'N/A' }}</x-table.cell-checkbox>
-                                <x-table.cell class="justify-start md:col-span-2">{{ $fee->program->code ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-2">{{ $fee->category->name ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-3">{{ $fee->description ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-2">{{ $fee->getFormattedPriceAttribute($fee->price) ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Program" class="justify-start md:col-span-2">{{ $fee->program->code ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Category" class="justify-start md:col-span-2">{{ $fee->category->name ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Description" class="justify-start md:col-span-3">{{ $fee->description ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Amount" class="justify-start md:col-span-2">{{ $fee->getFormattedPriceAttribute($fee->price) ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell-action>
                                     @if (!count($selected) > 0)
                                         <x-jet-dropdown align="right" width="60" dropdownClasses="z-10 shadow-2xl">

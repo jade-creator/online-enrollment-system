@@ -1,6 +1,6 @@
-<div class="w-full scrolling-touch">
+<div class="w-full">
 
-    <div class="h-content w-full py-8 px-8">
+    <div class="h-content w-full p-4 md:p-8">
         <x-table.title tableTitle="Advising Schedule" :isSelectedAll="$this->selectAll" :count="count($this->selected)">
             <a href="{{ route('admin.advising.create') }}">
                 @can('create', App\Models\Advice::class)
@@ -61,20 +61,20 @@
                 @forelse ($advice as $adviceItem)
                     <div wire:key="table-row-{{$adviceItem->id}}">
                         <x-table.row :active="$this->isSelected($adviceItem->id)">
-                            <div name="slot" class="grid grid-cols-12 gap-2">
+                            <div name="slot" class="grid grid-cols-12 md:gap-2">
                                 <x-table.cell-checkbox :value="$adviceItem->id">{{ $adviceItem->id ?? 'N/A' }}</x-table.cell-checkbox>
-                                <x-table.cell class="justify-start md:col-span-1">{{ $adviceItem->date ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-1">{{ $adviceItem->time ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-1">{{ $adviceItem->program->code ?? 'All' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-1">{{ $adviceItem->level->level ?? 'All' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-3">
+                                <x-table.cell headerLabel="Date/s" class="justify-start md:col-span-1">{{ $adviceItem->date ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Time" class="justify-start md:col-span-1">{{ $adviceItem->time ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Program" class="justify-start md:col-span-1">{{ $adviceItem->program->code ?? 'All' }}</x-table.cell>
+                                <x-table.cell headerLabel="Level" class="justify-start md:col-span-1">{{ $adviceItem->level->level ?? 'All' }}</x-table.cell>
+                                <x-table.cell headerLabel="Link" class="justify-start md:col-span-3">
                                     @isset ($adviceItem->link)
                                         <a href="{{ $adviceItem->link }}" class="underline text-blue-500" target="_blank">{{ $adviceItem->link }}</a>
                                     @else
                                         N/A
                                     @endisset
                                 </x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-2">{{ $adviceItem->remarks ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Remarks" class="justify-start md:col-span-2">{{ $adviceItem->remarks ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell-action>
                                     @if (!count($selected) > 0)
                                         <x-jet-dropdown align="right" width="60" dropdownClasses="z-10 shadow-2xl">

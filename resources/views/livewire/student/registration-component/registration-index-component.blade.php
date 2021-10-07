@@ -1,6 +1,6 @@
-<div class="w-full scrolling-touch">
+<div class="w-full">
 
-    <div class="h-content w-full py-8 px-8">
+    <div class="h-content w-full p-4 md:p-8">
         <x-table.title tableTitle="Registrations">
             <a href="{{ route('student.registrations.create') }}">
                 <x-table.nav-button>
@@ -24,7 +24,7 @@
                 </div>
                 <x-table.column-title class="col-span-2">program</x-table.column-title>
                 <x-table.column-title class="col-span-2">level</x-table.column-title>
-                <x-table.column-title class="col-span-2">level</x-table.column-title>
+                <x-table.column-title class="col-span-2">term</x-table.column-title>
                 <x-table.column-title class="col-span-2">section</x-table.column-title>
                 <x-table.column-title class="col-span-1">status</x-table.column-title>
                 <div class="col-span-1">
@@ -36,10 +36,10 @@
                 @forelse ($registrations as $registration)
                     <div wire:key="table-row-{{$registration->id}}">
                         <x-table.row>
-                            <div name="slot" class="grid grid-cols-12 gap-2">
-                                <x-table.cell class="justify-start md:col-span-2">{{ $registration->id ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-2">{{ $registration->prospectus->program->code ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-2">{{ $registration->prospectus->level->level ?? 'N/A' }}</x-table.cell>
+                            <div name="slot" class="grid grid-cols-12 md:gap-2">
+                                <x-table.cell headerLabel="Reg. ID" class="justify-start md:col-span-2">{{ $registration->id ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="program" class="justify-start md:col-span-2">{{ $registration->prospectus->program->code ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="level" class="justify-start md:col-span-2">{{ $registration->prospectus->level->level ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell class="justify-start md:col-span-2">{{ $registration->prospectus->term->term ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell class="justify-start md:col-span-2">{{ $registration->section->name ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell class="justify-start md:col-span-1">{{ $registration->status->name ?? 'N/A' }}</x-table.cell>

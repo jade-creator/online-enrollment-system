@@ -1,6 +1,6 @@
-<div class="w-full flex flex-1 scrolling-touch">
+<div class="w-full flex flex-1">
     <!-- Module -->
-    <div class="min-h-screen w-full py-8 px-8">
+    <div class="min-h-screen w-full p-4 md:p-8">
 
         <div class="mb-4 pb-3 border-b border-gray-200">
             <div class="flex items-center justify-between">
@@ -47,7 +47,7 @@
                              @click.away="open = false"
                              @close.stop="open = false"
                              class="w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-white border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer">
-                            <div class="grid grid-cols-12 gap-2">
+                            <div class="grid grid-cols-12 md:gap-2">
                                 <div class="flex items-center justify-start col-span-12 md:col-span-1 truncate md:border-0 border-t border-gray-300 font-bold text-xs pl-2">{{ $registration->id ?? 'N/A' }}</div>
                                 <div class="flex items-center justify-start col-span-12 md:col-span-3 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $registration->student->isStudent ? $registration->student->custom_id : '--' }}</div>
                                 <div class="flex items-center justify-start col-span-12 md:col-span-3 truncate md:border-0 border-t border-gray-300 font-bold text-xs">{{ $registration->prospectus->level->level ?? 'N/A' }}</div>

@@ -1,6 +1,6 @@
-<div class="w-full scrolling-touch">
+<div class="w-full">
 
-    <div class="h-content w-full py-8 px-8">
+    <div class="h-content w-full p-4 md:p-8">
         <x-table.title tableTitle="Payments">
         </x-table.title>
 
@@ -26,13 +26,13 @@
                 @forelse ($transactions as $transaction)
                     <div wire:key="table-row-{{$transaction->id}}">
                         <x-table.row :active="$this->isSelected($transaction->id)">
-                            <div name="slot" class="grid grid-cols-12 gap-2">
+                            <div name="slot" class="grid grid-cols-12 md:gap-2">
                                 <x-table.cell-checkbox :value="$transaction->id">{{ $transaction->id ?? 'N/A' }}</x-table.cell-checkbox>
-                                <x-table.cell class="justify-start md:col-span-2">{{ $transaction->created_at ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-2">{{ $transaction->getFormattedPriceAttribute($transaction->amount) ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-2">{{ $transaction->registration->id ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-2">{{ $transaction->getFormattedPriceAttribute($transaction->registration->assessment->grand_total) ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-1">{{ $transaction->getFormattedPriceAttribute($transaction->running_balance) ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="DataTime" class="justify-start md:col-span-2">{{ $transaction->created_at ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Amount" class="justify-start md:col-span-2">{{ $transaction->getFormattedPriceAttribute($transaction->amount) ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Registration" class="justify-start md:col-span-2">{{ $transaction->registration->id ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Grand Total" class="justify-start md:col-span-2">{{ $transaction->getFormattedPriceAttribute($transaction->registration->assessment->grand_total) ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Balance" class="justify-start md:col-span-1">{{ $transaction->getFormattedPriceAttribute($transaction->running_balance) ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell-action>
                                     @if (!count($selected) > 0)
                                         <x-jet-dropdown align="right" width="60" dropdownClasses="z-10 shadow-2xl">

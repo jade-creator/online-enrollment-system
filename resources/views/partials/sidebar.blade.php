@@ -23,6 +23,12 @@
                     </x-sidebar.link>
                 </x-sidebar.item>
 
+                <x-sidebar.item title="Faculties">
+                    <x-sidebar.link routeName="admin.faculties.view" route="admin/faculties" name="Faculties">
+                        <x-icons.faculty-icon/>
+                    </x-sidebar.link>
+                </x-sidebar.item>
+
                 <x-sidebar.item title="Grades">
                     <x-sidebar.link routeName="admin.grades.view" route="admin/grades" name="Grades">
                         <x-icons.grade-icon/>
