@@ -15,7 +15,7 @@ class ScheduleAddComponent extends Component
     public Models\Section $section;
     public Models\Schedule $schedule;
     public bool $addingSchedule = false;
-    public $prospectusSubjects, $days;
+    public $prospectusSubjects, $days, $professors;
 
     protected $listeners = [ 'modalAddingSchedule' ];
 
@@ -23,6 +23,7 @@ class ScheduleAddComponent extends Component
     {
         return [
             'schedule.prospectus_subject_id' => ['required'],
+            'schedule.employee_id' => ['required'],
             'schedule.day_id' => ['required'],
             'schedule.start_time' => ['required'],
             'schedule.end_time' => ['required', 'after:schedule.start_time'],

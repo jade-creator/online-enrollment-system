@@ -67,7 +67,7 @@ class SectionIndexComponent extends Livewire\Component
             ->with([
                 'registrations' => function($query) {
                     return $query->enrolled();
-                },
+                }
             ])
             ->filterWithProspectusByProgram($this->programId)
             ->orderBy($this->sortBy, $this->sortDirection)
@@ -105,6 +105,15 @@ class SectionIndexComponent extends Livewire\Component
 
     public function getDaysProperty() { return
         Models\Day::get(['id', 'name']);
+    }
+
+    public function getProfessorsProperty() { return
+        Models\Employee::whereNotNull('faculty_id')
+            ->with('user.person')
+            ->whereHas('user', function ($query){
+                return $query->orWhere('role_id', '>', 3);
+            })
+            ->get();
     }
 
     public function fileExport() { return

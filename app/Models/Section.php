@@ -31,6 +31,7 @@ class Section extends BaseModel
                         ->orderBy('start_time', 'ASC');
                 },
                 'schedules.prospectusSubject.subject',
+                'schedules.employee.user.person',
                 'schedules.day',
             ]);
     }

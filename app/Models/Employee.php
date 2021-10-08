@@ -16,6 +16,10 @@ class Employee extends Model
         'salutation',
     ];
 
+    public function schedules() { return
+        $this->hasMany(Schedule::class);
+    }
+
     public function faculty() { return
         $this->belongsTo(Faculty::class);
     }

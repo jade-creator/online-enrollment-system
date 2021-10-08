@@ -59,7 +59,7 @@ class FacultyAddMemberComponent extends Component
             session()->flash('swal:modal', [
                 'title' => $this->successTitle,
                 'type' => $this->successType,
-                'text' => $this->faculty->name.`'s members has been updated.`,
+                'text' => $this->faculty->name." has been updated.",
             ]);
             return redirect(route('admin.faculties.view'));
         } catch (\Exception $e) {

@@ -45,15 +45,16 @@ class ScheduleMergeabilityService
     /*get current block for update*/
     public function populateBlocks(Models\Schedule $schedule) : array
     {
-        $block = [];
+        $blocks = [];
+        $day = Models\Day::findOrFail($schedule->day_id);
 
-        $blocks[$schedule->day->name][0] = $this->stringToCarbonTime($schedule->start_time).'-'.$this->stringToCarbonTime($schedule->end_time);
+        $blocks[$day->name][0] = $this->stringToCarbonTime($schedule->start_time).'-'.$this->stringToCarbonTime($schedule->end_time);
 
         return $blocks;
     }
 
     //get schedule of selected section
-    public function populateSchedules(Models\Section $section, $days = null) : array
+    public function populateSchedules($section, $days = null) : array
     {
         $schedules = [];
 
@@ -70,12 +71,26 @@ class ScheduleMergeabilityService
         return $schedules;
     }
 
+    /*schedule service: store*/
     public function checkSchedule(Models\Section $section, Models\Schedule $schedule, $days = null) : bool
     {
         if ($section->schedules->isEmpty()) return FALSE;
 
         $blocks = $this->populateBlocks($schedule);
         $schedules = $this->populateSchedules($section, $days);
+
+        return $this->checkBlock($schedules, $blocks);
+    }
+
+    /*schedule service: store*/
+    public function checkProfessorSchedule(Models\Schedule $schedule, $days = null) : bool
+    {
+        $employee = Models\Employee::with('schedules')->findOrFail($schedule->employee_id);
+
+        if ($employee->schedules->isEmpty()) return FALSE;
+
+        $blocks = $this->populateBlocks($schedule);
+        $schedules = $this->populateSchedules($employee, $days);
 
         return $this->checkBlock($schedules, $blocks);
     }
@@ -88,14 +103,14 @@ class ScheduleMergeabilityService
     }
 
     //unset selected block time period to schedule.
-    public function unsetSchedule(Models\Section $section, array $blocks = [], $days = null) : array
+    public function unsetSchedule($section, array $blocks = [], $days = null) : array
     {
         $schedules = $this->populateSchedules($section, $days);
 
         foreach ($blocks as $day => $blockTimes) {
             foreach ($blockTimes as $blockTime) {
                 foreach ($schedules[$day] as $index => $scheduleTime) {
-                    if ($blockTime === $scheduleTime) {
+                    if ($blockTime == $scheduleTime) {
                         unset($schedules[$day][$index]);
                     }
                 }

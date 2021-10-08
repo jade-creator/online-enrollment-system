@@ -7,6 +7,9 @@ use App\Models\User;
 
 class FileService
 {
+    /**
+     * @throws \Exception
+     */
     public function store(User $user, array $files) : array
     {
         if (! empty($files)) {
@@ -18,6 +21,8 @@ class FileService
                     'hashed_name' => $file->hashName(),
                 ]);
             }
+        } else {
+            throw new \Exception('Please choose a file.');
         }
 
         return $files;

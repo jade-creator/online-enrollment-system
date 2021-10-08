@@ -16,7 +16,7 @@ class FacultyMemberService
 
     public function add(string $facultyId, array $employees)
     {
-        return Employee::where('id', $employees)->update([
+        return Employee::whereIn('id', $employees)->update([
             'faculty_id' => $facultyId,
         ]);
     }

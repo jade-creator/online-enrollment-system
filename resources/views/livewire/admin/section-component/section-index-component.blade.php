@@ -111,7 +111,7 @@
                                 </x-table.cell-action>
                             </div>
                         </x-table.row>
-                        <livewire:admin.schedule-component.schedule-view-component :section="$section" key="{{ 'schedule-view-component-'.now() }}">
+                        <livewire:admin.schedule-component.schedule-view-component :section="$section" key="'schedule-view-component-'{{ $section->id.now() }}">
                     </div>
                 @empty
                     <x-table.no-result>No sections found.🤔</x-table.no-result>
@@ -142,7 +142,7 @@
 
     <livewire:admin.section-component.section-destroy-component>
 
-    <livewire:admin.schedule-component.schedule-add-component key="{{ 'schedule-add-component-'.now() }}" :days="$this->days">
+    <livewire:admin.schedule-component.schedule-add-component key="{{ 'schedule-add-component-'.now() }}" :days="$this->days" :professors="$this->professors">
 
-    <livewire:admin.schedule-component.schedule-update-component key="{{ 'schedule-update-component-'.now() }}" :days="$this->days">
+    <livewire:admin.schedule-component.schedule-update-component key="{{ 'schedule-update-component-'.now() }}" :days="$this->days" :professors="$this->professors">
 </div>
