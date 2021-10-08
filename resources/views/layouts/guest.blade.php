@@ -18,7 +18,7 @@
         <script src="{{ mix('js/app.js') }}" defer></script>
         <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
     </head>
-    <body class="font-sans text-gray-900 antialiased">
+    <body class="font-sans bg-gray-100 text-gray-900 antialiased">
         {{ $slot }}
         {{-- <p>this is student</p> --}}
         @livewireScripts

@@ -1,5 +1,5 @@
-<div class="w-full scrolling-touch">
-    <div class="h-content w-full py-8 px-8">
+<div class="w-full">
+    <div class="h-content w-full p-4 md:p-8">
         <x-table.title tableTitle="Section Maintenance"></x-table.title>
 
         <x-table.main>
@@ -9,7 +9,7 @@
 
             <x-slot name="body">
                 <div class="grid place-items-center">
-                    <x-jet-form-section submit="" class="w-3/4">
+                    <x-jet-form-section submit="" class="w-11/12 md:w-3/4">
                         <x-slot name="title">
                             <p class="capitalize">{{ $section->name }}</p>
                         </x-slot>

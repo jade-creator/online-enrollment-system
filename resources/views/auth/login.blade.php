@@ -1,7 +1,7 @@
 <x-guest-layout>
     <x-jet-authentication-card>
         <x-slot name="logo">
-            <img src="https://drive.google.com/uc?id=1l2yy9vCB5pFaJwewAGiiOMU3BmQdsG8Q" width="100" height="100"> 
+            <x-jet-authentication-card-logo />
             <p class="mt-4 text-xl font-extrabold">{{ __('Log in to your account')}}</p>
             <p class="text-sm">{{__('Or')}} 
                 <a class="font-medium text-indigo-700 hover:text-indigo-800" href="{{ route('register') }}">

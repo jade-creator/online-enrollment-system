@@ -1,4 +1,4 @@
-<div x-data="{ openTab: 1 }" class="w-full h-screen bg-gray-50">
+<div x-data="{ openTab: 1 }" class="w-full h-content bg-gray-50">
     <div class="w-full border-b bg-white border-gray-200 sticky top-12 ">
         <nav class="flex">
             <ul class="flex flex-col space-y-2 sm:space-y-0 sm:flex-row list-none pt-5">
@@ -41,9 +41,10 @@
             </ul>
         </nav>
     </div>
+
     <div class="flex flex-col md:flex-row pb-4">
-        <div class="flex flex-row md:flex-col justify-around items-center md:justify-start md:items-start md:max-w-sm md:px-12">
-            <div class="flex flex-col">
+        <div class="flex flex-row gap-5 md:flex-col justify-around items-center md:justify-start md:items-start md:max-w-sm px-5 md:px-12">
+            <div class="flex flex-col md:items-center">
                 <img class="mt-6 w-40 rounded-full object-cover" src="{{ $user->profile_photo_url }}" alt="{{ $user->name }}"/>
                 <p class="mt-4 text-3xl font-semibold">{{ $user->name }}</p>
                 <p class="mt-2 text-gray-400 text-xl">{{ $user->email }}</p>
@@ -61,87 +62,51 @@
                     </a>
                 @endcan
             </div>
+            <div class="w-full h-full pt-5 space-y-2 md:border-t">
             @if ($user->role->name == 'student')
-                <div class="mt-10">
+                <div class="">
                     <h1 class="font-bold">Student ID</h1>
                     <div class="flex items-center py-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 text-gray-500" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <rect x="3" y="4" width="18" height="16" rx="3"></rect>
-                            <circle cx="9" cy="10" r="2"></circle>
-                            <line x1="15" y1="8" x2="17" y2="8"></line>
-                            <line x1="15" y1="12" x2="17" y2="12"></line>
-                            <line x1="7" y1="16" x2="17" y2="16"></line>
-                        </svg>
-                        <p class="font-bold text-indigo-500">{{ $user->student->custom_id ?? 'N/A' }}</p>
+                        <x-icons.id-icon />
+                        <p class="ml-3 font-bold text-indigo-500">{{ $user->student->custom_id ?? 'N/A' }}</p>
                     </div>
                 </div>
                 @forelse ($this->registrations as $registration)
                     @if ($loop->first)
-                        <div class="pt-2">
+                        <div class="">
                             <h1 class="font-bold">Level</h1>
                             <div class="flex items-center py-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 text-gray-500" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M18 21v-14"></path>
-                                    <path d="M9 15l3 -3l3 3"></path>
-                                    <path d="M15 10l3 -3l3 3"></path>
-                                    <line x1="3" y1="21" x2="21" y2="21"></line>
-                                    <line x1="12" y1="21" x2="12" y2="12"></line>
-                                    <path d="M3 6l3 -3l3 3"></path>
-                                    <path d="M6 21v-18"></path>
-                                 </svg>
-                                <p class="font-bold text-red-500">{{ $registration->prospectus->level->level ?? 'N/A' }}</p>
+                                <x-icons.level-icon />
+                                <p class="ml-3 font-bold text-red-500">{{ $registration->prospectus->level->level ?? 'N/A' }}</p>
                             </div>
                         </div>
-                        <div class="pt-2">
+                        <div class="">
                             <h1 class="font-bold">Program</h1>
                             <div class="flex items-center py-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 text-gray-500" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <polyline points="7 8 3 12 7 16"></polyline>
-                                    <polyline points="17 8 21 12 17 16"></polyline>
-                                    <line x1="14" y1="4" x2="10" y2="20"></line>
-                                 </svg>
-                                <p class="font-bold text-green-500">{{ $registration->prospectus->program->code ?? 'N/A' }}</p>
+                                <x-icons.program-icon />
+                                <p class="ml-3 font-bold text-green-500">{{ $registration->prospectus->program->code ?? 'N/A' }}</p>
                             </div>
                         </div>
-                        <div class="pt-2">
+                        <div class="">
                             <h1 class="font-bold">Term</h1>
                             <div class="flex items-center py-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 text-gray-500" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <line x1="4" y1="6" x2="9.5" y2="6"></line>
-                                    <line x1="4" y1="10" x2="9.5" y2="10"></line>
-                                    <line x1="4" y1="14" x2="9.5" y2="14"></line>
-                                    <line x1="4" y1="18" x2="9.5" y2="18"></line>
-                                    <line x1="14.5" y1="6" x2="20" y2="6"></line>
-                                    <line x1="14.5" y1="10" x2="20" y2="10"></line>
-                                    <line x1="14.5" y1="14" x2="20" y2="14"></line>
-                                    <line x1="14.5" y1="18" x2="20" y2="18"></line>
-                                </svg>
-                                <p class="font-bold text-yellow-500">{{ $registration->prospectus->term->term ?? 'N/A' }}</p>
+                                <x-icons.term-icon />
+                                <p class="ml-3 font-bold text-yellow-500">{{ $registration->prospectus->term->term ?? 'N/A' }}</p>
                             </div>
                         </div>
                     @endif
                 @empty
                 @endforelse
             @else
-                <div class="mt-10">
+                <div class="">
                     <h1 class="font-bold">Employee ID (<span>{{ $user->role->name }}</span>)</h1>
                     <div class="flex items-center py-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 text-gray-500" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <rect x="3" y="4" width="18" height="16" rx="3"></rect>
-                            <circle cx="9" cy="10" r="2"></circle>
-                            <line x1="15" y1="8" x2="17" y2="8"></line>
-                            <line x1="15" y1="12" x2="17" y2="12"></line>
-                            <line x1="7" y1="16" x2="17" y2="16"></line>
-                        </svg>
-                        <p class="font-bold text-indigo-500">{{ 'ASW-@2313-ASDJS' }}</p>
+                        <x-icons.id-icon />
+                        <p class="ml-3 font-bold text-indigo-500">{{ 'ASW-@2313-ASDJS' }}</p>
                     </div>
                 </div>
             @endif
+            </div>
         </div>
 
         <div x-show="openTab == 1" class="px-6 lg:px-8 w-full">

@@ -1,6 +1,6 @@
-<div class="w-full scrolling-touch">
+<div class="w-full">
 
-    <div class="h-content w-full py-8 px-8">
+    <div class="h-content w-full p-4 md:p-8">
         <x-table.title tableTitle="Fee Maintenance">
             <x-table.nav-button wire:click="$emit('modalAddingCategory')" wire:loading.attr="disabled">
                 Create New Category
@@ -16,7 +16,7 @@
 
             <x-slot name="body">
                 <div class="grid place-items-center">
-                    <x-jet-form-section submit="" class="w-3/4">
+                    <x-jet-form-section submit="" class="w-11/12 md:w-3/4">
                         <x-slot name="title">
                             Create New Fee
                         </x-slot>

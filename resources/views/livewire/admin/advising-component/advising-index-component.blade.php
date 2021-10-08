@@ -96,7 +96,7 @@
                                                     @endcan
 
                                                     @can ('destroy', $adviceItem)
-                                                        <x-table.cell-button wire:click.prevent="$emit('removeConfirm', {{$adviceItem}})" title="Delete">
+                                                        <x-table.cell-button wire:click.prevent="$emit('removeConfirm', {{$adviceItem}})" title="Delete" class="rounded-b-md hover:bg-red-500 hover:text-white transition-colors">
                                                             <x-icons.delete-icon/>
                                                         </x-table.cell-button>
                                                     @elsecan ('view', App\Models\Advice::class)
