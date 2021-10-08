@@ -85,7 +85,7 @@
                                                         </a>
                                                     @endcan
                                                     @can ('destroy', $fee)
-                                                        <x-table.cell-button wire:click.prevent="$emit('removeConfirm', {{$fee}})" title="Delete">
+                                                        <x-table.cell-button wire:click.prevent="$emit('removeConfirm', {{$fee}})" title="Delete" class="rounded-b-md hover:bg-red-500 hover:text-white transition-colors">
                                                             <x-icons.delete-icon/>
                                                         </x-table.cell-button>
                                                     @endcan

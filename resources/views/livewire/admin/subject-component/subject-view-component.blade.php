@@ -1,4 +1,4 @@
-<div class="w-full flex flex-1 scrolling-touch">
+<div class="w-full flex flex-1">
     <x-table.filter>
         <div name='slot'>
             

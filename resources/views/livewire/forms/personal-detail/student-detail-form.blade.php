@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="w-full flex flex-col md:flex-row max-w-5xl mx-auto py-5 sm:px-6 lg:px-8">
+    <div class="w-full flex flex-col md:flex-row max-w-5xl mx-auto p-4 sm:px-6 lg:px-8">
         @livewire('partials.progress-form')
         <div class="w-full py-10 sm:px-6 lg:px-8">
             <div class="pb-4">

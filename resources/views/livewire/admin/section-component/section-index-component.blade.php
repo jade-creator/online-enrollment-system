@@ -30,7 +30,7 @@
             </x-slot>
 
             <x-slot name="head">
-                <div class="col-span-2 flex items-start" id="columnTitle">
+                <div class="col-span-2 flex items-center" id="columnTitle">
                     <input @click.stop type="checkbox" wire:model="selectPage" class="cursor-pointer border-gray-400 focus:outline-none focus:ring-transparent mx-5 rounded-sm" title="Select Displayed Data">
                     <x-table.sort-button event="sortFieldSelected('id')">ID</x-table.sort-button>
                 </div>
@@ -44,7 +44,7 @@
                 <div class="col-span-1 text-center" id="seats-col">
                     <x-table.sort-button event="sortFieldSelected('seat')">seats</x-table.sort-button>
                 </div>
-                <x-table.column-title class="col-span-2 text-center">current no. of students</x-table.column-title>
+                <x-table.column-title class="col-span-2 text-center">no. of students</x-table.column-title>
                 <div class="col-span-1">
                     <x-table.sort-button event="sortFieldSelected('created_at')">latest</x-table.sort-button>
                 </div>
@@ -62,7 +62,7 @@
                                 <x-table.cell headerLabel="term" class="justify-start md:col-span-1">{{ $section->prospectus->term->term ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="room" class="justify-start md:col-span-1">{{ $section->room->name ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="seats" class="md:justify-center md:col-span-1">{{ $section->seat ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell headerLabel="current no. of students" class="md:justify-center md:col-span-2">{{ $section->registrations->count() }}</x-table.cell>
+                                <x-table.cell headerLabel="no. of students" class="md:justify-center md:col-span-2">{{ $section->registrations->count() }}</x-table.cell>
                                 <x-table.cell-action>
                                     @if (!count($selected) > 0)
                                         <x-jet-dropdown align="right" width="60" dropdownClasses="z-10 shadow-2xl">
@@ -96,7 +96,7 @@
                                                     @endcan
 
                                                     @can ('destroy', $section)
-                                                        <x-table.cell-button wire:click.prevent="$emit('removeConfirm', {{$section}})" title="Delete">
+                                                        <x-table.cell-button wire:click.prevent="$emit('removeConfirm', {{$section}})" title="Delete" class="rounded-b-md hover:bg-red-500 hover:text-white transition-colors">
                                                             <x-icons.delete-icon/>
                                                         </x-table.cell-button>
                                                     @elsecan ('view', App\Models\Section::class)
