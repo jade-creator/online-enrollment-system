@@ -12,6 +12,7 @@ class Schedule extends Model
 
     protected $fillable = [
         'prospectus_subject_id',
+        'employee_id',
         'day_id',
         'section_id',
         'start_time',
@@ -22,6 +23,10 @@ class Schedule extends Model
         'section',
         'day',
     ];
+
+    public function employee() { return
+        $this->belongsTo(Employee::class);
+    }
 
     public function classes() { return
         $this->belongsToMany(Registration::class, 'classes', 'schedule_id', 'registration_id')->withTimestamps();

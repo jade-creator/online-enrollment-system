@@ -14,9 +14,9 @@ class ScheduleUpdateComponent extends Component
 
     public Models\Section $section;
     public Models\Schedule $schedule;
-    public array $schedules = [];
+    public array $schedules = [], $profSchedules = [];
     public bool $viewingSchedule = false;
-    public $prospectusSubjects, $days;
+    public $prospectusSubjects, $days, $professors;
 
     protected $listeners = [ 'modalViewingSchedule' ];
 
@@ -24,6 +24,7 @@ class ScheduleUpdateComponent extends Component
     {
         return [
             'schedule.prospectus_subject_id' => ['required'],
+            'schedule.employee_id' => ['required'],
             'schedule.day_id' => ['required'],
             'schedule.start_time' => ['required'],
             'schedule.end_time' => ['required', 'after:schedule.start_time'],
@@ -42,14 +43,19 @@ class ScheduleUpdateComponent extends Component
     {
         $this->validate();
 
+        $originalDayId = $this->schedule->getOriginal('day_id');
         try {
             $this->authorize('update', $this->schedule);
+            $this->schedule = (new Schedule\ScheduleService())->updateProfSchedule($this->schedule, $this->profSchedules);
             $schedule = (new Schedule\ScheduleService())->update($this->schedule, $this->schedules);
 
             $this->success($this->schedule->prospectusSubject->subject->code."'s time period in ".$this->section->name." has been updated.");
             $this->toggleViewingSchedule();
             $this->emitUp('refresh');
         } catch (\Exception $e) {
+            $this->schedule->day_id = $originalDayId;
+            $this->schedule->update();
+
             $this->error($e->getMessage());
         }
     }
@@ -69,6 +75,9 @@ class ScheduleUpdateComponent extends Component
 
             $blocks = $scheduleMergeabilityService->populateBlocks($this->schedule);
             $this->schedules = $scheduleMergeabilityService->unsetSchedule($this->section, $blocks, $this->days);
+
+            $employee = Models\Employee::with('schedules')->findOrFail($schedule->employee_id);
+            $this->profSchedules = $scheduleMergeabilityService->unsetSchedule($employee, $blocks, $this->days);
         } catch (\Exception $e) {
             $this->toggleViewingSchedule();
             $this->error($e->getMessage());

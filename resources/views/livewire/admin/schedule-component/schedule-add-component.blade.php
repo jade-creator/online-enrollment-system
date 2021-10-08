@@ -1,4 +1,4 @@
-<x-jet-dialog-modal wire:model="addingSchedule" maxWidth="md">
+<x-jet-dialog-modal wire:model="addingSchedule">
     <x-slot name="title">
         {{ __('Schedule Maintenance') }}
     </x-slot>
@@ -6,23 +6,50 @@
     <x-slot name="content">
         <form>
             <div class="grid grid-cols-8 gap-6">
-                <div class="mt-4 col-span-8">
+                <div class="mt-4 col-span-4">
+                    <x-jet-label for="employee_id" value="{{ __('Employee ID') }}" />
+                    <select wire:model="schedule.employee_id" wire:loading.attr="disabled" name="employee_id" autofocus required>
+                        @forelse ($professors as $professor)
+                            @if ($loop->first)
+                                <option value="" selected>-- choose a professor --</option>
+                            @endif
+                            <option value="{{ $professor->custom_id ?? 'N/A' }}">{{ $professor->custom_id ?? 'N/A' }}</option>
+                        @empty
+                            <option value="">No added professor yet.</option>
+                        @endforelse
+                    </select>
+                    <x-jet-input-error for="schedule.employee_id" class="mt-2"/>
+                </div>
+                <div class="mt-4 col-span-4">
+                    <x-jet-label for="full_name" value="{{ __('Full Name') }}" />
+                    <select wire:model="schedule.employee_id" wire:loading.attr="disabled" name="full_name" autofocus required>
+                        @forelse ($professors as $professor)
+                            @if ($loop->first)
+                                <option value="" selected>-- choose a professor --</option>
+                            @endif
+                            <option value="{{ $professor->custom_id ?? 'N/A' }}">{{ $professor->salutation.' '.$professor->user->person->full_name ?? 'N/A' }}</option>
+                        @empty
+                            <option value="">No added professor yet.</option>
+                        @endforelse
+                    </select>
+                </div>
+                <div class="mt-4 col-span-4">
                     <x-jet-label for="subject" value="{{ __('Subject') }}" />
-                    <select wire:model.defer="schedule.prospectus_subject_id" name="subject" class="w-full mt-1 bg-white flex-1 p-2 tracking-wide border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" autofocus required>
+                    <select wire:model.defer="schedule.prospectus_subject_id" name="subject" autofocus required>
                         @forelse ($prospectusSubjects as $prospectus_subject)
                             @if ($loop->first)
                                 <option value="" selected>-- choose a subject --</option>
                             @endif
                             <option value="{{ $prospectus_subject->id ?? 'N/A' }}">{{ $prospectus_subject->subject->title ?? 'N/A' }}</option>
                         @empty
-                            <option value="">No records</option>
+                            <option value="">No added subject yet.</option>
                         @endforelse
                     </select>
                     <x-jet-input-error for="schedule.prospectus_subject_id" class="mt-2"/>
                 </div>
-                <div class="mt-4 col-span-8">
+                <div class="mt-4 col-span-4">
                     <x-jet-label for="day" value="{{ __('Day') }}" />
-                    <select wire:model.defer="schedule.day_id" name="day" class="w-full mt-1 bg-white flex-1 p-2 tracking-wide border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" autofocus required>
+                    <select wire:model.defer="schedule.day_id" name="day" autofocus required>
                         @forelse ($days as $day)
                             @if ($loop->first)
                                 <option value="" selected>-- choose a day --</option>

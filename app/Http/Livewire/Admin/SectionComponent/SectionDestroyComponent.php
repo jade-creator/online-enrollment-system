@@ -2,7 +2,9 @@
 
 namespace App\Http\Livewire\Admin\SectionComponent;
 
+use App\Models\Schedule;
 use App\Models\Section;
+use App\Services\Schedule\ScheduleService;
 use App\Services\Section\SectionService;
 use App\Traits\WithSweetAlert;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -15,6 +17,8 @@ class SectionDestroyComponent extends Component
     protected $listeners = [
         'removeSection',
         'removeConfirm',
+        'removeScheduleConfirm',
+        'removeSchedule',
     ];
 
     public function render()
@@ -42,6 +46,28 @@ class SectionDestroyComponent extends Component
                 'title' => $this->successTitle,
                 'type' => $this->successType,
                 'text' => $section->name.' has been deleted.',
+            ]);
+            return redirect(route('sections.view'));
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
+        }
+    }
+
+    public function removeScheduleConfirm(Schedule $schedule) {
+        $this->confirm('removeSchedule', 'Are you sure you want this deleted?', $schedule);
+    }
+
+    public function removeSchedule(Schedule $schedule)
+    {
+        try {
+            $sectionName = $schedule->section->name;
+            $this->authorize('destroy', $schedule);
+            (new ScheduleService())->destroy($schedule);
+
+            session()->flash('swal:modal', [
+                'title' => $this->successTitle,
+                'type' => $this->successType,
+                'text' => 'A class schedule has been removed in '.$sectionName,
             ]);
             return redirect(route('sections.view'));
         } catch (\Exception $e) {

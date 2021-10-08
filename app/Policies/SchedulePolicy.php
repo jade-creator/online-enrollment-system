@@ -23,4 +23,8 @@ class SchedulePolicy
     public function update(User $user, Schedule $schedule) { return
         $this->isAdmin($user);
     }
+
+    public function destroy(User $user, Schedule $schedule) { return
+        $this->isAdmin($user);
+    }
 }
