@@ -13,9 +13,16 @@
                     @if($loop->odd)
                         <h5 class="text-sm text-indigo-500 font-bold">{{$prospectus->level->level}}</h5>
                     @endif
-                    <a href="{{ route('admin.prospectuses.view', ['prospectusId' => $prospectus->id]) }}">
-                        <h4 class="pl-4 py-1">{{$prospectus->term->term}}</h4>
-                    </a>
+
+                    @if (auth()->user()->role->name == 'admin')
+                        <a href="{{ route('admin.prospectuses.view', ['prospectusId' => $prospectus->id]) }}">
+                            <h4 class="pl-4 py-1">{{$prospectus->term->term}}</h4>
+                        </a>
+                    @elseif (auth()->user()->role->name == 'student')
+                        <a href="{{ route('student.grades.view', ['prospectusId' => $prospectus->id]) }}">
+                            <h4 class="pl-4 py-1">{{$prospectus->term->term}}</h4>
+                        </a>
+                    @endif
                 @empty
                 @endforelse
             </li>

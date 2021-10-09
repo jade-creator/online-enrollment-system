@@ -24,7 +24,7 @@ class RegistrationService
     public function isSubjectsAvailable(Models\Registration $registration, $schedules) : bool
     {
         $subjectsEnrolled = $registration->grades->pluck('subject_id')->toArray();
-        $schedules = $schedules->pluck('prospectus_subject_id')->toArray();
+        $schedules = array_unique($schedules->pluck('prospectus_subject_id')->toArray());
 
         if ($subjectsEnrolled == $schedules) return TRUE;
 

@@ -37,7 +37,7 @@
                     <div wire:key="table-row-{{$registration->id}}">
                         <x-table.row>
                             <div name="slot" class="grid grid-cols-12 md:gap-2">
-                                <x-table.cell headerLabel="Reg. ID" class="justify-start md:col-span-2">{{ $registration->id ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Reg. ID" class="justify-start md:col-span-2">{{ $registration->custom_id ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="program" class="justify-start md:col-span-2">{{ $registration->prospectus->program->code ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="level" class="justify-start md:col-span-2">{{ $registration->prospectus->level->level ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell class="justify-start md:col-span-2">{{ $registration->prospectus->term->term ?? 'N/A' }}</x-table.cell>
@@ -70,7 +70,7 @@
                                                     @endcan
 
                                                     @can ('pay', $registration)
-                                                        <a href="{{ route('student.paywithpaypal', $registration->id) }}">
+                                                        <a href="{{ route('student.paywithpaypal', $registration->custom_id) }}">
                                                             <x-table.cell-button title="Pay">
                                                                 <x-icons.fee-icon/>
                                                             </x-table.cell-button>

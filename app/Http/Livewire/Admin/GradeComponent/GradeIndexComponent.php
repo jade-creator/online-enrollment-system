@@ -39,7 +39,7 @@ class GradeIndexComponent extends Livewire\Component
         $statuses = Models\Status::enrolledAndReleased()->pluck('id')->toArray();
 
         return Models\Registration::search($this->search)
-            ->with('extensions.registration.grades')
+            ->with(['extensions.registration.grades', 'prospectus.term:id,term'])
             ->where('isExtension', 0)
             ->withGrades($statuses)
             ->searchByStudent($this->search)

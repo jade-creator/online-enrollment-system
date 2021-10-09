@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Registration extends BaseModel
@@ -12,6 +13,7 @@ class Registration extends BaseModel
         'isRegular',
         'isNew',
         'isExtension',
+        'custom_id',
         'total_unit',
         'status_id',
         'section_id',
@@ -27,6 +29,14 @@ class Registration extends BaseModel
         'prospectus.program:id,code,program',
         'prospectus.term:id,term',
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+        self::creating(function ($model) {
+            $model->custom_id = IdGenerator::generate(['table' => 'registrations', 'field' => 'custom_id', 'length' => 10, 'prefix' =>date('ym')]);
+        });
+    }
 
     public function getClassificationAttribute() { return
         $this->attributes['isRegular'] ? 'Regular' : 'Irregular';
@@ -74,6 +84,7 @@ class Registration extends BaseModel
             ->with([
                 ...$this->relationships,
                 'classes.prospectusSubject',
+                'classes.employee.user.person',
                 'student.user.person.contact',
                 'student.user.person.detail.country',
                 'grades:id,registration_id,subject_id,mark_id,value',
@@ -220,7 +231,8 @@ class Registration extends BaseModel
 
         return empty($search) ? static::query()
             : static::where(function ($query) use ($search){
-                return $query->where('id', 'LIKE', $search);
+                return $query->where('id', 'LIKE', $search)
+                        ->orWhere('custom_id', 'LIKE', $search);
             });
     }
 }

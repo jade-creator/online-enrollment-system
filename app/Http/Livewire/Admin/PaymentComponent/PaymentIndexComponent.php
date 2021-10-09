@@ -46,6 +46,11 @@ class PaymentIndexComponent extends Livewire\Component
     public function getRowsQueryProperty()
     {
         return Models\Transaction::search($this->search)
+            ->when(filled($this->search), function ($query) {
+                return $query->orWhereHas('registration', function ($query) {
+                    return $query->where('custom_id', $this->search);
+                });
+            })
             ->orderBy($this->sortBy, $this->sortDirection)
             ->dateFiltered($this->dateMin, $this->dateMax);
     }

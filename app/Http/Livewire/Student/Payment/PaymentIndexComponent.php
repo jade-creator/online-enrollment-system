@@ -47,6 +47,11 @@ class PaymentIndexComponent extends Livewire\Component
     {
         return Models\Transaction::search($this->search)
             ->filterByStudent(auth()->user()->student->id)
+            ->when(filled($this->search), function ($query) {
+                return $query->orWhereHas('registration', function ($query) {
+                    return $query->where('custom_id', $this->search);
+                });
+            })
             ->orderBy($this->sortBy, $this->sortDirection)
             ->dateFiltered($this->dateMin, $this->dateMax);
     }

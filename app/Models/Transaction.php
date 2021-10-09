@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,6 +10,8 @@ class Transaction extends BaseModel
 {
     protected $fillable = [
         'registration_id',
+        'custom_id',
+        'paypal_transaction_id',
         'amount',
         'running_balance',
     ];
@@ -16,6 +19,14 @@ class Transaction extends BaseModel
     public $with = [
         'registration.assessment'
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+        self::creating(function ($model) {
+            $model->custom_id = IdGenerator::generate(['table' => 'transactions', 'field' => 'custom_id', 'length' => 10, 'prefix' =>'TRN-']);
+        });
+    }
 
     public function scopefilterByStudent($query, $studentId)
     {
@@ -67,9 +78,9 @@ class Transaction extends BaseModel
 
         return empty($search) ? static::query()
             : static::where(function ($query) use ($search){
-                return $query
-                    ->where('id', 'LIKE', $search)
-                    ->orWhere('registration_id', 'LIKE', $search);
+                return $query->where('id', 'LIKE', $search)
+                    ->orWhere('registration_id', 'LIKE', $search)
+                    ->orWhere('custom_id', 'LIKE', $search);
             });
     }
 }

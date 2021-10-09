@@ -77,7 +77,7 @@
                     <div wire:key="table-row-{{$registration->id}}">
                         <x-table.row>
                             <div name="slot" class="grid grid-cols-12 md:gap-2">
-                                <x-table.cell-checkbox :value="$registration->id">{{ $registration->id ?? 'N/A' }}</x-table.cell-checkbox>
+                                <x-table.cell-checkbox :value="$registration->id">{{ $registration->custom_id ?? 'N/A' }}</x-table.cell-checkbox>
                                 <x-table.cell headerLabel="Stud. ID" class="justify-start md:col-span-1">{{ $registration->student->custom_id ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="Full name" class="justify-start md:col-span-2">{{ $registration->student->user->person->full_name ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="status" class="justify-start md:col-span-2">{{ $registration->status->name ?? 'N/A' }}</x-table.cell>
@@ -106,9 +106,17 @@
                                                     @endcan
 
                                                     @can ('viewGrade', $registration)
-                                                        <a href="{{ route('admin.grades.view', ['search' => $registration->id]) }}">
+                                                        <a href="{{ route('admin.grades.view', ['search' => $registration->custom_id]) }}">
                                                             <x-table.cell-button title="Grading">
                                                                 <x-icons.grade-icon/>
+                                                            </x-table.cell-button>
+                                                        </a>
+                                                    @endcan
+
+                                                    @can ('view', $registration->assessment)
+                                                        <a href="{{ route('admin.payments.view', ['search' => $registration->custom_id]) }}">
+                                                            <x-table.cell-button title="Payments">
+                                                                <x-icons.fee-icon/>
                                                             </x-table.cell-button>
                                                         </a>
                                                     @endcan

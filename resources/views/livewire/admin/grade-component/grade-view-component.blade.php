@@ -2,10 +2,11 @@
     <x-slot name="nestedTable">
         <div class="py-4 grid grid-cols-12 gap-2">
             <x-table.column-title class="col-span-2 text-blue-500">subject</x-table.column-title>
-            <x-table.column-title class="col-span-3">title</x-table.column-title>
+            <x-table.column-title class="col-span-2">title</x-table.column-title>
             <x-table.column-title class="col-span-2">section</x-table.column-title>
+            <x-table.column-title class="col-span-2">semester</x-table.column-title>
             <x-table.column-title class="col-span-2">grade</x-table.column-title>
-            <x-table.column-title class="col-span-2">remark</x-table.column-title>
+            <x-table.column-title class="col-span-1">remark</x-table.column-title>
             <x-table.column-title class="col-span-1">action</x-table.column-title>
         </div>
 
@@ -14,18 +15,21 @@
                 <div class="pb-3 col-span-12 md:col-span-2 font-bold text-xs">
                     <p class="truncate">{{ $grade->prospectus_subject->subject->code ?? 'N/A' }}</p>
                 </div>
-                <div class="pb-3 col-span-12 md:col-span-3 font-bold text-xs">
+                <div class="pb-3 col-span-12 md:col-span-2 font-bold text-xs">
                     <p class="truncate">{{ $grade->prospectus_subject->subject->title ?? 'N/A' }}</p>
                 </div>
                 <div class="pb-3 col-span-12 md:col-span-2 font-bold text-xs">
                     <p class="truncate">{{ $registration->section->name ?? 'N/A' }}</p>
+                </div>
+                <div class="pb-3 col-span-12 md:col-span-2 font-bold text-xs">
+                    <p class="truncate">{{ $registration->prospectus->term->term ?? 'N/A' }}</p>
                 </div>
                 <div class="col-span-12 md:col-span-2 font-bold text-xs">
                     <p class="truncate">
                         {{ $grade->value ?? 'N/A' }}
                     </p>
                 </div>
-                <div class="col-span-12 md:col-span-2 font-bold text-xs">
+                <div class="col-span-12 md:col-span-1 font-bold text-xs">
                     <p class="truncate">
                         {{ $grade->mark->name ?? 'N/A' }}
                     </p>
@@ -53,18 +57,21 @@
                         <div class="pb-3 col-span-12 md:col-span-2 font-bold text-xs">
                             <p class="truncate">{{ $grade->prospectus_subject->subject->code ?? 'N/A' }}</p>
                         </div>
-                        <div class="pb-3 col-span-12 md:col-span-3 font-bold text-xs">
+                        <div class="pb-3 col-span-12 md:col-span-2 font-bold text-xs">
                             <p class="truncate">{{ $grade->prospectus_subject->subject->title ?? 'N/A' }}</p>
                         </div>
                         <div class="pb-3 col-span-12 md:col-span-2 font-bold text-xs">
                             <p class="truncate">{{ $extension->registration->section->name ?? 'N/A' }}</p>
+                        </div>
+                        <div class="pb-3 col-span-12 md:col-span-2 font-bold text-xs">
+                            <p class="truncate">{{ $extension->registration->prospectus->term->term ?? 'N/A' }}</p>
                         </div>
                         <div class="col-span-12 md:col-span-2 font-bold text-xs">
                             <p class="truncate">
                                 {{ $grade->value ?? 'N/A' }}
                             </p>
                         </div>
-                        <div class="col-span-12 md:col-span-2 font-bold text-xs">
+                        <div class="col-span-12 md:col-span-1 font-bold text-xs">
                             <p class="truncate">
                                 {{ $grade->mark->name ?? 'N/A' }}
                             </p>

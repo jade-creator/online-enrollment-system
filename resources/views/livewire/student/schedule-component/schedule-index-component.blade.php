@@ -66,7 +66,7 @@
                             @forelse ($registration->classes as $schedule)
                                 <div class="col-span-1">{{ $schedule->prospectusSubject->subject->code ?? 'N/A' }}</div>
                                 <div class="col-span-1 truncate">{{ $schedule->prospectusSubject->subject->title ?? 'N/A' }}</div>
-                                <div class="col-span-1">{{ 'Mr. Redgy Tan' }}</div>
+                                <div class="col-span-1">{{ $schedule->employee->user->person->full_name ?? 'N/A' }}</div>
                                 <div class="col-span-1">{{ $schedule->section->name ?? 'N/A' }}</div>
                                 <div class="col-span-1">{{ $schedule->day->name ?? 'N/A' }}</div>
                                 <div class="col-span-1">{{ \Carbon\Carbon::parse($schedule->start_time)->format('g: ia') ?? 'N/A' }}</div>

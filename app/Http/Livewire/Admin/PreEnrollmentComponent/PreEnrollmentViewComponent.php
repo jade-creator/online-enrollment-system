@@ -60,7 +60,7 @@ class PreEnrollmentViewComponent extends Component
     public function getRowsQueryProperty()
     {
         return Registration::search($this->search)
-            ->select(['id', 'isNew', 'status_id', 'section_id', 'student_id', 'isRegular', 'prospectus_id', 'created_at', 'released_at'])
+            ->select(['id', 'isNew', 'status_id', 'section_id', 'student_id', 'isRegular', 'prospectus_id', 'custom_id', 'created_at', 'released_at'])
             ->with([
                 'student.user.person',
                 'status:id,name',

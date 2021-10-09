@@ -33,7 +33,7 @@
                     <div wire:key="table-row-{{$registration->id}}" x-data="{ open: false }">
                         <x-table.row>
                             <div name="slot" class="grid grid-cols-12 md:gap-2">
-                                <x-table.cell headerLabel="reg. ID" class="justify-start md:col-span-2">{{ $registration->id ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="reg. ID" class="justify-start md:col-span-2">{{ $registration->custom_id ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="Stud. ID" class="justify-start md:col-span-1">{{ $registration->student->custom_id ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="Full name" class="justify-start md:col-span-2">{{ $registration->student->user->person->full_name ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="classification" class="justify-start md:col-span-2">{{ $registration->classification ?? 'N/A' }}</x-table.cell>
@@ -82,9 +82,7 @@
         </x-table.main>
     </div>
 
-    <div wire:loading>
-        @include('partials.loading')
-    </div>
+    <div>@include('partials.loading')</div>
 
     <livewire:admin.grade-component.grade-update-component key="'grade-update-component-'{{ now() }}">
 </div>
