@@ -33,7 +33,7 @@
                 <form>
                     <div class="col-span-3">
                         <x-jet-label value="{{ __('Registration ID:') }}"/>
-                        <x-jet-input type="text" class="mt-1 block w-full" value="{{ $registration->id ?? 'N/A' }}" readonly/>
+                        <x-jet-input type="text" class="mt-1 block w-full" value="{{ $registration->custom_id ?? 'N/A' }}" readonly/>
                     </div>
                     <div class="col-span-3">
                         <x-jet-label value="{{ __('Status:') }}"/>

@@ -14,7 +14,7 @@
                             <div class="grid grid-cols-6 gap-6">
                                 <div class="col-span-6">
                                     <label for="registrationId">Registration ID:</label>
-                                    <input id="registrationId" type="text" name="registrationId" value="{{ $registration->id }}" readonly autofocus>
+                                    <input id="registrationId" type="text" name="registrationId" value="{{ $registration->custom_id }}" readonly autofocus>
                                 </div>
 
                                 <div class="col-span-6">

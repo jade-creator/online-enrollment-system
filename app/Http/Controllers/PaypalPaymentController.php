@@ -46,12 +46,12 @@ class PaypalPaymentController extends Controller
 
     public function payWithPaypal($registrationId = null)
     {
-        $this->registration = Registration::with('assessment')->find($registrationId);
+        $this->registration = Registration::with('assessment')->where('custom_id', $registrationId)->first();
 
         $this->authorize('pay', $this->registration);
         if (is_null($this->registration)) return redirect()->route('student.payments.view');
 
-        Session::put('registration_id', $this->registration->id);
+        Session::put('registration_id', $this->registration->custom_id);
         return view('paywithpaypal', ['registration' => $this->registration]);
     }
 
@@ -64,7 +64,6 @@ class PaypalPaymentController extends Controller
 
         $registration_id = Session::get('registration_id');
         Session::put('amount', $request->get('amount'));
-
 
         $payer = new Payer();
         $payer->setPaymentMethod('paypal');
@@ -168,9 +167,13 @@ class PaypalPaymentController extends Controller
         $result = $payment->execute($execution, $this->_api_context);
 
         try {
+            $transactions = $payment->getTransactions();
+            $relatedResources = $transactions[0]->getRelatedResources();
+            $sale = $relatedResources[0]->getSale();
+
             $registration = new Registration();
-            $registration = Registration::with('assessment')->findOrFail(strval($registration_id));
-            $registration = (new PaypalPaymentService())->store($registration, $amount);
+            $registration = Registration::with('assessment')->where('custom_id', strval($registration_id))->firstOrFail();
+            $registration = (new PaypalPaymentService())->store($registration, $sale->getId(), $amount);
         } catch (\Exception $e) {
             return redirect()->route('student.payments.view')->with('swal:modal', [
                 'title' => $this->errorTitle,

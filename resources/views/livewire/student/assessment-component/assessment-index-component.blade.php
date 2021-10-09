@@ -55,6 +55,10 @@
                                         <p class="text-lg text-black">Total Amount</p>
                                         <p class="text-lg text-green-500">{{ $assessment->getFormattedPriceAttribute($assessment->grand_total) ?? 'N/A' }}</p>
                                     </div>
+                                    <div class="col-span-6 flex justify-between items-center font-bold text-sm text-gray-500">
+                                        <p>Running Balance</p>
+                                        <p>{{ $fee->getFormattedPriceAttribute($assessment->balance) ?? 'N/A' }}</p>
+                                    </div>
                                 @endif
                             @empty
                                 <p>No calculated fees.</p>
@@ -159,12 +163,12 @@
                     <x-slot name="actions">
                         @isset ($registration->assessment)
                             @can ('proceedToPayment', $registration->assessment)
-                                <a class="w-full text-white py-2 rounded-md bg-indigo-500 hover:bg-indigo-800 flex items-center justify-center" href="{{ route('student.paywithpaypal', ['registrationId' => $this->registration->id]) }}">
+                                <a class="w-full text-white py-2 rounded-md bg-indigo-500 hover:bg-indigo-800 flex items-center justify-center" href="{{ route('student.paywithpaypal', ['registrationId' => $this->registration->custom_id]) }}">
                                     <span>Proceed to Payment</span>
                                     <x-icons.right-arrow-icon />
                                 </a>
                             @elsecan ('view', $registration->assessment)
-                                <a class="w-full text-white py-2 rounded-md bg-indigo-500 hover:bg-indigo-800 flex items-center justify-center" href="{{ route('admin.payments.view', ['search' => $this->registration->id]) }}">
+                                <a class="w-full text-white py-2 rounded-md bg-indigo-500 hover:bg-indigo-800 flex items-center justify-center" href="{{ route('admin.payments.view', ['search' => $this->registration->custom_id]) }}">
                                     <x-icons.fee-icon/>
                                     <span class="mx-2">PAID AMOUNT: {{ $registration->assessment->paid_amount ?? 'N/A' }}</span>
                                 </a>

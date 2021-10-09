@@ -14,10 +14,11 @@
 
             <x-slot name="head">
                 <x-table.column-title class="col-span-2">Transaction ID</x-table.column-title>
+                <x-table.column-title class="col-span-2">Paypal Transaction ID</x-table.column-title>
                 <x-table.column-title class="col-span-2">DateTime</x-table.column-title>
-                <x-table.column-title class="col-span-2">Amount</x-table.column-title>
                 <x-table.column-title class="col-span-2">Registration ID</x-table.column-title>
-                <x-table.column-title class="col-span-2">Grand Total</x-table.column-title>
+                <x-table.column-title class="col-span-1">Amount</x-table.column-title>
+                <x-table.column-title class="col-span-1">Total</x-table.column-title>
                 <x-table.column-title class="col-span-1">Balance</x-table.column-title>
                 <x-table.column-title class="col-span-1">Option</x-table.column-title>
             </x-slot>
@@ -27,12 +28,13 @@
                     <div wire:key="table-row-{{$transaction->id}}">
                         <x-table.row :active="$this->isSelected($transaction->id)">
                             <div name="slot" class="grid grid-cols-12 gap-2">
-                                <x-table.cell-checkbox :value="$transaction->id">{{ $transaction->id ?? 'N/A' }}</x-table.cell-checkbox>
-                                <x-table.cell class="justify-start md:col-span-2">{{ $transaction->created_at ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-2">{{ $transaction->getFormattedPriceAttribute($transaction->amount) ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-2">{{ $transaction->registration->id ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-2">{{ $transaction->getFormattedPriceAttribute($transaction->registration->assessment->grand_total) ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-1">{{ $transaction->getFormattedPriceAttribute($transaction->running_balance) ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell-checkbox :value="$transaction->id">{{ $transaction->custom_id ?? 'N/A' }}</x-table.cell-checkbox>
+                                <x-table.cell headerLabel="Paypal Transaction ID" class="justify-start md:col-span-2">{{ $transaction->paypal_transaction_id ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="DataTime" class="justify-start md:col-span-2">{{ $transaction->created_at ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Registration" class="justify-start md:col-span-2">{{ $transaction->registration->custom_id ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Amount" class="justify-start md:col-span-1">{{ $transaction->getFormattedPriceAttribute($transaction->amount) ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Grand Total" class="justify-start md:col-span-1">{{ $transaction->getFormattedPriceAttribute($transaction->registration->assessment->grand_total) ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Balance" class="justify-start md:col-span-1">{{ $transaction->getFormattedPriceAttribute($transaction->running_balance) ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell-action>
                                     @if (!count($selected) > 0)
                                         <x-jet-dropdown align="right" width="60" dropdownClasses="z-10 shadow-2xl">
