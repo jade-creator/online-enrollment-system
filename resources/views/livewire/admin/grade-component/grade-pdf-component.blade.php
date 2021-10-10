@@ -5,7 +5,7 @@
                 <div>
                     <p class="font-bold text-lg"><span class="capitalize">{{ $registration->student->user->person->full_name ?? 'N/A' }}</span> - Grade Report</p>
                     <a href="{{ route('pre.registration.view', $registration->id) }}" title="View Details">
-                        <p class="text-indigo-500 font-bold hover:underline text-sm">REGISTRATION ID: <span>{{ $registration->id ?? 'N/A' }}</span></p>
+                        <p class="text-indigo-500 font-bold hover:underline text-sm">REGISTRATION ID: <span>{{ $registration->custom_id ?? 'N/A' }}</span></p>
                     </a>
                 </div>
                 <x-jet-button wire:click="createPdf" wire:loading.attr="disabled" class="bg-indigo-700 hover:bg-indigo-800 flex items-end">

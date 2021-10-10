@@ -43,7 +43,7 @@ class ScheduleAddComponent extends Component
         $this->validate();
 
         try {
-            $this->authorize('create', $this->schedule);
+            $this->authorize('createClass', $this->section);
             (new ScheduleService())->store($this->section, $this->schedule, $this->days);
 
             $this->success("A class has been added in ".$this->section->name);

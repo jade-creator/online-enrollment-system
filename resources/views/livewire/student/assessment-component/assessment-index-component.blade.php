@@ -121,7 +121,7 @@
                                             <p class="text-gray-600 mx-1">{{ $fee->category->name }}</p>
                                         </div>
                                         <div class="col-span-6">
-                                            <input wire:model.defer="fees.{{ $fee->id }}.1" value="{{ $fee->price }}" type="number">
+                                            <input value="{{ $fees[$fee->id][1] }}" type="number" readonly>
                                         </div>
                                     @empty
                                         <p>No added fees under this program.</p>

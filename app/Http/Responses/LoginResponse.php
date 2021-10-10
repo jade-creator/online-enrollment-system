@@ -14,6 +14,10 @@ class LoginResponse implements LoginResponseContract
                 return '/admin/dashboard';
                 break;
 
+            case 'registrar':
+                return '/registrar/pre-enrollments';
+                break;
+
             case 'student':
                 return '/student/pre-registrations';
                 break;

@@ -31,7 +31,7 @@ class PaymentAddComponent extends Component
     public function getRegistrationsProperty() { return
         Registration::filterByStudent(auth()->user()->student->id)
             ->has('assessment')
-            ->where('status_id', 4)
+            ->whereIn('status_id', [3,4])
             ->get(['id', 'custom_id']);
     }
 

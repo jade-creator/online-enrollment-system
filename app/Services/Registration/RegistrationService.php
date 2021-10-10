@@ -26,7 +26,10 @@ class RegistrationService
         $subjectsEnrolled = $registration->grades->pluck('subject_id')->toArray();
         $schedules = array_unique($schedules->pluck('prospectus_subject_id')->toArray());
 
-        if ($subjectsEnrolled == $schedules) return TRUE;
+        if (is_array($subjectsEnrolled)
+            && is_array($schedules)
+            && count($subjectsEnrolled) == count($schedules)
+            && array_diff($subjectsEnrolled, $schedules) === array_diff($schedules, $subjectsEnrolled)) return TRUE;
 
         return FALSE;
     }
