@@ -37,7 +37,7 @@ class RegistrationPolicy extends BasePolicy
     /*Paypal Payment Controller*/
     public function pay(User $user, Registration $registration) { return
         $user->role->name == 'student' && ($registration->status->name == 'enrolled' || $registration->status->name == 'finalized') &&
-            $user->student->id == $registration->student->id;
+            filled($registration->assessment) && $user->student->id == $registration->student->id;
     }
 
     /*student submitted registration for assessment.*/
