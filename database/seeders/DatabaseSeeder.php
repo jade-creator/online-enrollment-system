@@ -34,11 +34,11 @@ class DatabaseSeeder extends Seeder
             FacultySeeder::class,
 
             /*test*/
-            SectionSeeder::class,
-            AdminSeeder::class,
+//            SectionSeeder::class,
+//            AdminSeeder::class,
             ProspectusSubjectSeeder::class,
-            ScheduleSeeder::class,
-            FeeSeeder::class,
+//            ScheduleSeeder::class,
+//            FeeSeeder::class,
         ]);
     }
 }
