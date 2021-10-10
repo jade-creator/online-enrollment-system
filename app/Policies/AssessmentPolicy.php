@@ -6,20 +6,16 @@ use App\Models\Assessment;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class AssessmentPolicy
+class AssessmentPolicy extends BasePolicy
 {
     use HandlesAuthorization;
-
-    public function isAdmin(User $user) { return
-        $user->role->name == 'admin';
-    }
 
     public function proceedToPayment(User $user, Assessment $assessment) { return
         $user->role->name == 'student' && filled($assessment);
     }
 
     public function view(User $user) { return
-        $this->isAdmin($user);
+        $this->isAuthorized('assessment', 'view', $user);
     }
 
     public function create(User $user) { return

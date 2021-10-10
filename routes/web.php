@@ -82,11 +82,13 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
 
             Route::get('/dashboard', Dashboard::class)->name('dashboard');
 
+            //admin grade routes
             Route::group(['prefix' => 'grades', 'as' => 'grades.'], function (){
                 Route::get('', GradeComponent\GradeIndexComponent::class)->name('view');
                 Route::get('/{regId}/pdf', GradeComponent\GradePdfComponent::class)->name('pdf');
             });
 
+            //admin registration routes
             Route::group(['prefix' => 'pre-enrollments'], function (){
                 Route::get('', PreEnrollmentComponent\PreEnrollmentViewComponent::class)->name('pre.enrollments.view');
                 Route::get('/released', PreEnrollmentComponent\ReleasedPreEnrollmentComponent::class)->name('released.enrollments.view');
@@ -98,6 +100,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
                 Route::get('{section}/update', SectionComponent\SectionUpdateComponent::class)->name('update');
             });
 
+            //admin prospectus routes
             Route::get('/prospectuses/{prospectusId}', ProspectusComponent\ProspectusIndexComponent::class)->name('prospectuses.view');
 
             //admin subject routes
@@ -142,8 +145,29 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
     });
     // end admin
 
-    // admin and student
-    Route::middleware(['role:admin|student|faculty member', 'user.detail'])->group(function (){
+    //start: registrar
+    Route::middleware(['role:registrar'])->group(function () {
+        Route::get('/user/personal-details/registrar', AdminDetailForm::class)->middleware(['detail'])->name('user.personal-details.registrar');
+
+        Route::group(['middleware' => ['user.detail', 'approved'], 'prefix' => 'registrar', 'as' => 'registrar.'], function (){
+
+            //registrar: pre-enrollments
+            Route::group(['prefix' => 'pre-enrollments'], function () {
+                Route::get('', PreEnrollmentComponent\PreEnrollmentViewComponent::class)->name('pre.enrollments.view');
+                Route::get('/released', PreEnrollmentComponent\ReleasedPreEnrollmentComponent::class)->name('released.enrollments.view'); //TODO: fix html
+            });
+
+            //registrar grade routes
+            Route::group(['prefix' => 'grades', 'as' => 'grades.'], function (){
+                Route::get('', GradeComponent\GradeIndexComponent::class)->name('view');
+                Route::get('/{regId}/pdf', GradeComponent\GradePdfComponent::class)->name('pdf');
+            });
+        });
+    });
+    //end: registrar
+
+    // start: admin, registrar and student
+    Route::middleware(['role:admin|registrar|student|faculty member', 'user.detail'])->group(function (){
         Route::middleware('approved')->group(function () {
             Route::get('/sections', SectionComponent\SectionIndexComponent::class)->name('sections.view');
 
@@ -152,7 +176,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
 
         Route::get('/user/personal-profile/{userId}', User\UserProfileComponent::class)->name('user.personal.profile.view');
     });
-    // end
+    // end: admin, registrar and student
 
     // start student
     Route::middleware(['role:student'])->group(function (){

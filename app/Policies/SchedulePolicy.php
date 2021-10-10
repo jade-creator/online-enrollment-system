@@ -6,7 +6,7 @@ use App\Models\Schedule;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class SchedulePolicy
+class SchedulePolicy extends BasePolicy
 {
     use HandlesAuthorization;
 
@@ -16,15 +16,15 @@ class SchedulePolicy
 
     public function view(User $user) { return true; }
 
-    public function create(User $user) { return
-        $this->isAdmin($user);
-    }
+//    public function create(User $user) { return
+//        $this->isAuthorized('section', 'createClass', $user);
+//    }
 
     public function update(User $user, Schedule $schedule) { return
-        $this->isAdmin($user);
+        $this->isAuthorized('schedule', 'update', $user);
     }
 
     public function destroy(User $user, Schedule $schedule) { return
-        $this->isAdmin($user);
+        $this->isAuthorized('schedule', 'destroy', $user);
     }
 }

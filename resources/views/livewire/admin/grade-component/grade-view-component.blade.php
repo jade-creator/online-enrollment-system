@@ -10,87 +10,11 @@
             <x-table.column-title class="col-span-1">action</x-table.column-title>
         </div>
 
-        <div class="grid grid-cols-12 gap-2">
-            @forelse ($registration->grades as $grade)
-                <div class="pb-3 col-span-12 md:col-span-2 font-bold text-xs">
-                    <p class="truncate">{{ $grade->prospectus_subject->subject->code ?? 'N/A' }}</p>
-                </div>
-                <div class="pb-3 col-span-12 md:col-span-2 font-bold text-xs">
-                    <p class="truncate">{{ $grade->prospectus_subject->subject->title ?? 'N/A' }}</p>
-                </div>
-                <div class="pb-3 col-span-12 md:col-span-2 font-bold text-xs">
-                    <p class="truncate">{{ $registration->section->name ?? 'N/A' }}</p>
-                </div>
-                <div class="pb-3 col-span-12 md:col-span-2 font-bold text-xs">
-                    <p class="truncate">{{ $registration->prospectus->term->term ?? 'N/A' }}</p>
-                </div>
-                <div class="col-span-12 md:col-span-2 font-bold text-xs">
-                    <p class="truncate">
-                        {{ $grade->value ?? 'N/A' }}
-                    </p>
-                </div>
-                <div class="col-span-12 md:col-span-1 font-bold text-xs">
-                    <p class="truncate">
-                        {{ $grade->mark->name ?? 'N/A' }}
-                    </p>
-                </div>
-                <x-table.cell-action>
-                    @can ('update', $registration)
-                        <button wire:click.prevent="$emit('modalViewingGrade', {{ $grade }})" class="hover:text-indigo-500 rounded-circle p-1 mx-1 focus:outline-none" data-toggle="tooltip" data-placement="top" title="Edit">
-                            <x-icons.edit-icon/>
-                        </button>
-                    @elsecan ('view', App\Models\Grade::class)
-                        <x-table.cell-button>
-                            <x-icons.lock-icon/>
-                        </x-table.cell-button>
-                    @endcan
-                </x-table.cell-action>
-            @empty
-                <x-table.no-result>No added subject under the prospectus.🤔</x-table.no-result>
-            @endforelse
-        </div>
+        <livewire:admin.grade-component.row-blade-component :registration="$registration" :grades="$registration->grades" key="'row-blade-component-'{{ $registration->id.now() }}">
 
         @if ($registration->extensions->isNotEmpty())
             @foreach ($registration->extensions as $extension)
-                <div class="grid grid-cols-12 gap-2 mt-2">
-                    @forelse ($extension->registration->grades as $grade)
-                        <div class="pb-3 col-span-12 md:col-span-2 font-bold text-xs">
-                            <p class="truncate">{{ $grade->prospectus_subject->subject->code ?? 'N/A' }}</p>
-                        </div>
-                        <div class="pb-3 col-span-12 md:col-span-2 font-bold text-xs">
-                            <p class="truncate">{{ $grade->prospectus_subject->subject->title ?? 'N/A' }}</p>
-                        </div>
-                        <div class="pb-3 col-span-12 md:col-span-2 font-bold text-xs">
-                            <p class="truncate">{{ $extension->registration->section->name ?? 'N/A' }}</p>
-                        </div>
-                        <div class="pb-3 col-span-12 md:col-span-2 font-bold text-xs">
-                            <p class="truncate">{{ $extension->registration->prospectus->term->term ?? 'N/A' }}</p>
-                        </div>
-                        <div class="col-span-12 md:col-span-2 font-bold text-xs">
-                            <p class="truncate">
-                                {{ $grade->value ?? 'N/A' }}
-                            </p>
-                        </div>
-                        <div class="col-span-12 md:col-span-1 font-bold text-xs">
-                            <p class="truncate">
-                                {{ $grade->mark->name ?? 'N/A' }}
-                            </p>
-                        </div>
-                        <x-table.cell-action>
-                            @can ('update', $registration)
-                                <button wire:click.prevent="$emit('modalViewingGrade', {{ $grade }})" class="hover:text-indigo-500 rounded-circle p-1 mx-1 focus:outline-none" data-toggle="tooltip" data-placement="top" title="Edit">
-                                    <x-icons.edit-icon/>
-                                </button>
-                            @elsecan ('view', App\Models\Grade::class)
-                                <x-table.cell-button>
-                                    <x-icons.lock-icon/>
-                                </x-table.cell-button>
-                            @endcan
-                        </x-table.cell-action>
-                    @empty
-                        <x-table.no-result>No added subject under the prospectus.🤔</x-table.no-result>
-                    @endforelse
-                </div>
+                <livewire:admin.grade-component.row-blade-component :registration="$extension->registration" :grades="$extension->registration->grades" key="'row-blade-component-'{{ $registration->id.now() }}">
             @endforeach
         @endif
     </x-slot>

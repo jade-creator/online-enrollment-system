@@ -106,7 +106,7 @@
                                                     @endcan
 
                                                     @can ('viewGrade', $registration)
-                                                        <a href="{{ route('admin.grades.view', ['search' => $registration->custom_id]) }}">
+                                                        <a href="{{ route(auth()->user()->role->name.'.grades.view', ['search' => $registration->custom_id]) }}">
                                                             <x-table.cell-button title="Grading">
                                                                 <x-icons.grade-icon/>
                                                             </x-table.cell-button>
