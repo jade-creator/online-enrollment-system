@@ -7,7 +7,7 @@
                     <div class="mr-2 my-2">
                         <div class="flex">
                             <select wire:model="coRequisiteSubjects.{{ $index }}" name="coRequisiteSubjects[{{ $index }}]" class="bg-white flex-1 p-2 tracking-wide border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-l-md shadow-sm">
-                                <option value="">-- choose a pre-requisite --</option>
+                                <option value="">-- choose a co-requisite --</option>
                                 @forelse ($coRequisites as $coRequisite)
                                     <option value="{{ $coRequisite->subject->id }}">{{ $coRequisite->subject->title }}</option>
                                 @empty

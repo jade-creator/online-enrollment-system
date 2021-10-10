@@ -58,7 +58,7 @@ class PaypalPaymentController extends Controller
     public function postPaymentWithpaypal(Request $request)
     {
         $validatedData = $request->validate([
-            'amount' => ['required', 'numeric', 'min:1'],
+            'amount' => ['required', 'numeric', 'min:1', 'lte:balance'],
             'balance' => ['required', 'numeric', 'min:1'],
         ]);
 
