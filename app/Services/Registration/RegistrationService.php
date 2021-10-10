@@ -65,7 +65,7 @@ class RegistrationService
         if (empty($selected)) throw new \Exception('No Selected Subject/s.');
 
         $status = Models\Status::where('name', 'pending')->firstOrFail();
-        $mark = Models\Mark::where('name', 'tba')->firstOrFail();
+        $mark = Models\Mark::where('name', 'TBA')->firstOrFail();
 
         $registration->status_id = $status->id;
         $registration->save();
