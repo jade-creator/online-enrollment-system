@@ -29,12 +29,12 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             StudentSeeder::class,
             GuardianSeeder::class,
-            SectionSeeder::class,
             DaySeeder::class,
             CategorySeeder::class,
             FacultySeeder::class,
 
             /*test*/
+            SectionSeeder::class,
             AdminSeeder::class,
             ProspectusSubjectSeeder::class,
             ScheduleSeeder::class,

@@ -16,6 +16,7 @@ class BasePolicy
         ],
         'assessment' => [
             'view' => ['admin', 'registrar'],
+            'create' => ['admin', 'registrar'],
         ],
         'registration' => [
             'enroll' => ['admin', 'registrar'],

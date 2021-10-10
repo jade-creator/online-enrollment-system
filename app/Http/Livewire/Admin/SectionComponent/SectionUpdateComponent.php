@@ -19,7 +19,7 @@ class SectionUpdateComponent extends Component
     public function rules()
     {
         return [
-            'section.name' => ['required', 'string'],
+            'section.name' => ['required', 'string', 'max:100', 'alpha_dash'],
             'section.room_id' => ['required', 'integer'],
             'section.seat' => ['required', 'integer', 'min:1', 'gte:currentNumberOfStudents'],
             'currentNumberOfStudents' => ['integer', 'min:0'],
@@ -30,7 +30,8 @@ class SectionUpdateComponent extends Component
     }
 
     protected $messages = [
-        'section.name' => 'The name field cannot be empty.',
+        'section.name.required' => 'The name field cannot be empty.',
+        'section.name.alpha_dash' => 'The name may only contain letters, numbers, dashes and underscores with no spaces.',
         'section.room_id.required' => 'The room field cannot be empty.',
         'section.seat.required' => 'The seat field cannot be empty.',
         'programId.required' => 'The program field cannot be empty.',

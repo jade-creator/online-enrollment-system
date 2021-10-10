@@ -175,7 +175,7 @@
                             @endcan
                         @else
                             @if (! isset($grandTotal))
-                                @can ('enroll', $registration)
+                                @can ('finalize', $registration)
                                     <x-jet-button wire:click="compute" wire:loading.attr="disabled" class="w-full bg-indigo-500 hover:bg-indigo-800 flex items-center justify-center">
                                         <x-icons.fee-icon/>
                                         <span class="mx-2">{{ __('COMPUTE GRAND TOTAL') }}</span>
