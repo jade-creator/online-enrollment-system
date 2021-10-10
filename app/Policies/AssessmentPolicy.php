@@ -19,6 +19,6 @@ class AssessmentPolicy extends BasePolicy
     }
 
     public function create(User $user) { return
-        $this->isAdmin($user);
+        $this->isAuthorized('assessment', 'view', $user);
     }
 }
