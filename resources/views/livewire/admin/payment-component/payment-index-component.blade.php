@@ -29,7 +29,11 @@
                         <x-table.row :active="$this->isSelected($transaction->id)">
                             <div name="slot" class="grid grid-cols-12 gap-2">
                                 <x-table.cell-checkbox :value="$transaction->id">{{ $transaction->custom_id ?? 'N/A' }}</x-table.cell-checkbox>
-                                <x-table.cell headerLabel="Paypal Transaction ID" class="justify-start md:col-span-2">{{ $transaction->paypal_transaction_id ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Paypal Transaction ID" class="justify-start md:col-span-2">
+                                    <a href="{{ 'https://www.sandbox.paypal.com/activity/payment/'.$transaction->paypal_transaction_id }}" class="underline text-blue-500" target="_blank">
+                                        {{ $transaction->paypal_transaction_id ?? 'N/A' }}
+                                    </a>
+                                </x-table.cell>
                                 <x-table.cell headerLabel="DataTime" class="justify-start md:col-span-2">{{ $transaction->created_at ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="Registration" class="justify-start md:col-span-2">{{ $transaction->registration->custom_id ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="Amount" class="justify-start md:col-span-1">{{ $transaction->getFormattedPriceAttribute($transaction->amount) ?? 'N/A' }}</x-table.cell>
