@@ -46,8 +46,8 @@
                                 <x-table.cell headerLabel="Reg. ID" class="justify-start md:col-span-3">{{ $registration->custom_id ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="status" class="justify-start md:col-span-2">{{ $registration->status->name ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="section" class="justify-start md:col-span-2">{{ $registration->section->name ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-2">{{ $registration->total_unit ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-2">{{ $registration->classification ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="total unit" class="justify-start md:col-span-2">{{ $registration->total_unit ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="classification" class="justify-start md:col-span-2">{{ $registration->classification ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell-action>
                                     <x-jet-dropdown align="right" width="60" dropdownClasses="z-10 shadow-2xl">
                                         <x-slot name="trigger">

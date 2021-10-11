@@ -2,7 +2,7 @@
     @if (isset($registration))
         <x-jet-form-section submit="">
             <x-slot name="title">
-                <div class="w-full text-sm font-semibold flex items-center justify-between">
+                <div class="w-full text-sm font-semibold flex flex-wrap gap-5 items-center justify-between">
                     <p><span>{{ $registration->prospectus->level->level . ' - ' ?? 'N/A' }}</span>
                         <span>{{ $registration->prospectus->term->term . ' - ' ?? 'N/A' }}</span>Selected subject/s</p>
                     <p class="font-normal text-xs">Total Units: {{ $registration->total_unit }}</p>
@@ -15,68 +15,84 @@
 
             <x-slot name="form">
                 <div class="col-span-6">
-                    {{--  DISPLAY LIST OF ENROLLED SUBJECTS IF NO SELECTED SECTION  --}}
-                    @if (! isset($registration->section->name))
-                        <div class="mb-4 grid grid-cols-8 gap-2 col-span-6 font-bold text-xs text-gray-400 uppercase tracking-widest text-left">
-                            <div class="col-span-1">code</div>
-                            <div class="col-span-2">title</div>
-                            <div class="col-span-1">unit</div>
-                            <div class="col-span-2">co requisite</div>
-                            <div class="col-span-2">pre requisite</div>
-                        </div>
-                        <div class="grid grid-cols-8 gap-2 col-span-6 py-2 text-left">
-                            @forelse ($registration->grades as $grade)
-                                <div class="col-span-1">{{ $grade->prospectus_subject->subject->code ?? 'N/A' }}</div>
-                                <div class="col-span-2 truncate">{{ $grade->prospectus_subject->subject->title ?? 'N/A' }}</div>
-                                <div class="col-span-1">{{ $grade->prospectus_subject->unit ?? 'N/A' }}</div>
-                                <div class="col-span-2">
-                                    @forelse ($grade->prospectus_subject->corequisites as $requisite)
-                                        {{ $loop->first ? '' : ', '  }}
-                                        <span>&nbsp;{{ $requisite->code }}</span>
-                                    @empty
-                                        N/A
-                                    @endforelse
-                                </div>
-                                <div class="col-span-2">
-                                    @forelse ($grade->prospectus_subject->prerequisites as $requisite)
-                                        {{ $loop->first ? '' : ', '  }}
-                                        <span>&nbsp;{{ $requisite->code }}</span>
-                                    @empty
-                                        N/A
-                                    @endforelse
-                                </div>
-                            @empty
-                                <x-table.no-result>No subjects found. Sorry! Unable to register.🤔</x-table.no-result>
-                            @endforelse
-                        </div>
+                    <x-table.main>
+                        <x-slot name="filter"></x-slot>
+                        <x-slot name="paginationLink"></x-slot>
+                        @if (! isset($registration->section->name))
+                            <x-slot name="head">
+                                <x-table.column-title class="col-span-2">code</x-table.column-title>
+                                <x-table.column-title class="col-span-2">title</x-table.column-title>
+                                <x-table.column-title class="col-span-2">unit</x-table.column-title>
+                                <x-table.column-title class="col-span-3">co requisite</x-table.column-title>
+                                <x-table.column-title class="col-span-3">pre requisite</x-table.column-title>
+                            </x-slot>
+                        @else 
+                            <x-slot name="head">
+                                <x-table.column-title class="col-span-1">code</x-table.column-title>
+                                <x-table.column-title class="col-span-2">title</x-table.column-title>
+                                <x-table.column-title class="col-span-2">professor</x-table.column-title>
+                                <x-table.column-title class="col-span-2">section</x-table.column-title>
+                                <x-table.column-title class="col-span-1">day</x-table.column-title>
+                                <x-table.column-title class="col-span-2">start time</x-table.column-title>
+                                <x-table.column-title class="col-span-1">end time</x-table.column-title>
+                                <x-table.column-title class="col-span-1">unit</x-table.column-title>
+                            </x-slot>
+                        @endif
 
-                    {{--  DISPLAY LIST OF SCHEDULE IF THERE'S A SELECTED SECTION  --}}
-                    @else
-                        <div class="mb-4 grid grid-cols-8 gap-2 col-span-6 font-bold text-xs text-gray-400 uppercase tracking-widest text-left">
-                            <div class="col-span-1">code</div>
-                            <div class="col-span-1">title</div>
-                            <div class="col-span-1">professor</div>
-                            <div class="col-span-1">section</div>
-                            <div class="col-span-1">day</div>
-                            <div class="col-span-1">start time</div>
-                            <div class="col-span-1">end time</div>
-                            <div class="col-span-1">unit</div>
-                        </div>
-                        <div class="grid grid-cols-8 gap-2 col-span-6 py-2 text-left text-xs">
-                            @forelse ($registration->classes as $schedule)
-                                <div class="col-span-1">{{ $schedule->prospectusSubject->subject->code ?? 'N/A' }}</div>
-                                <div class="col-span-1 truncate">{{ $schedule->prospectusSubject->subject->title ?? 'N/A' }}</div>
-                                <div class="col-span-1">{{ $schedule->employee->user->person->full_name ?? 'N/A' }}</div>
-                                <div class="col-span-1">{{ $schedule->section->name ?? 'N/A' }}</div>
-                                <div class="col-span-1">{{ $schedule->day->name ?? 'N/A' }}</div>
-                                <div class="col-span-1">{{ \Carbon\Carbon::parse($schedule->start_time)->format('g: ia') ?? 'N/A' }}</div>
-                                <div class="col-span-1">{{ \Carbon\Carbon::parse($schedule->end_time)->format('g: ia') ?? 'N/A' }}</div>
-                                <div class="col-span-1">{{ $schedule->prospectusSubject->unit ?? 'N/A' }}</div>
-                            @empty
-                                <x-table.no-result>No subjects found. Sorry! Unable to register.🤔</x-table.no-result>
-                            @endforelse
-                        </div>
-                    @endif
+                        <x-slot name="body">
+                            {{--  DISPLAY LIST OF ENROLLED SUBJECTS IF NO SELECTED SECTION  --}}
+                            @if (! isset($registration->section->name))
+                                @forelse ($registration->grades as $grade)
+                                    <div wire:key="table-row-{{$grade->prospectus_subject->subject->code}}">
+                                        <x-table.row>
+                                            <div name="slot" class="grid grid-cols-12 md:gap-2">
+                                                <x-table.cell headerLabel="Code" class="justify-start md:col-span-2">{{ $grade->prospectus_subject->subject->code ?? 'N/A' }}</x-table.cell>
+                                                <x-table.cell headerLabel="title" class="justify-start truncate md:col-span-2">{{ $grade->prospectus_subject->subject->title ?? 'N/A' }}</x-table.cell>
+                                                <x-table.cell headerLabel="unit" class="justify-start md:col-span-2">{{ $grade->prospectus_subject->unit ?? 'N/A' }}</x-table.cell>
+                                                <x-table.cell headerLabel="co requisite" class="justify-start md:col-span-3">
+                                                    @forelse ($grade->prospectus_subject->corequisites as $requisite)
+                                                        {{ $loop->first ? '' : ', '  }}
+                                                        <span>&nbsp;{{ $requisite->code }}</span>
+                                                    @empty
+                                                        N/A
+                                                    @endforelse
+                                                </x-table.cell>
+                                                <x-table.cell headerLabel="pre requisite" class="justify-start md:col-span-3">
+                                                    @forelse ($grade->prospectus_subject->prerequisites as $requisite)
+                                                        {{ $loop->first ? '' : ', '  }}
+                                                        <span>&nbsp;{{ $requisite->code }}</span>
+                                                    @empty
+                                                        N/A
+                                                    @endforelse
+                                                </x-table.cell>
+                                            </div>
+                                        </x-table.row>
+                                    </div>
+                                @empty
+                                    <x-table.no-result>No subjects found. Sorry! Unable to register.🤔</x-table.no-result>
+                                @endforelse
+                            @else
+                                @forelse ($registration->classes as $schedule)
+                                    <div wire:key="table-row-{{$schedule->prospectusSubject->subject->code}}">
+                                        <x-table.row>
+                                            <div name="slot" class="grid grid-cols-12 md:gap-2">
+                                                <x-table.cell headerLabel="code" class="md:col-span-1">{{ $schedule->prospectusSubject->subject->code ?? 'N/A' }}</x-table.cell>
+                                                <x-table.cell headerLabel="title" class="truncate md:col-span-2">{{ $schedule->prospectusSubject->subject->title ?? 'N/A' }}</x-table.cell>
+                                                <x-table.cell headerLabel="professor" class="truncate md:col-span-2">{{ $schedule->employee->user->person->full_name ?? 'N/A' }}</x-table.cell>
+                                                <x-table.cell headerLabel="section" class="md:col-span-2">{{ $schedule->section->name ?? 'N/A' }}</x-table.cell>
+                                                <x-table.cell headerLabel="day" class="md:col-span-1">{{ $schedule->day->name ?? 'N/A' }}</x-table.cell>
+                                                <x-table.cell headerLabel="start time" class="md:col-span-2">{{ \Carbon\Carbon::parse($schedule->start_time)->format('g: ia') ?? 'N/A' }}</x-table.cell>
+                                                <x-table.cell headerLabel="end time" class="md:col-span-1">{{ \Carbon\Carbon::parse($schedule->end_time)->format('g: ia') ?? 'N/A' }}</x-table.cell>
+                                                <x-table.cell headerLabel="unit" class="md:col-span-1">{{ $schedule->prospectusSubject->unit ?? 'N/A' }}</x-table.cell>
+                                            </div>
+                                        </x-table.row>
+                                    </div>
+                                @empty
+                                    <x-table.no-result>No subjects found. Sorry! Unable to register.🤔</x-table.no-result>
+                                @endforelse
+                            @endif
+                        </x-slot>
+                    </x-table.main>
                 </div>
             </x-slot>
 
