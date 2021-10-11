@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="max-w-5xl mx-auto sm:px-6 lg:px-8 pt-12">
+    <div class="max-w-5xl mx-auto sm:px-6 lg:px-8 pt-8">
         <div class="w-full pl-0 md:pl-8">
             <div class="md:grid md:grid-cols-3 md:gap-6">
                 <x-jet-section-title>
@@ -7,7 +7,7 @@
                     <x-slot name="description">Please fill out the form with correct data.</x-slot>
                 </x-jet-section-title>
 
-                <div class="mt-5 md:mt-0 md:col-span-3">
+                <div class="md:col-span-3 p-4 md:p-8">
                     <form class="grid place-items-center" method="POST" id="payment-form" role="form" action="{!! URL::route('student.paypal') !!}" >
                     {{ csrf_field() }}
                         <div class="w-full px-4 py-5 bg-white sm:p-6 shadow sm:rounded-tl-md sm:rounded-tr-md">

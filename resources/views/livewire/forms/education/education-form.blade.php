@@ -13,7 +13,7 @@
             <!-- type -->
             <div class="col-span-3">
                 <x-jet-label for="selectedType" value="{{ __('School Type') }}" />
-                <select wire:model="attended.school_type_id" wire:loading.attr="disabled" name="selectedType" id="selectedType" required>
+                <select wire:model="attended.school_type_id" wire:loading.attr="disabled" name="selectedType" id="selectedType" class="truncate pr-5" required>
                     <option value="" selected>Choose a Type</option>
                     <option value="3" selected>Senior High School</option>
                     <option value="4" selected>College</option>
@@ -23,7 +23,7 @@
             <!-- level -->
             <div class="col-span-3">
                 <x-jet-label for="selectedLevel" value="{{ __('Level') }}" />
-                <select wire:model="attended.level_id" name="selectedLevel" id="selectedLevel" required>
+                <select wire:model="attended.level_id" name="selectedLevel" id="selectedLevel" class="truncate pr-5" required>
                     <option value="" selected>Choose a Level</option>
                     @if ($this->attended->school_type_id == '3')
                         <option value="13">Grade 12</option>
@@ -50,7 +50,7 @@
                 <x-jet-input-error for="attended.program" class="mt-2"/>
             </div>
             {{-- data of grad --}}
-            <div class="col-span-3">
+            <div class="col-span-6 sm:col-span-3">
                 <x-jet-label for="date_graduated" value="{{ __('Date Graduated') }}" />
                 <x-jet-input wire:model.defer="attended.date_graduated" id="date_graduated" type="date" autocomplete="date_graduated" required/>
                 <x-jet-input-error for="attended.date_graduated" class="mt-2"/>

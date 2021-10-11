@@ -13,43 +13,55 @@
 
             <x-slot name="form">
                 <x-jet-label class="font-bold text-indigo-500 text-xs" for="subjects" value="{{ __('Subjects') }}" />
-                <div class="col-span-6" id="subjects">
-                    <div class="mb-4 grid grid-cols-8 col-span-6 gap-2 font-bold text-xs text-gray-400 uppercase tracking-widest text-left">
-                        <div class="col-span-1">code</div>
-                        <div class="col-span-1">title</div>
-                        <div class="col-span-1">description</div>
-                        <div class="col-span-1">unit</div>
-                        <div class="col-span-2">co requisite</div>
-                        <div class="col-span-2">pre requisite</div>
-                    </div>
+                <div class="col-span-6 -mt-4" id="subjects">
+                    <x-table.main>
+                        <x-slot name="filter"></x-slot>
+                        <x-slot name="paginationLink"></x-slot>
 
-                    <div class="grid grid-cols-8 gap-2 col-span-6 py-2 text-left">
-                        @forelse ($prospectus->subjects as $index => $prospectus_subject)
-                            <div class="col-span-1">{{ $prospectus_subject->subject->code ?? 'N/A' }}</div>
-                            <div class="col-span-1 truncate">{{ $prospectus_subject->subject->title ?? 'N/A' }}</div>
-                            <div class="col-span-1">{{ $prospectus_subject->subject->description ?? 'N/A' }}</div>
-                            <div class="col-span-1">{{ $prospectus_subject->unit ?? 'N/A' }}</div>
-                            <div class="col-span-2">
-                                @forelse ($prospectus_subject->corequisites as $requisite)
-                                    {{ $loop->first ? '' : ', '  }}
-                                    <span>&nbsp;{{ $requisite->code }}</span>
-                                @empty
-                                    N/A
-                                @endforelse
-                            </div>
-                            <div class="col-span-2">
-                                @forelse ($prospectus_subject->prerequisites as $requisite)
-                                    {{ $loop->first ? '' : ', '  }}
-                                    <span>&nbsp;{{ $requisite->code }}</span>
-                                @empty
-                                    N/A
-                                @endforelse
-                            </div>
-                        @empty
-                            <x-table.no-result>No subjects found. Sorry! Unable to register.🤔</x-table.no-result>
-                        @endforelse
-                    </div>
+                        <x-slot name="head">
+                            <x-table.column-title class="col-span-2">code</x-table.column-title>
+                            <x-table.column-title class="col-span-2">title</x-table.column-title>
+                            <x-table.column-title class="col-span-2">description</x-table.column-title>
+                            <x-table.column-title class="col-span-2">unit</x-table.column-title>
+                            <x-table.column-title class="col-span-2">co requisite</x-table.column-title>
+                            <x-table.column-title class="col-span-2">pre requisite</x-table.column-title>
+                        </x-slot>
+
+                        <x-slot name="body">
+                            @forelse ($prospectus->subjects as $index => $prospectus_subject)
+                                <div wire:key="table-row-{{$prospectus_subject->subject->code}}">
+                                    <x-table.row>
+                                        <div name="slot" class="grid grid-cols-12 md:gap-2">
+                                            <x-table.cell headerLabel="Code" class="justify-start md:col-span-2">{{ $prospectus_subject->subject->code ?? 'N/A' }}</x-table.cell>
+                                            <x-table.cell headerLabel="title" class="justify-start md:col-span-2">{{ $prospectus_subject->subject->title ?? 'N/A' }}</x-table.cell>
+                                            <x-table.cell headerLabel="description" class="justify-start md:col-span-2">{{ $prospectus_subject->subject->description ?? 'N/A' }}</x-table.cell>
+                                            <x-table.cell headerLabel="unit" class="justify-start md:col-span-2">{{ $prospectus_subject->unit ?? 'N/A' }}</x-table.cell>
+                                            <x-table.cell headerLabel="co requisite" class="justify-start md:col-span-2">
+                                            @forelse ($prospectus_subject->corequisites as $requisite)
+                                                {{ $loop->first ? '' : ', '  }}
+                                                <span>&nbsp;{{ $requisite->code }}</span>
+                                            @empty
+                                                N/A
+                                            @endforelse
+                                            </x-table.cell>
+                                            <x-table.cell headerLabel="pre requisite" class="justify-start md:col-span-2">
+                                            @forelse ($prospectus_subject->prerequisites as $requisite)
+                                                {{ $loop->first ? '' : ', '  }}
+                                                <span>&nbsp;{{ $requisite->code }}</span>
+                                            @empty
+                                                N/A
+                                            @endforelse
+                                            </x-table.cell>
+                                        </div>
+                                    </x-table.row>
+                                </div>
+                            @empty
+                                <x-table.no-result>No subjects found.🤔</x-table.no-result>
+                            @endforelse
+                        </x-slot>
+                    </x-table.main>
                 </div>
+
             </x-slot>
 
             <x-slot name="actions">

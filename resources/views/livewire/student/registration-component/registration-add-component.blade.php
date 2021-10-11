@@ -58,7 +58,7 @@
                             <div class="col-span-6">
                                 <x-jet-label for="classification" value="{{ __('Classification') }}" />
                                 <select wire:model.defer="classification" wire:loading.attr="disabled" id="classification" class="relative w-full bg-white mt-3 pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
-                                    <option value="" selected>-- choose a classification --</option>
+                                    <option value="" selected>Choose a classification</option>
                                     <option value="regular">Regular</option>
                                     <option value="irregular">Irregular</option>
                                 </select>
@@ -68,7 +68,7 @@
                             <div class="col-span-6">
                                 <x-jet-label for="student_type" value="{{ __('Student Type') }}" />
                                 <select wire:model.defer="type" wire:loading.attr="disabled" id="student_type" class="relative w-full bg-white mt-3 pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
-                                    <option value="" selected>-- choose student type --</option>
+                                    <option value="" selected>Choose student type</option>
                                     <option value="new">New</option>
                                     <option value="old">Old</option>
                                 </select>
@@ -80,7 +80,7 @@
                                 <select wire:model.defer="programId" wire:loading.attr="disabled" id="program" aria-label="programs" class="relative w-full bg-white mt-3 pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
                                     @forelse ($this->programs as $program)
                                         @if ($loop->first)
-                                            <option value="" selected>-- choose a program --</option>
+                                            <option value="" selected>Choose a program</option>
                                         @endif
                                         <option value="{{ $program->id }}">{{ $program->code }}</option>
                                     @empty
@@ -95,7 +95,7 @@
                                 <select wire:model.defer="levelId" wire:loading.attr="disabled" id="level" class="relative w-full bg-white mt-3 pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
                                     @forelse ($this->levels as $level)
                                         @if ($loop->first)
-                                            <option value="" selected>-- choose a level --</option>
+                                            <option value="" selected>Choose a level</option>
                                         @endif
                                         <option value="{{ $level->id }}">{{ $level->level }}</option>
                                     @empty
@@ -108,7 +108,7 @@
                             <div class="col-span-6">
                                 <x-jet-label for="term" value="{{ __('Semester') }}" />
                                 <select wire:model.defer="termId" wire:loading.attr="disabled" id="term" aria-label="terms" class="relative w-full bg-white mt-3 pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
-                                    <option value="" selected>-- choose a term --</option>
+                                    <option value="" selected>Choose a term</option>
                                     <option value="1">1st sem</option>
                                     <option value="2">2nd sem</option>
                                 </select>

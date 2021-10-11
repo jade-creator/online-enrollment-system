@@ -59,6 +59,12 @@
                     </x-sidebar.link>
                 </x-sidebar.item>
 
+                <x-sidebar.item title="Payments">
+                    <x-sidebar.link routeName="admin.payments.view" route="admin/payments" name="Payments">
+                        <x-icons.credit-card-icon/>
+                    </x-sidebar.link>
+                </x-sidebar.item>
+
                 <x-sidebar.item title="Advising">
                     <x-sidebar.link routeName="admin.advising.view" route="admin/advising" name="Advising">
                         <x-icons.advising-icon/>

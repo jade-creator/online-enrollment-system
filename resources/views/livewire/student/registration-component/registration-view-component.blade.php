@@ -131,7 +131,7 @@
                         <x-jet-input type="text" class="mt-1" value="{{ $registration->student->user->person->detail->religion ?? 'N/A' }}" readonly/>
                     </div>
                     <div class="col-span-3">
-                        <x-jet-label value="{{ __('Country of Citizenship:') }}"/>
+                        <x-jet-label value="{{ __('Citizenship:') }}"/>
                         <x-jet-input type="text" class="mt-1" value="{{ $registration->student->user->person->detail->country->name ?? 'N/A' }}" readonly/>
                     </div>
                 </form>

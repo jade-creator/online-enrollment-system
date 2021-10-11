@@ -11,7 +11,7 @@
         <!-- gender -->
         <div class="col-span-3">
             <x-jet-label for="gender" value="{{ __('Gender') }}" />
-            <select  wire:model.defer="detail.gender" wire:loading.attr="disabled" name="gender" id="gender" required>
+            <select  wire:model.defer="detail.gender" wire:loading.attr="disabled" name="gender" id="gender" class="truncate pr-5" required>
                 <option value="">Choose a gender</option>
                 <option value="Other">Other</option>
                 <option value="Male">Male</option>
@@ -23,7 +23,7 @@
 
         <div class="col-span-3">
             <x-jet-label for="civil_status" value="{{ __('Civil Status') }}" />
-            <select wire:model.defer="detail.civil_status" wire:loading.attr="disabled" name="civil_status" id="civil_status" required>
+            <select wire:model.defer="detail.civil_status" wire:loading.attr="disabled" name="civil_status" id="civil_status" class="truncate pr-5" required>
                 <option value="">Choose a civil status</option>
                 <option value="Single">Single</option>
                 <option value="Married">Married</option>
@@ -36,7 +36,7 @@
 
         <div class="col-span-3">
             <x-jet-label for="religion" value="{{ __('Religion') }}" />
-            <select wire:model.defer="detail.religion" wire:loading.attr="disabled" name="religion" id="religion" required>
+            <select wire:model.defer="detail.religion" wire:loading.attr="disabled" name="religion" id="religion" class="truncate pr-5" required>
                 <option value="">Choose a religion</option>
                 <option value="Other">Other</option>
                 <option value="Catholic Christianity">Catholic Christianity</option>
@@ -49,9 +49,9 @@
         </div>
 
         <div class="col-span-3">
-            <x-jet-label for="nationality" value="{{ __('Country of Citizenship') }}" />
-            <select wire:model.defer="detail.country_id" wire:loading.attr="disabled" name="nationality" id="nationality" required>
-                <option value="" selected>-- select a nationality --</option>
+            <x-jet-label for="nationality" value="{{ __('Citizenship') }}" />
+            <select wire:model.defer="detail.country_id" wire:loading.attr="disabled" name="nationality" id="nationality" class="truncate pr-5" required>
+                <option value="" selected>Select nationality</option>
                 @forelse ($countries as $country)
                     <option value="{{$country->id}}">{{$country->name}}</option>
                 @empty

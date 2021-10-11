@@ -40,9 +40,9 @@
                                 <x-table.cell headerLabel="Reg. ID" class="justify-start md:col-span-2">{{ $registration->custom_id ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="program" class="justify-start md:col-span-2">{{ $registration->prospectus->program->code ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="level" class="justify-start md:col-span-2">{{ $registration->prospectus->level->level ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-2">{{ $registration->prospectus->term->term ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-2">{{ $registration->section->name ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell class="justify-start md:col-span-1">{{ $registration->status->name ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="term" class="justify-start md:col-span-2">{{ $registration->prospectus->term->term ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="section" class="justify-start md:col-span-2">{{ $registration->section->name ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="status" class="justify-start md:col-span-1">{{ $registration->status->name ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell-action>
                                     @if (!count($selected) > 0)
                                         <x-jet-dropdown align="right" width="60" dropdownClasses="z-10 shadow-2xl">

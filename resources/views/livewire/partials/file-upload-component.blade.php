@@ -21,7 +21,7 @@
             </div>
             @forelse ($user->files as $file)
                 <div class="col-span-6 border border-gray-200 p-2 rounded-md flex items-center justify-between">
-                    <p class="truncate w-9/12">{{ $file->file_name }}</p>
+                    <p class="truncate w-2/3 sm:w-9/12">{{ $file->file_name }}</p>
                     <div class="space-x-2">
                         <button wire:click.prevent="download({{$file}})" class="hover:text-green-500">
                             <x-icons.export-icon/>

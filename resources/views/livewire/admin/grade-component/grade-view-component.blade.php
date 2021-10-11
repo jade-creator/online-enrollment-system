@@ -1,6 +1,6 @@
 <x-table.nested-row>
     <x-slot name="nestedTable">
-        <div class="py-4 grid grid-cols-12 gap-2">
+        <div class="hidden md:grid py-4 grid-cols-12 gap-2">
             <x-table.column-title class="col-span-2 text-blue-500">subject</x-table.column-title>
             <x-table.column-title class="col-span-2">title</x-table.column-title>
             <x-table.column-title class="col-span-2">section</x-table.column-title>
