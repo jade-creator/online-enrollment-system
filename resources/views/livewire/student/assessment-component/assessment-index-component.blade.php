@@ -82,38 +82,34 @@
                                             <p class="text-gray-600 text-base">{{ $fee->category->name ?? 'N/A' }}</p>
                                             <p class="text-black font-semibold">{{ $fee->getFormattedPriceAttribute($fee->formatTwoDecimalPlaces($fee->pivot->total_fee)) ?? 'N/A' }}</p>
                                         </div>
-
-                                        @if ($loop->last)
-                                            <div class="col-span-6 flex items-center justify-between">
-                                                <p class="text-gray-600 text-base">Additional Fee</p>
-                                                <p class="text-black font-semibold">{{ $fee->getFormattedPriceAttribute($additional) ?? 'N/A' }}</p>
-                                            </div>
-                                            <div class="col-span-6 flex items-center justify-between">
-                                                <p class="text-gray-600 text-base">Discount Type</p>
-                                                <p class="text-black font-semibold">
-                                                    @isset ($assessment->isPercentage)
-                                                        {{ $assessment->discount_type ?? 'N/A' }}
-                                                    @else
-                                                        N/A
-                                                    @endisset
-                                                </p>
-                                            </div>
-                                            <div class="col-span-6 flex items-center justify-between">
-                                                <p class="text-gray-600 text-base">Discount Amount</p>
-                                                <p class="text-black font-semibold">{{ $assessment->discount_amount ?? 'N/A' }}</p>
-                                            </div>
-                                            <div class="col-span-6">
-                                                <p class="text-gray-600 text-base">Remarks</p>
-                                                <textarea readonly>{{ $assessment->remarks ?? 'N/A' }}</textarea>
-                                            </div>
-                                            <div class="col-span-6 flex justify-between items-center font-bold">
-                                                <p class="text-lg text-black">Total Amount</p>
-                                                <p class="text-lg text-green-500">{{ $fee->getFormattedPriceAttribute($grandTotal) ?? 'N/A' }}</p>
-                                            </div>
-                                        @endif
                                     @empty
-                                        <p>No calculated fees.</p>
                                     @endforelse
+                                    <div class="col-span-6 flex items-center justify-between">
+                                        <p class="text-gray-600 text-base">Additional Fee</p>
+                                        <p class="text-black font-semibold">{{ $assessment->getFormattedPriceAttribute($additional) ?? 'N/A' }}</p>
+                                    </div>
+                                    <div class="col-span-6 flex items-center justify-between">
+                                        <p class="text-gray-600 text-base">Discount Type</p>
+                                        <p class="text-black font-semibold">
+                                            @isset ($assessment->isPercentage)
+                                                {{ $assessment->discount_type ?? 'N/A' }}
+                                            @else
+                                                N/A
+                                            @endisset
+                                        </p>
+                                    </div>
+                                    <div class="col-span-6 flex items-center justify-between">
+                                        <p class="text-gray-600 text-base">Discount Amount</p>
+                                        <p class="text-black font-semibold">{{ $assessment->discount_amount ?? 'N/A' }}</p>
+                                    </div>
+                                    <div class="col-span-6">
+                                        <p class="text-gray-600 text-base">Remarks</p>
+                                        <textarea readonly>{{ $assessment->remarks ?? 'N/A' }}</textarea>
+                                    </div>
+                                    <div class="col-span-6 flex justify-between items-center font-bold">
+                                        <p class="text-lg text-black">Total Amount</p>
+                                        <p class="text-lg text-green-500">{{ $assessment->getFormattedPriceAttribute($grandTotal) ?? 'N/A' }}</p>
+                                    </div>
                                 @else
                                     @forelse ($registration->prospectus->program->fees as $fee)
                                         <div class="col-span-6 flex items-center">

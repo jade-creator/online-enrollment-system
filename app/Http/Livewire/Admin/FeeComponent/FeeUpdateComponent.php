@@ -14,7 +14,10 @@ class FeeUpdateComponent extends Component
 
     public Models\Fee $fee;
 
-    protected $listeners = ['refresh' => '$refresh'];
+    protected $listeners = [
+        'refresh' => '$refresh',
+        'updateFee',
+    ];
 
     public function rules()
     {
@@ -40,14 +43,8 @@ class FeeUpdateComponent extends Component
         ]);
     }
 
-    public function update()
+    public function updateFee()
     {
-        $this->validate();
-
-        $fee = (new FeeService())->find($this->fee);
-
-        if ($fee) return $this->error("Program's fee already exists. Unable to update.");
-
         try {
             $this->authorize('update', $this->fee);
             $fee = (new FeeService())->update($this->fee);
@@ -60,6 +57,20 @@ class FeeUpdateComponent extends Component
             return redirect(route('admin.fees.view'));
         } catch (\Exception $e) {
             $this->error($e->getMessage());
+        }
+    }
+
+    public function update()
+    {
+        $this->validate();
+
+        $fee = (new FeeService())->find($this->fee);
+
+        if ($fee->id != $this->fee->id) {
+            $this->fee->id = $fee->id;
+            return $this->confirm('updateFee', $fee->category->name." already exists. Do you want to change the description and amount?");
+        } else {
+            $this->updateFee();
         }
     }
 
