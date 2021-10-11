@@ -20,6 +20,12 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input)
     {
+        if ($input['role'] == 2) {
+            Validator::make($input, ['student_id' => ['required', 'unique:students,custom_id', 'alpha_num', 'max:100']])->validate();
+        } else {
+            Validator::make($input, ['employee_id' => ['required', 'unique:employees,custom_id', 'alpha_num', 'max:100']])->validate();
+        }
+
         Validator::make($input, [
             'role' => ['required'],
             'name' => ['required', 'string', 'max:255'],

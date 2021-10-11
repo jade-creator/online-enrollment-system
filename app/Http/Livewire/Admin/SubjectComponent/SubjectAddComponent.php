@@ -17,7 +17,7 @@ class SubjectAddComponent extends Component
     public function rules()
     {
         return [
-            'subject.code' => ['required', 'string', 'max:100'],
+            'subject.code' => ['required', 'string', 'max:100', 'alpha_num', 'unique:subjects,code'],
             'subject.title' => ['required', 'string', 'max:100'],
             'subject.description' => ['required', 'string', 'max:500'],
         ];
