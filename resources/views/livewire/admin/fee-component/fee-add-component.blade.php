@@ -26,11 +26,11 @@
                         <x-slot name="form">
                             <form>
                                 <div class="col-span-3">
-                                    <x-jet-label value="{{ __('Program Name') }}"/>
-                                    <select wire:model.defer="fee.program_id" wire:loading.attr="disabled" name="program">
+                                    <x-jet-label value="{{ __('Program') }}"/>
+                                    <select wire:model.defer="fee.program_id" wire:loading.attr="disabled" name="program" class="truncate pr-5">
                                         @forelse ($this->programs as $program)
                                             @if ($loop->first)
-                                                <option value="" selected>-- choose a program --</option>
+                                                <option value="" selected>Choose a program</option>
                                             @endif
                                             <option value="{{ $program->id ?? 'N/A' }}">{{ $program->code ?? 'N/A' }}</option>
                                         @empty
@@ -40,11 +40,11 @@
                                     <x-jet-input-error for="fee.program_id" class="mt-2"/>
                                 </div>
                                 <div class="col-span-3">
-                                    <x-jet-label value="{{ __('Category Name') }}"/>
-                                    <select wire:model.defer="fee.category_id" wire:loading.attr="disabled" name="category">
+                                    <x-jet-label value="{{ __('Category') }}"/>
+                                    <select wire:model.defer="fee.category_id" wire:loading.attr="disabled" name="category" class="truncate pr-5" >
                                         @forelse ($this->categories as $category)
                                             @if ($loop->first)
-                                                <option value="" selected>-- choose a category --</option>
+                                                <option value="" selected>Choose a category</option>
                                             @endif
                                             <option value="{{ $category->id ?? 'N/A' }}">{{ $category->name ?? 'N/A' }}</option>
                                         @empty
