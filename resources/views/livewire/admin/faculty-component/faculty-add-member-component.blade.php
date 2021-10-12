@@ -9,7 +9,7 @@
                 <div class="col-span-8">
                     <input wire:model.debounce.1000ms="search" type="text" placeholder="Search by ID...">
                 </div>
-                <div class="mt-4 col-span-8 grid grid-cols-12 px-2">
+                <div class="mt-4 col-span-8 hidden md:grid grid-cols-12 px-2">
                     <x-table.column-title class="col-span-4">ID</x-table.column-title>
                     <x-table.column-title class="col-span-5">Name</x-table.column-title>
                     <x-table.column-title class="col-span-3">role</x-table.column-title>
@@ -17,12 +17,12 @@
                 <div class="col-span-8">
                     @foreach($users as $user)
                         <div class=" grid grid-cols-12 mt-2">
-                            <x-table.cell class="justify-start md:col-span-4">
+                            <div class="flex items-center bg-indigo-500 md:bg-white text-white md:text-black justify-start col-span-12 py-2 md:py-0 md:col-span-4">
                                 <input wire:model.defer="selected" wire:loading.attr="disabled" value="{{ $user->employee->id }}" type="checkbox" class="mx-2">
                                 <span>{{ $user->id ?? 'N/A' }}</span>
-                            </x-table.cell>
-                            <x-table.cell class="justify-start md:col-span-5">{{ $user->name ?? 'N/A' }}</x-table.cell>
-                            <x-table.cell class="justify-start md:col-span-3">{{ $user->role->name ?? 'N/A' }}</x-table.cell>
+                            </div>
+                            <x-table.cell headerLabel="Name" class="justify-start md:col-span-5">{{ $user->name ?? 'N/A' }}</x-table.cell>
+                            <x-table.cell headerLabel="role" class="justify-start md:col-span-3">{{ $user->role->name ?? 'N/A' }}</x-table.cell>
                         </div>
                     @endforeach
                 </div>
