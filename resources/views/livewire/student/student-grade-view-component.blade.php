@@ -1,5 +1,4 @@
 <div class="w-full">
-
     <div class="h-content w-full p-4 md:p-8">
         <x-table.title tableTitle="Prospectus">
             <a href="{{ route('student.registrations.create') }}">
@@ -30,53 +29,52 @@
             <x-slot name="paginationLink"></x-slot>
 
             <x-slot name="head">
-                <x-table.column-title class="col-span-3">Registration ID</x-table.column-title>
-                <x-table.column-title class="col-span-2">status</x-table.column-title>
-                <x-table.column-title class="col-span-2">section</x-table.column-title>
-                <x-table.column-title class="col-span-2">total unit</x-table.column-title>
-                <x-table.column-title class="col-span-2">classification</x-table.column-title>
-                <x-table.column-title class="col-span-1">option</x-table.column-title>
+                <x-table.column-title class="col-span-1">code</x-table.column-title>
+                <x-table.column-title class="col-span-2">title</x-table.column-title>
+                <x-table.column-title class="col-span-2">description</x-table.column-title>
+                <x-table.column-title class="col-span-2">co-requisite</x-table.column-title>
+                <x-table.column-title class="col-span-2">pre-requisite</x-table.column-title>
+                <x-table.column-title class="col-span-1">unit</x-table.column-title>
+                <x-table.column-title class="col-span-1">remark</x-table.column-title>
+                <x-table.column-title class="col-span-1">grade</x-table.column-title>
             </x-slot>
 
             <x-slot name="body">
-                @forelse ($registrations as $registration)
-                    <div wire:key="table-row-{{$registration->id}}" x-data="{ open: false }">
-                        <x-table.row>
-                            <div name="slot" class="grid grid-cols-12 md:gap-2">
-                                <x-table.cell headerLabel="Reg. ID" class="justify-start md:col-span-3">{{ $registration->custom_id ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell headerLabel="status" class="justify-start md:col-span-2">{{ $registration->status->name ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell headerLabel="section" class="justify-start md:col-span-2">{{ $registration->section->name ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell headerLabel="total unit" class="justify-start md:col-span-2">{{ $registration->total_unit ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell headerLabel="classification" class="justify-start md:col-span-2">{{ $registration->classification ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell-action>
-                                    <x-jet-dropdown align="right" width="60" dropdownClasses="z-10 shadow-2xl">
-                                        <x-slot name="trigger">
-                                            <x-table.cell-dropdown-trigger-btn/>
-                                        </x-slot>
-
-                                        <x-slot name="content">
-                                            <div class="w-60">
-                                                <div class="block px-4 py-3 text-sm text-gray-500 font-bold">
-                                                    {{ __('Actions') }}
-                                                </div>
-                                                @can ('view', $registration)
-                                                    <a href="{{ route('pre.registration.view', $registration->id) }}">
-                                                        <x-table.cell-button title="View Registration">
-                                                            <x-icons.pre-enrollment-icon/>
-                                                        </x-table.cell-button>
-                                                    </a>
-                                                @endcan
-                                            </div>
-                                        </x-slot>
-                                    </x-jet-dropdown>
-                                </x-table.cell-action>
-                            </div>
-                        </x-table.row>
-
-                        <livewire:admin.grade-component.grade-view-component :registration="$registration" key="'grade-view-component-'{{ $registration->id.now() }}">
-                    </div>
+                @forelse ($prospectusSubjects as $index => $prospectus_subject)
+                    <x-table.row>
+                        <div name="slot" class="grid grid-cols-12 md:gap-2">
+                            <x-table.cell headerLabel="Code" class="justify-start md:col-span-1">{{ $prospectus_subject->subject->code ?? 'N/A' }}</x-table.cell>
+                            <x-table.cell headerLabel="Title" class="justify-start md:col-span-2" title="{{ $prospectus_subject->subject->title ?? 'N/A' }}">{{ $prospectus_subject->subject->title ?? 'N/A' }}</x-table.cell>
+                            <x-table.cell headerLabel="Unit" class="justify-start md:col-span-2" title="{{ $prospectus_subject->subject->description ?? 'N/A' }}">{{ $prospectus_subject->subject->description ?? 'N/A' }}</x-table.cell>
+                            <x-table.cell headerLabel="Co-requisite" class="justify-start md:col-span-2">
+                                @forelse ($prospectus_subject->corequisites as $subject)
+                                    {{ $loop->first ? '' : ', '  }}
+                                    <a href="{{ route('admin.subjects.view', ['search' => $subject->title]) }}" class="text-indigo-500 underline">{{ $subject->code }}</a>
+                                @empty
+                                    N/A
+                                @endforelse
+                            </x-table.cell>
+                            <x-table.cell headerLabel="Pre-requisite" class="justify-start md:col-span-2">
+                                @forelse ($prospectus_subject->prerequisites as $subject)
+                                    {{ $loop->first ? '' : ', '  }}
+                                    <a href="{{ route('admin.subjects.view', ['search' => $subject->title]) }}" class="text-indigo-500 underline">{{ $subject->code }}</a>
+                                @empty
+                                    N/A
+                                @endforelse
+                            </x-table.cell>
+                            <x-table.cell headerLabel="Unit" class="justify-start md:col-span-1">{{ $prospectus_subject->unit ?? 'N/A' }}</x-table.cell>
+                            <x-table.cell headerLabel="Remark" class="justify-start md:col-span-1">{{
+                                array_key_exists($prospectus_subject->id, $grades) && array_key_exists('mark', $grades[$prospectus_subject->id])
+                                    ? $grades[$prospectus_subject->id]['mark'] ?? 'N/A' : 'N/A'
+                            }}</x-table.cell>
+                            <x-table.cell headerLabel="Remark" class="justify-start md:col-span-1">{{
+                                array_key_exists($prospectus_subject->id, $grades) && array_key_exists('value', $grades[$prospectus_subject->id])
+                                    ? $grades[$prospectus_subject->id]['value'] ?? 'N/A' : 'N/A'
+                            }}</x-table.cell>
+                        </div>
+                    </x-table.row>
                 @empty
-                    <x-table.no-result>No registrations found.🤔</x-table.no-result>
+                    <x-table.no-result>No subjects found.🤔</x-table.no-result>
                 @endforelse
             </x-slot>
         </x-table.main>
