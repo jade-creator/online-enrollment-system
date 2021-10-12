@@ -4,7 +4,6 @@ namespace App\Http\Livewire\Admin\UserComponent;
 
 use App\Actions\Fortify\PasswordValidationRules;
 use App\Models;
-use App\Rules\GmailId;
 use App\Services\UserService;
 use App\Traits\WithSweetAlert;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -22,7 +21,7 @@ class UserAddComponent extends Component
         return [
             'role_id' => ['required'],
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users', new GmailId],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => $this->passwordRules(),
             'employee_id' => ['required_if:role_id,==,1,3,4,5'],
             'student_id' => ['required_if:role_id,==,2'],

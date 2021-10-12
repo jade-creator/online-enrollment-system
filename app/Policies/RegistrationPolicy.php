@@ -22,7 +22,8 @@ class RegistrationPolicy extends BasePolicy
 
     public function enroll(User $user, Registration $registration) { return
         $this->isAuthorized('registration', 'enroll', $user) && $registration->status->name == 'finalized' &&
-            filled($registration->assessment) && $registration->assessment->grand_total > $registration->assessment->balance;
+            filled($registration->assessment);
+        //&& $registration->assessment->grand_total > $registration->assessment->balance option
     }
 
     public function finalize(User $user, Registration $registration) { return
