@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Registration</title>
+    <title>Print Grade</title>
     <link rel="stylesheet" href="{{ asset('css/pdf.css') }}">
     <style>
         /*PDF SIZE*/
@@ -14,8 +14,17 @@
 </head>
 
 <body>
-    <div class="center mb-3">
-        <img src="https://drive.google.com/uc?id=1l2yy9vCB5pFaJwewAGiiOMU3BmQdsG8Q" width="100" height="100">
+    <div class="watermark"></div>
+    <div class="logo-container mb-3 center">
+        <img src="https://drive.google.com/uc?export=view&id=1l2yy9vCB5pFaJwewAGiiOMU3BmQdsG8Q" alt="logo" width="50" height="50">
+        <p class="truncate-widest bold">UNIVERSITY</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet, amet.</p>
+    </div>
+    
+    <!-- GENERAL WEIGHTED AVERAGE -->
+    <div id="gwa">
+        <p class="italic">GWA:</p>
+        <p>5.00</p>
     </div>
 
     <div class="container">
@@ -26,20 +35,20 @@
         </table>
         <table class="container-details">
             <tr>
-                <td>Student ID: <span>{{ $registration->student->custom_id ?? 'N/A' }}</span></td>
-                <td>Status: <span>{{ $registration->student->user->person->detail->civil_status ?? 'N/A' }}</span></td>
+                <td>Student ID: <span>STD0001</span></td>
+                <td>Status: <span>Enrolled</span></td>
             </tr>
             <tr>
-                <td>Student Name: <span>{{ $registration->student->user->person->full_name ?? 'N/A' }}</span></td>
-                <td>Student Type: <span>{{ $registration->is_new ?? 'N/A' }}</span></td>
+                <td>Student Name: <span>Mark Lawrence Parone</span></td>
+                <td>Student Type: <span>New</span></td>
             </tr>
             <tr>
-                <td>Section: <span>{{ $registration->section->name ?? 'N/A' }}</span></td>
-                <td>Year Level: <span>{{ $registration->prospectus->level->level ?? 'N/A' }}</span></td>
+                <td>Section: <span>BSIT-3E</span></td>
+                <td>Year Level: <span>4th year</span></td>
             </tr>
             <tr>
-                <td>Program: <span>{{ $registration->prospectus->program->code ?? 'N/A' }} </span>-<span> {{ $registration->prospectus->program->program ?? 'N/A' }}</span></td>
-                <td>School Year: <span>{{ $registration->school_year ?? 'N/A' }}</span></td>
+                <td>Program: <span>BSIT</span>-<span> Bachelor of Science in Information Technology</span></td>
+                <td>School Year: <span>2020 - 2021</span></td>
             </tr>
         </table>
     </div>
@@ -53,63 +62,18 @@
                 <th>Remark</th>
                 <th>Unit Earned</th>
             </tr>
-            @forelse ($collectionGrades as $grade)
+
                 <tr>
-                    <td>{{ $grade->prospectus_subject->subject->code ?? 'N/A' }}</td>
-                    <td class="whitespace-normal left">{{ $grade->prospectus_subject->subject->title ?? 'N/A' }}</td>
-                    <td>{{ $registration->section->name ?? 'N/A' }}</td>
-                    <td>{{ $grade->value ?? 'N/A' }}</td>
-                    <td>{{ $grade->mark->name ?? 'N/A' }}</td>
-                    <td>{{ $grade->prospectus_subject->unit ?? 'N/A' }}</td>
+                    <td>MATH</td>
+                    <td class="whitespace-normal left">Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem, expedita?</td>
+                    <td>BSIT-3E</td>
+                    <td>3.00</td>
+                    <td>PASSED</td>
+                    <td>3</td>
                 </tr>
-            @empty
-            @endforelse
+
         </table>
     </div>
-
-
-
-
-
-{{--
-<!--
-    <div>
-        <p><span>(LOGO)</span> University Name</p>
-        <p><span>{{ $registration->prospectus->program->code ?? 'N/A' }} -</span> {{ $registration->prospectus->program->program ?? 'N/A' }}</p>
-    </div>
-    <p>---------------------------------</p>
-    <div>
-        <p>Student ID: <span>{{ $registration->student->custom_id ?? 'N/A' }}</span></p>
-        <p>Student Name: <span>{{ $registration->student->user->person->full_name ?? 'N/A' }}</span></p>
-        <p>Section: <span>{{ $registration->section->name ?? 'N/A' }}</span></p>
-        <p>School Year: <span>{{ $registration->school_year ?? 'N/A' }}</span></p>
-    </div>
-    <p>---------------------------------</p>
-
-    <p><span>{{ $registration->prospectus->level->level ?? 'N/A' }} </span>-<span> {{ $registration->prospectus->term->term ?? 'N/A' }}</span></p>
-
-    <table>
-        <tr>
-            <th>subject</th>
-            <th>title</th>
-            <th>section</th>
-            <th>grade</th>
-            <th>remark</th>
-        </tr>
-        <tbody>
-        @forelse ($collectionGrades as $grade)
-            <tr>
-                <td>{{ $grade->prospectus_subject->subject->code ?? 'N/A' }}</td>
-                <td>{{ $grade->prospectus_subject->subject->title ?? 'N/A' }}</td>
-                <td>{{ $registration->section->name ?? 'N/A' }}</td>
-                <td>{{ $grade->value ?? 'N/A' }}</td>
-                <td>{{ $grade->mark->name ?? 'N/A' }}</td>
-            </tr>
-        @empty
-        @endforelse
-        </tbody>
-        <p>Computed Grade: <span>{{ number_format($computedGrade, '2', '.', '') ?? 'N/A' }}</span></p>
-    </table> -->--}}
 </body>
 
 </html>

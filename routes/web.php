@@ -23,7 +23,7 @@ use App\Http\Livewire\Forms\User;
 use App\Http\Livewire\Admin\ProspectusComponent;
 use App\Http\Livewire\Student;
 use App\Http\Livewire\Student\RegistrationComponent;
-use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\PDFController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -55,7 +55,9 @@ Route::get('/view-pdf', function () {
 });
 
 // Downlaod pdf
-Route::get('/download-pdf', [RegistrationController::class, 'downloadPDF'])->name('download.pdf');
+Route::get('/registration-pdf', [PDFController::class, 'downloadRegistration'])->name('registration.pdf');
+Route::get('/grade-pdf', [PDFController::class, 'downloadGrade'])->name('grade.pdf');
+Route::get('/classlist-pdf', [PDFController::class, 'downloadClassList'])->name('classlist.pdf');
 //------END GUEST-------
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function (){

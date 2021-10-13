@@ -5,13 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Registration</title>
+    <title>Print Registration</title>
     <link rel="stylesheet" href="{{ asset('css/pdf.css') }}">
 </head>
 
 <body>
-    <div class="logo-container">
-        <img src="https://drive.google.com/uc?id=1OBzJloHutLsDw2E9V-VTLc26ZIetJLrW" alt="logo">
+    <div class="watermark"></div>
+    <div class="logo-container mb-3 center">
+        <img src="https://drive.google.com/uc?export=view&id=1l2yy9vCB5pFaJwewAGiiOMU3BmQdsG8Q" alt="logo" width="50" height="50">
+        <p class="truncate-widest bold">UNIVERSITY</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet, amet.</p>
     </div>
     <div class="container">
         <table class="container-title">
