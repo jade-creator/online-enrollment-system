@@ -7,6 +7,8 @@ use Livewire\Component;
 
 class ProspectusDropdown extends Component
 {
+    public string $curriculumId = '';
+    
     public function render() { return
         view('livewire.partials.prospectus-dropdown', [ 'programs' => $this->programs ]);
     }

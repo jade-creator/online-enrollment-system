@@ -12,7 +12,12 @@ class Student extends Model
     protected $fillable = [
         'custom_id',
         'user_id',
+        'program_id',
     ];
+
+    public function program() { return
+        $this->belongsTo(Program::class);
+    }
 
     public function registrations() { return
         $this->hasMany(Registration::class);

@@ -19,6 +19,8 @@ class CreateCurriculaTable extends Migration
             $table->string('code', 100);
             $table->text('description')->nullable();
             $table->boolean('isActive')->default(0);
+            $table->date('start_date');
+            $table->date('end_date');
             $table->timestamps();
             $table->softDeletes();
         });

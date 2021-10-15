@@ -12,15 +12,21 @@ class RegularAddComponent extends Component
 {
     use AuthorizesRequests, WithSweetAlert;
 
+    public Models\Curriculum $curriculum;
     public Models\Registration $registration;
     public Models\Prospectus $prospectus;
-    public string $prospectusSlug, $prospectusId, $type = '';
+    public string $prospectusSlug, $prospectusId, $type = '', $curriculumCode = '';
 
     public function mount()
     {
-        list($this->prospectusId, $this->type) = explode( '-', $this->prospectusSlug);
+        list($this->prospectusId, $this->type, $this->curriculumCode) = explode( '-', $this->prospectusSlug);
+
+        $this->curriculum = Models\Curriculum::where('code', $this->curriculumCode)->firstOrFail();
 
         $this->prospectus = Models\Prospectus::with([
+            'subjects' => function($query) {
+                return $query->where('curriculum_id', $this->curriculum->id)->get();
+            },
             'subjects.prerequisites',
             'subjects.corequisites',
         ])->findOrFail($this->prospectusId);
@@ -41,6 +47,7 @@ class RegularAddComponent extends Component
                 'registration.prospectus_id' => $this->prospectusId,
                 'registration.student_id' => auth()->user()->student->id,
                 'registration.total_unit' => $this->prospectus->subjects->sum('unit'),
+                'registration.curriculum_id' => $this->curriculum->id,
             ]);
 
             $subjectsId = $registrationService->pluckSubjectsId($this->prospectus->subjects);

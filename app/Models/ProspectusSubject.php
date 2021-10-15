@@ -20,6 +20,7 @@ class ProspectusSubject extends BaseModel
         'id',
         'prospectus_id',
         'subject_id',
+        'curriculum_id',
         'unit',
         'created_at',
     ];
@@ -30,6 +31,10 @@ class ProspectusSubject extends BaseModel
     public function scopeGetAllSubjectsInProspectus($query, $prospectusId) { return
         $query->where('prospectus_id', $prospectusId)
             ->get($this->select);
+    }
+
+    public function curriculum() { return
+        $this->belongsTo(Curriculum::class);
     }
 
     public function corequisites() { return

@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+class TestSeeder extends Seeder
 {
     /**
      * Seed the application's database.
@@ -32,14 +32,12 @@ class DatabaseSeeder extends Seeder
             DaySeeder::class,
             CategorySeeder::class,
             FacultySeeder::class,
-
-            /*test*/
-//            SectionSeeder::class,
-//            AdminSeeder::class,
-//            ProspectusSubjectSeeder::class,
-//            ScheduleSeeder::class,
-//            FeeSeeder::class,
-//            CurriculumSeeder::class
+            SectionSeeder::class,
+            AdminSeeder::class,
+            CurriculumSeeder::class,
+            ProspectusSubjectSeeder::class,
+            ScheduleSeeder::class,
+            FeeSeeder::class,
         ]);
     }
 }

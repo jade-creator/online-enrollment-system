@@ -68,6 +68,18 @@
                 </select>
                 <x-jet-input-error for="employee.faculty_id" class="mt-2"/>
             </div>
+        @else
+            <div class="col-span-6">
+                <x-jet-label for="program_id" value="{{ __('Program') }}" />
+                <select wire:model.defer="student.program_id" wire:loading.attr="disabled" id="program_id" name="program_id" required>
+                    <option value="" selected>-- select a program --</option>
+                    @forelse($this->programs as $program)
+                        <option value="{{ $program->id }}">{{ $program->program }}</option>
+                    @empty
+                    @endforelse
+                </select>
+                <x-jet-input-error for="student.program_id" class="mt-2"/>
+            </div>
         @endif
     </x-slot>
 

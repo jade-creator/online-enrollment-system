@@ -1,5 +1,5 @@
 <div class="pb-2">
-    <h3 class="font-bold text-md px-4">{{ __('Programs')}}</h3>
+    <h3 class="font-semibold">{{ __('Programs')}}</h3>
     <ul x-data="{ program: 'none' }" id="program-wrapper">
         @forelse($programs as $program)
             <li @click.stop="program = '{{$program->code}}'" class="flex items-center p-2 hover:bg-gray-100 cursor-pointer">
@@ -15,7 +15,7 @@
                     @endif
 
                     @if (auth()->user()->role->name == 'admin')
-                        <a href="{{ route('admin.prospectuses.view', ['prospectusId' => $prospectus->id]) }}">
+                        <a href="{{ route('admin.prospectuses.view', ['prospectusId' => $prospectus->id, 'curriculumId' => $curriculumId]) }}">
                             <h4 class="pl-4 py-1">{{$prospectus->term->term}}</h4>
                         </a>
                     @elseif (auth()->user()->role->name == 'student')

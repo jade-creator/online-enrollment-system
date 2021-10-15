@@ -22,7 +22,17 @@
                         </p>
                     @endisset
                     <x-table.filter :isSearchable="false" :isFilterable="false">
-                        <livewire:partials.prospectus-dropdown/>
+                        <x-table.filter-slot title="Curriculum">
+                            <select wire:model="curriculumId" wire:loading.attr="disabled" name="curriculumId" class="w-full flex-1">
+                                @forelse ($curriculums as $curriculum)
+                                    <option value="{{ $curriculum->id ?? 'N/A' }}">{{ $curriculum->code ?? 'N/A' }}</option>
+                                @empty
+                                    <option value="">No records</option>
+                                @endforelse
+                            </select>
+                        </x-table.filter-slot>
+
+                        <livewire:partials.prospectus-dropdown :curriculumId="$curriculumId" key="{{ 'prospectus-dropdown-component-'.now() }}"/>
                     </x-table.filter>
                 </div>
             </x-slot>
@@ -101,9 +111,10 @@
     </div>
 
     <livewire:admin.prospectus-component.prospectus-add-component :prospectusId="$prospectusId" :coRequisites="$coRequisites" :preRequisites="$preRequisites" :subjects="$allSubjects"
-                                                                  key="{{ 'prospectus-add-component-'.now() }}">
+                                                                 :curriculumId="$curriculumId" key="{{ 'prospectus-add-component-'.now() }}">
 
-    <livewire:admin.prospectus-component.prospectus-update-component :coRequisites="$coRequisites" :preRequisites="$preRequisites" :subjects="$allSubjects" key="{{ 'prospectus-update-component-'.now() }}">
+    <livewire:admin.prospectus-component.prospectus-update-component :coRequisites="$coRequisites" :preRequisites="$preRequisites" :subjects="$allSubjects"
+                                                                 :curriculumId="$curriculumId" key="{{ 'prospectus-update-component-'.now() }}">
 
-    <livewire:admin.prospectus-component.prospectus-destroy-component>
+    <livewire:admin.prospectus-component.prospectus-destroy-component :curriculumId="$curriculumId" key="{{ 'prospectus-destroy-component-'.now() }}">
 </div>

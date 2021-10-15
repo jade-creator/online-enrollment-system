@@ -19,6 +19,7 @@ class Registration extends BaseModel
         'section_id',
         'student_id',
         'prospectus_id',
+        'curriculum_id',
     ];
 
     public array $relationships = [
@@ -28,6 +29,7 @@ class Registration extends BaseModel
         'prospectus.level:id,level',
         'prospectus.program:id,code,program',
         'prospectus.term:id,term',
+        'curriculum',
     ];
 
     public static function boot()
@@ -182,6 +184,10 @@ class Registration extends BaseModel
 //                'isExtension' => 0,
                 'released_at' => null,
             ]);
+    }
+
+    public function curriculum() { return
+        $this->belongsTo(Curriculum::class);
     }
 
     public function transactions() { return

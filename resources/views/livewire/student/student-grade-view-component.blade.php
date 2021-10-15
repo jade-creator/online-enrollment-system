@@ -21,6 +21,9 @@
                         </p>
                     @endisset
                     <x-table.filter :isSearchable="false" :isFilterable="false">
+                        <x-table.filter-slot title="Curriculum">
+                            <x-jet-input value="{{ $curriculum->code ?? 'N/A' }}" id="seat" type="text" name="seat" readonly/>
+                        </x-table.filter-slot>
                         <livewire:partials.prospectus-dropdown/>
                     </x-table.filter>
                 </div>

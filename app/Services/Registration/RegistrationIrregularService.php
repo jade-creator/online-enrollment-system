@@ -13,7 +13,7 @@ class RegistrationIrregularService
         return $subjects->sum('unit');
     }
 
-    public function createNewRegistration(int $prospectusId, int $studentId, int $total_unit = 0,  int $isExtension = 0) : Models\Registration
+    public function createNewRegistration(int $prospectusId, int $studentId, int $curriculumId, int $total_unit = 0,  int $isExtension = 0) : Models\Registration
     {
         $registration = new Models\Registration();
         $registration->prospectus_id = $prospectusId;
@@ -21,6 +21,7 @@ class RegistrationIrregularService
         $registration->isRegular = 0;
         $registration->isExtension = $isExtension;
         $registration->total_unit = $total_unit;
+        $registration->curriculum_id = $curriculumId;
 
         return $registration;
     }
@@ -28,7 +29,7 @@ class RegistrationIrregularService
     /**
      * @throws \Exception
      */
-    public function store($prospectuses, int $studentId, array $selected = []) : Models\Registration
+    public function store($prospectuses, int $studentId, int $curriculumId, array $selected = []) : Models\Registration
     {
         if (empty($selected) || empty($selected[0])) throw new \Exception('No subject/s found. Unable to register.');
 
@@ -40,10 +41,10 @@ class RegistrationIrregularService
             if (is_array($selected) && empty($selected[$index])) continue;
 
             if ($index == 0) {
-                $registration = $this->createNewRegistration($prospectus->id, $studentId, $this->calculateTotalUnit($prospectus, $selected[0]));
+                $registration = $this->createNewRegistration($prospectus->id, $studentId, $curriculumId, $this->calculateTotalUnit($prospectus, $selected[0]));
                 $registrationMain = $registrationService->store($selected[0], $registration);
             } else {
-                $registration = $this->createNewRegistration($prospectus->id, $studentId, $this->calculateTotalUnit($prospectus, $selected[$index]), 1);
+                $registration = $this->createNewRegistration($prospectus->id, $studentId, $curriculumId, $this->calculateTotalUnit($prospectus, $selected[$index]), 1);
                 $registration = $registrationService->store($selected[$index], $registration);
 
                 $extension = new Models\Extension();

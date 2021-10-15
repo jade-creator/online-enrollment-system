@@ -5,6 +5,8 @@ namespace App\Http\Livewire\Forms\PersonalDetail;
 use App\Models\Employee;
 use App\Models\Faculty;
 use App\Models\Person;
+use App\Models\Program;
+use App\Models\Student;
 use App\Traits\WithSweetAlert;
 use Exception;
 use Carbon\Carbon;
@@ -18,10 +20,12 @@ class FullnameForm extends Component
 
     public Person $person;
     public Employee $employee;
+    public Student $student;
 
     protected $rules = [
         'employee.faculty_id' => ['nullable'],
         'employee.salutation' => ['required'],
+        'student.program_id' => ['required'],
         'person.firstname' => [ 'required', 'string', 'max:255'],
         'person.middlename' => [ 'required', 'string', 'max:255'],
         'person.lastname' => [ 'required', 'string', 'max:255'],
@@ -38,6 +42,7 @@ class FullnameForm extends Component
 
         $this->person = $user->person ?? new Person();
         $this->employee = $user->employee ?? new Employee();
+        $this->student = $user->student ?? new Student();
     }
 
     /**
@@ -76,15 +81,14 @@ class FullnameForm extends Component
 
     public function updateOrCreateFullname()
     {
+        $validationArray = $this->rules;
+
         if (auth()->user()->role->name == 'student') {
-            $this->validate([
-                'person.firstname' => [ 'required', 'string', 'max:255'],
-                'person.middlename' => [ 'required', 'string', 'max:255'],
-                'person.lastname' => [ 'required', 'string', 'max:255'],
-                'person.suffix' => [ 'nullable', 'string', 'max:255'],
-            ]);
+            unset($validationArray['employee.faculty_id'], $validationArray['employee.salutation']);
+            $this->validate($validationArray);
         } else {
-            $this->validate();
+            unset($validationArray['student.program_id']);
+            $this->validate($validationArray);
         }
 
         if (empty(trim($this->person->suffix))) $this->person->suffix = null;
@@ -96,13 +100,21 @@ class FullnameForm extends Component
                 $this->person->update();
             }
 
-            if (auth()->user()->role->name !== 'student') $this->employee->update();
+            if (auth()->user()->role->name !== 'student') {
+                $this->employee->update();
+            } else {
+                $this->student->update();
+            };
 
             $this->emit('saved');
             $this->emit('proceed', 2);
         } catch (Exception $e) {
             $this->error($e->getMessage());
         }
+    }
+
+    public function getProgramsProperty() { return
+        Program::get(['id', 'program']);
     }
 
     public function getFacultiesProperty() { return

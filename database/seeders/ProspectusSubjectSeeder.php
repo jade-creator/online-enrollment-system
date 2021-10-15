@@ -23,7 +23,7 @@ class ProspectusSubjectSeeder extends Seeder
 
         foreach ($bsitProspectuses as $prospectus) {
             for ($loop = 0; $loop <= 1; $loop++) {
-                $prospectusSubjects[] = ['prospectus_id' => $prospectus, 'subject_id' => $subjects[$index], 'unit' => 3, 'created_at' => now(), 'updated_at' => now()];
+                $prospectusSubjects[] = ['prospectus_id' => $prospectus, 'subject_id' => $subjects[$index], 'curriculum_id' => 1, 'unit' => 3, 'created_at' => now(), 'updated_at' => now()];
                 $index++;
             }
         }

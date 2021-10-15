@@ -35,13 +35,16 @@ class Prospectus extends Model
     }
 
     // pluck subjects in a prospectus collection.
-    public function pluckSubject($prospectuses)
+    public function pluckSubject($prospectuses, $curriculumId)
     {
         $subjects = new Collection();
 
         foreach ($prospectuses as $prospectus)
         {
-            $subjects = $subjects->merge($prospectus->subjects);
+            $prospectusSubjects = $prospectus->subjects->filter(function($subject) use ($curriculumId) {
+                return $subject->curriculum_id == $curriculumId;
+            });
+            $subjects = $subjects->merge($prospectusSubjects);
         }
 
         return $subjects->map(fn($prospectus) => $prospectus->subject);
@@ -58,19 +61,19 @@ class Prospectus extends Model
     }
 
     // get all subjects in all preceding prospectuses.
-    public function scopeGetAllSubjectsInPrecedingProspectuses($query, $prospectus) {
+    public function scopeGetAllSubjectsInPrecedingProspectuses($query, $prospectus, $curriculumId) {
         $prospectuses = $query->getAllPrecedingProspectuses($prospectus);
 
-        return $this->pluckSubject($prospectuses);
+        return $this->pluckSubject($prospectuses, $curriculumId);
     }
 
     // get all subjects in the given program.
-    public function scopeGetAllSubjectsInProgram($query, $programId)
+    public function scopeGetAllSubjectsInProgram($query, $programId, $curriculumId)
     {
         $prospectuses = $query->where('program_id', $programId)
             ->get(['id', 'program_id']);
 
-        return $this->pluckSubject($prospectuses);
+        return $this->pluckSubject($prospectuses, $curriculumId);
     }
 
     public function subjects() { return

@@ -67,6 +67,10 @@
                         <x-jet-label value="{{ __('Classification:') }}"/>
                         <x-jet-input type="text" class="mt-1" value="{{  $registration->classification ?? 'N/A' }}" readonly/>
                     </div>
+                    <div class="col-span-3">
+                        <x-jet-label value="{{ __('Curriculum:') }}"/>
+                        <x-jet-input type="text" class="mt-1" value="{{  $registration->curriculum->code ?? 'N/A' }}" readonly/>
+                    </div>
                 </form>
             </x-slot>
 

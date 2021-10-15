@@ -56,17 +56,14 @@ class UserProfileComponent extends Component
 
         $this->fullName = $this->user->person->full_name;
 
-        if ($this->user->role->name != 'student') {
-            $this->fullName = $this->user->employee->salutation.' '.$this->user->person->full_name;
-            $this->faculty = $this->user->employee->faculty->name ?? 'N/A';
-        }
+        if ($this->user->role->name != 'student') $this->fullName = $this->user->employee->salutation.' '.$this->user->person->full_name;
 
         $this->person = $this->user->person;
         $this->detail = $this->person->detail;
         $this->country = $this->person->detail->country->name;
         $this->contact = $this->person->contact;
 
-        if ($this->user->role_id == 2) {
+        if ($this->user->role_id == 2) { \Debugbar::info($this->user->student);
             $this->guardian  = $this->user->student->guardian ?? 'N/A';
             $this->guardianPerson  = $this->user->student->guardian->person ?? 'N/A';
             $this->fullNameGuardian = $this->guardianPerson->full_name ?? 'N/A';
