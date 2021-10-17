@@ -6,6 +6,7 @@ use App\Models\AttendedSchool;
 use App\Models\Contact;
 use App\Models\Detail;
 use App\Models\Person;
+use App\Models\Program;
 use App\Models\Role;
 use App\Models\Student;
 use App\Models\User;
@@ -14,15 +15,16 @@ use Illuminate\Database\Seeder;
 class StudentSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Run the database seeds. TODO curr id
      *
      * @return void
      */
     public function run()
     {
         $role = Role::where('name', 'student')->first();
+        $programs = Program::get(['id', 'program'])->pluck('id')->toArray();
 
-        Person::factory()->count(199)->create()->each(function ($person) use ($role) {
+        Person::factory()->count(199)->create()->each(function ($person) use ($role, $programs) {
             $person->user()->save(
                 User::factory()->make([
                     'role_id' => $role->id,
@@ -33,8 +35,11 @@ class StudentSeeder extends Seeder
 
             $person->detail()->save(Detail::factory()->make());
 
+            $programAndCurriculumId = $programs[array_rand($programs)];
             $student = new Student([
                 'custom_id' => null,
+                'program_id' => $programAndCurriculumId,
+                'curriculum_id' => $programAndCurriculumId,
             ]);
             $person->user->student()->save($student);
             $person->user->student->custom_id = $person->user->student->id;

@@ -5,7 +5,7 @@
         <x-table.cell headerLabel="section" class="md:col-span-2">{{ $registration->section->name ?? 'N/A' }}</x-table.cell>
         <x-table.cell headerLabel="term" class="md:col-span-2">{{ $registration->prospectus->term->term ?? 'N/A' }}</x-table.cell>
         <x-table.cell headerLabel="grade" class="md:col-span-2">{{ $grade->value ?? 'N/A' }}</x-table.cell>
-        <x-table.cell headerLabel="mark" class="md:col-span-1">{{ $grade->mark->name ?? 'N/A' }}</x-table.cell>
+        <x-table.cell headerLabel="mark" class="md:col-span-1">{!! $grade->mark->name_element ?? 'N/A' !!}</x-table.cell>
         <x-table.cell-action>
             @can ('update', $grade)
                 <x-table.cell-button wire:click.prevent="$emit('modalViewingGrade', {{ $grade }})">

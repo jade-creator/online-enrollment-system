@@ -15,6 +15,7 @@ class ProspectusUpdateComponent extends Component
 
     public ProspectusSubject $prospectusSubject;
     public bool $viewingSubject = false;
+    public string $curriculumId = '';
     public array $preRequisiteSubjects = [], $coRequisiteSubjects = [];
     public $subjects, $preRequisites, $coRequisites;
 
@@ -55,7 +56,7 @@ class ProspectusUpdateComponent extends Component
 
         try {
             $this->authorize('update', $this->prospectusSubject);
-            (new ProspectusSubjectService())->update($this->prospectusSubject, $this->preRequisiteSubjects, $this->coRequisiteSubjects);
+            (new ProspectusSubjectService())->update($this->prospectusSubject, $this->curriculumId, $this->preRequisiteSubjects, $this->coRequisiteSubjects);
 
             $this->success($this->prospectusSubject->subject->code.' has been updated.');
             $this->toggleViewingSubject();
@@ -96,6 +97,10 @@ class ProspectusUpdateComponent extends Component
     {
         $this->resetValidation();
         $this->viewingSubject = !$this->viewingSubject;
+    }
+
+    public function updatedViewingSubject() {
+        $this->emitUp('refresh');
     }
 
     public function setSubject(ProspectusSubject $prospectusSubject) { $this->prospectusSubject = $prospectusSubject; }

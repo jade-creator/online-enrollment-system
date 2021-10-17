@@ -63,11 +63,11 @@
                                                         </a>
                                                     @endcan
 
-                                                    @can ('viewGrade', $registration)
-                                                        <x-table.cell-button title="View Grade">
-                                                            <x-icons.lock-icon/>
+                                                    <a href="{{ route('student.grades.view', ['levelId' => $registration->prospectus->level_id, 'semesterId' => $registration->prospectus->term_id]) }}">
+                                                        <x-table.cell-button title="View Prospectus">
+                                                            <x-icons.prospectus-icon/>
                                                         </x-table.cell-button>
-                                                    @endcan
+                                                    </a>
 
                                                     @can ('pay', $registration)
                                                         <a href="{{ route('student.paywithpaypal', $registration->custom_id) }}">

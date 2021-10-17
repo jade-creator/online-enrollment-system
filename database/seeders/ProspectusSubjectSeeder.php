@@ -17,13 +17,13 @@ class ProspectusSubjectSeeder extends Seeder
         DB::table('prospectus_subjects')->delete();
 
         $bsitProspectuses = DB::table('prospectuses')->where('program_id', 1)->pluck('id');
-        $subjects = DB::table('subjects')->skip(0)->take(16)->pluck('id');
+        $subjects = DB::table('subjects')->skip(0)->take(40)->pluck('id');
         $prospectusSubjects = [];
         $index = 0;
 
         foreach ($bsitProspectuses as $prospectus) {
-            for ($loop = 0; $loop <= 1; $loop++) {
-                $prospectusSubjects[] = ['prospectus_id' => $prospectus, 'subject_id' => $subjects[$index], 'unit' => 3, 'created_at' => now(), 'updated_at' => now()];
+            for ($loop = 0; $loop <= 4; $loop++) {
+                $prospectusSubjects[] = ['prospectus_id' => $prospectus, 'subject_id' => $subjects[$index], 'curriculum_id' => 1, 'unit' => 3, 'created_at' => now(), 'updated_at' => now()];
                 $index++;
             }
         }

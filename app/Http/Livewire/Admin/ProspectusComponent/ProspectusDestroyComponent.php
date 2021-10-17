@@ -13,6 +13,8 @@ class ProspectusDestroyComponent extends Component
     use AuthorizesRequests;
     use WithSweetAlert;
 
+    public string $curriculumId = '';
+
     protected $listeners = [
         'removeSubject',
         'removeConfirm',
@@ -35,7 +37,7 @@ class ProspectusDestroyComponent extends Component
         $this->authorize('destroy', $prospectusSubject);
 
         try {
-            (new ProspectusSubjectService())->destroy($prospectusSubject);
+            (new ProspectusSubjectService())->destroy($prospectusSubject, $this->curriculumId);
 
             $this->emitUp('refresh');
             $this->success($prospectusSubject->subject->code." has been deleted.");

@@ -20,11 +20,10 @@
 
                         <x-slot name="head">
                             <x-table.column-title class="col-span-2">code</x-table.column-title>
-                            <x-table.column-title class="col-span-2">title</x-table.column-title>
-                            <x-table.column-title class="col-span-2">description</x-table.column-title>
-                            <x-table.column-title class="col-span-2">unit</x-table.column-title>
-                            <x-table.column-title class="col-span-2">co requisite</x-table.column-title>
-                            <x-table.column-title class="col-span-2">pre requisite</x-table.column-title>
+                            <x-table.column-title class="col-span-3">title</x-table.column-title>
+                            <x-table.column-title class="col-span-1">unit</x-table.column-title>
+                            <x-table.column-title class="col-span-3">co requisite</x-table.column-title>
+                            <x-table.column-title class="col-span-3">pre requisite</x-table.column-title>
                         </x-slot>
 
                         <x-slot name="body">
@@ -33,10 +32,9 @@
                                     <x-table.row>
                                         <div name="slot" class="grid grid-cols-12 md:gap-2">
                                             <x-table.cell headerLabel="Code" class="justify-start md:col-span-2">{{ $prospectus_subject->subject->code ?? 'N/A' }}</x-table.cell>
-                                            <x-table.cell headerLabel="title" class="justify-start md:col-span-2">{{ $prospectus_subject->subject->title ?? 'N/A' }}</x-table.cell>
-                                            <x-table.cell headerLabel="description" class="justify-start md:col-span-2">{{ $prospectus_subject->subject->description ?? 'N/A' }}</x-table.cell>
-                                            <x-table.cell headerLabel="unit" class="justify-start md:col-span-2">{{ $prospectus_subject->unit ?? 'N/A' }}</x-table.cell>
-                                            <x-table.cell headerLabel="co requisite" class="justify-start md:col-span-2">
+                                            <x-table.cell headerLabel="title" class="justify-start md:col-span-3" title="{{ $prospectus_subject->subject->title ?? 'N/A' }}">{{ $prospectus_subject->subject->title ?? 'N/A' }}</x-table.cell>
+                                            <x-table.cell headerLabel="unit" class="justify-start md:col-span-1">{{ $prospectus_subject->unit ?? 'N/A' }}</x-table.cell>
+                                            <x-table.cell headerLabel="co requisite" class="justify-start md:col-span-3">
                                             @forelse ($prospectus_subject->corequisites as $requisite)
                                                 {{ $loop->first ? '' : ', '  }}
                                                 <span>&nbsp;{{ $requisite->code }}</span>
@@ -44,7 +42,7 @@
                                                 N/A
                                             @endforelse
                                             </x-table.cell>
-                                            <x-table.cell headerLabel="pre requisite" class="justify-start md:col-span-2">
+                                            <x-table.cell headerLabel="pre requisite" class="justify-start md:col-span-3">
                                             @forelse ($prospectus_subject->prerequisites as $requisite)
                                                 {{ $loop->first ? '' : ', '  }}
                                                 <span>&nbsp;{{ $requisite->code }}</span>

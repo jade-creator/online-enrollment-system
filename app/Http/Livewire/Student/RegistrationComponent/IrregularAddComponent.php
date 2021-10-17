@@ -14,19 +14,28 @@ class IrregularAddComponent extends Component
 {
     use AuthorizesRequests, WithSweetAlert;
 
+    public Models\Curriculum $curriculum;
     public Models\Registration $registration;
     public Models\Prospectus $prospectus;
     public array $selected = [], $selectAll = [];
-    public string $prospectusSlug, $type = '';
+    public string $prospectusSlug, $type = '', $curriculumCode = '';
     public int $prospectusId;
     public $prospectuses;
 
     public function mount(RegistrationService $registrationService)
     {
-        list($this->prospectusId, $this->type) = explode( '-', $this->prospectusSlug);
+        list($this->prospectusId, $this->type, $this->curriculumCode) = explode( '-', $this->prospectusSlug);
+
+        $this->curriculum = Models\Curriculum::where('code', $this->curriculumCode)->firstOrFail();
 
         $this->prospectus = Models\Prospectus::findOrFail($this->prospectusId);
-        $this->prospectuses = Models\Prospectus::with('subjects.prerequisites')
+        $this->prospectuses = Models\Prospectus::with([
+                'subjects' => function($query) {
+                    return $query->where('curriculum_id', $this->curriculum->id)->get();
+                },
+                'subjects.prerequisites',
+                'subjects.corequisites',
+            ])
             ->orderBy('id', 'DESC')->getAllPrecedingProspectuses($this->prospectus, TRUE);
 
         foreach ($this->prospectuses as $prospectus) {
@@ -44,7 +53,7 @@ class IrregularAddComponent extends Component
         $this->authorize('register', $this->prospectus);
 
         try {
-            $registration = (new RegistrationIrregularService())->store($this->prospectuses, auth()->user()->student->id, $this->selected);
+            $registration = (new RegistrationIrregularService())->store($this->prospectuses, auth()->user()->student->id, $this->curriculum->id, $this->selected);
 
             return redirect()->route('pre.registration.view', $registration->id);
         } catch (\Exception $e) {

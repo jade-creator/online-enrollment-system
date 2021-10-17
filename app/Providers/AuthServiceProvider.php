@@ -16,6 +16,7 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         Models\Advice::class => Policies\AdvicePolicy::class,
         Models\AttendedSchool::class => Policies\AttendedSchoolPolicy::class,
+        Models\Curriculum::class => Policies\CurriculumPolicy::class,
         Models\Faculty::class => Policies\FacultyPolicy::class,
         Models\Fee::class => Policies\FeePolicy::class,
         Models\Grade::class => Policies\GradePolicy::class,

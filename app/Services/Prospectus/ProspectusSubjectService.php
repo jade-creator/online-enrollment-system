@@ -2,13 +2,31 @@
 
 namespace App\Services\Prospectus;
 
+use App\Models\Curriculum;
 use App\Models\Prospectus;
 use App\Models\ProspectusSubject;
 
 class ProspectusSubjectService
 {
-    public function store(ProspectusSubject $prospectusSubject, string $prospectusId, array $preRequisites, array $coRequisites) : ProspectusSubject
+    /**
+     * @throws \Exception
+     */
+    public function isAllowed(string $curriculumId)
     {
+        if (empty($curriculumId)) throw new \Exception('No curriculum found!');
+
+        $curriculum = Curriculum::with('registrations')->find($curriculumId);
+
+        if (filled($curriculum) && isset($curriculum->registrations) && $curriculum->registrations->isNotEmpty()) {
+            throw new \Exception('Not Allowed! There are already students registered under this curriculum.');
+        }
+    }
+
+    public function store(ProspectusSubject $prospectusSubject, string $prospectusId, string $curriculumId, array $preRequisites, array $coRequisites) : ProspectusSubject
+    {
+        $this->isAllowed($curriculumId);
+
+        $prospectusSubject->curriculum_id = $curriculumId;
         $prospectusSubject->prospectus_id = $prospectusId;
         $prospectusSubject->save();
 
@@ -18,8 +36,10 @@ class ProspectusSubjectService
         return $prospectusSubject;
     }
 
-    public function update(ProspectusSubject $prospectusSubject, array $preRequisites, array $coRequisites) : ProspectusSubject
+    public function update(ProspectusSubject $prospectusSubject, string $curriculumId, array $preRequisites, array $coRequisites) : ProspectusSubject
     {
+        $this->isAllowed($curriculumId);
+
         $prospectusSubject->update();
 
         (new PreRequisiteService())->update($prospectusSubject, $preRequisites);
@@ -28,8 +48,10 @@ class ProspectusSubjectService
         return $prospectusSubject;
     }
 
-    public function destroy(ProspectusSubject $prospectusSubject) : bool
+    public function destroy(ProspectusSubject $prospectusSubject, string $curriculumId) : bool
     {
+        $this->isAllowed($curriculumId);
+
         return $prospectusSubject->delete();
     }
 

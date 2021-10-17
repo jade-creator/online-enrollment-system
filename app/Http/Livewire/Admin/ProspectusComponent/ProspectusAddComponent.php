@@ -15,7 +15,7 @@ class ProspectusAddComponent extends Component
 
     public ProspectusSubject $prospectusSubject;
     public bool $addingSubject = false;
-    public string $prospectusId = '';
+    public string $prospectusId = '', $curriculumId = '';
     public array $preRequisiteSubjects = [], $coRequisiteSubjects = [];
     public $subjects, $preRequisites, $coRequisites;
 
@@ -44,13 +44,19 @@ class ProspectusAddComponent extends Component
 
     public function modalAddingSubject()
     {
-        $this->resetValidation();
-        $this->fill([
-            'prospectusSubject' => new ProspectusSubject(),
-            'preRequisiteSubjects' => [],
-            'coRequisiteSubjects' => [],
-        ]);
-        $this->toggleAddingSubject();
+        try {
+            if (empty($this->curriculumId)) throw new \Exception('Please select a curriculum!');
+
+            $this->resetValidation();
+            $this->fill([
+                'prospectusSubject' => new ProspectusSubject(),
+                'preRequisiteSubjects' => [],
+                'coRequisiteSubjects' => [],
+            ]);
+            $this->toggleAddingSubject();
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
+        }
     }
 
     public function setCoRequisiteSubjects($value) { $this->coRequisiteSubjects = $value; }
@@ -63,7 +69,7 @@ class ProspectusAddComponent extends Component
 
         try {
             $this->authorize('create', ProspectusSubject::class);
-            $prospectusSubject = (new ProspectusSubjectService())->store($this->prospectusSubject, $this->prospectusId, $this->preRequisiteSubjects, $this->coRequisiteSubjects);
+            $prospectusSubject = (new ProspectusSubjectService())->store($this->prospectusSubject, $this->prospectusId, $this->curriculumId, $this->preRequisiteSubjects, $this->coRequisiteSubjects);
 
             $this->success($prospectusSubject->subject->code.' has been added.');
             $this->toggleAddingSubject();

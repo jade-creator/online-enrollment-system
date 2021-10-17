@@ -93,7 +93,7 @@
                 </x-sidebar.item>
 
                 <x-sidebar.item title="Prospectus">
-                    <x-sidebar.link routeName="student.grades.view" route="student/grades" parameter="prospectusId" value="1" name="Prospectus">
+                    <x-sidebar.link routeName="student.grades.view" route="student/grades" name="Prospectus">
                         <x-icons.prospectus-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>

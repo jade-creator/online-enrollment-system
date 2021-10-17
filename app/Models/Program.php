@@ -17,6 +17,14 @@ class Program extends BaseModel
         'year',
     ];
 
+    public function students() { return
+        $this->hasMany(Student::class);
+    }
+
+    public function curriculum() { return
+        $this->hasMany(Curriculum::class);
+    }
+
     public function faculties() { return
         $this->hasMany(Faculty::class);
     }

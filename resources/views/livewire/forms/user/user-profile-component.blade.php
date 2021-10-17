@@ -63,49 +63,58 @@
                 @endcan
             </div>
             <div class="w-full h-full pt-5 space-y-2 md:border-t">
-            @if ($user->role->name == 'student')
-                <div class="">
-                    <h1 class="font-bold">Student ID</h1>
-                    <div class="flex items-center py-2">
-                        <x-icons.id-icon />
-                        <p class="ml-3 font-bold text-indigo-500">{{ $user->student->custom_id ?? 'N/A' }}</p>
+                @if ($user->role->name == 'student')
+                    <div>
+                        <h1 class="font-bold">Student ID</h1>
+                        <div class="flex items-start py-2">
+                            <x-icons.id-icon />
+                            <p class="ml-3 font-bold text-indigo-500">{{ $user->student->custom_id ?? 'N/A' }}</p>
+                        </div>
                     </div>
-                </div>
-                @forelse ($this->registrations as $registration)
-                    @if ($loop->first)
-                        <div class="">
-                            <h1 class="font-bold">Level</h1>
-                            <div class="flex items-center py-2">
-                                <x-icons.level-icon />
-                                <p class="ml-3 font-bold text-red-500">{{ $registration->prospectus->level->level ?? 'N/A' }}</p>
-                            </div>
+                    <div>
+                        <h1 class="font-bold">Program</h1>
+                        <div class="flex items-start py-2">
+                            <x-icons.program-icon />
+                            <p class="ml-3 font-bold text-green-500">{{ $user->student->program->code ?? 'N/A' }}</p>
                         </div>
-                        <div class="">
-                            <h1 class="font-bold">Program</h1>
-                            <div class="flex items-center py-2">
-                                <x-icons.program-icon />
-                                <p class="ml-3 font-bold text-green-500">{{ $registration->prospectus->program->code ?? 'N/A' }}</p>
+                    </div>
+                    @forelse ($this->registrations as $registration)
+                        @if ($loop->first)
+                            <div class="">
+                                <h1 class="font-bold">Level</h1>
+                                <div class="flex items-start py-2">
+                                    <x-icons.level-icon />
+                                    <p class="ml-3 font-bold text-red-500">{{ $registration->prospectus->level->level ?? 'N/A' }}</p>
+                                </div>
                             </div>
+                            <div class="">
+                                <h1 class="font-bold">Term</h1>
+                                <div class="flex items-start py-2">
+                                    <x-icons.term-icon />
+                                    <p class="ml-3 font-bold text-yellow-500">{{ $registration->prospectus->term->term ?? 'N/A' }}</p>
+                                </div>
+                            </div>
+                        @endif
+                    @empty
+                    @endforelse
+                @else
+                    <div class="">
+                        <h1 class="font-bold">Employee ID <span class="text-blue-500 text-lg cursor-pointer" title="{{ $user->role->name }}">&#9432</span></h1>
+                        <div class="flex items-start py-2">
+                            <x-icons.id-icon />
+                            <p class="ml-3 font-bold text-indigo-500">{{  $this->user->employee->custom_id ?? 'N/A' }}</p>
                         </div>
-                        <div class="">
-                            <h1 class="font-bold">Term</h1>
-                            <div class="flex items-center py-2">
-                                <x-icons.term-icon />
-                                <p class="ml-3 font-bold text-yellow-500">{{ $registration->prospectus->term->term ?? 'N/A' }}</p>
+                    </div>
+                    @if ($user->role->name == 'dean' || $user->role->name == 'faculty member')
+                        <div>
+                            <h1 class="font-bold">Faculty</h1>
+                            <div class="flex items-start py-2">
+                                <x-icons.faculty-icon/>
+                                <p class="ml-3 font-bold text-green-500">{{ $this->user->employee->faculty->name ?? 'N/A' }}</p>
                             </div>
                         </div>
                     @endif
-                @empty
-                @endforelse
-            @else
-                <div class="">
-                    <h1 class="font-bold">Employee ID (<span>{{ $user->role->name }}</span>)</h1>
-                    <div class="flex items-center py-2">
-                        <x-icons.id-icon />
-                        <p class="ml-3 font-bold text-indigo-500">{{ 'ASW-@2313-ASDJS' }}</p>
-                    </div>
-                </div>
-            @endif
+                @endif
             </div>
         </div>
 
@@ -116,13 +125,6 @@
                     <x-jet-label for="fullname" value="{{ __('Fullname') }}" />
                     <x-jet-input wire:model="fullName" type="text" name="firstname" readonly/>
                 </div>
-
-                @if ($user->role->name !== 'student')
-                    <div class="mt-4 col-span-8">
-                        <x-jet-label for="faculty" value="{{ __('Faculty') }}" />
-                        <x-jet-input wire:model="faculty" type="text" name="faculty" readonly/>
-                    </div>
-                @endif
             </div>
             <div class="mt-12 mb-6 text-lg font-semibold">Other Details</div>
             <div class="grid grid-cols-8 gap-6">

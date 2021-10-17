@@ -3,6 +3,7 @@
 use App\Http\Controllers\PaypalPaymentController;
 use App\Http\Livewire\Admin\AdvisingComponent;
 use App\Http\Livewire\Admin\Dashboard;
+use App\Http\Livewire\Admin\CurriculumComponent;
 use App\Http\Livewire\Admin\FacultyComponent;
 use App\Http\Livewire\Admin\FeeComponent;
 use App\Http\Livewire\Admin\GradeComponent;
@@ -75,6 +76,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
         Route::get('/user/personal-details/employee', AdminDetailForm::class)->middleware(['detail'])->name('user.personal-details.admin');
 
         Route::group(['middleware' => ['user.detail', 'approved'], 'prefix' => 'admin', 'as' => 'admin.'], function (){
+
+            Route::group(['prefix' => 'curricula', 'as' => 'curricula.'], function (){
+                Route::get('', CurriculumComponent\CurriculumIndexComponent::class)->name('view');
+                Route::get('/create', CurriculumComponent\CurriculumAddComponent::class)->name('create');
+                Route::get('/{curriculum}/update', CurriculumComponent\CurriculumUpdateComponent::class)->name('update');
+            });
 
             Route::group(['prefix' => 'advising', 'as' => 'advising.'], function (){
                 Route::get('', AdvisingComponent\AdvisingIndexComponent::class)->name('view');
@@ -193,7 +200,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
                 Route::get('/{prospectusSlug}/irregular', RegistrationComponent\IrregularAddComponent::class)->name('irregular.create');
             });
 
-            Route::get('/grades/{prospectusId}', Student\StudentGradeViewComponent::class)->name('grades.view');
+            Route::get('/grades', Student\StudentGradeViewComponent::class)->name('grades.view');
 
             //paypal routes
             Route::get('paywithpaypal/{registrationId?}', [PaypalPaymentController::class, 'payWithPaypal'])->name('paywithpaypal');
