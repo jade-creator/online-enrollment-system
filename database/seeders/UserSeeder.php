@@ -110,6 +110,7 @@ class UserSeeder extends Seeder
                 $student = new Student([
                     'custom_id' => null,
                     'program_id' => 1,
+                    'curriculum_id' => 1,
                 ]);
                 $person->user->student()->save($student);
                 $person->user->student->custom_id = $person->user->student->id;

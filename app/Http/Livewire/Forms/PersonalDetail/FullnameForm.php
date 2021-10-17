@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Forms\PersonalDetail;
 
+use App\Models\Curriculum;
 use App\Models\Employee;
 use App\Models\Faculty;
 use App\Models\Person;
@@ -103,6 +104,9 @@ class FullnameForm extends Component
             if (auth()->user()->role->name !== 'student') {
                 $this->employee->update();
             } else {
+                $curriculum = Curriculum::findActiveCurriculum($this->student->program_id);
+
+                $this->student->curriculum_id = $curriculum->id ?? NULL;
                 $this->student->update();
             };
 

@@ -59,7 +59,15 @@ class CurriculumIndexComponent extends Livewire\Component
     public function activateOrDeactivateCurriculum()
     {
         try {
+            $curriculums = Models\Curriculum::where([
+                ['program_id', $this->curriculum->program_id],
+                ['isActive', 1]
+            ])->get();
+
             $this->curriculum->isActive = !$this->curriculum->isActive;
+
+            if ($curriculums->count() == 1 && !$this->curriculum->isActive) throw new \Exception('Unable to deactivate. At least one active curriculum per program.');
+
             $curriculum = (new CurriculumService())->store($this->curriculum);
 
             $state = $curriculum->isActive ? 'activated.' : 'deactivated.';

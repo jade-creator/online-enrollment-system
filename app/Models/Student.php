@@ -13,7 +13,12 @@ class Student extends Model
         'custom_id',
         'user_id',
         'program_id',
+        'curriculum_id',
     ];
+
+    public function curriculum() { return
+        $this->belongsTo(Curriculum::class);
+    }
 
     public function program() { return
         $this->belongsTo(Program::class);

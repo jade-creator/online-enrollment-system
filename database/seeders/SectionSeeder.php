@@ -32,7 +32,7 @@ class SectionSeeder extends Seeder
             foreach ($sectionNames as $sectionName) {
                 $room = Room::select('id')->inRandomOrder()->first();
 
-                $this->name = $prospectus->program->code . " - " . $prospectus->level->level[0] . $sectionName;
+                $this->name = $prospectus->program->code . "-" . $prospectus->level->level[0] . $sectionName;
 
                 Section::create([
                     'name' => $this->name,

@@ -16,12 +16,11 @@ class ScheduleSeeder extends Seeder
     {
         $schedules = [];
 
-        $subjects = DB::table('prospectus_subjects')->skip(0)->take(2)->pluck('id');
+        $subjects = DB::table('prospectus_subjects')->skip(0)->take(5)->pluck('id');
         $day = DB::table('days')->skip(0)->take(1)->pluck('id');
-        $section = DB::table('days')->skip(0)->take(1)->pluck('id');
 
         foreach ($subjects as $subject) {
-            $schedules[] = ['prospectus_subject_id' => $subject, 'day_id' => $day[0], 'section_id' => $section[0], 'start_time' => now(),
+            $schedules[] = ['prospectus_subject_id' => $subject, 'day_id' => $day[0], 'section_id' => 1, 'start_time' => now(),
                 'end_time' => now(), 'created_at' => now(), 'updated_at' => now()];
         }
 

@@ -15,7 +15,7 @@ use Illuminate\Database\Seeder;
 class StudentSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Run the database seeds. TODO curr id
      *
      * @return void
      */
@@ -35,9 +35,11 @@ class StudentSeeder extends Seeder
 
             $person->detail()->save(Detail::factory()->make());
 
+            $programAndCurriculumId = $programs[array_rand($programs)];
             $student = new Student([
                 'custom_id' => null,
-                'program_id' => $programs[array_rand($programs)],
+                'program_id' => $programAndCurriculumId,
+                'curriculum_id' => $programAndCurriculumId,
             ]);
             $person->user->student()->save($student);
             $person->user->student->custom_id = $person->user->student->id;

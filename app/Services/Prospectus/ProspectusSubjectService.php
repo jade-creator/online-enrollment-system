@@ -18,7 +18,7 @@ class ProspectusSubjectService
         $curriculum = Curriculum::with('registrations')->find($curriculumId);
 
         if (filled($curriculum) && isset($curriculum->registrations) && $curriculum->registrations->isNotEmpty()) {
-            throw new \Exception('Not Allowed! There are already students enrolled under this curriculum.');
+            throw new \Exception('Not Allowed! There are already students registered under this curriculum.');
         }
     }
 

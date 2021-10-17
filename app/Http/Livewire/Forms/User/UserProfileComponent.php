@@ -63,8 +63,8 @@ class UserProfileComponent extends Component
         $this->country = $this->person->detail->country->name;
         $this->contact = $this->person->contact;
 
-        if ($this->user->role_id == 2) { \Debugbar::info($this->user->student);
-            $this->guardian  = $this->user->student->guardian ?? 'N/A';
+        if ($this->user->role_id == 2) {
+            $this->guardian  = $this->user->student->guardian ?? NULL;
             $this->guardianPerson  = $this->user->student->guardian->person ?? 'N/A';
             $this->fullNameGuardian = $this->guardianPerson->full_name ?? 'N/A';
             $this->guardianContact  = $this->user->student->guardian->person->contact ?? 'N/A';

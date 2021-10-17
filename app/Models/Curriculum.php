@@ -46,6 +46,10 @@ class Curriculum extends BaseModel
         Carbon::parse($this->start_date)->format('Y').'-'.Carbon::parse($this->end_date)->format('Y');
     }
 
+    public function students() { return
+        $this->hasMany(Student::class);
+    }
+
     public function registrations() { return
         $this->hasMany(Registration::class);
     }

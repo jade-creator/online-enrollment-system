@@ -46,9 +46,9 @@ class RegistrationAddComponent extends Component
         $this->validate();
 
         try {
-            $curriculum = Models\Curriculum::findActiveCurriculum($this->programId);
+            $curriculum = auth()->user()->student->curriculum;
 
-            if (empty($curriculum)) throw new \Exception('No active curriculum! Please wait a moment or contact the admins.');
+            if (empty($curriculum)) throw new \Exception('No curriculum found! Please wait a moment or contact the admins.');
 
              $prospectus = Models\Prospectus::select('id')
                 ->findSpecificProspectus($this->programId, $this->levelId, $this->termId);

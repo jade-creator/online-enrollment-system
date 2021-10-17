@@ -200,7 +200,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
                 Route::get('/{prospectusSlug}/irregular', RegistrationComponent\IrregularAddComponent::class)->name('irregular.create');
             });
 
-            Route::get('/grades/{prospectusId}', Student\StudentGradeViewComponent::class)->name('grades.view');
+            Route::get('/grades', Student\StudentGradeViewComponent::class)->name('grades.view');
 
             //paypal routes
             Route::get('paywithpaypal/{registrationId?}', [PaypalPaymentController::class, 'payWithPaypal'])->name('paywithpaypal');

@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             RoomSeeder::class,
             StatusSeeder::class,
             MarkSeeder::class,
+            CurriculumSeeder::class,
             UserSeeder::class,
             StudentSeeder::class,
             GuardianSeeder::class,
@@ -39,7 +40,6 @@ class DatabaseSeeder extends Seeder
 //            ProspectusSubjectSeeder::class,
 //            ScheduleSeeder::class,
 //            FeeSeeder::class,
-//            CurriculumSeeder::class
         ]);
     }
 }
