@@ -135,29 +135,21 @@
                             <div class="flex items-center col-span-12 md:col-span-1 font-bold text-xs border">
                                 <p class="md:hidden w-1/2 h-full uppercase px-2 text-indigo-500 border-r flex items-center">remark</p>
                                 <p class="break-words w-1/2 md:w-full py-4 px-2">
-                                    @isset ($registration)
-                                        @if (is_array($grades) && array_key_exists($prospectus_subject->subject->id, $grades))
-                                            {!! $grades[$prospectus_subject->subject->id]['mark'] ?? 'N/A' !!}
-                                        @else
-                                            N/A
-                                        @endif
+                                    @if (is_array($grades) && array_key_exists($prospectus_subject->subject->id, $grades))
+                                        {!! $grades[$prospectus_subject->subject->id]['mark'] ?? 'N/A' !!}
                                     @else
                                         N/A
-                                    @endisset
+                                    @endif
                                 </p>
                             </div>
                             <div class="flex items-center col-span-12 md:col-span-1 font-bold text-xs border">
                                 <p class="md:hidden w-1/2 h-full uppercase px-2 text-indigo-500 border-r flex items-center">grade</p>
                                 <p class="break-words w-1/2 md:w-full py-4 px-2 bg-ye">
-                                    @isset ($registration)
-                                        @if (is_array($grades) && array_key_exists($prospectus_subject->subject->id, $grades))
-                                            {{ $grades[$prospectus_subject->subject->id]['value'] ?? 'N/A' }}
-                                        @else
-                                            N/A
-                                        @endif
+                                    @if (is_array($grades) && array_key_exists($prospectus_subject->subject->id, $grades))
+                                        {{ $grades[$prospectus_subject->subject->id]['value'] ?? 'N/A' }}
                                     @else
                                         N/A
-                                    @endisset
+                                    @endif
                                 </p>
                             </div>
                         </div>
