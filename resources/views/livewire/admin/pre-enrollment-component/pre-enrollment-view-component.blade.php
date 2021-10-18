@@ -80,7 +80,7 @@
                                 <x-table.cell-checkbox :value="$registration->id">{{ $registration->custom_id ?? 'N/A' }}</x-table.cell-checkbox>
                                 <x-table.cell headerLabel="Stud. ID" class="justify-start md:col-span-1">{{ $registration->student->custom_id ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="Full name" class="justify-start md:col-span-2">{{ $registration->student->user->person->full_name ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell headerLabel="status" class="justify-start md:col-span-2">{{ $registration->status->name ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="status" class="justify-start md:col-span-2">{!! $registration->status->name_element ?? 'N/A' !!}</x-table.cell>
                                 <x-table.cell headerLabel="program" class="justify-start md:col-span-1">{{ $registration->prospectus->program->code ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="level" class="justify-start md:col-span-1">{{ $registration->prospectus->level->level ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="sem" class="justify-start md:col-span-1">{{ $registration->prospectus->term->term ?? 'N/A' }}</x-table.cell>

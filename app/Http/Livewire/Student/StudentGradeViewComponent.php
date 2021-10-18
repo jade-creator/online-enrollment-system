@@ -48,22 +48,17 @@ class StudentGradeViewComponent extends Component
                 ['term_id', $this->semesterId],
             ])->firstOrFail();
 
-        $this->registration = Models\Registration::with(['grades.prospectus_subject.subject', 'grades.mark'])
-            ->where([
-                ['prospectus_id', '=', $this->prospectus->id],
-                ['student_id', '=', auth()->user()->student->id],
-                ['isRegular', '=', 1],
-                ['status_id', 4]
-            ])
-            ->latest('created_at')->first();
+        $registrations = Models\Registration::where('student_id', auth()->user()->student->id)
+            ->whereIn('status_id', [4,6])
+            ->get();
+        $registrationsIds = $registrations->pluck('id')->toArray();
 
-        if (filled($this->registration)) {
-            $grades = $this->registration->grades->map(function ($grade){ return
-                ['prospectusSubjectId' => $grade->prospectus_subject->subject->id, 'mark' => $grade->mark->name_element, 'value' => $grade->value ?? 'N/A'];
-            })->toArray();
+        $grades = Models\Grade::whereIn('registration_id', $registrationsIds)->get();
 
-            foreach($grades as $grade) {
-                $this->grades[$grade['prospectusSubjectId']] = $grade;
+        if (filled($registrations) && filled($grades)) {
+            foreach ($grades as $grade) {
+                $this->grades[$grade->prospectus_subject->subject->id] = ['prospectusSubjectId' => $grade->prospectus_subject->subject->id, 'mark' => $grade->mark->name_element,
+                    'value' => $grade->value ?? 'N/A'];
             }
         }
     }

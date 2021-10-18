@@ -42,7 +42,7 @@
                                 <x-table.cell headerLabel="level" class="justify-start md:col-span-2">{{ $registration->prospectus->level->level ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="term" class="justify-start md:col-span-2">{{ $registration->prospectus->term->term ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="section" class="justify-start md:col-span-2">{{ $registration->section->name ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell headerLabel="status" class="justify-start md:col-span-1">{{ $registration->status->name ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="status" class="justify-start md:col-span-1">{!! $registration->status->name_element ?? 'N/A' !!}</x-table.cell>
                                 <x-table.cell-action>
                                     @if (!count($selected) > 0)
                                         <x-jet-dropdown align="right" width="60" dropdownClasses="z-10 shadow-2xl">
