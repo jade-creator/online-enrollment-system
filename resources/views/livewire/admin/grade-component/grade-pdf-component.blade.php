@@ -1,4 +1,4 @@
-<div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
+<div class="max-w-5xl mx-auto sm:px-6 px-4 md:px-8">
     @if (isset($registration))
         <div class="py-10">
             <div class="flex items-center justify-between">
@@ -15,34 +15,34 @@
             </div>
             <x-jet-section-border/>
         </div>
+        <div x-data="{ open: true }">
+            <x-table.nested-row>
+                <x-slot name="nestedTable">
+                    <div class="md:hidden grid grid-cols-12 place-items-center py-4 bg-indigo-500">
+                        <x-table.column-title class="col-span-12"><span class="text-white">Grade</span></x-table.column-title>
+                    </div>
+                    <div class="py-4 hidden md:grid grid-cols-12 gap-2 px-4 bg-indigo-500">
+                        <x-table.column-title class="col-span-2"><span class="text-white">code</span></x-table.column-title>
+                        <x-table.column-title class="col-span-3"><span class="text-white">title</span></x-table.column-title>
+                        <x-table.column-title class="col-span-3"><span class="text-white">section</span></x-table.column-title>
+                        <x-table.column-title class="col-span-2"><span class="text-white">grade</span></x-table.column-title>
+                        <x-table.column-title class="col-span-2"><span class="text-white">mark</span></x-table.column-title>
+                    </div>
 
-        <table>
-            <tr>
-                <th>
-                    <input wire:model="selectAll" wire:loading.attr="disabled" type="checkbox" name="selectAll">
-                </th>
-                <th>subject</th>
-                <th>title</th>
-                <th>section</th>
-                <th>grade</th>
-                <th>remark</th>
-            </tr>
-            <tbody>
-                @forelse ($registration->grades as $grade)
-                   <tr>
-                       <td>
-                           <input wire:model="grades.{{ $loop->index }}.0" wire:loading.attr="disabled" type="checkbox" name="grades[{{ $loop->index }}][0]">
-                       </td>
-                       <td>{{ $grade->prospectus_subject->subject->code ?? 'N/A' }}</td>
-                       <td>{{ $grade->prospectus_subject->subject->title ?? 'N/A' }}</td>
-                       <td>{{ $registration->section->name ?? 'N/A' }}</td>
-                       <td>{{ $grade->value ?? 'N/A' }}</td>
-                       <td>{{ $grade->mark->name ?? 'N/A' }}</td>
-                   </tr>
-                @empty
-                @endforelse
-            </tbody>
-        </table>
+                    <div class="grid grid-cols-12 md:gap-2 px-4 py-4 md:py-0">
+                        @forelse ($registration->grades as $grade)
+                            <x-table.cell headerLabel="Subject" class="md:col-span-2">{{ $grade->prospectus_subject->subject->code ?? 'N/A' }}</x-table.cell>
+                            <x-table.cell headerLabel="Title" class="md:col-span-3">{{ $grade->prospectus_subject->subject->title ?? 'N/A' }}</x-table.cell>
+                            <x-table.cell headerLabel="Professor" class="md:col-span-3">{{ $registration->section->name ?? 'N/A' }}</x-table.cell>
+                            <x-table.cell headerLabel="Day" class="md:col-span-2">{{ $grade->value ?? 'N/A' }}</x-table.cell>
+                            <x-table.cell headerLabel="Start Time" class="md:col-span-2">{{ $grade->mark->name ?? 'N/A' }}</x-table.cell>
+                        @empty
+                            <x-table.no-result>No added classes yet.🤔</x-table.no-result>
+                        @endforelse
+                    </div>
+                </x-slot>
+            </x-table.nested-row>
+        </div>
         <p>Computed Grade: <span>{{ number_format($this->grade, '2', '.', '') ?? 'N/A' }}</span></p>
     @endisset
 </div>

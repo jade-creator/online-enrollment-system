@@ -1,7 +1,7 @@
 <!-- Responsive Navigation Menu -->
 <div @click="open = ! open" :class="{'w-full': open, 'lg:w-12': ! open}" class="pb-14 w-0 h-full bg-gray-500 bg-opacity-50 fixed">
 
-    <div @click.stop :class="{'w-full sm:w-1/2 lg:w-64 shadow-lg': open, 'w-0 lg:w-12': ! open}" class="overflow-y-auto overflow-x-hidden transition-width transition-slowest ease h-full bg-white border-r border-gray-200">
+    <div @click.stop :class="{'w-full sm:w-1/2 lg:w-64 shadow-lg': open, 'w-0 lg:w-12': ! open}" class="sidebar overflow-y-auto overflow-x-hidden transition-width transition-slowest ease h-full bg-white border-r border-gray-200">
         <ul class="flex flex-col h-content w-full">
             @if(auth()->user()->role->name === 'admin')
 

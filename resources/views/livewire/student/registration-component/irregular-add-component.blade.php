@@ -1,4 +1,4 @@
-<div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
+<div class="max-w-5xl mx-auto p-4 md:p-8">
     @include('partials.view-profile-button')
 
     <div class="w-full pl-0 md:pl-8">
@@ -14,70 +14,83 @@
             <x-slot name="form">
                 <div class="col-span-6" id="program-subjects">
                     <x-jet-label class="font-bold text-indigo-500 text-xs" for="subjects" value="{{ $prospectus->program->code . ' Subjects for:' }}"/>
+                    
+                    {{-- LOOP WHOLE TABLE --}}
                     @forelse ($selected as $index_S => $subjects)
+
+                        {{-- LOOP TABLE TITLE --}}
                         @forelse ($prospectuses as $index_P => $prospectus)
                             @if ($index_S == $index_P)
                                 <h1>{{ $prospectus->level->level ?? 'N/A' }}<span>{{ $prospectus->term->term ?? 'N/A' }}</span></h1>
                             @endif
                         @empty
                         @endforelse
+                        <x-table.main>
+                            <x-slot name="filter"></x-slot>
+                            <x-slot name="paginationLink"></x-slot>
+                            
+                            <x-slot name="head">
+                                <x-table.column-title class="col-span-2">
+                                    <input wire:model="selectAll.{{ $index_S }}" wire:loading.attr="disabled" type="checkbox" title="Select Displayed Subject/s">
+                                    <div class="ml-3">code</div>
+                                </x-table.column-title>
+                                <x-table.column-title class="col-span-3">title</x-table.column-title>
+                                <x-table.column-title class="col-span-3">unit</x-table.column-title>
+                                <x-table.column-title class="col-span-3">co requisite</x-table.column-title>
+                                <x-table.column-title class="col-span-3">pre requisite</x-table.column-title>
+                            </x-slot>
 
-                        <div class="mb-4 grid grid-cols-8 col-span-6">
-                            <div class="col-span-1 font-bold text-xs text-gray-400 uppercase tracking-widest text-left flex">code</div>
-                            <div class="col-span-2 font-bold text-xs text-gray-400 uppercase tracking-widest text-left">title</div>
-                            <div class="col-span-1 font-bold text-xs text-gray-400 uppercase tracking-widest text-center">unit</div>
-                            <div class="col-span-2 font-bold text-xs text-gray-400 uppercase tracking-widest text-center">co requisite</div>
-                            <div class="col-span-2 font-bold text-xs text-gray-400 uppercase tracking-widest text-center">pre requisite</div>
-                        </div>
-
-                        @forelse ($prospectuses as $index_P => $prospectus_p)
-                            @if ($index_S == $index_P)
-                                @forelse ($prospectus_p->subjects as $index_s => $prospectus_subject)
-                                    <div class="mb-2 py-2 grid grid-cols-8 gap-2 col-span-6 border-b-2 border-gray-200">
-                                        <div class="col-span-1">
-                                            <div class="flex items-center">
-                                                @if (in_array($prospectus_subject->subject_id, $origSelectedSubjects[$index_P]))
-                                                    <input wire:key="{{ $prospectus_subject->id.'-'.$loop->index }}" wire:model="selected.{{ $index_S }}.{{ $index_s }}" wire:loading.attr="disabled" type="checkbox" id="selected[{{ $index_S }}][{{ $index_s }}]" name="selected[{{ $index_S }}][{{ $index_s }}]" value="{{ $prospectus_subject->id }}">
-                                                @else
-                                                    @if (array_key_exists($prospectus_subject->subject_id, $this->grades)
-                                                        && $this->grades[$prospectus_subject->subject_id]['is_passed'] == TRUE)
-                                                        <span class="text-green-500"><x-icons.check-icon/></span>
-                                                    @else
-                                                        <span class="text-red-500"><x-icons.reject-icon/></span>
-                                                    @endif
-                                                @endif
-                                                <div class="ml-3">
-                                                    {{ $prospectus_subject->subject->code ?? 'N/A' }}
-                                                </div>
+                            <x-slot name="body">
+                                @forelse ($prospectuses as $index_P => $prospectus_p)
+                                    @if ($index_S == $index_P)
+                                        @forelse ($prospectus_p->subjects as $index_s => $prospectus_subject)
+                                            <div wire:key="table-row-{{$prospectus_subject->subject->code}}">
+                                                <x-table.row>
+                                                    <div name="slot" class="grid grid-cols-12 md:gap-2">
+                                                        <x-table.cell headerLabel="Code" class="justify-start md:col-span-2">
+                                                            <div class="flex items-center">
+                                                                @if (in_array($prospectus_subject->subject_id, $origSelectedSubjects[$index_P]))
+                                                                    <input wire:key="{{ $prospectus_subject->id.'-'.$loop->index }}" wire:model="selected.{{ $index_S }}.{{ $index_s }}" wire:loading.attr="disabled" type="checkbox" id="selected[{{ $index_S }}][{{ $index_s }}]" name="selected[{{ $index_S }}][{{ $index_s }}]" value="{{ $prospectus_subject->id }}">
+                                                                @else
+                                                                    @if (array_key_exists($prospectus_subject->subject_id, $this->grades)
+                                                                        && $this->grades[$prospectus_subject->subject_id]['is_passed'] == TRUE)
+                                                                        <span class="text-green-500"><x-icons.check-icon/></span>
+                                                                    @else
+                                                                        <span class="text-red-500"><x-icons.reject-icon/></span>
+                                                                    @endif
+                                                                @endif
+                                                                <div class="ml-3">
+                                                                    {{ $prospectus_subject->subject->code ?? 'N/A' }}
+                                                                </div>
+                                                            </div>
+                                                        </x-table.cell>
+                                                        <x-table.cell headerLabel="title" class="justify-start md:col-span-3">{{ $prospectus_subject->subject->title ?? 'N/A' }}</x-table.cell>
+                                                        <x-table.cell headerLabel="unit" class="justify-start md:col-span-3">{{ $prospectus_subject->unit ?? 'N/A' }}</x-table.cell>
+                                                        <x-table.cell headerLabel="co requisite" class="justify-start md:col-span-3">
+                                                            @forelse ($prospectus_subject->corequisites as $requisite)
+                                                                {{ $loop->first ? '' : ', '  }}
+                                                                <span>&nbsp;{{ $requisite->code }}</span>
+                                                            @empty
+                                                                N/A
+                                                            @endforelse
+                                                        </x-table.cell>
+                                                        <x-table.cell headerLabel="pre requisite" class="justify-start md:col-span-3">
+                                                            @forelse ($prospectus_subject->prerequisites as $requisite)
+                                                                {{ $loop->first ? '' : ', '  }}
+                                                                <span>&nbsp;{{ $requisite->code }}</span>
+                                                            @empty
+                                                                N/A
+                                                            @endforelse
+                                                        </x-table.cell>
+                                                    </div>
+                                                </x-table.row>
                                             </div>
-                                        </div>
-                                        <div class="col-span-2"><p class="truncate">{{ $prospectus_subject->subject->title ?? 'N/A' }}</p></div>
-                                        <div class="col-span-1 text-center">{{ $prospectus_subject->unit ?? 'N/A' }}</div>
-                                        <div class="col-span-2 text-center">
-                                            @forelse ($prospectus_subject->corequisites as $requisite)
-                                                {{ $loop->first ? '' : ', '  }}
-                                                <span>&nbsp;{{ $requisite->code }}</span>
-                                            @empty
-                                                N/A
-                                            @endforelse
-                                        </div>
-                                        <div class="col-span-2 text-center">
-                                            @forelse ($prospectus_subject->prerequisites as $requisite)
-                                                {{ $loop->first ? '' : ', '  }}
-                                                <span>&nbsp;{{ $requisite->code }}</span>
-                                            @empty
-                                                N/A
-                                            @endforelse
-                                        </div>
-                                    </div>
-                                @empty
-{{--                                    subjects--}}
-                                @endforelse
-                            @endif
-                        @empty
-{{--                            prospectus--}}
-                        @endforelse
+                                        @empty
+                                        @endforelse
+                                    @endif
+                        </x-table.main>
                     @empty
+                        <x-table.no-result>No subjects found.🤔</x-table.no-result>
                     @endforelse
                 </div>
             </x-slot>

@@ -1,4 +1,4 @@
-<div class="max-w-5xl mx-auto p-4 sm:px-6 lg:px-8 ">
+<div class="max-w-5xl mx-auto p-4 md:p-8 ">
     @include('partials.view-profile-button')
 
     <div class="flex flex-col md:flex-row">
@@ -58,7 +58,7 @@
                             <div class="col-span-6">
                                 <x-jet-label for="classification" value="{{ __('Classification') }}" />
                                 <select wire:model.defer="classification" wire:loading.attr="disabled" id="classification" class="relative w-full bg-white mt-3 pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
-                                    <option value="" selected>-- select a classification --</option>
+                                    <option value="" selected>Select a classification</option>
                                     <option value="regular">Regular</option>
                                     <option value="irregular">Irregular</option>
                                 </select>
@@ -68,7 +68,7 @@
                             <div class="col-span-6">
                                 <x-jet-label for="student_type" value="{{ __('Student Type') }}" />
                                 <select wire:model.defer="type" wire:loading.attr="disabled" id="student_type" class="relative w-full bg-white mt-3 pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
-                                    <option value="" selected>-- select student type --</option>
+                                    <option value="" selected>Select student type</option>
                                     <option value="new">New</option>
                                     <option value="old">Old</option>
                                 </select>
@@ -77,11 +77,11 @@
 
                             <div class="col-span-6">
                                 <x-jet-label for="program" value="{{ __('Program') }}" />
-                                <select wire:model.defer="programId" wire:loading.attr="disabled" id="program" aria-label="programs" class="relative w-full bg-white mt-3 pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
+                                <select wire:model.defer="programId" wire:loading.attr="disabled" id="program" aria-label="programs" class="truncate pr-5 relative w-full bg-white mt-3 pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
                                     @isset(auth()->user()->student->program_id)
                                         <option value="{{ auth()->user()->student->program_id }}">{{ auth()->user()->student->program->program ?? 'N/A' }}</option>
                                     @else
-                                        <option value="">-- select a program --</option>
+                                        <option value="">Select a program</option>
                                     @endisset
                                 </select>
                                 <x-jet-input-error for="programId" class="mt-2"/>
@@ -93,7 +93,7 @@
                                     @isset(auth()->user()->student->program->prospectuses)
                                         @forelse (auth()->user()->student->program->prospectuses as $prospectus)
                                             @if ($loop->first)
-                                                <option value="" selected>-- select a level --</option>
+                                                <option value="" selected>Select a level</option>
                                             @endif
                                             @if ($loop->odd)
                                                 <option value="{{ $prospectus->level->id }}">{{ $prospectus->level->level }}</option>
@@ -111,7 +111,7 @@
                             <div class="col-span-6">
                                 <x-jet-label for="term" value="{{ __('Semester') }}" />
                                 <select wire:model.defer="termId" wire:loading.attr="disabled" id="term" aria-label="terms" class="relative w-full bg-white mt-3 pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
-                                    <option value="" selected>-- select a sem --</option>
+                                    <option value="" selected>Select a semester</option>
                                     <option value="1">1st sem</option>
                                     <option value="2">2nd sem</option>
                                 </select>
