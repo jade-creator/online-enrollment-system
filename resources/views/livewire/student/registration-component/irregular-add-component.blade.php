@@ -14,21 +14,18 @@
             <x-slot name="form">
                 <div class="col-span-6" id="program-subjects">
                     <x-jet-label class="font-bold text-indigo-500 text-xs" for="subjects" value="{{ $prospectus->program->code . ' Subjects for:' }}"/>
-                    
+
                     {{-- LOOP WHOLE TABLE --}}
                     @forelse ($selected as $index_S => $subjects)
 
                         {{-- LOOP TABLE TITLE --}}
-                        @forelse ($prospectuses as $index_P => $prospectus)
-                            @if ($index_S == $index_P)
-                                <h1>{{ $prospectus->level->level ?? 'N/A' }}<span>{{ $prospectus->term->term ?? 'N/A' }}</span></h1>
-                            @endif
-                        @empty
-                        @endforelse
+                        @foreach ($prospectuses as $index_P => $prospectus)
+                            @if ($index_S == $index_P)<h1>{{ $prospectus->level->level ?? 'N/A' }}<span>{{ $prospectus->term->term ?? 'N/A' }}</span></h1>@endif
+                        @endforeach
                         <x-table.main>
                             <x-slot name="filter"></x-slot>
                             <x-slot name="paginationLink"></x-slot>
-                            
+
                             <x-slot name="head">
                                 <x-table.column-title class="col-span-2">
                                     <input wire:model="selectAll.{{ $index_S }}" wire:loading.attr="disabled" type="checkbox" title="Select Displayed Subject/s">
@@ -41,9 +38,9 @@
                             </x-slot>
 
                             <x-slot name="body">
-                                @forelse ($prospectuses as $index_P => $prospectus_p)
+                                @foreach ($prospectuses as $index_P => $prospectus_p)
                                     @if ($index_S == $index_P)
-                                        @forelse ($prospectus_p->subjects as $index_s => $prospectus_subject)
+                                        @foreach ($prospectus_p->subjects as $index_s => $prospectus_subject)
                                             <div wire:key="table-row-{{$prospectus_subject->subject->code}}">
                                                 <x-table.row>
                                                     <div name="slot" class="grid grid-cols-12 md:gap-2">
@@ -59,9 +56,7 @@
                                                                         <span class="text-red-500"><x-icons.reject-icon/></span>
                                                                     @endif
                                                                 @endif
-                                                                <div class="ml-3">
-                                                                    {{ $prospectus_subject->subject->code ?? 'N/A' }}
-                                                                </div>
+                                                                <div class="ml-3">{{ $prospectus_subject->subject->code ?? 'N/A' }}</div>
                                                             </div>
                                                         </x-table.cell>
                                                         <x-table.cell headerLabel="title" class="justify-start md:col-span-3">{{ $prospectus_subject->subject->title ?? 'N/A' }}</x-table.cell>
@@ -85,9 +80,10 @@
                                                     </div>
                                                 </x-table.row>
                                             </div>
-                                        @empty
-                                        @endforelse
+                                        @endforeach
                                     @endif
+                                @endforeach
+                            </x-slot>
                         </x-table.main>
                     @empty
                         <x-table.no-result>No subjects found.🤔</x-table.no-result>
