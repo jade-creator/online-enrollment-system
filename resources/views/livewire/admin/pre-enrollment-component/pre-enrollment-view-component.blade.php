@@ -51,25 +51,20 @@
                 </x-table.filter>
             </x-slot>
 
-            <x-slot name="paginationLink">
-                {{ $registrations->links('partials.pagination-link') }}
-            </x-slot>
+            <x-slot name="paginationLink">{{ $registrations->links('partials.pagination-link') }}</x-slot>
 
             <x-slot name="head">
                 <div class="col-span-2 flex items-center">
                     <input wire:model="selectPage" wire:loading.attr="disabled" type="checkbox" title="Select Displayed Data" class="mx-5">
                     <x-table.sort-button event="sortFieldSelected('id')">reg. ID</x-table.sort-button>
                 </div>
-                <x-table.column-title class="col-span-1">Stud. ID</x-table.column-title>
-                <x-table.column-title class="col-span-3">full Name</x-table.column-title>
-                <x-table.column-title class="col-span-1">status</x-table.column-title>
+                <x-table.column-title class="col-span-2">Student</x-table.column-title>
                 <x-table.column-title class="col-span-1">Program</x-table.column-title>
                 <x-table.column-title class="col-span-1">level</x-table.column-title>
                 <x-table.column-title class="col-span-1">sem</x-table.column-title>
-                <x-table.column-title class="col-span-1">section</x-table.column-title>
-                <div class="col-span-1">
-                    <x-table.sort-button event="sortFieldSelected('created_at')">latest</x-table.sort-button>
-                </div>
+                <x-table.column-title class="col-span-2">section</x-table.column-title>
+                <x-table.column-title class="col-span-2">status</x-table.column-title>
+                <div class="col-span-1"><x-table.sort-button event="sortFieldSelected('created_at')">latest</x-table.sort-button></div>
             </x-slot>
 
             <x-slot name="body">
@@ -77,20 +72,56 @@
                     <div wire:key="table-row-{{$registration->id}}">
                         <x-table.row>
                             <div name="slot" class="grid grid-cols-12 md:gap-2">
-                                <x-table.cell-checkbox :value="$registration->id">{{ $registration->custom_id ?? 'N/A' }}</x-table.cell-checkbox>
-                                <x-table.cell headerLabel="Stud. ID" class="justify-start md:col-span-1">{{ $registration->student->custom_id ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell headerLabel="Full name" class="justify-start md:col-span-3">{{ $registration->student->user->person->full_name ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell headerLabel="status" class="justify-start md:col-span-1">{!! $registration->status->name_element ?? 'N/A' !!}</x-table.cell>
+                                <x-table.cell-checkbox :value="$registration->id">
+                                    <div class="hidden md:block mx-1 flex flex-col">
+                                        @if (empty($registration->assessment))
+                                            <div class="flex items-center">
+                                                <div class="font-bold rounded-full bg-yellow-500 flex items-center justify-center" style="height: 8px; width: 8px; font-size: 5px;">&nbsp;</div>
+                                                <div class="mx-1">{{ $registration->custom_id ?? 'N/A' }}</div>
+                                            </div>
+                                            <div class="font-bold text-gray-400 text-xs pt-0.5">pending assessment</div>
+                                        @elseif (filled($registration->assessment) && $registration->assessment->grand_total == $registration->assessment->balance)
+                                            <div class="flex items-center">
+                                                <div class="font-bold rounded-full bg-blue-500 flex items-center justify-center" style="height: 8px; width: 8px; font-size: 5px;">&nbsp;</div>
+                                                <div class="mx-1">{{ $registration->custom_id ?? 'N/A' }}</div>
+                                            </div>
+                                            <div class="font-bold text-gray-400 text-xs pt-0.5">finalized assessment</div>
+                                        @elseif (filled($registration->assessment) && 1 > $registration->assessment->balance)
+                                            <div class="flex items-center">
+                                                <div class="font-bold rounded-full bg-green-500 flex items-center justify-center" style="height: 8px; width: 8px; font-size: 5px;">&nbsp;</div>
+                                                <div class="mx-1">{{ $registration->custom_id ?? 'N/A' }}</div>
+                                            </div>
+                                            <div class="font-bold text-gray-400 text-xs pt-0.5">fully paid</div>
+                                        @elseif (filled($registration->assessment) && $registration->assessment->grand_total > $registration->assessment->balance)
+                                            <div class="flex items-center">
+                                                <div class="font-bold rounded-full bg-indigo-600 flex items-center justify-center" style="height: 8px; width: 8px; font-size: 5px;">&nbsp;</div>
+                                                <div class="mx-1">{{ $registration->custom_id ?? 'N/A' }}</div>
+                                            </div>
+                                            <div class="font-bold text-gray-400 text-xs pt-0.5">partially paid</div>
+                                        @else
+                                            <div>{{ $registration->custom_id ?? 'N/A' }}</div>
+                                        @endif
+                                    </div>
+                                    <span class="block md:hidden">{{ $registration->custom_id ?? 'N/A' }}</span>
+                                </x-table.cell-checkbox>
+                                <x-table.cell headerLabel="Student" class="justify-start md:col-span-2">
+                                    @if ( Laravel\Jetstream\Jetstream::managesProfilePhotos() )
+                                        <div class="hidden md:block mr-4 flex-shrink-0"><img class="h-8 w-8 rounded-full object-cover" src="{{ $registration->student->user->profile_photo_url ?? 'N/A' }}"/></div>
+                                    @endif
+                                    <div class="flex flex-col my-2 md:my-0">
+                                        <div>{{ $registration->student->user->person->short_full_name ?? 'N/A'}}</div>
+                                        <div class="font-bold text-gray-400 text-xs pt-0.5">ID: {{ $registration->student->custom_id ?? 'N/A' }}</div>
+                                    </div>
+                                </x-table.cell>
                                 <x-table.cell headerLabel="program" class="justify-start md:col-span-1">{{ $registration->prospectus->program->code ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="level" class="justify-start md:col-span-1">{{ $registration->prospectus->level->level ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="sem" class="justify-start md:col-span-1">{{ $registration->prospectus->term->term ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell headerLabel="section" class="justify-start md:col-span-1">{{ $registration->section->name ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="section" class="justify-start md:col-span-2">{{ $registration->section->name ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="status" class="justify-start md:col-span-2">{!! $registration->status->name_element ?? 'N/A' !!}</x-table.cell>
                                 <x-table.cell-action>
                                     @if (!count($selected) > 0)
                                         <x-jet-dropdown align="right" width="60" dropdownClasses="z-10 shadow-2xl">
-                                            <x-slot name="trigger">
-                                                <x-table.cell-dropdown-trigger-btn/>
-                                            </x-slot>
+                                            <x-slot name="trigger"><x-table.cell-dropdown-trigger-btn/></x-slot>
 
                                             <x-slot name="content">
                                                 <div class="w-60">
@@ -149,9 +180,7 @@
         </x-table.bulk-action-bar>
     </div>
 
-    <div wire:loading>
-        @include('partials.loading')
-    </div>
+    <div>@include('partials.loading')</div>
 
     <livewire:admin.pre-enrollment-component.pre-enrollment-destroy-component>
 </div>

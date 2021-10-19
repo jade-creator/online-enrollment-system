@@ -39,6 +39,9 @@ class RegularAddComponent extends Component
     public function save(RegistrationService $registrationService)
     {
         try {
+            //search for duplicate regular registration.
+            (new RegistrationService())->searchDuplicate($this->prospectusId, auth()->user()->student->id);
+
             $this->authorize('register', $this->prospectus);
 
             $this->fill([
@@ -55,7 +58,12 @@ class RegularAddComponent extends Component
 
             return redirect()->route('pre.registration.view', $registration->id);
         } catch (\Exception $e) {
-            $this->error($e->getMessage());
+            $this->emit('error');
+
+            return session()->flash('alert', [
+                'type' => 'danger',
+                'message' => $e->getMessage(),
+            ]);
         }
     }
 }

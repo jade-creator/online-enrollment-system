@@ -1,5 +1,6 @@
 <div>
-    @if ((isset($registration) && $registration->status->name !== 'pending') && $registration->status->name !== 'confirming')
+    @if ((isset($registration) && $registration->status->name !== 'pending')
+            && $registration->status->name !== 'confirming' && $registration->status->name !== 'denied')
         <div class="md:w-8/12">
             <x-jet-form-section submit="">
                 <x-slot name="title">
@@ -17,124 +18,57 @@
                 <x-slot name="form">
                     <div class="col-span-6 font-bold">Details</div>
                     @isset ($registration->assessment)
-                        @forelse ($registration->fees as $index => $fee)
+                        @foreach ($registration->fees as $index => $fee)
                             <div class="col-span-6 flex items-center justify-between">
                                 <p class="text-gray-600 text-base">{{ $fee->category->name ?? 'N/A' }}</p>
                                 <p class="text-black font-semibold">{{ $fee->getFormattedPriceAttribute($fee->formatTwoDecimalPlaces($fee->pivot->total_fee)) ?? 'N/A' }}</p>
                             </div>
-
-                            @if ($loop->last)
-                                <div class="col-span-6 flex items-center justify-between">
-                                    <p class="text-gray-600 text-base">Additional Fee</p>
-                                    <p class="text-black font-semibold">{{ $assessment->getFormattedPriceAttribute($assessment->additional) ?? 'N/A' }}</p>
-                                </div>
-                                <div class="col-span-6 flex items-center justify-between">
-                                    <p class="text-gray-600 text-base">Discount Type</p>
-                                    <p class="text-black font-semibold">
-                                        @isset ($assessment->isPercentage)
-                                            {{ $assessment->discount_type ?? 'N/A' }}
-                                        @else
-                                            N/A
-                                        @endisset
-                                    </p>
-                                </div>
-                                <div class="col-span-6 flex items-center justify-between">
-                                    <p class="text-gray-600 text-base">Discount Amount</p>
-                                    <p class="text-black font-semibold">{{ $assessment->discount_amount ?? 'N/A' }}</p>
-                                </div>
-                                <div class="col-span-6">
-                                    <p class="text-gray-600 text-base">Remarks</p>
-                                    <textarea readonly>{{ $assessment->remarks ?? 'N/A' }}</textarea>
-                                </div>
-                                <div class="col-span-6 flex justify-between items-center font-bold">
-                                    <p class="text-lg text-black">Total Amount</p>
-                                    <p class="text-lg text-green-500">{{ $assessment->getFormattedPriceAttribute($assessment->grand_total) ?? 'N/A' }}</p>
-                                </div>
-                                <div class="col-span-6 flex justify-between items-center font-bold text-sm text-gray-500">
-                                    <p>Running Balance</p>
-                                    <p>{{ $fee->getFormattedPriceAttribute($assessment->balance) ?? 'N/A' }}</p>
-                                </div>
-                            @endif
-                        @empty
-                            <p>No calculated fees.</p>
-                        @endforelse
+                        @endforeach
+                        <div class="col-span-6 flex items-center justify-between">
+                            <p class="text-gray-600 text-base">Additional Fee</p>
+                            <p class="text-black font-semibold">{{ $assessment->getFormattedPriceAttribute($assessment->additional) ?? 'N/A' }}</p>
+                        </div>
+                        <div class="col-span-6 flex items-center justify-between">
+                            <p class="text-gray-600 text-base">Discount Type</p>
+                            <p class="text-black font-semibold">
+                                @isset ($assessment->isPercentage)
+                                    {{ $assessment->discount_type ?? 'N/A' }}
+                                @else
+                                    N/A
+                                @endisset
+                            </p>
+                        </div>
+                        <div class="col-span-6 flex items-center justify-between">
+                            <p class="text-gray-600 text-base">Discount Amount</p>
+                            <p class="text-black font-semibold">{{ $assessment->discount_amount ?? 'N/A' }}</p>
+                        </div>
+                        <div class="col-span-6">
+                            <p class="text-gray-600 text-base">Remarks</p>
+                            <textarea readonly>{{ $assessment->remarks ?? 'N/A' }}</textarea>
+                        </div>
+                        <div class="col-span-6 flex justify-between items-center font-bold">
+                            <p class="text-lg text-black">Total Amount</p>
+                            <p class="text-lg text-green-500">{{ $assessment->getFormattedPriceAttribute($assessment->grand_total) ?? 'N/A' }}</p>
+                        </div>
+                        <div class="col-span-6 flex justify-between items-center font-bold text-sm text-gray-500">
+                            <p>Running Balance</p>
+                            <p>{{ $assessment->getFormattedPriceAttribute($assessment->balance) ?? 'N/A' }}</p>
+                        </div>
                     @else
-                        {{--STUDENT: DISPLAY ONLY FOR INITIAL ASSESSMENT.--}}
+                        {{-- DISPLAY if no assessment found.--}}
                         @can ('submitted', $registration)
+                            {{--STUDENT SIDE--}}
                             @forelse ($registration->prospectus->program->fees as $index => $fee)
                                 <div class="col-span-6 flex items-center justify-between">
                                     <p class="text-gray-600 text-base">{{ $fee->category->name ?? 'N/A' }}</p>
                                     <p class="text-black font-semibold">{{ $fee->getFormattedPriceAttribute($fee->price) ?? 'N/A' }}</p>
                                 </div>
                             @empty
+                                <p>No added fees under this program.</p>
                             @endforelse
-                            <div class="col-span-6 flex items-center justify-between">
-                                <p class="text-gray-600 text-base">Additional Fee</p>
-                                <p class="text-black font-semibold">{{ $assessment->getFormattedPriceAttribute($assessment->additional) ?? 'N/A' }}</p>
-                            </div>
-                            <div class="col-span-6 flex items-center justify-between">
-                                <p class="text-gray-600 text-base">Discount Type</p>
-                                <p class="text-black font-semibold">
-                                    @isset ($assessment->isPercentage)
-                                        {{ $assessment->discount_type ?? 'N/A' }}
-                                    @else
-                                        N/A
-                                    @endisset
-                                </p>
-                            </div>
-                            <div class="col-span-6 flex items-center justify-between">
-                                <p class="text-gray-600 text-base">Discount Amount</p>
-                                <p class="text-black font-semibold">{{ $assessment->discount_amount ?? 'N/A' }}</p>
-                            </div>
-                            <div class="col-span-6">
-                                <p class="text-gray-600 text-base">Remarks</p>
-                                <textarea readonly>{{ $assessment->remarks ?? 'N/A' }}</textarea>
-                            </div>
-                            <div class="col-span-6 flex justify-between items-center font-bold">
-                                <p class="text-lg text-black">Total Amount</p>
-                                <p class="text-lg text-green-500">{{ $assessment->getFormattedPriceAttribute($assessment->grand_total) ?? 'N/A' }}</p>
-                            </div>
-                            <div class="col-span-6 flex justify-between items-center font-bold text-sm text-gray-500">
-                                <p>Running Balance</p>
-                                <p>{{ $assessment->getFormattedPriceAttribute($assessment->balance) ?? 'N/A' }}</p>
-                            </div>
-                        @else
-                            {{--STUDENT: DISPLAY ONLY FOR INITIAL ASSESSMENT.--}}
-                            @can ('submitted', $registration)
-                                @forelse ($registration->prospectus->program->fees as $index => $fee)
-                                    <div class="col-span-6 flex items-center justify-between">
-                                        <p class="text-gray-600 text-base">{{ $fee->category->name ?? 'N/A' }}</p>
-                                        <p class="text-black font-semibold">{{ $fee->getFormattedPriceAttribute($fee->formatTwoDecimalPlaces($fee->pivot->total_fee)) ?? 'N/A' }}</p>
-                                    </div>
-                                @empty
-                                @endforelse
-                                <div class="col-span-6 flex items-center justify-between">
-                                    <p class="text-gray-600 text-base">Additional Fee</p>
-                                    <p class="text-black font-semibold">{{ $assessment->getFormattedPriceAttribute($additional) ?? 'N/A' }}</p>
-                                </div>
-                                <div class="col-span-6 flex items-center justify-between">
-                                    <p class="text-gray-600 text-base">Discount Type</p>
-                                    <p class="text-black font-semibold">
-                                        @isset ($assessment->isPercentage)
-                                            {{ $assessment->discount_type ?? 'N/A' }}
-                                        @else
-                                            N/A
-                                        @endisset
-                                    </p>
-                                </div>
-                                <div class="col-span-6 flex items-center justify-between">
-                                    <p class="text-gray-600 text-base">Discount Amount</p>
-                                    <p class="text-black font-semibold">{{ $assessment->discount_amount ?? 'N/A' }}</p>
-                                </div>
-                                <div class="col-span-6">
-                                    <p class="text-gray-600 text-base">Remarks</p>
-                                    <textarea readonly>{{ $assessment->remarks ?? 'N/A' }}</textarea>
-                                </div>
-                                <div class="col-span-6 flex justify-between items-center font-bold">
-                                    <p class="text-lg text-black">Total Amount</p>
-                                    <p class="text-lg text-green-500">{{ $assessment->getFormattedPriceAttribute($grandTotal) ?? 'N/A' }}</p>
-                                </div>
-                            @else
+                        @elsecan('finalize', $registration)
+                            {{-- ADMIN SIDE not computed yet.--}}
+                            @if (is_null($grandTotal))
                                 @forelse ($registration->prospectus->program->fees as $fee)
                                     <div class="col-span-6 flex items-center">
                                         <input wire:model.defer="fees.{{ $fee->id }}.0" type="checkbox">
@@ -175,7 +109,43 @@
                                     <textarea wire:model.defer="assessment.remarks" wire:loading.attr="disabled" type="number" min="0"></textarea>
                                     <x-jet-input-error for="assessment.remarks" class="mt-2"/>
                                 </div>
-                            @endisset
+                            @else
+                                {{-- ADMIN SIDE computed.--}}
+                                @foreach ($registration->fees as $index => $fee)
+                                    @if ($fees[$fee->id][0] == TRUE)
+                                        <div class="col-span-6 flex items-center justify-between">
+                                            <p class="text-gray-600 text-base">{{ $fee->category->name ?? 'N/A' }}</p>
+                                            <p class="text-black font-semibold">{{ $fee->getFormattedPriceAttribute($fee->formatTwoDecimalPlaces($fee->pivot->total_fee)) ?? 'N/A' }}</p>
+                                        </div>
+                                    @endif
+                                @endforeach
+                                <div class="col-span-6 flex items-center justify-between">
+                                    <p class="text-gray-600 text-base">Additional Fee</p>
+                                    <p class="text-black font-semibold">{{ $assessment->getFormattedPriceAttribute($additional) ?? 'N/A' }}</p>
+                                </div>
+                                <div class="col-span-6 flex items-center justify-between">
+                                    <p class="text-gray-600 text-base">Discount Type</p>
+                                    <p class="text-black font-semibold">
+                                        @isset ($assessment->isPercentage)
+                                            {{ $assessment->discount_type ?? 'N/A' }}
+                                        @else
+                                            N/A
+                                        @endisset
+                                    </p>
+                                </div>
+                                <div class="col-span-6 flex items-center justify-between">
+                                    <p class="text-gray-600 text-base">Discount Amount</p>
+                                    <p class="text-black font-semibold">{{ $assessment->discount_amount ?? 'N/A' }}</p>
+                                </div>
+                                <div class="col-span-6">
+                                    <p class="text-gray-600 text-base">Remarks</p>
+                                    <textarea readonly>{{ $assessment->remarks ?? 'N/A' }}</textarea>
+                                </div>
+                                <div class="col-span-6 flex justify-between items-center font-bold">
+                                    <p class="text-lg text-black">Total Amount</p>
+                                    <p class="text-lg text-green-500">{{ $assessment->getFormattedPriceAttribute($grandTotal) ?? 'N/A' }}</p>
+                                </div>
+                            @endif
                         @endcan
                     @endisset
                 </x-slot>

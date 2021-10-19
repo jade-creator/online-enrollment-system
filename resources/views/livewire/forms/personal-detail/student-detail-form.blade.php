@@ -30,7 +30,7 @@
                 @livewire('forms.guardian.guardian-form', ['studentId' => $student->id])
                 <x-jet-section-border/>
             @endif
-            @if ($step == 5)
+            @if ($step >= 5)
                 @livewire('forms.education.education-form', ['studentId' => $student->id])
                 <x-jet-section-border/>
             @endif

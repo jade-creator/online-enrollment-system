@@ -2,11 +2,15 @@
     @if (isset($registration))
         <div class="py-10">
             <div class="flex items-center justify-between">
-                <div>
-                    <p class="font-bold text-lg"><span>{{ $registration->student->user->person->full_name ?? 'N/A' }} </span>- Pre Registration</p>
-                    <a href="{{ route('user.personal.profile.view', $registration->student->user->id) }}" title="View Profile">
-                        <p class="text-indigo-500 font-bold hover:underline text-sm">View Profile</p>
-                    </a>
+                <div class="flex items-center">
+                    <img class="border border-gray-200 mt-1 h-16 w-16 rounded-full object-cover" src="{{ $registration->student->user->profile_photo_url }}" alt="photo"/>
+
+                    <div class="mx-3">
+                        <p class="font-bold text-lg"><span>{{ $registration->student->user->person->full_name ?? 'N/A' }} </span>- Pre Registration</p>
+                        <a href="{{ route('user.personal.profile.view', $registration->student->user->id) }}" title="View Profile">
+                            <p class="text-indigo-500 font-bold hover:underline text-sm">View Profile</p>
+                        </a>
+                    </div>
                 </div>
                 @can ('exportRegistration', $registration)
                     <x-jet-button wire:click.prevent="createPdf" wire:loading.attr="disabled" class="bg-indigo-700 hover:bg-indigo-800 flex items-end">

@@ -1,6 +1,6 @@
 <x-jet-form-section submit="updateOrCreateFullname">
     <x-slot name="title">
-        {{ __('Fullname') }}
+        <span class="capitalize">{{ auth()->user()->role->name ?? 'N/A' }}</span>
     </x-slot>
 
     <x-slot name="description">
@@ -80,6 +80,34 @@
                 </select>
                 <x-jet-input-error for="student.program_id" class="mt-2"/>
             </div>
+            <div class="col-span-6">
+                <x-jet-label for="student.isRegular" value="{{ __('Student Classification') }}" />
+                <fieldset name="classification" class="w-100 flex items-center gap-2">
+                    <label for="regular" class="w-1/2 border border-gray-300 hover:border-indigo-400 rounded-md p-2 flex items-center cursor-pointer">
+                        <input wire:model="student.isRegular" wire:loading.attr="disabled" id="regular" type="radio" value="1" name="classification" class="mr-2">
+                        <label for="regular" class="cursor-pointer text-gray-600">Regular</label>
+                    </label>
+                    <label for="irregular" class="w-1/2 border border-gray-300 hover:border-indigo-400 rounded-md p-2 flex items-center cursor-pointer">
+                        <input wire:model="student.isRegular" wire:loading.attr="disabled" id="irregular" type="radio" value="0" name="classification" class="mr-2">
+                        <label for="irregular" class="cursor-pointer">Irregular</label>
+                    </label>
+                </fieldset>
+                <x-jet-input-error for="student.isRegular" class="mt-2"/>
+            </div>
+            <div class="col-span-6">
+                <x-jet-label for="student.isNew" value="{{ __('Student Type') }}" />
+                <fieldset name="type" class="w-100 flex items-center gap-2">
+                    <label for="new" class="w-1/2 border border-gray-300 hover:border-indigo-400 rounded-md p-2 flex items-center cursor-pointer">
+                        <input wire:model="student.isNew" wire:loading.attr="disabled" id="new" type="radio" value="1" name="type" class="mr-2">
+                        <label for="new" class="cursor-pointer">New</label>
+                    </label>
+                    <label for="old" class="w-1/2 border border-gray-300 hover:border-indigo-400 rounded-md p-2 flex items-center cursor-pointer">
+                        <input wire:model="student.isNew" wire:loading.attr="disabled" id="old" type="radio" value="0" name="type" class="mr-2">
+                        <label for="old" class="cursor-pointer">Old</label>
+                    </label>
+                </fieldset>
+                <x-jet-input-error for="student.isNew" class="mt-2"/>
+            </div>
         @endif
     </x-slot>
 
@@ -93,7 +121,7 @@
         </x-jet-action-message>
 
         <x-jet-button class="bg-indigo-700 hover:bg-indigo-800" wire:loading.attr="disabled">
-            {{ __('Save fullname') }}
+            {{ __('Save and Proceed') }}
         </x-jet-button>
     </x-slot>
 </x-jet-form-section>

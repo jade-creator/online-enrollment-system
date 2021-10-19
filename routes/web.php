@@ -72,7 +72,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
     });
 
     // start admin
-    Route::middleware(['role:admin|faculty member'])->group(function () {
+    Route::middleware(['role:admin'])->group(function () {
         Route::get('/user/personal-details/employee', AdminDetailForm::class)->middleware(['detail'])->name('user.personal-details.admin');
 
         Route::group(['middleware' => ['user.detail', 'approved'], 'prefix' => 'admin', 'as' => 'admin.'], function (){
@@ -174,6 +174,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
         });
     });
     //end: registrar
+
+    Route::middleware(['role:admin|registrar'])->group(function () {
+        Route::get('users/students', UserComponent\StudentIndexComponent::class)->name('users.students.index');
+    });
 
     // start: admin, registrar and student
     Route::middleware(['role:admin|registrar|student|faculty member', 'user.detail'])->group(function (){

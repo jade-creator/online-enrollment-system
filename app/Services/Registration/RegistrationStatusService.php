@@ -76,11 +76,15 @@ class RegistrationStatusService
     {
         $status = $this->findStatus('denied');
 
-        if($registration->extensions->isNotEmpty()) {
+        if ($registration->extensions->isNotEmpty()) {
             foreach ($registration->extensions as $extension) {
                 $this->reject($extension->registration);
             }
         }
+
+        if ($registration->assessment) $registration->assessment->delete();
+
+        if ($registration->transactions->isNotEmpty()) $registration->transactions->delete();
 
         return $this->setStatus($registration, $status);
     }

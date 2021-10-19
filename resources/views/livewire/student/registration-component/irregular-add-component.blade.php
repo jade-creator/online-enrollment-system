@@ -1,6 +1,11 @@
 <div class="max-w-5xl mx-auto p-4 md:p-8">
     @include('partials.view-profile-button')
 
+    @if (session()->has('alert'))
+        <x-form.alert type="{{session('alert')['type']}}">{!!session('alert')['message']!!}</x-form.alert>
+        <x-jet-section-border/>
+    @endif
+
     <div class="w-full pl-0 md:pl-8">
         <x-jet-form-section submit="">
             <x-slot name="title">
@@ -101,6 +106,10 @@
                         {{ __('Go Back') }}
                     </x-jet-secondary-button>
                 </a>
+
+                <x-jet-action-message class="mr-3 text-red-500 font-bold" on="error">
+                    {{ __('Failed! Please read the error above.') }}
+                </x-jet-action-message>
 
                 @if (empty($selected[0]))
                     <x-jet-button class="ml-2 bg-indigo-700 hover:bg-indigo-800 cursor-not-allowed" disabled="disabled">

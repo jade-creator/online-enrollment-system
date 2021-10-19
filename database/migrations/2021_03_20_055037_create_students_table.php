@@ -17,6 +17,8 @@ class CreateStudentsTable extends Migration
             $table->id();
             $table->string('custom_id')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->boolean('isRegular')->default(1);
+            $table->boolean('isNew')->default(1);
             $table->timestamps();
         });
     }

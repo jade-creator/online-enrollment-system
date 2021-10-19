@@ -82,7 +82,12 @@ class RegistrationFormButtons extends Component
         please wait for the assessment. Thank you!');
     }
 
-    public function rejectConfirm() { return
+    public function rejectConfirm()
+    {
+        if ($this->registration->assessment && $this->registration->transactions->isNotEmpty()
+            && $this->registration->assessment->grand_total > $this->registration->assessment->balance)
+                return $this->confirm('reject', "Are you sure? This action will also delete all transaction history.");
+
         $this->confirm('reject', "Are you sure? Registration's status will be rejected.");
     }
 

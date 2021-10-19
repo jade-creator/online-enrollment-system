@@ -73,7 +73,7 @@ class RegistrationService
         //attach enrolled subjects as grades on registration.
         $grades = [];
         foreach ($selected as $id) {
-            $grades[] = new Models\Grade([
+            if (isset($id) && $id != false) $grades[] = new Models\Grade([
                 'subject_id' => $id,
                 'mark_id' => $mark->id,
             ]);
@@ -82,5 +82,22 @@ class RegistrationService
         $registration->grades()->saveMany($grades);
 
         return $registration;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function searchDuplicate($prospectusId, $studentId)
+    {
+        $registrationDuplicate = Models\Registration::where([
+            ['prospectus_id', $prospectusId],
+            ['student_id', $studentId],
+            ['isExtension', 0],
+            ['isRegular', 1],
+        ])->first();
+
+        //check duplicate of enrollment.
+        if (filled($registrationDuplicate)) throw new \Exception('A registration was found for this current semester. Please refer to Registration ID: '.
+            $registrationDuplicate->custom_id.'. Duplication is not allowed!');
     }
 }

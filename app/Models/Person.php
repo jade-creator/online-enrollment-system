@@ -26,6 +26,10 @@ class Person extends Model
         "{$this->firstname} {$this->middlename} {$this->lastname} {$this->suffix}";
     }
 
+    public function getShortFullNameAttribute() { return
+        "{$this->firstname} {$this->lastname}";
+    }
+
     public function user(){
         return $this->hasOne(User::class);
     }

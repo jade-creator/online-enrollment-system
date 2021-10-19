@@ -21,6 +21,7 @@ class CreateTransactionsTable extends Migration
             $table->bigInteger('amount');
             $table->bigInteger('running_balance');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
