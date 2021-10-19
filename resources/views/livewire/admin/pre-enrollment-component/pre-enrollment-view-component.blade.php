@@ -61,8 +61,8 @@
                     <x-table.sort-button event="sortFieldSelected('id')">reg. ID</x-table.sort-button>
                 </div>
                 <x-table.column-title class="col-span-1">Stud. ID</x-table.column-title>
-                <x-table.column-title class="col-span-2">full Name</x-table.column-title>
-                <x-table.column-title class="col-span-2">status</x-table.column-title>
+                <x-table.column-title class="col-span-3">full Name</x-table.column-title>
+                <x-table.column-title class="col-span-1">status</x-table.column-title>
                 <x-table.column-title class="col-span-1">Program</x-table.column-title>
                 <x-table.column-title class="col-span-1">level</x-table.column-title>
                 <x-table.column-title class="col-span-1">sem</x-table.column-title>
@@ -79,8 +79,8 @@
                             <div name="slot" class="grid grid-cols-12 md:gap-2">
                                 <x-table.cell-checkbox :value="$registration->id">{{ $registration->custom_id ?? 'N/A' }}</x-table.cell-checkbox>
                                 <x-table.cell headerLabel="Stud. ID" class="justify-start md:col-span-1">{{ $registration->student->custom_id ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell headerLabel="Full name" class="justify-start md:col-span-2">{{ $registration->student->user->person->full_name ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell headerLabel="status" class="justify-start md:col-span-2">{!! $registration->status->name_element ?? 'N/A' !!}</x-table.cell>
+                                <x-table.cell headerLabel="Full name" class="justify-start md:col-span-3">{{ $registration->student->user->person->full_name ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="status" class="justify-start md:col-span-1">{!! $registration->status->name_element ?? 'N/A' !!}</x-table.cell>
                                 <x-table.cell headerLabel="program" class="justify-start md:col-span-1">{{ $registration->prospectus->program->code ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="level" class="justify-start md:col-span-1">{{ $registration->prospectus->level->level ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="sem" class="justify-start md:col-span-1">{{ $registration->prospectus->term->term ?? 'N/A' }}</x-table.cell>
