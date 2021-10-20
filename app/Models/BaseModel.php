@@ -15,4 +15,13 @@ class BaseModel extends Model
             return $query->whereBetween('created_at', [$dateMin, $dateMax]);
         });
     }
+
+    public function getFormattedPriceAttribute($value) { return
+        'PHP '.number_format($value, 2, '.', ',');
+    }
+
+    public function formatTwoDecimalPlaces($value) {
+        $value = $value / 100;
+        return number_format((float)$value, 2, '.', '');
+    }
 }

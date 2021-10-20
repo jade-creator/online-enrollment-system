@@ -58,14 +58,6 @@
                                                         <x-icons.view-icon/>
                                                     </x-table.cell-button>
                                                 </a>
-
-                                                @can ('exportGrade', $registration)
-                                                    <a href="{{ route(auth()->user()->role->name.'.grades.pdf', $registration->id) }}">
-                                                        <x-table.cell-button title="Grade Report">
-                                                            <x-icons.grade-icon/>
-                                                        </x-table.cell-button>
-                                                    </a>
-                                                @endcan
                                             </div>
                                         </x-slot>
                                     </x-jet-dropdown>

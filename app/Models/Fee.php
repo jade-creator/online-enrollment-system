@@ -33,14 +33,14 @@ class Fee extends BaseModel
         });
     }
 
-    public function getFormattedPriceAttribute($value) { return
-        'PHP '.number_format($value, 2, '.', ',');
-    }
-
-    public function formatTwoDecimalPlaces($value) {
-        $value = $value / 100;
-        return number_format((float)$value, 2, '.', '');
-    }
+//    public function getFormattedPriceAttribute($value) { return
+//        'PHP '.number_format($value, 2, '.', ',');
+//    }
+//
+//    public function formatTwoDecimalPlaces($value) {
+//        $value = $value / 100;
+//        return number_format((float)$value, 2, '.', '');
+//    }
 
     public function getPriceAttribute($value) { return
         $this->formatTwoDecimalPlaces($value);

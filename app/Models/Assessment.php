@@ -2,13 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Assessment extends Model
+class Assessment extends BaseModel
 {
-    use HasFactory, SoftDeletes;
+    use SoftDeletes;
 
     protected $fillable = [
         'registration_id',
@@ -20,14 +18,14 @@ class Assessment extends Model
         'remarks',
     ];
 
-    public function getFormattedPriceAttribute($value) { return
-        'PHP '.number_format($value, 2, '.', ',');
-    }
-
-    public function formatTwoDecimalPlaces($value) {
-        $value = $value / 100;
-        return number_format((float)$value, 2, '.', '');
-    }
+//    public function getFormattedPriceAttribute($value) { return
+//        'PHP '.number_format($value, 2, '.', ',');
+//    }
+//
+//    public function formatTwoDecimalPlaces($value) {
+//        $value = $value / 100;
+//        return number_format((float)$value, 2, '.', '');
+//    }
 
     public function getPaidAmountAttribute()
     {

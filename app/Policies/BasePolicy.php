@@ -19,6 +19,7 @@ class BasePolicy
             'create' => ['admin', 'registrar'],
         ],
         'registration' => [
+            'edit' => ['admin', 'registrar'],
             'enroll' => ['admin', 'registrar'],
             'reject' => ['admin', 'registrar'],
             'confirm' => ['admin', 'registrar'],
@@ -29,6 +30,12 @@ class BasePolicy
         'grade' => [
             'update' => ['admin', 'registrar'],
         ],
+        'person' => [
+            'view' => ['admin', 'registrar', 'dean', 'faculty member'],
+        ],
+        'prospectus' => [
+            'register' => ['admin', 'student', 'registrar'],
+        ]
     ];
 
     public function isAuthorized(string $policy, string $action, User $user) : bool

@@ -28,8 +28,9 @@ class RegistrationService
 
         if (is_array($subjectsEnrolled)
             && is_array($schedules)
-            && count($subjectsEnrolled) == count($schedules)
-            && array_diff($subjectsEnrolled, $schedules) === array_diff($schedules, $subjectsEnrolled)) return TRUE;
+            && array_intersect($subjectsEnrolled, $schedules) == $subjectsEnrolled) return TRUE;
+//            && count($subjectsEnrolled) == count($schedules)
+//            && array_diff($subjectsEnrolled, $schedules) === array_diff($schedules, $subjectsEnrolled)) return TRUE;
 
         return FALSE;
     }
@@ -99,5 +100,15 @@ class RegistrationService
         //check duplicate of enrollment.
         if (filled($registrationDuplicate)) throw new \Exception('A registration was found for this current semester. Please refer to Registration ID: '.
             $registrationDuplicate->custom_id.'. Duplication is not allowed!');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function update(array $selected, Models\Registration $registration) : Models\Registration
+    {
+        if ($registration->grades->isNotEmpty()) $registration->grades()->delete();
+
+        return $this->store($selected, $registration);
     }
 }

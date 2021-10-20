@@ -4,6 +4,8 @@ namespace App\Models;
 
 class Student extends BaseModel
 {
+    use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
+
     protected $fillable = [
         'custom_id',
         'user_id',
@@ -22,6 +24,10 @@ class Student extends BaseModel
         'isRegular' => true,
         'isNew' => true,
     ];
+
+    public function grandTotal() { return
+        $this->hasManyDeep( Assessment::class, [Registration::class]);
+    }
 
     public function curriculum() { return
         $this->belongsTo(Curriculum::class);

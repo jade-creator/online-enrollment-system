@@ -30,6 +30,15 @@ class RegistrationViewComponent extends Component
     {
         $this->registration = Registration::preRegistered($this->regId);
 
+        if ( (auth()->user()->role->name == 'admin' || auth()->user()->role->name == 'registrar')
+                && filled($this->registration) && $this->registration->status->name == 'confirming') {
+
+            session()->flash('alert', [
+                'type' => 'info',
+                'message' => 'NOTE: Please review the registration before confirming.',
+            ]);
+        }
+
         $this->authorize('view', $this->registration);
 
         $this->totalUnit = $this->registration->total_unit;

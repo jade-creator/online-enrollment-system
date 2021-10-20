@@ -18,8 +18,21 @@
                         <span>{{ __('Export as PDF')}}</span>
                     </x-jet-button>
                 @endcan
+
+                @can ('edit', $registration)
+                    <a href="{{ route('admin.students.registration.create', ['student' => $registration->student, 'registration' => $registration]) }}">
+                        <x-jet-button class="bg-indigo-700 hover:bg-indigo-800 flex items-end">
+                            <x-icons.edit-icon/>
+                            <span class="mx-2">{{ __('Edit')}}</span>
+                        </x-jet-button>
+                    </a>
+                @endcan
             </div>
             <x-jet-section-border/>
+
+            @if (session()->has('alert'))
+                <x-form.alert type="{{session('alert')['type']}}">{!!session()->pull('alert')['message']!!}</x-form.alert>
+            @endif
         </div>
 
         {{-- PRE-REGISTRATION INFO    --}}
@@ -100,7 +113,7 @@
                     </div>
                     <div class="col-span-3">
                         <x-jet-label value="{{ __('Type:') }}"/>
-                        <x-jet-input type="text" class="mt-1" value="{{ $registration->is_new ?? 'N/A' }}" readonly/>
+                        <x-jet-input type="text" class="mt-1" value="{{ $registration->isNew ?? 'N/A' }}" readonly/>
                     </div>
                     <div class="col-span-3">
                         <x-jet-label value="{{ __('Name:') }}"/>

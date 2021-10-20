@@ -15,7 +15,6 @@ class StudentIndexComponent extends Livewire\Component
 
     public Models\Student $student;
     public int $paginateValue = 10;
-//    public string $isRegular = '', $isNew = ''; TODO
 
     protected $queryString = [
         'search' => [ 'except' => '' ],
@@ -46,12 +45,15 @@ class StudentIndexComponent extends Livewire\Component
     public function getRowsQueryProperty()
     {
         return Models\Student::search($this->search)
-            ->with('user')
+            ->with(['user.person', 'grandTotal'])
             ->when(filled($this->search), function ($query) {
                 return $query->orWhereHas('user', function ($query) {
-                    return $query->where('name', $this->search)
-                        ->orWhere('email', $this->search);
-                });
+                        return $query->where('email', $this->search);
+                    })->orWhereHas('user.person', function ($query) {
+                        return $query->where('firstname', $this->search)
+                            ->orWhere('middlename', $this->search)
+                            ->orWhere('lastname', $this->search);
+                    });
             })
             ->orderBy($this->sortBy, $this->sortDirection)
             ->dateFiltered($this->dateMin, $this->dateMax);

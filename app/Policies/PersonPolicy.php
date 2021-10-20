@@ -6,7 +6,7 @@ use App\Models\User;
 use App\Models\Person;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class PersonPolicy
+class PersonPolicy extends BasePolicy
 {
     use HandlesAuthorization;
 
@@ -18,7 +18,7 @@ class PersonPolicy
      * @return mixed
      */
     public function view(User $user, Person $person) { return
-        $user->role->name == 'admin' || $person->id == $user->person_id;
+        $this->isAuthorized('person', 'view', $user) || $person->id == $user->person_id;
     }
 
     public function update(User $user, Person $person) { return

@@ -15,7 +15,7 @@ class LoginResponse implements LoginResponseContract
                 break;
 
             case 'registrar':
-                return '/registrar/pre-enrollments';
+                return '/pre-enrollments';
                 break;
 
             case 'student':

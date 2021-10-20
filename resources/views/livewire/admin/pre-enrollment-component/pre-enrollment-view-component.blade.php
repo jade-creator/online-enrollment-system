@@ -1,12 +1,7 @@
 <div class="w-full">
 
     <div class="h-content w-full p-4 md:p-8">
-        <x-table.title tableTitle="Pre Registrations">
-            <x-jet-secondary-button class="flex items-center">
-                <x-icons.release-icon/>
-                <p class="pl-2">{{ __('Archives')}}</p>
-            </x-jet-secondary-button>
-        </x-table.title>
+        <x-table.title tableTitle="Pre Registrations"></x-table.title>
 
         <x-table.main>
             <x-slot name="filter">
@@ -137,7 +132,7 @@
                                                     @endcan
 
                                                     @can ('viewGrade', $registration)
-                                                        <a href="{{ route(auth()->user()->role->name.'.grades.view', ['search' => $registration->custom_id]) }}">
+                                                        <a href="{{ route('admin.grades.view', ['search' => $registration->custom_id]) }}">
                                                             <x-table.cell-button title="Grading">
                                                                 <x-icons.grade-icon/>
                                                             </x-table.cell-button>

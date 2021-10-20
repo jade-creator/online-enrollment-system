@@ -12,7 +12,7 @@
                 </x-sidebar.item>
 
                 <x-sidebar.item title="Pre Enrollment">
-                    <x-sidebar.link routeName="admin.pre.enrollments.view" route="admin/pre-enrollments" name="Pre Enrollment">
+                    <x-sidebar.link routeName="admin.pre.enrollments.view" route="pre-enrollments" name="Pre Enrollment">
                         <x-icons.pre-enrollment-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>
@@ -30,7 +30,7 @@
                 </x-sidebar.item>
 
                 <x-sidebar.item title="Grades">
-                    <x-sidebar.link routeName="admin.grades.view" route="admin/grades" name="Grades">
+                    <x-sidebar.link routeName="admin.grades.view" route="grades" name="Grades">
                         <x-icons.grade-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>
