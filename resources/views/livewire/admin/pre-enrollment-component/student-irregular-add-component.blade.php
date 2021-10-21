@@ -1,15 +1,28 @@
 <div class="max-w-5xl mx-auto p-4 md:p-8">
-    @include('partials.view-profile-button')
+    <div class="pt-10 pb-5 flex items-center justify-between">
+        @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
+            <div class="flex items-start">
+                <img class="border border-gray-200 mt-1 h-16 w-16 rounded-full object-cover" src="{{ $student->user->profile_photo_url }}" alt="photo"/>
+                <div class="px-6 py-2 flex flex-col text-2xl">
+                    <h2>{{ $student->user->person->full_name ?? 'N/A' }}</h2>
+                    <a href="{{ route('users.students.index', ['search' => $student->custom_id]) }}">
+                        <p class="text-indigo-500 font-bold text-sm hover:underline">Student ID: {{ $student->custom_id ?? 'N/A' }}</p>
+                    </a>
+                </div>
+            </div>
+        @endif
 
-    @if (session()->has('alert'))
-        <x-form.alert type="{{session('alert')['type']}}">{!!session('alert')['message']!!}</x-form.alert>
-        <x-jet-section-border/>
-    @endif
+        <a href="{{ route('user.personal.profile.view', ['userId' => $student->user->id]) }}">
+            <x-jet-secondary-button class="">
+                {{ __('View profile')}}
+            </x-jet-secondary-button>
+        </a>
+    </div>
 
     <div class="w-full pl-0 md:pl-8">
         <x-jet-form-section submit="">
             <x-slot name="title">
-                {{ __('Pre Registration') }}
+                <span>Pre Registration @if (filled($registration)) - {{ $registration->custom_id }} @endif</span>
             </x-slot>
 
             <x-slot name="description">
@@ -52,7 +65,7 @@
                                                             <x-table.cell headerLabel="Code" class="justify-start md:col-span-2">
                                                                 <div class="flex items-center">
                                                                     @if (in_array($prospectus_subject->subject_id, $origSelectedSubjects[$index_P]))
-                                                                        <input wire:key="{{ $prospectus_subject->id.'-'.$loop->index }}" wire:model="selected.{{ $index_S }}.{{ $index_s }}" wire:loading.attr="disabled" type="checkbox" id="selected[{{ $index_S }}][{{ $index_s }}]" name="selected[{{ $index_S }}][{{ $index_s }}]" value="{{ $prospectus_subject->id }}">
+                                                                        <input wire:key="{{ $prospectus_subject->id.'-'.$loop->index }}" wire:model.defer="selected.{{ $index_S }}.{{ $index_s }}" wire:loading.attr="disabled" type="checkbox" id="selected[{{ $index_S }}][{{ $index_s }}]" name="selected[{{ $index_S }}][{{ $index_s }}]" value="{{ $prospectus_subject->id }}">
                                                                     @else
                                                                         @if (array_key_exists($prospectus_subject->subject_id, $this->grades)
                                                                             && $this->grades[$prospectus_subject->subject_id]['is_passed'] == TRUE)
@@ -98,29 +111,27 @@
             </x-slot>
 
             <x-slot name="actions">
-                <a href="{{ route('student.registrations.create') }}">
+                <a href="{{ route('admin.students.registration.create', ['student' => $registration->student ?? $student, 'registration' => $registration]) }}">
                     <x-jet-secondary-button class="hover:bg-indigo-100">
                         {{ __('Go Back') }}
                     </x-jet-secondary-button>
                 </a>
 
-                <x-jet-action-message class="mr-3 text-red-500 font-bold" on="error">
-                    {{ __('Failed! Please read the error above.') }}
-                </x-jet-action-message>
-
-                @if (empty($selected[0]))
-                    <x-jet-button class="ml-2 bg-indigo-700 hover:bg-indigo-800 cursor-not-allowed" disabled="disabled">
+                @can ('register', $prospectus)
+                    <x-jet-button wire:click.prevent="save" class="ml-2 bg-indigo-700 hover:bg-indigo-800">
                         {{ __('Register') }}
                     </x-jet-button>
-                @else
-                    @can ('register', $prospectus)
-                        <x-jet-button wire:click.prevent="save" class="ml-2 bg-indigo-700 hover:bg-indigo-800">
-                            {{ __('Register') }}
-                        </x-jet-button>
-                    @endcan
-                @endif
+                @endcan
             </x-slot>
         </x-jet-form-section>
         <x-jet-section-border/>
     </div>
+
+    @if (session()->has('alert'))
+        <x-form.alert type="{{session('alert')['type']}}">{!!session()->pull('alert')['message']!!}</x-form.alert>
+    @endif
+
+    @push('scripts')
+        <script src="{{ asset('js/alert.js') }}"></script>
+    @endpush
 </div>

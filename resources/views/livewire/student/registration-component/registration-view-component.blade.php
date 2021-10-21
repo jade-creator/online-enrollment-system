@@ -6,7 +6,7 @@
                     <img class="border border-gray-200 mt-1 h-16 w-16 rounded-full object-cover" src="{{ $registration->student->user->profile_photo_url }}" alt="photo"/>
 
                     <div class="mx-3">
-                        <p class="font-bold text-lg"><span>{{ $registration->student->user->person->full_name ?? 'N/A' }} </span>- Pre Registration</p>
+                        <p class="font-bold text-lg"><span>{{ $registration->student->user->person->full_name ?? 'N/A' }} </span>- Pre Registration </p>
                         <a href="{{ route('user.personal.profile.view', $registration->student->user->id) }}" title="View Profile">
                             <p class="text-indigo-500 font-bold hover:underline text-sm">View Profile</p>
                         </a>
@@ -29,10 +29,6 @@
                 @endcan
             </div>
             <x-jet-section-border/>
-
-            @if (session()->has('alert'))
-                <x-form.alert type="{{session('alert')['type']}}">{!!session()->pull('alert')['message']!!}</x-form.alert>
-            @endif
         </div>
 
         {{-- PRE-REGISTRATION INFO    --}}
@@ -166,11 +162,11 @@
         <livewire:student.schedule-component.schedule-index-component :registration="$registration" key="{{ 'student-schedule-index-component-'.now() }}"/>
 
             {{-- DISPLAY ONLY FOR EXTENDED REGISTRATION/IRREGULAR STUDENT'S REGISTRATION --}}
-            @forelse ($registration->extensions as $index => $extension)
-                <livewire:student.schedule-component.schedule-index-component :registration="$extension->registration" key="{{ 'student-schedule-index-component-'.$index.'-'.now() }}"/>
-            @empty
-                {{-- DISPLAY NOTHING IF NOT EXTENDED/REGULAR STUDENT'S REGISTRATION --}}
-            @endforelse
+            @foreach ($registration->extensions as $index => $extension)
+                @if ($extension->registration->grades->isNotEmpty())
+                    <livewire:student.schedule-component.schedule-index-component :registration="$extension->registration" key="{{ 'student-schedule-index-component-'.$index.'-'.now() }}"/>
+                @endif
+            @endforeach
 
         {{-- ASSESSMENT OF FEES --}}
         <livewire:student.assessment-component.assessment-index-component :registration="$registration" :totalUnit="$totalUnit" key="{{ 'student-assessment-index-component'.now() }}"/>
@@ -182,7 +178,13 @@
         <livewire:partials.select-section-form key="{{ 'select-section-form-'.now() }}">
     @endif
 
-    <div wire:loading>
-        @include('partials.loading')
-    </div>
+    <div>@include('partials.loading')</div>
+
+    @if (session()->has('alert'))
+        <x-form.alert type="{{session('alert')['type']}}">{!!session()->pull('alert')['message']!!}</x-form.alert>
+    @endif
+
+    @push('scripts')
+        <script src="{{ asset('js/alert.js') }}"></script>
+    @endpush
 </div>

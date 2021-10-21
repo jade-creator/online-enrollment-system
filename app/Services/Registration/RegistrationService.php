@@ -29,8 +29,6 @@ class RegistrationService
         if (is_array($subjectsEnrolled)
             && is_array($schedules)
             && array_intersect($subjectsEnrolled, $schedules) == $subjectsEnrolled) return TRUE;
-//            && count($subjectsEnrolled) == count($schedules)
-//            && array_diff($subjectsEnrolled, $schedules) === array_diff($schedules, $subjectsEnrolled)) return TRUE;
 
         return FALSE;
     }
@@ -74,7 +72,7 @@ class RegistrationService
         //attach enrolled subjects as grades on registration.
         $grades = [];
         foreach ($selected as $id) {
-            if (isset($id) && $id != false) $grades[] = new Models\Grade([
+            if (isset($id) && $id != FALSE) $grades[] = new Models\Grade([
                 'subject_id' => $id,
                 'mark_id' => $mark->id,
             ]);
@@ -107,8 +105,23 @@ class RegistrationService
      */
     public function update(array $selected, Models\Registration $registration) : Models\Registration
     {
-        if ($registration->grades->isNotEmpty()) $registration->grades()->delete();
+        $registration = $this->detachGrades($registration);
 
         return $this->store($selected, $registration);
+    }
+
+    public function detachGrades(Models\Registration $registration) : Models\Registration
+    {
+        if ($registration->grades->isNotEmpty()) $registration->grades()->delete();
+
+        if ($registration->extensions->isNotEmpty()) {
+            foreach ($registration->extensions as $extension) {
+                $this->detachGrades($extension->registration);
+                $extension->delete();
+                $extension->registration->delete();
+            }
+        }
+
+        return $registration;
     }
 }

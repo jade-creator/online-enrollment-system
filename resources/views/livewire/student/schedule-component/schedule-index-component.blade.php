@@ -9,9 +9,7 @@
                 </div>
             </x-slot>
 
-            <x-slot name="description">
-                {{-- OPTIONAL --}}
-            </x-slot>
+            <x-slot name="description"></x-slot>
 
             <x-slot name="form">
                 <div class="col-span-6">
@@ -26,15 +24,17 @@
                                 <x-table.column-title class="col-span-3">co requisite</x-table.column-title>
                                 <x-table.column-title class="col-span-3">pre requisite</x-table.column-title>
                             </x-slot>
-                        @else 
+                        @else
                             <x-slot name="head">
-                                <x-table.column-title class="col-span-1">code</x-table.column-title>
-                                <x-table.column-title class="col-span-2">title</x-table.column-title>
-                                <x-table.column-title class="col-span-2">professor</x-table.column-title>
+                                <x-table.column-title class="col-span-2">subject</x-table.column-title>
+                                @if (auth()->user()->role->name == 'student')
+                                    <x-table.column-title class="col-span-3">title</x-table.column-title>
+                                @else
+                                    <x-table.column-title class="col-span-3">professor</x-table.column-title>
+                                @endif
                                 <x-table.column-title class="col-span-2">section</x-table.column-title>
-                                <x-table.column-title class="col-span-1">day</x-table.column-title>
-                                <x-table.column-title class="col-span-2">start time</x-table.column-title>
-                                <x-table.column-title class="col-span-1">end time</x-table.column-title>
+                                <x-table.column-title class="col-span-2">day</x-table.column-title>
+                                <x-table.column-title class="col-span-2">time</x-table.column-title>
                                 <x-table.column-title class="col-span-1">unit</x-table.column-title>
                             </x-slot>
                         @endif
@@ -76,14 +76,23 @@
                                     <div wire:key="table-row-{{$schedule->prospectusSubject->subject->code}}">
                                         <x-table.row>
                                             <div name="slot" class="grid grid-cols-12 md:gap-2">
-                                                <x-table.cell headerLabel="code" class="md:col-span-1">{{ $schedule->prospectusSubject->subject->code ?? 'N/A' }}</x-table.cell>
-                                                <x-table.cell headerLabel="title" class="truncate md:col-span-2">{{ $schedule->prospectusSubject->subject->title ?? 'N/A' }}</x-table.cell>
-                                                <x-table.cell headerLabel="professor" class="truncate md:col-span-2">{{ $schedule->employee->user->person->full_name ?? 'N/A' }}</x-table.cell>
+                                                <x-table.cell headerLabel="code" class="md:col-span-2">{{ $schedule->prospectusSubject->subject->code ?? 'N/A' }}</x-table.cell>
+                                                @if (auth()->user()->role->name == 'student')
+                                                    <x-table.cell headerLabel="title" class="truncate md:col-span-3">{{ $schedule->prospectusSubject->subject->title ?? 'N/A' }}</x-table.cell>
+                                                @else
+                                                    <x-table.cell headerLabel="professor" class="truncate md:col-span-3">
+                                                        <span>{{ $schedule->employee->user->salutation ?? '' }}</span>
+                                                        <span>{{ $schedule->employee->user->person->full_name ?? 'N/A' }}</span>
+                                                    </x-table.cell>
+                                                @endif
                                                 <x-table.cell headerLabel="section" class="md:col-span-2">{{ $schedule->section->name ?? 'N/A' }}</x-table.cell>
-                                                <x-table.cell headerLabel="day" class="md:col-span-1">{{ $schedule->day->name ?? 'N/A' }}</x-table.cell>
-                                                <x-table.cell headerLabel="start time" class="md:col-span-2">{{ \Carbon\Carbon::parse($schedule->start_time)->format('g: ia') ?? 'N/A' }}</x-table.cell>
-                                                <x-table.cell headerLabel="end time" class="md:col-span-1">{{ \Carbon\Carbon::parse($schedule->end_time)->format('g: ia') ?? 'N/A' }}</x-table.cell>
-                                                <x-table.cell headerLabel="unit" class="md:col-span-1">{{ $schedule->prospectusSubject->unit ?? 'N/A' }}</x-table.cell>
+                                                <x-table.cell headerLabel="day" class="md:col-span-2">{{ $schedule->day->name ?? 'N/A' }}</x-table.cell>
+                                                <x-table.cell headerLabel="time" class="md:col-span-2">
+                                                    <span>{{ \Carbon\Carbon::parse($schedule->start_time)->format('g: ia') ?? 'N/A' }}</span>
+                                                    <span>-</span>
+                                                    <span>{{ \Carbon\Carbon::parse($schedule->end_time)->format('g: ia') ?? 'N/A' }}</span>
+                                                </x-table.cell>
+                                                <x-table.cell headerLabel="unit" class="md:col-span-1 justify-center">{{ $schedule->prospectusSubject->unit ?? 'N/A' }}</x-table.cell>
                                             </div>
                                         </x-table.row>
                                     </div>

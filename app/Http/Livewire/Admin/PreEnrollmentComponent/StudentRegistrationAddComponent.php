@@ -38,8 +38,8 @@ class StudentRegistrationAddComponent extends Component
     {
         if (is_null($this->registration)) {
             $this->fill([
-                'classification' => $this->student->isRegular ? 'regular' : 'irregular',
-                'type' => $this->student->isNew ? 'new' : 'old',
+                'classification' => $this->student->isRegular == 'Regular' ? 'regular' : 'irregular',
+                'type' => $this->student->isNew == 'New' ? 'new' : 'old',
                 'programId' => $this->student->program_id ?? '',
                 'programName' => $this->student->program->program ?? 'N/A',
             ]);
@@ -84,12 +84,16 @@ class StudentRegistrationAddComponent extends Component
             return redirect()->route('admin.students.'.$this->classification.'.create', ['student' => $this->student,
                 'prospectusSlug' => $prospectus->id.'-'.$this->type.'-'.$curriculum->code, 'registration' => $this->registration]);
         } catch (\Exception $e) {
-            $this->emit('error');
-
-            return session()->flash('alert', [
+            session()->flash('alert', [
                 'type' => 'danger',
                 'message' => $e->getMessage(),
             ]);
+
+            return $this->emit('alert');
         }
     }
+
+    public function updatedClassification($value) { if ($value == 'irregular') $this->type = 'old'; }
+
+    public function updatedType($value) { if ($value == 'new') $this->classification = 'regular'; }
 }

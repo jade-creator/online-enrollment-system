@@ -37,6 +37,8 @@ class RegistrationViewComponent extends Component
                 'type' => 'info',
                 'message' => 'NOTE: Please review the registration before confirming.',
             ]);
+
+            $this->emit('alert');
         }
 
         $this->authorize('view', $this->registration);

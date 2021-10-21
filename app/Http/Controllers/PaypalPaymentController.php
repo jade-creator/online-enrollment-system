@@ -46,7 +46,7 @@ class PaypalPaymentController extends Controller
 
     public function payWithPaypal($registrationId = null)
     {
-        $this->registration = Registration::with('assessment')->where('custom_id', $registrationId)->first();
+        $this->registration = Registration::with(['prospectus', 'assessment'])->where('custom_id', $registrationId)->first();
 
         $this->authorize('pay', $this->registration);
         if (is_null($this->registration)) return redirect()->route('student.payments.view');
@@ -161,12 +161,12 @@ class PaypalPaymentController extends Controller
             ]);
         }
 
-        $payment = Payment::get($payment_id, $this->_api_context);
-        $execution = new PaymentExecution();
-        $execution->setPayerId($request->input('PayerID'));
-        $result = $payment->execute($execution, $this->_api_context);
-
         try {
+            $payment = Payment::get($payment_id, $this->_api_context);
+            $execution = new PaymentExecution();
+            $execution->setPayerId($request->input('PayerID'));
+            $result = $payment->execute($execution, $this->_api_context);
+
             $transactions = $payment->getTransactions();
             $relatedResources = $transactions[0]->getRelatedResources();
             $sale = $relatedResources[0]->getSale();

@@ -64,14 +64,16 @@ class RegistrationAddComponent extends Component
                 ->findSpecificProspectus($this->programId, $this->levelId, $this->termId);
             (new RegistrationService())->searchDuplicate($prospectus->id, auth()->user()->student->id);
 
+            $this->emit('saved');
+
             return redirect()->route('student.registrations.'.$this->classification.'.create', $prospectus->id.'-'.$this->type.'-'.$curriculum->code);
         } catch (\Exception $e) {
-            $this->emit('error');
-
-            return session()->flash('alert', [
+            session()->flash('alert', [
                 'type' => 'danger',
                 'message' => $e->getMessage(),
             ]);
+
+            return $this->emit('alert');
         }
     }
 

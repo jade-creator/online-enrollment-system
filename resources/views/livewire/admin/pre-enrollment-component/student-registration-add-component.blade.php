@@ -82,7 +82,7 @@
                     <x-slot name="form">
                         <div class="col-span-6">
                             <x-jet-label for="classification" value="{{ __('Classification') }}" />
-                            <select wire:model.defer="classification" wire:loading.attr="disabled" id="classification" class="relative w-full bg-white mt-3 pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
+                            <select wire:model="classification" wire:loading.attr="disabled" id="classification" class="relative w-full bg-white mt-3 pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
                                 <option value="">Select a classification</option>
                                 <option value="regular">Regular</option>
                                 <option value="irregular">Irregular</option>
@@ -92,7 +92,7 @@
 
                         <div class="col-span-6">
                             <x-jet-label for="student_type" value="{{ __('Student Type') }}" />
-                            <select wire:model.defer="type" wire:loading.attr="disabled" id="student_type" class="relative w-full bg-white mt-3 pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
+                            <select wire:model="type" wire:loading.attr="disabled" id="student_type" class="relative w-full bg-white mt-3 pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
                                 <option value="">Select student type</option>
                                 <option value="new">New</option>
                                 <option value="old">Old</option>
@@ -142,10 +142,6 @@
                             {{ __('Redirecting...') }}
                         </x-jet-action-message>
 
-                        <x-jet-action-message class="mr-3 text-red-500 font-bold w-full" on="error">
-                            {{ __('Failed! Please read the error above.') }}
-                        </x-jet-action-message>
-
                         <x-jet-button wire:click.prevent="next" class="bg-indigo-700 hover:bg-indigo-800" wire:loading.attr="disabled">
                             {{ __('Next') }}
                         </x-jet-button>
@@ -155,4 +151,12 @@
             </div>
         </div>
     </div>
+
+    @if (session()->has('alert'))
+        <x-form.alert type="{{session('alert')['type']}}">{!!session()->pull('alert')['message']!!}</x-form.alert>
+    @endif
+
+    @push('scripts')
+        <script src="{{ asset('js/alert.js') }}"></script>
+    @endpush
 </div>

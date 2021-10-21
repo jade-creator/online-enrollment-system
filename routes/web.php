@@ -161,6 +161,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
 
             Route::get('/pre-enrollments/student/{student}/regular/{prospectusSlug}/create/{registration?}', PreEnrollmentComponent\StudentRegularAddComponent::class)->name('students.regular.create');
 
+            Route::get('/pre-enrollments/student/{student}/irregular/{prospectusSlug}/create/{registration?}', PreEnrollmentComponent\StudentIrregularAddComponent::class)->name('students.irregular.create');
+
             Route::get('/grades', GradeComponent\GradeIndexComponent::class)->name('grades.view');
 
             Route::get('/student/{student}/update', UserComponent\StudentUpdateComponent::class)->name('student.update');

@@ -19,6 +19,7 @@ class CreateExtensionsTable extends Migration
             $table->foreign('extension_id')->references('id')->on('registrations');
             $table->foreignId('registration_id')->constrained();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

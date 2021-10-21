@@ -43,7 +43,12 @@ class RegistrationFormButtons extends Component
             $this->success($message);
             $this->emitUp('refresh');
         } catch (\Exception $e) {
-            $this->error($e->getMessage());
+            session()->flash('alert', [
+                'type' => 'danger',
+                'message' => $e->getMessage(),
+            ]);
+
+            return $this->emit('alert');
         }
     }
 

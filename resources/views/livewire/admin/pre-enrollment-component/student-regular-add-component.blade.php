@@ -92,14 +92,6 @@
                     </x-jet-secondary-button>
                 </a>
 
-                <x-jet-action-message class="mr-3 text-green-500 font-bold w-full" on="saved">
-                    {{ __('Saved successfully!') }}
-                </x-jet-action-message>
-
-                <x-jet-action-message class="mr-3 text-red-500 font-bold" on="error">
-                    {{ __('Failed! Please read the error above.') }}
-                </x-jet-action-message>
-
                 @can ('register', $prospectus)
                     <x-jet-button wire:click.prevent="save"  class="ml-2 bg-indigo-700 hover:bg-indigo-800" wire:loading.attr="disabled">
                         {{ __('Register') }}
@@ -109,4 +101,12 @@
         </x-jet-form-section>
         <x-jet-section-border/>
     </div>
+
+    @if (session()->has('alert'))
+        <x-form.alert type="{{session('alert')['type']}}">{!!session()->pull('alert')['message']!!}</x-form.alert>
+    @endif
+
+    @push('scripts')
+        <script src="{{ asset('js/alert.js') }}"></script>
+    @endpush
 </div>

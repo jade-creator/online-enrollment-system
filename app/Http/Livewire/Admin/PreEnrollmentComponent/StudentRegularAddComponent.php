@@ -57,16 +57,19 @@ class StudentRegularAddComponent extends Component
             $subjectsId = $registrationService->pluckSubjectsId($this->prospectus->subjects);
             $registration = $registrationService->update($subjectsId, $this->registration);
 
-            $this->emit('saved');
+            session()->flash('alert', [
+                'type' => 'success',
+                'message' => 'Saved successfully.',
+            ]);
+            $this->emit('alert');
 
             return redirect()->route('pre.registration.view', $registration->id);
         } catch (\Exception $e) {
-            $this->emit('error');
-
-            return session()->flash('alert', [
+            session()->flash('alert', [
                 'type' => 'danger',
                 'message' => $e->getMessage(),
             ]);
+            return $this->emit('alert');
         }
     }
 }

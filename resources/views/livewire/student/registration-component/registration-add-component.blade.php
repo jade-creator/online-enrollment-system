@@ -1,11 +1,6 @@
 <div class="max-w-5xl mx-auto p-4 md:p-8 ">
     @include('partials.view-profile-button')
 
-    @if (session()->has('alert'))
-        <x-form.alert type="{{session('alert')['type']}}">{!!session('alert')['message']!!}</x-form.alert>
-        <x-jet-section-border/>
-    @endif
-
     <div class="flex flex-col md:flex-row">
         <div class="flex flex-col h-auto mb-3 md:h-0">
             <div class="w-full lg:w-64 md:w-60">
@@ -125,8 +120,8 @@
                     </x-slot>
 
                     <x-slot name="actions">
-                        <x-jet-action-message class="mr-3 text-red-500 font-bold" on="error">
-                            {{ __('Failed! Please read the error above.') }}
+                        <x-jet-action-message class="mr-3 text-blue-500 font-bold w-full" on="saved">
+                            {{ __('Redirecting...') }}
                         </x-jet-action-message>
 
                         <x-jet-button wire:click.prevent="next"  class="bg-indigo-700 hover:bg-indigo-800" wire:loading.attr="disabled">
@@ -138,4 +133,12 @@
             </div>
         </div>
     </div>
+
+    @if (session()->has('alert'))
+        <x-form.alert type="{{session('alert')['type']}}">{!!session()->pull('alert')['message']!!}</x-form.alert>
+    @endif
+
+    @push('scripts')
+        <script src="{{ asset('js/alert.js') }}"></script>
+    @endpush
 </div>

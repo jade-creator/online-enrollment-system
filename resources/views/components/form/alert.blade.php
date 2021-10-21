@@ -39,11 +39,11 @@
     }
 @endphp
 
-<section>
+<section id="alert" class="fixed w-11/12 top-12 md:top-16 md:w-1/2 lg:w-1/4 right-5 z-20">
     <div class="relative items-center w-full py-5 md:py-2 mx-auto max-w-7xl">
         <!------ Component-->
-        <div class="p-6 border-l-4 {{$borderColor}} -6 rounded-r-xl {{$bgColor}}">
-            <div class="flex">
+        <div class="p-6 border-l-4 {{$borderColor}} -6 rounded-r-xl {{$bgColor}} relative">
+            <div class="flex break-words">
                 <div class="flex-shrink-0">
                     <svg class="w-5 h-5 {{$lightTextColor}}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         @if ($type == 'success')
@@ -59,7 +59,7 @@
                 </div>
                 <div class="ml-3">
                     <div class="text-sm {{$darkTextColor}}">
-                        <p> @isset($slot){!!$slot!!}@endisset </p>
+                        <p class="">@isset($slot){!! $slot !!}@endisset</p>
                     </div>
                 </div>
             </div>
