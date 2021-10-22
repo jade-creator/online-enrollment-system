@@ -88,7 +88,7 @@ class RegistrationPolicy extends BasePolicy
     /* > registration view component
      * */
     public function exportRegistration(User $user, Registration $registration) { return
-        $this->isAdmin($user) && $registration->status->name == 'enrolled';
+        $this->isAuthorized('registration', 'exportRegistration', $user) && $registration->status->name == 'enrolled';
     }
 
     public function export(User $user) { return

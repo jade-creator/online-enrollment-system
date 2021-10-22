@@ -31,6 +31,23 @@ class Transaction extends BaseModel
         });
     }
 
+    public function getPaymentElementAttribute()
+    {
+        $status = $this->attributes['paypal_transaction_id'] == NULL ? 'failed' : 'completed';
+        $color = '';
+
+        switch ($status) {
+            case 'failed':
+                $color = 'border border-red-500 text-red-500';
+                break;
+
+            case 'completed':
+                $color = 'border border-green-500 text-green-500';
+        }
+
+        return '<span class="px-2 py-1 rounded text-white uppercase '.$color.'">'.$status.'</span>';
+    }
+
     public function scopefilterByStudent($query, $studentId)
     {
         return $query->when(filled($studentId), function ($query) use ($studentId) {
@@ -39,15 +56,6 @@ class Transaction extends BaseModel
             });
         });
     }
-
-//    public function getFormattedPriceAttribute($value) { return
-//        'PHP '.number_format($value, 2, '.', ',');
-//    }
-//
-//    public function formatTwoDecimalPlaces($value) {
-//        $value = $value / 100;
-//        return number_format((float)$value, 2, '.', '');
-//    }
 
     public function getRunningBalanceAttribute($value) { return
         $this->formatTwoDecimalPlaces($value);

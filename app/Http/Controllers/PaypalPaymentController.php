@@ -154,27 +154,20 @@ class PaypalPaymentController extends Controller
         Session::forget(['paypal_payment_id', 'registration_id', 'amount']);
 
         if (empty($request->input('PayerID')) || empty($request->input('token'))) {
-            return redirect()->route('student.paywithpaypal', $registration_id)->with('swal:modal', [
-                'title' => $this->errorTitle,
-                'type' => $this->errorType,
-                'text' => 'Payment cancelled!',
-            ]);
+            return redirect()->route('student.paywithpaypal', $registration_id);
         }
+
+        $registration = new Registration();
+        $registration = Registration::with('assessment')->where('custom_id', strval($registration_id))->firstOrFail();
 
         try {
             $payment = Payment::get($payment_id, $this->_api_context);
             $execution = new PaymentExecution();
             $execution->setPayerId($request->input('PayerID'));
             $result = $payment->execute($execution, $this->_api_context);
-
-            $transactions = $payment->getTransactions();
-            $relatedResources = $transactions[0]->getRelatedResources();
-            $sale = $relatedResources[0]->getSale();
-
-            $registration = new Registration();
-            $registration = Registration::with('assessment')->where('custom_id', strval($registration_id))->firstOrFail();
-            $registration = (new PaypalPaymentService())->store($registration, $sale->getId(), $amount);
         } catch (\Exception $e) {
+            $registration = (new PaypalPaymentService())->failed($registration, $amount);
+
             return redirect()->route('student.payments.view')->with('swal:modal', [
                 'title' => $this->errorTitle,
                 'type' => $this->errorType,
@@ -183,12 +176,30 @@ class PaypalPaymentController extends Controller
         }
 
         if ($result->getState() == 'approved') {
-            return redirect()->route('student.payments.view')->with('swal:modal', [
-                'title' => $this->successTitle,
-                'type' => $this->successType,
-                'text' => 'Payment success!',
-            ]);
+            try {
+                $transactions = $payment->getTransactions();
+                $relatedResources = $transactions[0]->getRelatedResources();
+                $sale = $relatedResources[0]->getSale();
+
+                $registration = (new PaypalPaymentService())->store($registration, $sale->getId(), $amount);
+
+                return redirect()->route('student.payments.view')->with('swal:modal', [
+                    'title' => $this->successTitle,
+                    'type' => $this->successType,
+                    'text' => 'Payment success!',
+                ]);
+            } catch (\Exception $e) {
+                $registration = (new PaypalPaymentService())->failed($registration, $amount);
+
+                return redirect()->route('student.paywithpaypal', $registration_id)->with('swal:modal', [
+                    'title' => $this->errorTitle,
+                    'type' => $this->errorType,
+                    'text' => 'Payment failed!',
+                ]);
+            }
         }
+
+        $registration = (new PaypalPaymentService())->failed($registration, $amount);
 
         return redirect()->route('student.paywithpaypal', $registration_id)->with('swal:modal', [
             'title' => $this->errorTitle,

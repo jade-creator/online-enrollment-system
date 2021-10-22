@@ -3,8 +3,7 @@
 
     <div @click.stop :class="{'w-full sm:w-1/2 lg:w-64 shadow-lg': open, 'w-0 lg:w-12': ! open}" class="sidebar overflow-y-auto overflow-x-hidden transition-width transition-slowest ease h-full bg-white border-r border-gray-200">
         <ul class="flex flex-col h-content w-full">
-            @if(auth()->user()->role->name === 'admin')
-
+            @if (auth()->user()->role->name === 'admin')
                 <x-sidebar.item title="Dashboard">
                     <x-sidebar.link routeName="admin.dashboard" route="admin/dashboard" name="Dashboard">
                         <x-icons.dashboard-icon/>
@@ -76,19 +75,10 @@
                         <x-icons.users-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>
-            @endif
-
-            @if(auth()->user()->role->name === 'student')
-
+            @elseif (auth()->user()->role->name === 'student')
                 <x-sidebar.item title="Registrations">
                     <x-sidebar.link routeName="student.registrations.index" route="student/pre-registrations" name="Registrations">
                         <x-icons.pre-enrollment-icon/>
-                    </x-sidebar.link>
-                </x-sidebar.item>
-
-                <x-sidebar.item title="Schedules">
-                    <x-sidebar.link routeName="sections.view" route="sections" name="Schedules">
-                        <x-icons.section-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>
 
@@ -103,12 +93,6 @@
                         <x-icons.credit-card-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>
-
-{{--                <x-sidebar.item title="Prospectus">--}}
-{{--                    <x-sidebar.link routeName="prospectuses.view" route="prospectuses" name="Prospectus">--}}
-{{--                        <x-icons.prospectus-icon/>--}}
-{{--                    </x-sidebar.link>--}}
-{{--                </x-sidebar.item>--}}
             @endif
             <!-- Responsive Settings Options -->
             <div class="block lg:hidden pt-4 pb-1 border-t border-gray-200">

@@ -18,15 +18,6 @@ class Assessment extends BaseModel
         'remarks',
     ];
 
-//    public function getFormattedPriceAttribute($value) { return
-//        'PHP '.number_format($value, 2, '.', ',');
-//    }
-//
-//    public function formatTwoDecimalPlaces($value) {
-//        $value = $value / 100;
-//        return number_format((float)$value, 2, '.', '');
-//    }
-
     public function getPaidAmountAttribute()
     {
         $value = $this->formatTwoDecimalPlaces($this->attributes['grand_total'] - $this->attributes['balance']);

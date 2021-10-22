@@ -27,7 +27,7 @@
                         @else
                             <x-slot name="head">
                                 <x-table.column-title class="col-span-2">subject</x-table.column-title>
-                                @if (auth()->user()->role->name == 'student')
+                                @if ( auth()->user()->role->name == 'student' && ($registration->status->name !== 'enrolled' && $registration->status->name !== 'released') )
                                     <x-table.column-title class="col-span-3">title</x-table.column-title>
                                 @else
                                     <x-table.column-title class="col-span-3">professor</x-table.column-title>
@@ -77,7 +77,7 @@
                                         <x-table.row>
                                             <div name="slot" class="grid grid-cols-12 md:gap-2">
                                                 <x-table.cell headerLabel="code" class="md:col-span-2">{{ $schedule->prospectusSubject->subject->code ?? 'N/A' }}</x-table.cell>
-                                                @if (auth()->user()->role->name == 'student')
+                                                @if ( auth()->user()->role->name == 'student' && ($registration->status->name !== 'enrolled' && $registration->status->name !== 'released') )
                                                     <x-table.cell headerLabel="title" class="truncate md:col-span-3">{{ $schedule->prospectusSubject->subject->title ?? 'N/A' }}</x-table.cell>
                                                 @else
                                                     <x-table.cell headerLabel="professor" class="truncate md:col-span-3">

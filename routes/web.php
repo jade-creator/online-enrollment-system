@@ -172,7 +172,13 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
     });
     //end: admin and registrar
 
-    // start: admin, registrar and student
+    //start: all except student
+    Route::middleware(['role:admin|registrar|dean|faculty member', 'user.detail', 'approved'])->group(function (){
+        Route::get('/sections', SectionComponent\SectionIndexComponent::class)->name('sections.view');
+    });
+    //end: all except student
+
+    // start: all
     Route::middleware(['role:admin|registrar|student|dean|faculty member', 'user.detail'])->group(function (){
         Route::middleware('approved')->group(function () {
             Route::get('/sections', SectionComponent\SectionIndexComponent::class)->name('sections.view');
@@ -182,7 +188,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
 
         Route::get('/user/personal-profile/{userId}', User\UserProfileComponent::class)->name('user.personal.profile.view');
     });
-    // end: admin, registrar and student
+    // end: all
 
     // start student
     Route::middleware(['role:student'])->group(function (){

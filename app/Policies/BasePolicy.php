@@ -26,6 +26,7 @@ class BasePolicy
             'pending' => ['admin', 'registrar'],
             'update' => ['admin', 'registrar'],
             'selectSection' => ['admin', 'registrar', 'student'],
+            'exportRegistration' => ['admin', 'registrar'],
         ],
         'grade' => [
             'update' => ['admin', 'registrar'],

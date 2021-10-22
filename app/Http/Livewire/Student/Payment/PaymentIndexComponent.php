@@ -55,4 +55,34 @@ class PaymentIndexComponent extends Livewire\Component
             ->orderBy($this->sortBy, $this->sortDirection)
             ->dateFiltered($this->dateMin, $this->dateMax);
     }
+
+
+    public function pay()
+    {
+        if (auth()->user()->student->registrations->isEmpty()) {
+            session()->flash('alert', [
+                'type' => 'info',
+                'message' => 'You are not registered. Click <a href="'.route('student.registrations.create').'" class="underline">register</a> now',
+            ]);
+        }
+
+        if (auth()->user()->student->registrations->isNotEmpty()
+                && auth()->user()->student->grandTotal->sum('balance') == 0) {
+            session()->flash('alert', [
+                'type' => 'success',
+                'message' => 'No balance found. You are fully paid as of '.date('M d Y'),
+            ]);
+
+            return $this->emit('alert');
+        }
+
+        $registration = Models\Registration::with('assessment')
+            ->where('student_id', auth()->user()->student->id)
+            ->whereHas('assessment', function ($query) {
+                return $query->where('balance', '!=', 0);
+            })
+            ->first();
+
+        return $this->redirect(route('student.paywithpaypal', $registration->custom_id));
+    }
 }
