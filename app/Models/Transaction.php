@@ -17,11 +17,14 @@ class Transaction extends BaseModel
         'paypal_transaction_id',
         'amount',
         'running_balance',
+        'archived_at',
     ];
 
     public $with = [
         'registration.assessment'
     ];
+
+    protected $dates = ['archived_at'];
 
     public static function boot()
     {

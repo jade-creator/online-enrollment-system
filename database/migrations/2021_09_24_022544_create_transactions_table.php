@@ -20,6 +20,7 @@ class CreateTransactionsTable extends Migration
             $table->string('paypal_transaction_id', 100)->nullable()->default(null);
             $table->bigInteger('amount');
             $table->bigInteger('running_balance');
+            $table->timestamp('archived_at')->nullable()->default(NULL);
             $table->timestamps();
             $table->softDeletes();
         });

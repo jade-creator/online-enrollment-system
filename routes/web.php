@@ -163,8 +163,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
 
             Route::get('/pre-enrollments/student/{student}/irregular/{prospectusSlug}/create/{registration?}', PreEnrollmentComponent\StudentIrregularAddComponent::class)->name('students.irregular.create');
 
-            Route::get('/grades', GradeComponent\GradeIndexComponent::class)->name('grades.view');
-
             Route::get('/student/{student}/update', UserComponent\StudentUpdateComponent::class)->name('student.update');
         });
 
@@ -173,7 +171,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
     //end: admin and registrar
 
     //start: all except student
-    Route::middleware(['role:admin|registrar|dean|faculty member', 'user.detail', 'approved'])->group(function (){
+    Route::middleware(['role:admin|registrar|dean|faculty member', 'user.detail', 'approved'])->group(function () {
+        Route::group(['as' => 'admin.'], function () {
+            Route::get('/grades', GradeComponent\GradeIndexComponent::class)->name('grades.view');
+        });
+
         Route::get('/sections', SectionComponent\SectionIndexComponent::class)->name('sections.view');
     });
     //end: all except student
@@ -181,8 +183,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
     // start: all
     Route::middleware(['role:admin|registrar|student|dean|faculty member', 'user.detail'])->group(function (){
         Route::middleware('approved')->group(function () {
-            Route::get('/sections', SectionComponent\SectionIndexComponent::class)->name('sections.view');
-
             Route::get('/pre-registration/{regId}/details', RegistrationComponent\RegistrationViewComponent::class)->name('pre.registration.view');
         });
 
