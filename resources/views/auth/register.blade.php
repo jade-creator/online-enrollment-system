@@ -35,8 +35,8 @@
             </div>
 
             <div class="mt-4">
-                <x-jet-label for="name" value="{{ __('Name') }}" />
-                <x-jet-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" autofocus autocomplete="name" placeholder="eg. John Doe"/>
+                <x-jet-label for="name" value="{{ __('Username') }}" />
+                <x-jet-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" autofocus autocomplete="name" placeholder="eg. johndoe"/>
             </div>
 
             <div class="mt-4">

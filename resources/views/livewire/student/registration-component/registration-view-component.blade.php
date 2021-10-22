@@ -2,17 +2,30 @@
     @if (isset($registration))
         <div class="py-10">
             <div class="flex items-center justify-between">
-                <div>
-                    <p class="font-bold text-lg"><span>{{ $registration->student->user->person->full_name ?? 'N/A' }} </span>- Pre Registration</p>
-                    <a href="{{ route('user.personal.profile.view', $registration->student->user->id) }}" title="View Profile">
-                        <p class="text-indigo-500 font-bold hover:underline text-sm">View Profile</p>
-                    </a>
+                <div class="flex items-center">
+                    <img class="border border-gray-200 mt-1 h-16 w-16 rounded-full object-cover" src="{{ $registration->student->user->profile_photo_url }}" alt="photo"/>
+
+                    <div class="mx-3">
+                        <p class="font-bold text-lg"><span>{{ $registration->student->user->person->full_name ?? 'N/A' }} </span>- Pre Registration </p>
+                        <a href="{{ route('user.personal.profile.view', $registration->student->user->id) }}" title="View Profile">
+                            <p class="text-indigo-500 font-bold hover:underline text-sm">View Profile</p>
+                        </a>
+                    </div>
                 </div>
                 @can ('exportRegistration', $registration)
                     <x-jet-button wire:click.prevent="createPdf" wire:loading.attr="disabled" class="bg-indigo-700 hover:bg-indigo-800 flex items-end">
                         <x-icons.export-icon/>
                         <span>{{ __('Export as PDF')}}</span>
                     </x-jet-button>
+                @endcan
+
+                @can ('edit', $registration)
+                    <a href="{{ route('admin.students.registration.create', ['student' => $registration->student, 'registration' => $registration]) }}">
+                        <x-jet-button class="bg-indigo-700 hover:bg-indigo-800 flex items-end">
+                            <x-icons.edit-icon/>
+                            <span class="mx-2">{{ __('Edit')}}</span>
+                        </x-jet-button>
+                    </a>
                 @endcan
             </div>
             <x-jet-section-border/>
@@ -96,7 +109,7 @@
                     </div>
                     <div class="col-span-3">
                         <x-jet-label value="{{ __('Type:') }}"/>
-                        <x-jet-input type="text" class="mt-1" value="{{ $registration->is_new ?? 'N/A' }}" readonly/>
+                        <x-jet-input type="text" class="mt-1" value="{{ $registration->isNew ?? 'N/A' }}" readonly/>
                     </div>
                     <div class="col-span-3">
                         <x-jet-label value="{{ __('Name:') }}"/>
@@ -149,11 +162,11 @@
         <livewire:student.schedule-component.schedule-index-component :registration="$registration" key="{{ 'student-schedule-index-component-'.now() }}"/>
 
             {{-- DISPLAY ONLY FOR EXTENDED REGISTRATION/IRREGULAR STUDENT'S REGISTRATION --}}
-            @forelse ($registration->extensions as $index => $extension)
-                <livewire:student.schedule-component.schedule-index-component :registration="$extension->registration" key="{{ 'student-schedule-index-component-'.$index.'-'.now() }}"/>
-            @empty
-                {{-- DISPLAY NOTHING IF NOT EXTENDED/REGULAR STUDENT'S REGISTRATION --}}
-            @endforelse
+            @foreach ($registration->extensions as $index => $extension)
+                @if ($extension->registration->grades->isNotEmpty())
+                    <livewire:student.schedule-component.schedule-index-component :registration="$extension->registration" key="{{ 'student-schedule-index-component-'.$index.'-'.now() }}"/>
+                @endif
+            @endforeach
 
         {{-- ASSESSMENT OF FEES --}}
         <livewire:student.assessment-component.assessment-index-component :registration="$registration" :totalUnit="$totalUnit" key="{{ 'student-assessment-index-component'.now() }}"/>
@@ -165,7 +178,13 @@
         <livewire:partials.select-section-form key="{{ 'select-section-form-'.now() }}">
     @endif
 
-    <div wire:loading>
-        @include('partials.loading')
-    </div>
+    <div>@include('partials.loading')</div>
+
+    @if (session()->has('alert'))
+        <x-form.alert type="{{session('alert')['type']}}">{!!session()->pull('alert')['message']!!}</x-form.alert>
+    @endif
+
+    @push('scripts')
+        <script src="{{ asset('js/alert.js') }}"></script>
+    @endpush
 </div>

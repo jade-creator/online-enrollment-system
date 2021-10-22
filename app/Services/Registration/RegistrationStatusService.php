@@ -58,11 +58,13 @@ class RegistrationStatusService
             $schedules = $registrationService->populateSchedules($registration->section, $days);
 
             foreach ($registration->extensions as $extension) {
+                if (is_null($extension->registration->section_id) && $extension->registration->total_unit == 0) continue;
+
                 $blocks = $registrationService->populateSchedules($extension->registration->section, $days);
 
                 if ($registrationService->checkBlock($schedules, $blocks)) throw new \Exception('Unable to submit, conflict on schedule was detected.');
 
-                $registration_t = $this->submit($extension->registration);
+                $this->submit($extension->registration);
             }
         }
 
@@ -76,11 +78,15 @@ class RegistrationStatusService
     {
         $status = $this->findStatus('denied');
 
-        if($registration->extensions->isNotEmpty()) {
+        if ($registration->extensions->isNotEmpty()) {
             foreach ($registration->extensions as $extension) {
                 $this->reject($extension->registration);
             }
         }
+
+        if ($registration->assessment) $registration->assessment()->delete();
+
+        if ($registration->transactions->isNotEmpty()) $registration->transactions()->delete();
 
         return $this->setStatus($registration, $status);
     }

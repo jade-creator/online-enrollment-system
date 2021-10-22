@@ -2,19 +2,32 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
-class Student extends Model
+class Student extends BaseModel
 {
-    use HasFactory;
+    use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
     protected $fillable = [
         'custom_id',
         'user_id',
         'program_id',
+        'isRegular',
+        'isNew',
         'curriculum_id',
     ];
+
+    protected $casts = [
+        'isRegular' => 'boolean',
+        'isNew' => 'boolean',
+    ];
+
+    protected $attributes = [
+        'isRegular' => true,
+        'isNew' => true,
+    ];
+
+    public function grandTotal() { return
+        $this->hasManyDeep( Assessment::class, [Registration::class]);
+    }
 
     public function curriculum() { return
         $this->belongsTo(Curriculum::class);
@@ -38,5 +51,15 @@ class Student extends Model
 
     public function attendedSchool(){
         return $this->hasOne(AttendedSchool::class);
+    }
+
+    public static function search(?string $search)
+    {
+        $search = '%'.$search.'%';
+
+        return empty($search) ? static::query()
+            : static::where(function ($query) use ($search){
+                return $query->where('custom_id', 'LIKE', $search);
+            });
     }
 }

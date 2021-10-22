@@ -3,7 +3,7 @@
         <x-slot name="logo">
             <x-jet-authentication-card-logo />
             <p class="mt-4 text-xl font-extrabold">{{ __('Log in to your account')}}</p>
-            <p class="text-sm">{{__('Or')}} 
+            <p class="text-sm">{{__('Or')}}
                 <a class="font-medium text-indigo-700 hover:text-indigo-800" href="{{ route('register') }}">
                     {{ __('create new account') }}
                 </a>
@@ -22,8 +22,8 @@
             @csrf
 
             <div>
-                <x-jet-label for="email" value="{{ __('Email') }}" />
-                <x-jet-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus placeholder="example@gmail.com"/>
+                <x-jet-label for="email" value="{{ __('Username or Email') }}" />
+                <x-jet-input id="email" class="block mt-1 w-full" type="text" name="email" :value="old('email')" required autofocus placeholder="johndoe or example@gmail.com"/>
             </div>
 
             <div class="mt-4">

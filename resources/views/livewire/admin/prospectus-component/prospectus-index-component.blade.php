@@ -13,13 +13,20 @@
             <x-slot name="filter">
                 <div class="flex items-center justify-between">
                     @isset ($prospectus)
-                        <p class="flex items-center justify-between text-indigo-500">
-                            <span>{{ $prospectus->program->code ?? 'N/A' }}</span>
-                            <x-icons.right-arrow-icon/>
-                            <span>{{ $prospectus->level->level ?? 'N/A' }}</span>
-                            <x-icons.right-arrow-icon/>
-                            <span>{{ $prospectus->term->term ?? 'N/A' }}</span>
-                        </p>
+                        <ul class="list-none flex font-semibold">
+                            <li class="text-indigo-500">
+                                <span class="block md:hidden">{{ $prospectus->program->code ?? 'N/A' }}</span>
+                                <span class="hidden md:block">{{ $prospectus->program->program ?? 'N/A' }}</span>
+                            </li>
+                            <li class="text-gray-400 mx-4">/</li>
+                            <li>
+                                <span>{{ $prospectus->level->level ?? 'N/A' }}</span>
+                            </li>
+                            <li class="text-gray-400 mx-4">/</li>
+                            <li>
+                                <span>{{ $prospectus->term->term ?? 'N/A' }}</span>
+                            </li>
+                        </ul>
                     @endisset
                     <x-table.filter :isSearchable="false" :isFilterable="false">
                         <x-table.filter-slot title="Curriculum">
@@ -30,9 +37,8 @@
                                     <option value="">No records</option>
                                 @endforelse
                             </select>
+                            <livewire:partials.prospectus-dropdown :curriculumId="$curriculumId" key="{{ 'prospectus-dropdown-component-'.now() }}"/>
                         </x-table.filter-slot>
-
-                        <livewire:partials.prospectus-dropdown :curriculumId="$curriculumId" key="{{ 'prospectus-dropdown-component-'.now() }}"/>
                     </x-table.filter>
                 </div>
             </x-slot>

@@ -93,7 +93,7 @@
                     </div>
 
                     @forelse ($this->prospectus->subjects as $prospectus_subject)
-                        <div class="grid grid-cols-12 py-4 md:py-0">
+                        <div class="grid grid-cols-12 md:my-0 my-4 bg-white">
                             <div class="flex items-center col-span-12 md:col-span-1 font-bold text-xs border border-indigo-500 md:border-gray-200 bg-indigo-500 md:bg-transparent">
                                 <p class="md:hidden w-1/2 h-full uppercase px-2 text-white md:text-indigo-500 border-r flex items-center">code</p>
                                 <p class="break-words w-1/2 md:w-full py-4 px-2 text-white md:text-black">{{ $prospectus_subject->subject->code ?? 'N/A' }}</p>
@@ -108,7 +108,7 @@
                             </div>
                             <div class="flex items-center col-span-12 md:col-span-1 font-bold text-xs border">
                                 <p class="md:hidden w-1/2 h-full uppercase px-2 text-indigo-500 border-r flex items-center">unit</p>
-                                <p class="break-words w-1/2 md:w-full py-4 px-2">{{ $prospectus_subject->unit ?? 'N/A' }}</p>
+                                <p class="break-words w-1/2 md:w-full py-4 px-2 md:text-center">{{ $prospectus_subject->unit ?? 'N/A' }}</p>
                             </div>
                             <div class="flex items-center col-span-12 md:col-span-2 font-bold text-xs border">
                                 <p class="md:hidden w-1/2 h-full uppercase px-2 text-indigo-500 border-r flex items-center">co-requisite</p>
@@ -134,7 +134,7 @@
                             </div>
                             <div class="flex items-center col-span-12 md:col-span-1 font-bold text-xs border">
                                 <p class="md:hidden w-1/2 h-full uppercase px-2 text-indigo-500 border-r flex items-center">remark</p>
-                                <p class="break-words w-1/2 md:w-full py-4 px-2">
+                                <p class="break-words w-1/2 md:w-full py-4 px-2 md:text-center">
                                     @if (is_array($grades) && array_key_exists($prospectus_subject->subject->id, $grades))
                                         {!! $grades[$prospectus_subject->subject->id]['mark'] ?? 'N/A' !!}
                                     @else
@@ -144,7 +144,7 @@
                             </div>
                             <div class="flex items-center col-span-12 md:col-span-1 font-bold text-xs border">
                                 <p class="md:hidden w-1/2 h-full uppercase px-2 text-indigo-500 border-r flex items-center">grade</p>
-                                <p class="break-words w-1/2 md:w-full py-4 px-2 bg-ye">
+                                <p class="break-words w-1/2 md:w-full py-4 px-2 md:text-center">
                                     @if (is_array($grades) && array_key_exists($prospectus_subject->subject->id, $grades))
                                         {{ $grades[$prospectus_subject->subject->id]['value'] ?? 'N/A' }}
                                     @else

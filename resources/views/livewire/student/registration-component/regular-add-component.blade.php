@@ -1,5 +1,10 @@
-<div class="max-w-5xl mx-auto p-4 sm:px-6 lg:px-8">
+<div class="max-w-5xl mx-auto p-4 md:p-8">
     @include('partials.view-profile-button')
+
+    @if (session()->has('alert'))
+        <x-form.alert type="{{session('alert')['type']}}">{!!session()->pull('alert')['message']!!}</x-form.alert>
+        <x-jet-section-border/>
+    @endif
 
     <div class="w-full pl-0 md:pl-8">
         <x-jet-form-section submit="">
@@ -68,6 +73,11 @@
                         {{ __('Go Back') }}
                     </x-jet-secondary-button>
                 </a>
+
+                <x-jet-action-message class="mr-3 text-red-500 font-bold" on="error">
+                    {{ __('Failed! Please read the error above.') }}
+                </x-jet-action-message>
+
                 @can ('register', $prospectus)
                     <x-jet-button wire:click.prevent="save"  class="ml-2 bg-indigo-700 hover:bg-indigo-800" wire:loading.attr="disabled">
                         {{ __('Register') }}

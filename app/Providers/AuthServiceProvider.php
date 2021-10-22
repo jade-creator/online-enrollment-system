@@ -28,6 +28,7 @@ class AuthServiceProvider extends ServiceProvider
         Models\Registration::class => Policies\RegistrationPolicy::class,
         Models\Schedule::class => Policies\SchedulePolicy::class,
         Models\Section::class => Policies\SectionPolicy::class,
+        Models\Setting::class => Policies\SettingPolicy::class,
         Models\Subject::class => Policies\SubjectPolicy::class,
         Models\User::class => Policies\UserPolicy::class,
     ];

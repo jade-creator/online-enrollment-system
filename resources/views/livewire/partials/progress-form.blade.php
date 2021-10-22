@@ -6,7 +6,7 @@
                 C0.919,9.266,1.404,9.269,1.702,9.57l5.495,5.536L18.221,4.083c0.301-0.301,0.787-0.301,1.087,0c0.301,0.3,0.301,0.787,0,1.087
                 L7.741,16.738C7.596,16.882,7.401,16.963,7.197,16.963z"></path>
             </svg>
-            <h1 class="{{ $step > 1 ? 'mt-3 text-gray-600 font-bold' : 'mt-3 text-gray-300 font-bold'}}">Fullname</h1>
+            <h1 class="{{ $step > 1 ? 'mt-3 text-gray-600 font-bold' : 'mt-3 text-gray-300 font-bold'}}"><span class="capitalize">{{ auth()->user()->role->name ?? 'N/A' }}</span></h1>
         </div>
         <div class="flex">
             <svg class="{{ $step > 2 ? 'm-3 h-6 bg-green-400 p-1 rounded-xl' : 'm-3 h-6 bg-gray-300 p-1 rounded-xl'}}" viewBox="0 0 20 20">
@@ -24,7 +24,7 @@
             </svg>
             <h1 class="{{ $step > 3 ? 'mt-3 text-gray-600 font-bold' : 'mt-3 text-gray-300 font-bold'}}">Contact</h1>
         </div>
-    
+
         @if (auth()->user()->role->name == 'student')
             <div class="flex">
                 <svg class="{{ $step > 4 ? 'm-3 h-6 bg-green-400 p-1 rounded-xl' : 'm-3 h-6 bg-gray-300 p-1 rounded-xl'}}" viewBox="0 0 20 20">
@@ -44,10 +44,10 @@
             </div>
         @endif
     </div>
-    <div class="block xl:hidden px-4 sm:px-4 lg:px-8 w-full">
+    <div class="block xl:hidden w-full">
         <div class="font-bold flex flex-row justify-between">
             <p>Progress:</p>
-            <p><span> {{ $step > 1 ? $step-=1 : '0' }}</span> / {{ Auth::user()->role->name === 'admin' ? 3 : 5}}</p>
+            <p class="text-green-500"><span> {{ $step > 1 ? $step-=1 : '0' }}</span> / {{ Auth::user()->role->name === 'admin' ? 3 : 5}}</p>
         </div>
     </div>
 </div>

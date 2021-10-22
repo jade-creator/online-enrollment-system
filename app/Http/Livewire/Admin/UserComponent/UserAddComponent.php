@@ -20,11 +20,11 @@ class UserAddComponent extends Component
     {
         return [
             'role_id' => ['required'],
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'alpha_dash', 'unique:users', 'min:6', 'max:30'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => $this->passwordRules(),
-            'employee_id' => ['required_if:role_id,==,1,3,4,5'],
-            'student_id' => ['required_if:role_id,==,2'],
+            'employee_id' => ['required_if:role_id,==,1,3,4,5', 'unique:employees,custom_id', 'alpha_num', 'max:100'],
+            'student_id' => ['required_if:role_id,==,2', 'unique:students,custom_id', 'alpha_num', 'max:100'],
         ];
     }
 

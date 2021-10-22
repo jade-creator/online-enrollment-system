@@ -10,6 +10,11 @@ class RegistrationPolicy extends BasePolicy
 {
     use HandlesAuthorization;
 
+    public function edit(User $user, Registration $registration) { return
+        $this->isAuthorized('registration', 'edit', $user) && ($registration->status->name == 'pending' ||
+            $registration->status->name == 'confirming');
+    }
+
     public function reject(User $user, Registration $registration) { return
         $this->isAuthorized('registration', 'reject', $user) && ($registration->status->name == 'finalized' ||
             $registration->status->name == 'enrolled');
@@ -83,7 +88,7 @@ class RegistrationPolicy extends BasePolicy
     /* > registration view component
      * */
     public function exportRegistration(User $user, Registration $registration) { return
-        $this->isAdmin($user) && $registration->status->name == 'enrolled';
+        $this->isAuthorized('registration', 'exportRegistration', $user) && $registration->status->name == 'enrolled';
     }
 
     public function export(User $user) { return

@@ -24,8 +24,13 @@ class IrregularAddComponent extends Component
 
     public function mount(RegistrationService $registrationService)
     {
+        //check if irregular students are allowed to enroll.
+        $setting = Models\Setting::latest()->get()->first();
+        if (filled($setting)) $this->authorize('view', $setting);
+
         list($this->prospectusId, $this->type, $this->curriculumCode) = explode( '-', $this->prospectusSlug);
 
+        //check if curriculum exists.
         $this->curriculum = Models\Curriculum::where('code', $this->curriculumCode)->firstOrFail();
 
         //set prospectus, subject prereqs and coreqs.

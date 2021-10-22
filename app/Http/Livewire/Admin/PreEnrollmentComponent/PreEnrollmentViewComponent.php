@@ -69,6 +69,7 @@ class PreEnrollmentViewComponent extends Component
                 'prospectus.level:id,level',
                 'prospectus.program:id,code,program',
                 'prospectus.term:id,term',
+                'assessment'
             ])
             ->when(filled($this->search), function($query) {
                 return $query->orWhereHas('student', function($query) {

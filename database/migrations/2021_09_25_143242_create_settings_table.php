@@ -16,6 +16,7 @@ class CreateSettingsTable extends Migration
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
             $table->boolean('auto_account_approval')->default(1);
+            $table->boolean('allow_irregular_student_to_enroll')->default(1);
             $table->timestamps();
         });
     }

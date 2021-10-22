@@ -27,6 +27,8 @@ class FullnameForm extends Component
         'employee.faculty_id' => ['nullable'],
         'employee.salutation' => ['required'],
         'student.program_id' => ['required'],
+        'student.isRegular' => ['required'],
+        'student.isNew' => ['required'],
         'person.firstname' => [ 'required', 'string', 'max:255'],
         'person.middlename' => [ 'required', 'string', 'max:255'],
         'person.lastname' => [ 'required', 'string', 'max:255'],
@@ -86,11 +88,11 @@ class FullnameForm extends Component
 
         if (auth()->user()->role->name == 'student') {
             unset($validationArray['employee.faculty_id'], $validationArray['employee.salutation']);
-            $this->validate($validationArray);
         } else {
-            unset($validationArray['student.program_id']);
-            $this->validate($validationArray);
+            unset($validationArray['student.program_id'], $validationArray['student.isRegular'], $validationArray['student.isNew']);
         }
+
+        $this->validate($validationArray);
 
         if (empty(trim($this->person->suffix))) $this->person->suffix = null;
 
@@ -115,6 +117,14 @@ class FullnameForm extends Component
         } catch (Exception $e) {
             $this->error($e->getMessage());
         }
+    }
+
+    public function updatedStudentIsRegular($value) {
+        if (! $value) $this->student->isNew = FALSE;
+    }
+
+    public function updatedStudentIsNew($value) {
+        if ($value) $this->student->isRegular = TRUE;
     }
 
     public function getProgramsProperty() { return

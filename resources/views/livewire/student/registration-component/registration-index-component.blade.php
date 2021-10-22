@@ -10,26 +10,18 @@
         </x-table.title>
 
         <x-table.main>
-            <x-slot name="filter">
-                <x-table.filter/>
-            </x-slot>
+            <x-slot name="filter"><x-table.filter/></x-slot>
 
-            <x-slot name="paginationLink">
-                {{ $registrations->links('partials.pagination-link') }}
-            </x-slot>
+            <x-slot name="paginationLink">{{ $registrations->links('partials.pagination-link') }}</x-slot>
 
             <x-slot name="head">
-                <div class="col-span-2">
-                    <x-table.sort-button event="sortFieldSelected('id')">reg. ID</x-table.sort-button>
-                </div>
+                <div class="col-span-2"><x-table.sort-button event="sortFieldSelected('id')">reg. ID</x-table.sort-button></div>
                 <x-table.column-title class="col-span-2">program</x-table.column-title>
                 <x-table.column-title class="col-span-2">level</x-table.column-title>
                 <x-table.column-title class="col-span-2">term</x-table.column-title>
                 <x-table.column-title class="col-span-2">section</x-table.column-title>
                 <x-table.column-title class="col-span-1">status</x-table.column-title>
-                <div class="col-span-1">
-                    <x-table.sort-button event="sortFieldSelected('created_at')">latest</x-table.sort-button>
-                </div>
+                <div class="col-span-1"><x-table.sort-button event="sortFieldSelected('created_at')">latest</x-table.sort-button></div>
             </x-slot>
 
             <x-slot name="body">
@@ -37,7 +29,38 @@
                     <div wire:key="table-row-{{$registration->id}}">
                         <x-table.row>
                             <div name="slot" class="grid grid-cols-12 md:gap-2">
-                                <x-table.cell headerLabel="Reg. ID" class="justify-start md:col-span-2">{{ $registration->custom_id ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Reg. ID" class="justify-start md:col-span-2">
+                                    <div class="hidden md:block mx-3 flex flex-col">
+                                        @if (empty($registration->assessment))
+                                            <div class="flex items-center">
+                                                <div class="font-bold rounded-full bg-yellow-500 flex items-center justify-center" style="height: 8px; width: 8px; font-size: 5px;">&nbsp;</div>
+                                                <div class="mx-1">{{ $registration->custom_id ?? 'N/A' }}</div>
+                                            </div>
+                                            <div class="font-bold text-gray-400 text-xs pt-0.5">pending assessment</div>
+                                        @elseif (filled($registration->assessment) && $registration->assessment->grand_total == $registration->assessment->balance)
+                                            <div class="flex items-center">
+                                                <div class="font-bold rounded-full bg-blue-500 flex items-center justify-center" style="height: 8px; width: 8px; font-size: 5px;">&nbsp;</div>
+                                                <div class="mx-1">{{ $registration->custom_id ?? 'N/A' }}</div>
+                                            </div>
+                                            <div class="font-bold text-gray-400 text-xs pt-0.5">finalized assessment</div>
+                                        @elseif (filled($registration->assessment) && 1 > $registration->assessment->balance)
+                                            <div class="flex items-center">
+                                                <div class="font-bold rounded-full bg-green-500 flex items-center justify-center" style="height: 8px; width: 8px; font-size: 5px;">&nbsp;</div>
+                                                <div class="mx-1">{{ $registration->custom_id ?? 'N/A' }}</div>
+                                            </div>
+                                            <div class="font-bold text-gray-400 text-xs pt-0.5">fully paid</div>
+                                        @elseif (filled($registration->assessment) && $registration->assessment->grand_total > $registration->assessment->balance)
+                                            <div class="flex items-center">
+                                                <div class="font-bold rounded-full bg-indigo-600 flex items-center justify-center" style="height: 8px; width: 8px; font-size: 5px;">&nbsp;</div>
+                                                <div class="mx-1">{{ $registration->custom_id ?? 'N/A' }}</div>
+                                            </div>
+                                            <div class="font-bold text-gray-400 text-xs pt-0.5">partially paid</div>
+                                        @else
+                                            <div>{{ $registration->custom_id ?? 'N/A' }}</div>
+                                        @endif
+                                    </div>
+                                    <div class="block md:hidden my-4">{{ $registration->custom_id ?? 'N/A' }}</div>
+                                </x-table.cell>
                                 <x-table.cell headerLabel="program" class="justify-start md:col-span-2">{{ $registration->prospectus->program->code ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="level" class="justify-start md:col-span-2">{{ $registration->prospectus->level->level ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="term" class="justify-start md:col-span-2">{{ $registration->prospectus->term->term ?? 'N/A' }}</x-table.cell>
@@ -46,9 +69,7 @@
                                 <x-table.cell-action>
                                     @if (!count($selected) > 0)
                                         <x-jet-dropdown align="right" width="60" dropdownClasses="z-10 shadow-2xl">
-                                            <x-slot name="trigger">
-                                                <x-table.cell-dropdown-trigger-btn/>
-                                            </x-slot>
+                                            <x-slot name="trigger"><x-table.cell-dropdown-trigger-btn/></x-slot>
 
                                             <x-slot name="content">
                                                 <div class="w-60">
@@ -91,7 +112,5 @@
         </x-table.main>
     </div>
 
-    <div wire:loading>
-        @include('partials.loading')
-    </div>
+    <div>@include('partials.loading')</div>
 </div>

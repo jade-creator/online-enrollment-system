@@ -6,7 +6,7 @@ use App\Models\Prospectus;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class ProspectusPolicy
+class ProspectusPolicy extends BasePolicy
 {
     use HandlesAuthorization;
 
@@ -19,6 +19,6 @@ class ProspectusPolicy
     }
 
     public function register(User $user, Prospectus $prospectus) { return
-        $user->role->name == 'student' && $prospectus->subjects->isNotEmpty();
+        $this->isAuthorized('prospectus', 'register', $user) && $prospectus->subjects->isNotEmpty();
     }
 }

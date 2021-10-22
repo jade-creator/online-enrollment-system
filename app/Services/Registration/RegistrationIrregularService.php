@@ -58,4 +58,41 @@ class RegistrationIrregularService
 
         return $registrationMain;
     }
+
+    /**
+     * @throws \Exception
+     */
+    public function update(Models\Registration $registration, $prospectuses, int $curriculumId, array $selected = []) : Models\Registration
+    {
+        $registrationService = new RegistrationService();
+
+        $registrationService->detachGrades($registration);
+
+        $extensions = [];
+
+        foreach ($prospectuses as $index => $prospectus) {
+            if ($index == 0) {
+                $registration->section_id = NULL;
+                $registration->prospectus_id = $prospectus->id;
+                $registration->isRegular = 0;
+                $registration->total_unit = $this->calculateTotalUnit($prospectus, $selected[0]);
+                $registration->curriculum_id = $curriculumId;
+                $registration->update();
+
+                $registration = $registrationService->store($selected[0], $registration);
+            } else {
+                $registrationExtension = $this->createNewRegistration($prospectus->id, $registration->student_id, $curriculumId, $this->calculateTotalUnit($prospectus, $selected[$index]), 1);
+                $registrationExtension = $registrationService->store($selected[$index], $registrationExtension);
+
+                $extension = new Models\Extension();
+                $extension->extension_id = $registrationExtension->id;
+                $extension->registration_id = $registration->id;
+                $extensions[] = $extension;
+            }
+        }
+
+        if (is_array($selected) && sizeof($selected) > 1) $registration->extensions()->saveMany($extensions);
+
+        return $registration;
+    }
 }

@@ -87,6 +87,7 @@ class Registration extends BaseModel
                 ...$this->relationships,
                 'classes.prospectusSubject',
                 'classes.employee.user.person',
+                'classes.employee.user.employee',
                 'student.user.person.contact',
                 'student.user.person.detail.country',
                 'grades:id,registration_id,subject_id,mark_id,value',
@@ -184,6 +185,10 @@ class Registration extends BaseModel
 //                'isExtension' => 0,
                 'released_at' => null,
             ]);
+    }
+
+    public function totalFees() { return
+        $this->getFormattedPriceAttribute($this->formatTwoDecimalPlaces($this->fees()->sum('total_fee')));
     }
 
     public function curriculum() { return

@@ -28,8 +28,7 @@ class RegistrationService
 
         if (is_array($subjectsEnrolled)
             && is_array($schedules)
-            && count($subjectsEnrolled) == count($schedules)
-            && array_diff($subjectsEnrolled, $schedules) === array_diff($schedules, $subjectsEnrolled)) return TRUE;
+            && array_intersect($subjectsEnrolled, $schedules) == $subjectsEnrolled) return TRUE;
 
         return FALSE;
     }
@@ -73,13 +72,55 @@ class RegistrationService
         //attach enrolled subjects as grades on registration.
         $grades = [];
         foreach ($selected as $id) {
-            $grades[] = new Models\Grade([
+            if (isset($id) && $id != FALSE) $grades[] = new Models\Grade([
                 'subject_id' => $id,
                 'mark_id' => $mark->id,
             ]);
         }
 
         $registration->grades()->saveMany($grades);
+
+        return $registration;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function searchDuplicate($prospectusId, $studentId)
+    {
+        $registrationDuplicate = Models\Registration::where([
+            ['prospectus_id', $prospectusId],
+            ['student_id', $studentId],
+            ['isExtension', 0],
+            ['isRegular', 1],
+        ])->first();
+
+        //check duplicate of enrollment.
+        if (filled($registrationDuplicate)) throw new \Exception('A registration was found for this current semester. Please refer to Registration ID: '.
+            $registrationDuplicate->custom_id.'. Duplication is not allowed!');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function update(array $selected, Models\Registration $registration) : Models\Registration
+    {
+        $registration = $this->detachGrades($registration);
+
+        return $this->store($selected, $registration);
+    }
+
+    public function detachGrades(Models\Registration $registration) : Models\Registration
+    {
+        if ($registration->grades->isNotEmpty()) $registration->grades()->delete();
+
+        if ($registration->extensions->isNotEmpty()) {
+            foreach ($registration->extensions as $extension) {
+                $this->detachGrades($extension->registration);
+                $extension->delete();
+                $extension->registration->delete();
+            }
+        }
 
         return $registration;
     }
