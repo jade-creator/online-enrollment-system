@@ -70,7 +70,7 @@ class GradeService
             $grade->mark_id = (new GradeRemarkService())->findRemark($type);
         }
 
-        $grade->save();
+        $grade->update();
 
         return $grade;
     }

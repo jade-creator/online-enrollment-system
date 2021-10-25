@@ -151,44 +151,46 @@
                 </x-slot>
 
                 <x-slot name="actions">
-                    @isset ($registration->assessment)
-                        @can ('proceedToPayment', $registration->assessment)
-                            <a class="w-full text-white py-2 rounded-md bg-indigo-500 hover:bg-indigo-800 flex items-center justify-center" href="{{ route('student.paywithpaypal', ['registrationId' => $this->registration->custom_id]) }}">
-                                <span>Proceed to Payment</span>
-                                <x-icons.right-arrow-icon />
-                            </a>
-                        @elsecan ('view', $registration->assessment)
-                            <a class="w-full text-white py-2 rounded-md bg-indigo-500 hover:bg-indigo-800 flex items-center justify-center" href="{{ route('admin.payments.view', ['search' => $this->registration->custom_id]) }}">
-                                <x-icons.fee-icon/>
-                                <span class="mx-2">PAID AMOUNT: {{ $registration->assessment->paid_amount ?? 'N/A' }}</span>
-                            </a>
-                        @endcan
-                    @else
-                        @if (! isset($grandTotal))
-                            @can ('finalize', $registration)
-                                <x-jet-button wire:click="compute" wire:loading.attr="disabled" class="w-full bg-indigo-500 hover:bg-indigo-800 flex items-center justify-center">
+                    @can ('action', $registration)
+                        @isset ($registration->assessment)
+                            @can ('proceedToPayment', $registration->assessment)
+                                <a class="w-full text-white py-2 rounded-md bg-indigo-500 hover:bg-indigo-800 flex items-center justify-center" href="{{ route('student.paywithpaypal', ['registrationId' => $this->registration->custom_id]) }}">
+                                    <span>Proceed to Payment</span>
+                                    <x-icons.right-arrow-icon />
+                                </a>
+                            @elsecan ('view', $registration->assessment)
+                                <a class="w-full text-white py-2 rounded-md bg-indigo-500 hover:bg-indigo-800 flex items-center justify-center" href="{{ route('admin.payments.view', ['search' => $this->registration->custom_id]) }}">
                                     <x-icons.fee-icon/>
-                                    <span class="mx-2">{{ __('COMPUTE GRAND TOTAL') }}</span>
-                                </x-jet-button>
-                            @elsecan ('submitted', $registration)
-                                <x-jet-button disabled="disabled" class="w-full bg-indigo-500 flex items-center justify-center cursor-not-allowed disabled:opacity-80">
-                                    <x-icons.reject-icon/>
-                                    <span class="mx-2">{{ __('PLEASE WAIT THE FINAL ASSESSMENT') }}</span>
-                                </x-jet-button>
+                                    <span class="mx-2">PAID AMOUNT: {{ $registration->assessment->paid_amount ?? 'N/A' }}</span>
+                                </a>
                             @endcan
                         @else
-                            <div class="w-full flex flex-col">
-                                <x-jet-button wire:click="save" wire:loading.attr="disabled" class="w-full bg-green-500 hover:bg-green-600 flex items-center justify-center">
-                                    <x-icons.fee-icon/>
-                                    <span class="mx-2">{{ __('PLACE FEES') }}</span>
-                                </x-jet-button>
-                                <x-jet-button wire:click="cancel" class="w-full text-indigo-500 border-indigo-500 bg-white hover:bg-gray-200 flex items-center justify-center my-2">
-                                    <x-icons.reject-icon/>
-                                    <span class="mx-2">{{ __('CANCEL') }}</span>
-                                </x-jet-button>
-                            </div>
-                        @endif
-                    @endisset
+                            @if (! isset($grandTotal))
+                                @can ('finalize', $registration)
+                                    <x-jet-button wire:click="compute" wire:loading.attr="disabled" class="w-full bg-indigo-500 hover:bg-indigo-800 flex items-center justify-center">
+                                        <x-icons.fee-icon/>
+                                        <span class="mx-2">{{ __('COMPUTE GRAND TOTAL') }}</span>
+                                    </x-jet-button>
+                                @elsecan ('submitted', $registration)
+                                    <x-jet-button disabled="disabled" class="w-full bg-indigo-500 flex items-center justify-center cursor-not-allowed disabled:opacity-80">
+                                        <x-icons.reject-icon/>
+                                        <span class="mx-2">{{ __('PLEASE WAIT THE FINAL ASSESSMENT') }}</span>
+                                    </x-jet-button>
+                                @endcan
+                            @else
+                                <div class="w-full flex flex-col">
+                                    <x-jet-button wire:click="save" wire:loading.attr="disabled" class="w-full bg-green-500 hover:bg-green-600 flex items-center justify-center">
+                                        <x-icons.fee-icon/>
+                                        <span class="mx-2">{{ __('PLACE FEES') }}</span>
+                                    </x-jet-button>
+                                    <x-jet-button wire:click="cancel" class="w-full text-indigo-500 border-indigo-500 bg-white hover:bg-gray-200 flex items-center justify-center my-2">
+                                        <x-icons.reject-icon/>
+                                        <span class="mx-2">{{ __('CANCEL') }}</span>
+                                    </x-jet-button>
+                                </div>
+                            @endif
+                        @endisset
+                    @endcan
                 </x-slot>
             </x-jet-form-section>
         </div>

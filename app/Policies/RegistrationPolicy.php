@@ -10,6 +10,10 @@ class RegistrationPolicy extends BasePolicy
 {
     use HandlesAuthorization;
 
+    public function action(User $user, Registration $registration) { return
+        is_null($registration->released_at);
+    }
+
     public function edit(User $user, Registration $registration) { return
         $this->isAuthorized('registration', 'edit', $user) && ($registration->status->name == 'pending' ||
             $registration->status->name == 'confirming');

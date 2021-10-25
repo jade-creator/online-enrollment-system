@@ -11,10 +11,9 @@ class PaymentIndexComponent extends Livewire\Component
 {
     use AuthorizesRequests;
     use Livewire\WithPagination, Traits\WithBulkActions, Traits\WithSorting, Traits\WithFilters, Traits\WithExporting,
-        Traits\WithSweetAlert;
+        Traits\WithSweetAlert, Traits\WithArchiving;
 
     public int $paginateValue = 10;
-    public string $isArchived = '0';
 
     protected $queryString = [
         'search' => [ 'except' => '' ],
@@ -51,7 +50,7 @@ class PaymentIndexComponent extends Livewire\Component
 
     public function getRowsQueryProperty()
     {
-        return Models\Transaction::search($this->search)
+        $query = Models\Transaction::search($this->search)
             ->with([
                 'registration.assessment',
                 'registration.prospectus.level',
@@ -63,25 +62,14 @@ class PaymentIndexComponent extends Livewire\Component
                     $query->where('custom_id', $this->search);
                 });
             })
-            ->when($this->isArchived == '1', function ($query) {
-                $query->whereNotNull('archived_at');
-            })
-            ->when($this->isArchived == '0', function ($query) {
-                $query->whereNull('archived_at');
-            })
             ->orderBy($this->sortBy, $this->sortDirection)
             ->dateFiltered($this->dateMin, $this->dateMax);
+
+        return $this->archivingQuery($query, 'archived_at');
     }
 
     public function pay()
     {
-        if (auth()->user()->student->registrations->isEmpty()) {
-            session()->flash('alert', [
-                'type' => 'info',
-                'message' => 'You are not registered. Click <a href="'.route('student.registrations.create').'" class="underline">register</a> now',
-            ]);
-        }
-
         if (auth()->user()->student->registrations->isNotEmpty()
                 && auth()->user()->student->grandTotal->sum('balance') == 0) {
             session()->flash('alert', [
@@ -94,71 +82,17 @@ class PaymentIndexComponent extends Livewire\Component
 
         $registration = Models\Registration::with('assessment')
             ->where('student_id', auth()->user()->student->id)
+            ->whereNull('released_at')
             ->whereHas('assessment', function ($query) {
                 return $query->where('balance', '!=', 0);
             })
             ->first();
 
-        return $this->redirect(route('student.paywithpaypal', $registration->custom_id));
-    }
+        if (filled($registration)) return $this->redirect(route('student.paywithpaypal', $registration->custom_id));
 
-    public function unarchive(Models\Transaction $transaction)
-    {
-        try {
-            $transaction->archived_at = NULL;
-            return $transaction->update();
-        } catch (\Exception $e) {
-            session()->flash('alert', [
-                'type' => 'danger',
-                'message' => $e->getMessage(),
-            ]);
-
-            return $this->emit('alert');
-        }
-    }
-
-    public function archive(Models\Transaction $transaction)
-    {
-        try {
-            $transaction->archived_at = now();
-            $transaction->update();
-        } catch (\Exception $e) {
-            session()->flash('alert', [
-                'type' => 'danger',
-                'message' => $e->getMessage(),
-            ]);
-
-            return $this->emit('alert');
-        }
-    }
-
-    public function unarchiveAll()
-    {
-        try {
-            Models\Transaction::whereIn('id', $this->selected)->update(['archived_at' => NULL]);
-            $this->emitSelf('DeselectPage', FALSE);
-        } catch (\Exception $e) {
-            session()->flash('alert', [
-                'type' => 'danger',
-                'message' => $e->getMessage(),
-            ]);
-
-            return $this->emit('alert');
-        }
-    }
-
-    public function archiveAll()
-    {
-        try {
-            Models\Transaction::whereIn('id', $this->selected)->update(['archived_at' => now()]);
-            $this->emitSelf('DeselectPage', FALSE);
-        } catch (\Exception $e) {
-            session()->flash('alert', [
-                'type' => 'danger',
-                'message' => $e->getMessage(),
-            ]);
-
-            return $this->emit('alert');
-        }
+        return session()->flash('alert', [
+            'type' => 'info',
+            'message' => 'No registration found. Click <a href="'.route('student.registrations.create').'" class="underline">register</a> now',
+        ]);
     }
 }

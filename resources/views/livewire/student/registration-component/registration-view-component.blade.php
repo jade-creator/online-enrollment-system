@@ -1,4 +1,8 @@
 <div class="max-w-5xl space-y-4 md:space-x-0 mx-auto p-4 sm:px-6 lg:px-8">
+    @cannot ('action', $registration)
+        <x-form.unflashed-alert>This registration has been archived and it is now 'read-only'.</x-form.unflashed-alert>
+    @endcannot
+
     @if (isset($registration))
         <div class="py-10">
             <div class="flex items-center justify-between">
@@ -171,11 +175,13 @@
         {{-- ASSESSMENT OF FEES --}}
         <livewire:student.assessment-component.assessment-index-component :registration="$registration" :totalUnit="$totalUnit" key="{{ 'student-assessment-index-component'.now() }}"/>
 
-        {{--Main action buttons: submit,confirm,enroll,pending,reject--}}
-        <livewire:partials.registration-form-buttons :registration="$registration" key="{{ 'registration-form-buttons-'.now() }}">
+        @can ('action', $registration)
+            {{--Main action buttons: submit,confirm,enroll,pending,reject--}}
+            <livewire:partials.registration-form-buttons :registration="$registration" key="{{ 'registration-form-buttons-'.now() }}">
 
-        {{--Modal form: selecting section and apply schedules--}}
-        <livewire:partials.select-section-form key="{{ 'select-section-form-'.now() }}">
+            {{--Modal form: selecting section and apply schedules--}}
+            <livewire:partials.select-section-form key="{{ 'select-section-form-'.now() }}">
+        @endcan
     @endif
 
     <div>@include('partials.loading')</div>

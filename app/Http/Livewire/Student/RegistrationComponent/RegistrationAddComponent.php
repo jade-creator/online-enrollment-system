@@ -29,6 +29,14 @@ class RegistrationAddComponent extends Component
         ];
     }
 
+    protected $messages = [
+        'classification.required' => 'The classification field cannot be empty.',
+        'type.required' => 'The type field cannot be empty.',
+        'levelId.required' => 'The level field cannot be empty.',
+        'programId.required' => 'The program field cannot be empty.',
+        'termId.required' => 'The term field cannot be empty.',
+    ];
+
     public function mount() {
         $this->fill([
             'registration' => new Models\Registration(),
@@ -77,11 +85,15 @@ class RegistrationAddComponent extends Component
         }
     }
 
-    public function getLevelsProperty()
-    {
-        $type = Models\SchoolType::filterByType('College');
+    public function updatedClassification($value) { if ($value == 'irregular') $this->type = 'old'; }
 
-        return $type->levels;
+    public function updatedType($value) { if ($value == 'new') $this->classification = 'regular'; }
+
+    public function getLevelsProperty() { return
+        Models\Prospectus::select(['level_id', 'program_id'])
+        ->where('program_id', auth()->user()->student->program_id)
+        ->groupBy(['level_id', 'program_id'])
+        ->get();
     }
 
     public function getProgramsProperty() { return

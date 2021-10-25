@@ -39,10 +39,10 @@ class ProspectusDestroyComponent extends Component
         try {
             (new ProspectusSubjectService())->destroy($prospectusSubject, $this->curriculumId);
 
+            $this->emitUp('alertParent', 'success', $prospectusSubject->subject->code.' has been deleted.');
             $this->emitUp('refresh');
-            $this->success($prospectusSubject->subject->code." has been deleted.");
         } catch (\Exception $e) {
-            $this->error($e->getMessage());
+            $this->emitUp('alertParent', 'danger', $e->getMessage());
         }
     }
 }

@@ -68,4 +68,19 @@ class ScheduleService
 
         return $schedule;
     }
+
+    public function populateProfessors(Models\Registration $registration) : array
+    {
+        if ($registration->classes->isEmpty()) return [];
+
+        $professors = [];
+
+        foreach ($registration->classes as $schedule) {
+            if (array_key_exists($schedule->prospectus_subject_id, $professors)) continue;
+
+            $professors[$schedule->prospectus_subject_id] = [$schedule->employee->user->person->full_name, $schedule->prospectusSubject->unit];
+        }
+
+        return $professors;
+    }
 }

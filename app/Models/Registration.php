@@ -85,9 +85,12 @@ class Registration extends BaseModel
         return $query->select(['id', ...$this->fillable, 'released_at', 'created_at'])
             ->with([
                 ...$this->relationships,
-                'classes.prospectusSubject',
-                'classes.employee.user.person',
-                'classes.employee.user.employee',
+                'classes' => function ($query) {
+                    $query->withTrashed()->with(['prospectusSubject', 'employee.user.person']);
+                },
+//                'classes.prospectusSubject',
+//                'classes.employee.user.person',
+//                'classes.employee.user.employee',
                 'student.user.person.contact',
                 'student.user.person.detail.country',
                 'grades:id,registration_id,subject_id,mark_id,value',

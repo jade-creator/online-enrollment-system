@@ -30,6 +30,7 @@ class ProspectusUpdateComponent extends Component
         return [
             'prospectusSubject.subject_id' => ['required', 'integer'],
             'prospectusSubject.unit' => ['required', 'integer', 'min:1'],
+            'prospectusSubject.isComputed' => ['boolean'],
         ];
     }
 
@@ -58,11 +59,13 @@ class ProspectusUpdateComponent extends Component
             $this->authorize('update', $this->prospectusSubject);
             (new ProspectusSubjectService())->update($this->prospectusSubject, $this->curriculumId, $this->preRequisiteSubjects, $this->coRequisiteSubjects);
 
-            $this->success($this->prospectusSubject->subject->code.' has been updated.');
+//            $this->success($this->prospectusSubject->subject->code.' has been updated.');
+            $this->emitUp('alertParent', 'success', $this->prospectusSubject->subject->code.' has been updated.');
             $this->toggleViewingSubject();
             $this->emitUp('refresh');
         } catch (\Exception $e) {
-            $this->error($e->getMessage());
+//            $this->error($e->getMessage());
+            $this->emitUp('alertParent', 'danger', $e->getMessage());
         }
     }
 
