@@ -67,9 +67,10 @@ class StudentGradeViewComponent extends Component
         view('livewire.student.student-grade-view-component');
     }
 
-    public function getProspectusesProperty() { return
-        Models\Prospectus::select('level_id')
-            ->groupBy(['level_id'])
+    public function getLevelsProperty() { return
+        Models\Prospectus::select(['level_id', 'program_id'])
+            ->where('program_id', auth()->user()->student->program_id)
+            ->groupBy(['level_id', 'program_id'])
             ->get();
     }
 

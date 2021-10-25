@@ -63,7 +63,7 @@
                                                     </a>
 
                                                     <a href="{{ route('admin.students.registration.create', ['student' => $student]) }}">
-                                                        <x-table.cell-button title="Enroll">
+                                                        <x-table.cell-button title="Register">
                                                             <x-icons.pre-enrollment-icon/>
                                                         </x-table.cell-button>
                                                     </a>
@@ -91,4 +91,12 @@
     </div>
 
     <div>@include('partials.loading')</div>
+
+    @if (session()->has('alert'))
+        <x-form.alert type="{{session('alert')['type']}}">{!!session()->pull('alert')['message']!!}</x-form.alert>
+    @endif
+
+    @push('scripts')
+        <script src="{{ asset('js/alert.js') }}"></script>
+    @endpush
 </div>

@@ -14,6 +14,7 @@ class ProspectusSubject extends BaseModel
         'prospectus_id',
         'subject_id',
         'unit',
+        'isComputed'
     ];
 
     public $select = [
@@ -22,10 +23,19 @@ class ProspectusSubject extends BaseModel
         'subject_id',
         'curriculum_id',
         'unit',
-        'created_at',
+        'isComputed',
+        'created_at'
     ];
 
+    protected $casts = ['isComputed' => 'boolean'];
+
+    protected $attributes = ['isComputed' => true];
+
     public $with = [ 'subject:id,code,title' ];
+
+    public function getComputedElementAttribute() { return
+        $this->attributes['isComputed'] ? 'computed' : 'not computed';
+    }
 
     //get all the subjects in the given prospectus.
     public function scopeGetAllSubjectsInProspectus($query, $prospectusId) { return

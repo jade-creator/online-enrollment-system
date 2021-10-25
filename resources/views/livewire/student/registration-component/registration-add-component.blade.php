@@ -57,7 +57,7 @@
                     <x-slot name="form">
                         <div class="col-span-6">
                             <x-jet-label for="classification" value="{{ __('Classification') }}" />
-                            <select wire:model.defer="classification" wire:loading.attr="disabled" id="classification" class="relative w-full bg-white mt-3 pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
+                            <select wire:model="classification" wire:loading.attr="disabled" id="classification" class="relative w-full bg-white mt-3 pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
                                 <option value="" selected>Select a classification</option>
                                 <option value="regular">Regular</option>
                                 <option value="irregular">Irregular</option>
@@ -67,7 +67,7 @@
 
                         <div class="col-span-6">
                             <x-jet-label for="student_type" value="{{ __('Student Type') }}" />
-                            <select wire:model.defer="type" wire:loading.attr="disabled" id="student_type" class="relative w-full bg-white mt-3 pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
+                            <select wire:model="type" wire:loading.attr="disabled" id="student_type" class="relative w-full bg-white mt-3 pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
                                 <option value="" selected>Select student type</option>
                                 <option value="new">New</option>
                                 <option value="old">Old</option>
@@ -90,20 +90,13 @@
                         <div class="col-span-6">
                             <x-jet-label for="level" value="{{ __('Level') }}"/>
                             <select wire:model.defer="levelId" wire:loading.attr="disabled" id="level" class="relative w-full bg-white mt-3 pb-3 border-b border-gray-200 transition-all duration-500 focus-within:border-gray-300">
-                                @isset(auth()->user()->student->program->prospectuses)
-                                    @forelse (auth()->user()->student->program->prospectuses as $prospectus)
-                                        @if ($loop->first)
-                                            <option value="" selected>Select a level</option>
-                                        @endif
-                                        @if ($loop->odd)
-                                            <option value="{{ $prospectus->level->id }}">{{ $prospectus->level->level }}</option>
-                                        @endif
-                                    @empty
-                                        <option value="">No records</option>
-                                    @endforelse
-                                @else
+                                @forelse ($this->levels as $level)
+                                    @if ($loop->first) <option value="">Select a level</option> @endif
+
+                                    <option value="{{ $level->level->id ?? '' }}">{{ $level->level->level ?? 'N/A' }}</option>
+                                @empty
                                     <option value="">No records</option>
-                                @endisset
+                                @endforelse
                             </select>
                             <x-jet-input-error for="levelId" class="mt-2"/>
                         </div>

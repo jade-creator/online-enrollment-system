@@ -68,7 +68,7 @@
                                                             </a>
                                                         @endcan
 
-                                                        <x-table.cell-button wire:click="archive({{$transaction}})" wire:loading.attr="disabled" @click.stop title="Archive">
+                                                        <x-table.cell-button wire:click="archive('Transaction', {{$transaction}}, 'archived_at')" wire:loading.attr="disabled" @click.stop title="Archive">
                                                             <x-icons.edit-icon/>
                                                         </x-table.cell-button>
                                                     </div>
@@ -79,7 +79,7 @@
                                 @else
                                     @if (!count($selected) > 0)
                                         <x-table.cell x-data="{ open: true }" @click.stop headerLabel="Action" class="justify-start md:col-span-1">
-                                            <button wire:click="unarchive({{$transaction}})" wire:loading.attr="disabled" @click.stop class="text-blue-400 hover:text-blue-500 text-base focus:outline-none relative px-2">
+                                            <button wire:click="unarchive('Transaction', {{$transaction}}, 'archived_at')" wire:loading.attr="disabled" @click.stop class="text-blue-400 hover:text-blue-500 text-base focus:outline-none relative px-2">
                                                 <span>loading...</span>
                                                 <span x-show="open"
                                                       @click="open = ! open"
@@ -138,11 +138,11 @@
 
         <x-table.bulk-action-bar :count="count($selected)">
             @if (isset($isArchived) && $isArchived !== '1')
-                <x-table.bulk-action-button nameButton="Archive" event="archiveAll">
+                <x-table.bulk-action-button nameButton="Archive" event="archiveAll('Transaction', 'archived_at')">
                     <x-icons.edit-icon/>
                 </x-table.bulk-action-button>
             @else
-                <x-table.bulk-action-button nameButton="Unarchive" event="unarchiveAll">
+                <x-table.bulk-action-button nameButton="Unarchive" event="unarchiveAll('Transaction', 'archived_at')">
                     <x-icons.edit-icon/>
                 </x-table.bulk-action-button>
             @endif

@@ -15,6 +15,7 @@ class SectionUpdateComponent extends Component
     public Models\Section $section;
     public $currentNumberOfStudents;
     public string $programId = '', $levelId = '', $termId = '';
+    public $route;
 
     public function rules()
     {
@@ -42,6 +43,7 @@ class SectionUpdateComponent extends Component
     public function mount()
     {
         $this->fill([
+            'route' => url()->previous(),
             'programId' => $this->section->prospectus->program_id,
             'levelId' => $this->section->prospectus->level_id,
             'termId' => $this->section->prospectus->term_id,
@@ -66,7 +68,8 @@ class SectionUpdateComponent extends Component
                 'type' => $this->successType,
                 'text' => $this->section->name.' has been updated.',
             ]);
-            return redirect(route('sections.view'));
+
+            return redirect($this->route);
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }

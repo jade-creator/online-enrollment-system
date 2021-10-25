@@ -49,14 +49,15 @@ class ScheduleUpdateComponent extends Component
             $this->schedule = (new Schedule\ScheduleService())->updateProfSchedule($this->schedule, $this->profSchedules);
             $schedule = (new Schedule\ScheduleService())->update($this->schedule, $this->schedules);
 
-            $this->success($this->schedule->prospectusSubject->subject->code."'s time period in ".$this->section->name." has been updated.");
+            $this->emitUp('alertParent', 'success', $this->schedule->prospectusSubject->subject->code."'s time period in ".$this->section->name." has been updated.");
             $this->toggleViewingSchedule();
             $this->emitUp('refresh');
         } catch (\Exception $e) {
             $this->schedule->day_id = $originalDayId;
             $this->schedule->update();
 
-            $this->error($e->getMessage());
+            $this->toggleViewingSchedule();
+            $this->emitUp('alertParent', 'danger', $e->getMessage());
         }
     }
 

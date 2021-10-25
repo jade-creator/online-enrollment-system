@@ -5,17 +5,14 @@ namespace App\Http\Livewire\Admin\PreEnrollmentComponent;
 use App\Exports\RegistrationsExport;
 use App\Models\Program;
 use App\Models\Registration;
-use App\Traits\WithExporting;
-use App\Traits\WithSweetAlert;
-use Livewire\Component;
-use Livewire\WithPagination;
-use App\Traits\WithFilters;
-use App\Traits\WithBulkActions;
-use App\Traits\WithSorting;
+use App\Models\Student;
+use App\Traits;
+use Livewire;
 
-class PreEnrollmentViewComponent extends Component
+class PreEnrollmentViewComponent extends Livewire\Component
 {
-    use WithBulkActions, WithSorting, WithPagination, WithFilters, WithExporting, WithSweetAlert;
+    use Traits\WithBulkActions, Traits\WithSorting, Livewire\WithPagination, Traits\WithFilters, Traits\WithExporting,
+        Traits\WithSweetAlert, Traits\WithArchiving;
 
     public Registration $registration;
     public int $paginateValue = 10;
@@ -28,11 +25,13 @@ class PreEnrollmentViewComponent extends Component
         'sortBy' => [ 'except' => 'created_at' ],
         'sortDirection' => [ 'except' => 'desc' ],
         'statusId' => [ 'except' => '' ],
+        'isArchived' => [ 'except' => '' ],
     ];
 
     protected $updatesQueryString = [
         'search',
         'statusId',
+        'isArchived'
     ];
 
     protected $allowedSorts = [
@@ -59,7 +58,7 @@ class PreEnrollmentViewComponent extends Component
 
     public function getRowsQueryProperty()
     {
-        return Registration::search($this->search)
+        $query = Registration::search($this->search)
             ->select(['id', 'isNew', 'status_id', 'section_id', 'student_id', 'isRegular', 'prospectus_id', 'custom_id', 'created_at', 'released_at'])
             ->with([
                 'student.user.person',
@@ -82,7 +81,7 @@ class PreEnrollmentViewComponent extends Component
                         });
             })
             ->where('isExtension', 0)
-            ->whereNull('released_at')
+//            ->whereNull('released_at')
             ->filterByStatus($this->statusId)
             ->filterByProgram($this->programId)
             ->filterByLevel($this->levelId)
@@ -91,6 +90,27 @@ class PreEnrollmentViewComponent extends Component
             ->when(!is_null($this->dateMin), function($query) {
                 return $query->whereBetween('created_at', [$this->dateMin, $this->dateMax]);
             });
+
+        return $this->archivingQuery($query, 'released_at');
+    }
+
+    public function createNewRegistration()
+    {
+        $students = Student::all();
+
+        if ($students) {
+            session()->flash('alert', [
+                'type' => 'info',
+                'message' => "Please select a student. Click the option and choose 'register'.",
+            ]);
+        } else {
+            session()->flash('alert', [
+                'type' => 'info',
+                'message' => 'No student found as of '.date('M d Y'),
+            ]);
+        }
+
+        return $this->redirect(route('users.students.index'));
     }
 
     public function getProgramsProperty() { return
@@ -114,9 +134,5 @@ class PreEnrollmentViewComponent extends Component
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }
-    }
-
-    public function paginationView() { return
-        'partials.pagination-link';
     }
 }

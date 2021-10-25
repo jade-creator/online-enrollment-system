@@ -18,7 +18,7 @@ class Section extends BaseModel
     public $with = [
         'prospectus:id,level_id,program_id,term_id',
         'prospectus.level:id,level',
-        'prospectus.program:id,code',
+        'prospectus.program:id,code,program',
         'prospectus.term:id,term',
         'room:id,name',
     ];

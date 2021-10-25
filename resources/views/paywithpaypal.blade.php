@@ -4,6 +4,12 @@
             <div class="md:grid md:grid-cols-3 md:gap-6">
                 <div class="md:col-span-3 p-4 md:p-8 grid grid-cols-6">
                     <div class="col-span-6 xl:col-span-4">
+                        <div class="px-2">
+                            @cannot ('action', $registration)
+                                <x-form.unflashed-alert>This registration has been archived and it is now 'read-only'.</x-form.unflashed-alert>
+                            @endcannot
+                        </div>
+
                         <x-jet-label class="block md:hidden font-extrabold text-xl">{{ $registration->custom_id ?? 'N/A' }}</x-jet-label>
 
                         <div class="my-2">
@@ -34,7 +40,7 @@
                     </div>
 
                     <form class="col-span-6 xl:col-span-2 w-full md:w-8/12 lg:w-1/2 xl:w-full grid place-items-center" method="POST" id="payment-form" role="form" action="{!! URL::route('student.paypal') !!}" >
-                    {{ csrf_field() }}
+                        {{ csrf_field() }}
                         <div class="w-full px-4 py-5 sm:p-6 shadow sm:rounded-tl-md sm:rounded-tr-md bg-white">
                             <div>
                                 <p class="uppercase font-extrabold text-2xl font-mono">SUMMARY</p>
@@ -81,12 +87,14 @@
                                     <div class="w-full border-t border-gray-200"></div>
                                 </div>
 
-                                <div class="col-span-6 grid grid-cols-6">
-                                        <input id="amount" type="number" name="amount" value="{{ old('amount') }}" min="0" autofocus class="col-span-4">
-                                        <button type="submit" class="md:text-sm py-2.5 ml-2 bg-black font-black rounded-md text-white col-span-2">
-                                            Enter Amount
-                                        </button>
-                                </div>
+                                @can ('action', $registration)
+                                    <div class="col-span-6 grid grid-cols-6">
+                                            <input id="amount" type="number" name="amount" value="{{ old('amount') }}" min="0" autofocus class="col-span-4">
+                                            <button type="submit" class="md:text-sm py-2.5 ml-2 bg-black font-black rounded-md text-white col-span-2">
+                                                Enter Amount
+                                            </button>
+                                    </div>
+                                @endcan
 
                                 <div class="col-span-6">
                                     <x-jet-input-error for="amount" class="mt-2"/>

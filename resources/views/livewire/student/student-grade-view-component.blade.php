@@ -31,10 +31,10 @@
                                 <x-slot name="content">
                                     <div class="w-40">
                                         <ul class="font-normal text-indigo-500">
-                                            @foreach ($this->prospectuses as $prospectus)
-                                                <li class="p-2 hover:bg-gray-200 {{ $prospectus->level->id == $levelId ? 'bg-gray-200' : ''}}">
-                                                    <a href="{{ route('student.grades.view', ['levelId' => $prospectus->level->id, 'semesterId' => $semesterId]) }}" class="block w-full h-full">
-                                                        {{ $prospectus->level->level }}
+                                            @foreach ($this->levels as $level)
+                                                <li class="p-2 hover:bg-gray-200 {{ $level->level->id == $levelId ? 'bg-gray-200' : ''}}">
+                                                    <a href="{{ route('student.grades.view', ['levelId' => $level->level->id, 'semesterId' => $semesterId]) }}" class="block w-full h-full">
+                                                        {{ $level->level->level }}
                                                     </a>
                                                 </li>
                                             @endforeach

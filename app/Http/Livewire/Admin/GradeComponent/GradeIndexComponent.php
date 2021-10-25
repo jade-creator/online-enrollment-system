@@ -24,7 +24,10 @@ class GradeIndexComponent extends Livewire\Component
 
     protected array $allowedSorts = ['id'];
 
-    protected $listeners = ['refresh' => '$refresh'];
+    protected $listeners = [
+        'refresh' => '$refresh',
+        'alertParent'
+    ];
 
     public function render() { return
         view('livewire.admin.grade-component.grade-index-component', ['registrations' => $this->rows]);
@@ -45,6 +48,16 @@ class GradeIndexComponent extends Livewire\Component
             ->searchByStudent($this->search)
             ->orderBy($this->sortBy, $this->sortDirection)
             ->dateFiltered($this->dateMin, $this->dateMax);
+    }
+
+    public function alertParent(string $type = '', string $message = '')
+    {
+        session()->flash('alert', [
+            'type' => $type,
+            'message' => $message,
+        ]);
+
+        $this->emit('alert');
     }
 
     public function updatingPaginateValue() { $this->resetPage(); }

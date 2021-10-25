@@ -102,7 +102,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
             });
 
             //admin prospectus routes
-            Route::get('/prospectuses/{prospectusId}', ProspectusComponent\ProspectusIndexComponent::class)->name('prospectuses.view');
+            Route::get('/prospectuses', ProspectusComponent\ProspectusIndexComponent::class)->name('prospectuses.view');
 
             //admin subject routes
             Route::group(['prefix' => 'subjects', 'as' => 'subjects.'], function (){
@@ -164,6 +164,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
             Route::get('/pre-enrollments/student/{student}/irregular/{prospectusSlug}/create/{registration?}', PreEnrollmentComponent\StudentIrregularAddComponent::class)->name('students.irregular.create');
 
             Route::get('/student/{student}/update', UserComponent\StudentUpdateComponent::class)->name('student.update');
+
+            Route::get('/grade-report/{registration}', GradeComponent\GradePdfComponent::class)->name('grade.report');
         });
 
         Route::get('users/students', UserComponent\StudentIndexComponent::class)->name('users.students.index');

@@ -46,11 +46,12 @@ class ScheduleAddComponent extends Component
             $this->authorize('createClass', $this->section);
             (new ScheduleService())->store($this->section, $this->schedule, $this->days);
 
-            $this->success("A class has been added in ".$this->section->name);
+            $this->emitUp('alertParent', 'success', "A class has been added in ".$this->section->name);
             $this->toggleAddingSchedule();
             $this->emitUp('refresh');
         } catch (\Exception $e) {
-            $this->error($e->getMessage());
+            $this->toggleAddingSchedule();
+            $this->emitUp('alertParent', 'danger', $e->getMessage());
         }
     }
 

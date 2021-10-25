@@ -18,6 +18,7 @@ class CreateProspectusSubjectsTable extends Migration
             $table->foreignId('prospectus_id')->constrained();
             $table->foreignId('subject_id')->constrained();
             $table->integer('unit');
+            $table->boolean('isComputed')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

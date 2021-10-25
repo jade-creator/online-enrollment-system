@@ -30,6 +30,7 @@ class ProspectusAddComponent extends Component
         return [
             'prospectusSubject.subject_id' => ['required'],
             'prospectusSubject.unit' => ['required', 'integer', 'min:1'],
+            'prospectusSubject.isComputed' => ['boolean'],
         ];
     }
 
@@ -38,25 +39,23 @@ class ProspectusAddComponent extends Component
         'prospectusSubject.unit.required' => 'The unit field cannot be empty.',
     ];
 
+    public function mount() {
+        $this->prospectusSubject = new ProspectusSubject();
+    }
+
     public function render() { return
         view('livewire.admin.prospectus-component.prospectus-add-component');
     }
 
     public function modalAddingSubject()
     {
-        try {
-            if (empty($this->curriculumId)) throw new \Exception('Please select a curriculum!');
-
-            $this->resetValidation();
-            $this->fill([
-                'prospectusSubject' => new ProspectusSubject(),
-                'preRequisiteSubjects' => [],
-                'coRequisiteSubjects' => [],
-            ]);
-            $this->toggleAddingSubject();
-        } catch (\Exception $e) {
-            $this->error($e->getMessage());
-        }
+        $this->resetValidation();
+        $this->fill([
+            'prospectusSubject' => new ProspectusSubject(),
+            'preRequisiteSubjects' => [],
+            'coRequisiteSubjects' => [],
+        ]);
+        $this->toggleAddingSubject();
     }
 
     public function setCoRequisiteSubjects($value) { $this->coRequisiteSubjects = $value; }
@@ -71,11 +70,11 @@ class ProspectusAddComponent extends Component
             $this->authorize('create', ProspectusSubject::class);
             $prospectusSubject = (new ProspectusSubjectService())->store($this->prospectusSubject, $this->prospectusId, $this->curriculumId, $this->preRequisiteSubjects, $this->coRequisiteSubjects);
 
-            $this->success($prospectusSubject->subject->code.' has been added.');
+            $this->emitUp('alertParent', 'success', $prospectusSubject->subject->code.' has been added.');
             $this->toggleAddingSubject();
             $this->emitUp('refresh');
         }catch (\Exception $e) {
-            $this->error($e->getMessage());
+            $this->emitUp('alertParent', 'danger', $e->getMessage());
         }
     }
 

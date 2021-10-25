@@ -27,6 +27,21 @@
                     <x-jet-input-error for="prospectusSubject.unit" class="mt-2"/>
                 </div>
 
+                <div class="mt-4 col-span-8">
+                    <x-jet-label for="subject-computed" value="{{ __('Computed') }}"/>
+                    <div class="flex items-center mt-2">
+                        <input wire:model="prospectusSubject.isComputed" wire:loading.attr="disabled" type="checkbox" class="mx-1">
+                        <span class="flex items-center">
+                            @if ($prospectusSubject->isComputed)
+                                <div class="mx-2 font-bold rounded-full bg-green-400 flex items-center justify-center" style="height: 8px; width: 8px; font-size: 5px;">&nbsp;</div>
+                            @else
+                                <div class="mx-2 font-bold rounded-full bg-red-400 flex items-center justify-center" style="height: 8px; width: 8px; font-size: 5px;">&nbsp;</div>
+                            @endif
+                            <p class="text-sm text-gray-500">Include to Cumulative Weighted Average (CWA) computation.</p>
+                        </span>
+                    </div>
+                </div>
+
                 <livewire:partials.pre-requisite-dropdown :preRequisiteSubjects="$preRequisiteSubjects" :preRequisites="$preRequisites" key="{{ 'pre-requisite-dropdown-add-'.now() }}">
 
                 <livewire:partials.co-requisite-dropdown :coRequisiteSubjects="$coRequisiteSubjects" :coRequisites="$coRequisites" key="{{ 'co-requisite-dropdown-add-'.now() }}">
