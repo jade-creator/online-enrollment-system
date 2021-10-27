@@ -23,18 +23,18 @@
                 <div class="mt-4 col-span-8">
                     <x-jet-label for="schedules" value="{{ __('Schedules') }}"/>
                     <div class="mb-4 mt-2 grid grid-cols-8 gap-2 col-span-8 font-bold text-xs text-gray-400 uppercase tracking-widest text-left">
-                        <div class="col-span-2">code</div>
+                        <div class="col-span-2 sm:col-span-1">code</div>
                         <div class="hidden sm:block sm:col-span-2">title</div>
                         <div class="col-span-2">day</div>
-                        <div class="col-span-2">time</div>
+                        <div class="col-span-4 sm:col-span-3">time</div>
                     </div>
 
                     <div class="grid grid-cols-8 gap-2 col-span-8 py-2 text-left">
                         @forelse ($schedules as $schedule)
-                            <div class="col-span-2">{{ $schedule->prospectusSubject->subject->code ?? 'N/A' }}</div>
-                            <div class="hidden sm:block sm:col-span-2">{{ $schedule->prospectusSubject->subject->title ?? 'N/A' }}</div>
-                            <div class="col-span-2">{{ $schedule->day->name ?? 'N/A' }}</div>
-                            <div class="col-span-4 md:col-span-2">
+                            <div class="col-span-2 sm:col-span-1">{{ $schedule->prospectusSubject->subject->code ?? 'N/A' }}</div>
+                            <div class="truncate hidden sm:block sm:col-span-2">{{ $schedule->prospectusSubject->subject->title ?? 'N/A' }}</div>
+                            <div class="col-span-2 truncate">{{ $schedule->day->name ?? 'N/A' }}</div>
+                            <div class="col-span-4 sm:col-span-3">
                                 <span>{{ \Carbon\Carbon::parse($schedule->start_time)->format('g: ia') ?? 'N/A' }}</span>
                                 <span>-</span>
                                 <span>{{ \Carbon\Carbon::parse($schedule->end_time)->format('g: ia') ?? 'N/A' }}</span>
