@@ -15,8 +15,8 @@ class RegistrationPolicy extends BasePolicy
     }
 
     public function edit(User $user, Registration $registration) { return
-        $this->isAuthorized('registration', 'edit', $user) && ($registration->status->name == 'pending' ||
-            $registration->status->name == 'confirming');
+        $this->action($user, $registration) && $this->isAuthorized('registration', 'edit', $user)
+            && ($registration->status->name == 'pending' || $registration->status->name == 'confirming');
     }
 
     public function reject(User $user, Registration $registration) { return

@@ -41,7 +41,7 @@
                                 </div>
                                 <div class="col-span-3">
                                     <x-jet-label value="{{ __('Category') }}"/>
-                                    <select wire:model.defer="fee.category_id" wire:loading.attr="disabled" name="category" class="truncate pr-5" >
+                                    <select wire:model.defer="fee.category_id" wire:loading.attr="disabled" name="category" class="truncate pr-5">
                                         @forelse ($this->categories as $category)
                                             @if ($loop->first)
                                                 <option value="" selected>Choose a category</option>
@@ -55,7 +55,7 @@
                                 </div>
                                 <div class="col-span-6">
                                     <x-jet-label value="{{ __('Description (optional)') }}"/>
-                                    <textarea wire:model.defer="description" wire:loading.attr="disabled" name="description"></textarea>
+                                    <textarea wire:model.defer="description" wire:loading.attr="disabled" name="description" class="h-32"></textarea>
                                     <x-jet-input-error for="description" class="mt-2"/>
                                 </div>
                                 <div class="col-span-3">

@@ -18,6 +18,7 @@ class CreateSectionsTable extends Migration
             $table->string('name', 100);
             $table->foreignId('room_id')->constrained();
             $table->unsignedInteger('seat');
+            $table->boolean('isFull')->default(0);
             $table->foreignId('prospectus_id')->constrained();
             $table->timestamps();
             $table->softDeletes();

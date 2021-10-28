@@ -18,10 +18,22 @@
 
                         <x-slot name="form">
                             <form>
-                                <div class="col-span-6">
+                                <div class="col-span-3">
                                     <x-jet-label for="code" value="{{ __('Code') }}" />
                                     <x-jet-input wire:model.defer="program.code" id="code" type="text" name="code" autofocus required/>
                                     <x-jet-input-error for="program.code" class="mt-2"/>
+                                </div>
+                                <div class="col-span-3">
+                                    <x-jet-label for="facultyId" value="{{ __('Faculty') }}" />
+                                    <select wire:model.defer="program.faculty_id" name="facultyId" autofocus required>
+                                        <option value="" selected>Select a faculty</option>
+                                        @forelse ($this->faculties as $faculty)
+                                            <option value="{{ $faculty->id ?? 'N/A' }}">{{ $faculty->code ?? 'N/A' }}</option>
+                                        @empty
+                                            <option value="">No records</option>
+                                        @endforelse
+                                    </select>
+                                    <x-jet-input-error for="program.faculty_id" class="mt-2"/>
                                 </div>
                                 <div class="col-span-6">
                                     <x-jet-label for="program" value="{{ __('Program') }}" />
@@ -35,7 +47,7 @@
                                 </div>
                                 <div class="col-span-6">
                                     <x-jet-label for="description" value="{{ __('Description') }}" />
-                                    <textarea wire:model.defer="program.description" id="description" type="text" name="description" autofocus required></textarea>
+                                    <textarea wire:model.defer="program.description" id="description" name="description" autofocus required class="h-32"></textarea>
                                     <x-jet-input-error for="program.description" class="mt-2"/>
                                 </div>
                             </form>

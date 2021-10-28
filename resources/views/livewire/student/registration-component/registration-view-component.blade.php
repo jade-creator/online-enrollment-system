@@ -1,7 +1,7 @@
 <div class="max-w-5xl space-y-4 md:space-x-0 mx-auto p-4 sm:px-6 lg:px-8">
-    @cannot ('action', $registration)
-        <x-form.unflashed-alert>This registration has been archived and it is now 'read-only'.</x-form.unflashed-alert>
-    @endcannot
+    @if (session()->has('unflashed-alert'))
+        <x-form.unflashed-alert type="{{session('unflashed-alert')['type']}}">{!!session()->pull('unflashed-alert')['message']!!}</x-form.unflashed-alert>
+    @endif
 
     @if (isset($registration))
         <div class="py-10">

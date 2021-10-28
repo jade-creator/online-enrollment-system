@@ -14,22 +14,30 @@ class FacultyUpdateComponent extends Component
     use AuthorizesRequests, WithSweetAlert;
 
     public Faculty $faculty;
+    public $route;
 
     public function rules()
     {
         return [
+            'faculty.code' => ['required', 'string', 'max:100', 'unique:faculties,code,'.$this->faculty->id, 'alpha_dash'],
             'faculty.name' => ['required', 'string', 'max:200'],
-            'faculty.program_id' => ['required'],
-            'faculty.description' => ['nullable', 'string', 'max:500'],
-            'faculty.mission' => ['nullable', 'string', 'max:500'],
-            'faculty.vision' => ['nullable', 'string', 'max:500'],
+            'faculty.description' => ['required', 'string', 'max:500'],
+            'faculty.mission' => ['required', 'string', 'max:500'],
+            'faculty.vision' => ['required', 'string', 'max:500'],
         ];
     }
 
     protected $messages = [
+        'faculty.code.required' => 'The code field cannot be empty.',
         'faculty.name.required' => 'The name field cannot be empty.',
-        'faculty.program_id.required' => 'The program field cannot be empty.',
+        'faculty.description.required' => 'The description field cannot be empty.',
+        'faculty.mission.required' => 'The mission field cannot be empty.',
+        'faculty.vision.required' => 'The vision field cannot be empty.',
     ];
+
+    public function mount() {
+        $this->route = url()->previous();
+    }
 
     public function render() { return
         view('livewire.admin.faculty-component.faculty-update-component');
@@ -48,13 +56,10 @@ class FacultyUpdateComponent extends Component
                 'type' => $this->successType,
                 'text' => $faculty->name.' has been updated.',
             ]);
-            return redirect(route('admin.faculties.view'));
+
+            return redirect($this->route);
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }
-    }
-
-    public function getProgramsProperty() { return
-        Program::get(['id', 'program']);
     }
 }

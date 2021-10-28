@@ -26,7 +26,7 @@ class GradeIndexComponent extends Livewire\Component
 
     protected $listeners = [
         'refresh' => '$refresh',
-        'alertParent'
+        'sessionFlashAlert'
     ];
 
     public function render() { return
@@ -48,16 +48,6 @@ class GradeIndexComponent extends Livewire\Component
             ->searchByStudent($this->search)
             ->orderBy($this->sortBy, $this->sortDirection)
             ->dateFiltered($this->dateMin, $this->dateMax);
-    }
-
-    public function alertParent(string $type = '', string $message = '')
-    {
-        session()->flash('alert', [
-            'type' => $type,
-            'message' => $message,
-        ]);
-
-        $this->emit('alert');
     }
 
     public function updatingPaginateValue() { $this->resetPage(); }

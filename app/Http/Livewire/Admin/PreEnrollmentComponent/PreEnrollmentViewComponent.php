@@ -97,20 +97,12 @@ class PreEnrollmentViewComponent extends Livewire\Component
     public function createNewRegistration()
     {
         $students = Student::all();
+        $message = filled($students) ? 'Please select a student. Click the option and choose "register".'
+            : 'No student found as of '.date('M d Y');
 
-        if ($students) {
-            session()->flash('alert', [
-                'type' => 'info',
-                'message' => "Please select a student. Click the option and choose 'register'.",
-            ]);
-        } else {
-            session()->flash('alert', [
-                'type' => 'info',
-                'message' => 'No student found as of '.date('M d Y'),
-            ]);
-        }
+        $this->sessionFlashAlert('student-index-alert', 'info', $message, FALSE);
 
-        return $this->redirect(route('users.students.index'));
+        return redirect(route('users.students.index'));
     }
 
     public function getProgramsProperty() { return

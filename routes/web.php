@@ -91,10 +91,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
 
             Route::get('/dashboard', Dashboard::class)->name('dashboard');
 
-            //admin grade routes
-
-            //admin registration routes
-
             //admin section routes
             Route::group(['prefix' => 'sections', 'as' => 'sections.'], function (){
                 Route::get('/create', SectionComponent\SectionAddComponent::class)->name('create');
@@ -103,13 +99,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
 
             //admin prospectus routes
             Route::get('/prospectuses', ProspectusComponent\ProspectusIndexComponent::class)->name('prospectuses.view');
-
-            //admin subject routes
-            Route::group(['prefix' => 'subjects', 'as' => 'subjects.'], function (){
-                Route::get('', SubjectComponent\SubjectIndexComponent::class)->name('view');
-                Route::get('/create', SubjectComponent\SubjectAddComponent::class)->name('create');
-                Route::get('{subject}/update', SubjectComponent\SubjectUpdateComponent::class)->name('update');
-            });
 
             //admin program routes
             Route::group(['prefix' => 'programs', 'as' => 'programs.'], function (){
@@ -128,13 +117,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
                 Route::get('', FeeComponent\FeeIndexComponent::class)->name('view');
                 Route::get('/create', FeeComponent\FeeAddComponent::class)->name('create');
                 Route::get('{fee}/update', FeeComponent\FeeUpdateComponent::class)->name('update');
-            });
-
-            //admin faculty routes
-            Route::group(['prefix' => 'faculties', 'as' => 'faculties.'], function (){
-                Route::get('', FacultyComponent\FacultyIndexComponent::class)->name('view');
-                Route::get('/create', FacultyComponent\FacultyAddComponent::class)->name('create');
-                Route::get('{faculty}/update', FacultyComponent\FacultyUpdateComponent::class)->name('update');
             });
 
             //admin user routes
@@ -171,6 +153,25 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
         Route::get('users/students', UserComponent\StudentIndexComponent::class)->name('users.students.index');
     });
     //end: admin and registrar
+
+    //start: admin and dean.
+    Route::group(['middleware' => ['role:admin|dean', 'user.detail', 'approved'], 'as' => 'admin.'], function () {
+
+        //admin faculty routes
+        Route::group(['prefix' => 'faculties', 'as' => 'faculties.'], function (){
+            Route::get('', FacultyComponent\FacultyIndexComponent::class)->name('view');
+            Route::get('/create', FacultyComponent\FacultyAddComponent::class)->name('create');
+            Route::get('{faculty}/update', FacultyComponent\FacultyUpdateComponent::class)->name('update');
+        });
+
+        //subject routes
+        Route::group(['prefix' => 'subjects', 'as' => 'subjects.'], function () {
+            Route::get('', SubjectComponent\SubjectIndexComponent::class)->name('view');
+            Route::get('/create', SubjectComponent\SubjectAddComponent::class)->name('create');
+            Route::get('{subject}/update', SubjectComponent\SubjectUpdateComponent::class)->name('update');
+        });
+    });
+    //end: admin and dean.
 
     //start: all except student
     Route::middleware(['role:admin|registrar|dean|faculty member', 'user.detail', 'approved'])->group(function () {

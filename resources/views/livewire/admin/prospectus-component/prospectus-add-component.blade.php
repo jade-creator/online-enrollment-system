@@ -4,7 +4,7 @@
     </x-slot>
 
     <x-slot name="content">
-        <form>
+        <form class="sidebar w-full px-6 mb-2 max-h-96 overflow-x-hidden overflow-y-auto">
             <div class="grid grid-cols-8 gap-6">
                 <div class="mt-4 col-span-8">
                     <x-jet-label for="subject-id" value="{{ __('Subject') }}"/>

@@ -17,7 +17,7 @@ class FacultyPolicy
     public function view(User $user) { return true; }
 
     public function leave(User $user, Faculty $faculty) { return
-        $user->employee->faculty_id == $faculty->id;
+        $faculty->employees->contains('id', $user->employee->id);
     }
 
     public function addMember(User $user, Faculty $faculty) { return

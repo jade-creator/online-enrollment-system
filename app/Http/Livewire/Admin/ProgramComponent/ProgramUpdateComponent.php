@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\ProgramComponent;
 
+use App\Models\Faculty;
 use App\Models\Program;
 use App\Services\ProgramService;
 use App\Traits\WithSweetAlert;
@@ -18,13 +19,15 @@ class ProgramUpdateComponent extends Component
     public function rules()
     {
         return [
-            'program.code' => ['required', 'string', 'max:100'],
+            'program.faculty_id' => ['required'],
+            'program.code' => ['required', 'string', 'max:100', 'alpha_num', 'unique:programs,code,'.$this->program->id],
             'program.program' => ['required', 'string', 'max:100'],
             'program.description' => ['required', 'string', 'max:500'],
         ];
     }
 
     protected $messages = [
+        'program.faculty_id.required' => 'The faculty field cannot be empty.',
         'program.code.required' => 'The code field cannot be empty.',
         'program.program.required' => 'The program field cannot be empty.',
         'program.description.required' => 'The description field cannot be empty.',
@@ -55,5 +58,9 @@ class ProgramUpdateComponent extends Component
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }
+    }
+
+    public function getFacultiesProperty() { return
+        Faculty::get(['id', 'code']);
     }
 }

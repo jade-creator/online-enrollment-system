@@ -32,7 +32,7 @@
             <x-slot name="head">
                 <div class="col-span-2 flex items-center" id="columnTitle">
                     <input @click.stop type="checkbox" wire:model="selectPage" class="cursor-pointer border-gray-400 focus:outline-none focus:ring-transparent mx-5 rounded-sm" title="Select Displayed Data">
-                    <x-table.sort-button event="sortFieldSelected('id')">ID</x-table.sort-button>
+                    <x-table.sort-button event="sortFieldSelected('name')">Name</x-table.sort-button>
                 </div>
                 <x-table.column-title class="col-span-3">program</x-table.column-title>
                 <x-table.column-title class="col-span-3">room</x-table.column-title>
@@ -144,7 +144,7 @@
 
     <livewire:admin.section-component.section-destroy-component>
 
-    <livewire:admin.schedule-component.schedule-add-component key="{{ 'schedule-add-component-'.now() }}" :days="$this->days" :professors="$this->professors">
+    <livewire:admin.schedule-component.schedule-add-component key="{{ 'schedule-add-component-'.now() }}" :days="$this->days">
 
     <livewire:admin.schedule-component.schedule-update-component key="{{ 'schedule-update-component-'.now() }}" :days="$this->days" :professors="$this->professors">
 
