@@ -107,7 +107,7 @@
 
             <x-slot name="actions">
                 @can ('selectSection', $registration)
-                    <x-jet-button wire:click.prevent="$emit('modalAddingClasses', {{ $registration }})" wire:loading.attr="disabled" class="{{ is_null($registration->section_id) ? 'bg-green-500 hover:bg-green-800' : 'bg-indigo-500 hover:bg-indigo-800' }}">
+                    <x-jet-button  wire:click.prevent="$emit('modalAddingClasses', {{ $registration }})" class="{{ is_null($registration->section_id) ? 'bg-green-500 hover:bg-green-800' : 'bg-indigo-500 hover:bg-indigo-800' }}">
                         @if (is_null($registration->section_id))
                             <span>{{ __('Select Section') }}</span>
                         @else

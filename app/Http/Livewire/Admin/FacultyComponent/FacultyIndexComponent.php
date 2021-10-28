@@ -30,12 +30,14 @@ class FacultyIndexComponent extends Livewire\Component
 
     protected array $allowedSorts = [
         'id',
+        'code',
         'name',
     ];
 
     protected $listeners = [
         'refresh' => '$refresh',
         'DeselectPage' => 'updatedSelectPage',
+        'sessionFlashAlert',
         'fileExport',
     ];
 
@@ -50,9 +52,9 @@ class FacultyIndexComponent extends Livewire\Component
     public function getRowsQueryProperty()
     {
         return Faculty::search($this->search)
-            ->select(['id', 'name', 'program_id', 'description', 'mission', 'vision', 'created_at'])
+            ->select(['id', 'code', 'name', 'description', 'mission', 'vision', 'created_at'])
             ->with([
-                'program:id,code',
+                'employees.user.role',
                 'employees.user.person',
             ])
             ->orderBy($this->sortBy, $this->sortDirection)

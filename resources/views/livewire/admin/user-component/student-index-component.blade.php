@@ -94,6 +94,8 @@
 
     @if (session()->has('alert'))
         <x-form.alert type="{{session('alert')['type']}}">{!!session()->pull('alert')['message']!!}</x-form.alert>
+    @elseif (session()->has('student-index-alert'))
+        <x-form.alert type="{{session('student-index-alert')['type']}}">{!!session()->pull('student-index-alert')['message']!!}</x-form.alert>
     @endif
 
     @push('scripts')

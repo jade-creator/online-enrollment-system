@@ -34,7 +34,7 @@
                                     <select wire:model.defer="fee.program_id" wire:loading.attr="disabled" name="program">
                                         @forelse ($programs as $program)
                                             @if ($loop->first)
-                                                <option value="" selected>-- choose a program --</option>
+                                                <option value="" selected>Select a program</option>
                                             @endif
                                             <option value="{{ $program->id ?? 'N/A' }}">{{ $program->code ?? 'N/A' }}</option>
                                         @empty
@@ -48,7 +48,7 @@
                                     <select wire:model.defer="fee.category_id" wire:loading.attr="disabled" name="category">
                                         @forelse ($categories as $category)
                                             @if ($loop->first)
-                                                <option value="" selected>-- choose a category --</option>
+                                                <option value="" selected>Select a category</option>
                                             @endif
                                             <option value="{{ $category->id ?? 'N/A' }}">{{ $category->name ?? 'N/A' }}</option>
                                         @empty
@@ -59,7 +59,7 @@
                                 </div>
                                 <div class="col-span-6">
                                     <x-jet-label value="{{ __('Description (optional)') }}"/>
-                                    <textarea wire:model.defer="fee.description" wire:loading.attr="disabled" name="description"></textarea>
+                                    <textarea wire:model.defer="fee.description" wire:loading.attr="disabled" name="description" class="h-32"></textarea>
                                     <x-jet-input-error for="fee.description" class="mt-2"/>
                                 </div>
                                 <div class="col-span-3">

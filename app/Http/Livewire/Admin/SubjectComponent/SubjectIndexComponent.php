@@ -29,7 +29,8 @@ class SubjectIndexComponent extends Livewire\Component
     protected $listeners = [
         'refresh' => '$refresh',
         'DeselectPage' => 'updatedSelectPage',
-        'fileExport',
+        'alertParent',
+        'fileExport'
     ];
 
     protected array $allowedSorts = [
@@ -52,6 +53,16 @@ class SubjectIndexComponent extends Livewire\Component
             ->select(['id', 'code', 'title', 'description', 'created_at'])
             ->orderBy($this->sortBy, $this->sortDirection)
             ->dateFiltered($this->dateMin, $this->dateMax);
+    }
+
+    public function alertParent(string $type = '', string $message = '')
+    {
+        session()->flash('alert', [
+            'type' => $type,
+            'message' => $message,
+        ]);
+
+        $this->emit('alert');
     }
 
     public function fileExport() { return

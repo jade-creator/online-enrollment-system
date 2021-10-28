@@ -27,4 +27,14 @@ class Employee extends Model
     public function user() { return
         $this->belongsTo(User::class);
     }
+
+    public static function search(?string $search)
+    {
+        $search = '%'.$search.'%';
+
+        return empty($search) ? static::query()
+            : static::where(function ($query) use ($search){
+                return $query->where('custom_id', 'LIKE', $search);
+            });
+    }
 }

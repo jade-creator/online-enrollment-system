@@ -1,3 +1,29 @@
+.sidebar::-webkit-scrollbar {
+    background: transparent;
+    display: none;
+    width: 5px;
+}
+
+.sidebar:hover::-webkit-scrollbar {
+    display: block;
+}
+
+/* Track */
+.sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Handle */
+.sidebar::-webkit-scrollbar-thumb {
+    background: #bdc3c7;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: #bdc3c7;
+}
+
 /* progress bar */
 .test {
     color: red;

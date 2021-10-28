@@ -28,14 +28,28 @@ class StudentIrregularAddComponent extends Component
 
         //set prospectus, subject prereqs and coreqs.
         $this->prospectus = Models\Prospectus::findOrFail($this->prospectusId);
+    }
+
+    public function render() { return
+        view('livewire.admin.pre-enrollment-component.student-irregular-add-component', ['prospectuses' => $this->getProspectuses()]);
+    }
+
+    public function getProspectuses()
+    {
         $this->prospectuses = Models\Prospectus::with([
                 'subjects' => function($query) {
-                    return $query->where('curriculum_id', $this->curriculum->id)->get();
+                    $query->with([
+                        'subject' => function ($query) { $query->withTrashed(); },
+                    ])
+                        ->where('curriculum_id', $this->curriculum->id)
+                        ->get();
                 },
                 'subjects.prerequisites',
                 'subjects.corequisites',
             ])
             ->orderBy('id', 'DESC')->getAllPrecedingProspectuses($this->prospectus, TRUE);
+
+        if (filled($this->selected)) return $this->prospectuses;
 
         //get all grades.
         $registrations = Models\Registration::where('student_id', $this->student->id)
@@ -79,10 +93,8 @@ class StudentIrregularAddComponent extends Component
         }
 
         $this->origSelectedSubjects = $this->selected;
-    }
 
-    public function render() { return
-        view('livewire.admin.pre-enrollment-component.student-irregular-add-component');
+        return $this->prospectuses;
     }
 
     public function save()
@@ -96,28 +108,28 @@ class StudentIrregularAddComponent extends Component
 
             if (filled($this->registration)) $this->authorize('edit', $this->registration);
 
-            $this->authorize('register', $this->prospectus); \Debugbar::info($this->selected);
+            $this->authorize('register', $this->prospectus);
 
             if (is_null($this->registration)) {
-                $this->registration = (new RegistrationIrregularService())->store($this->prospectuses, $this->student->id, $this->curriculum->id, $this->selected);
+                $registration = (new RegistrationIrregularService())->store($this->prospectuses, $this->student->id, $this->curriculum->id, $this->selected);
             } else {
-                $this->registration = (new RegistrationIrregularService())->update($this->registration, $this->prospectuses, $this->curriculum->id, $this->selected);
+                $registration = (new RegistrationIrregularService())->update($this->registration, $this->prospectuses, $this->curriculum->id, $this->selected);
             };
 
             session()->flash('alert', [
                 'type' => 'success',
                 'message' => 'Saved successfully.',
             ]);
-            $this->emit('alert');
+//            $this->emit('alert');
 
-            return redirect()->route('pre.registration.view', $this->registration->id);
+            return redirect()->route('pre.registration.view', $registration->id);
         } catch (\Exception $e) {
             session()->flash('alert', [
                 'type' => 'danger',
                 'message' => $e->getMessage(),
             ]);
 
-            return $this->emit('alert');
+//            return $this->emit('alert');
         }
     }
 }

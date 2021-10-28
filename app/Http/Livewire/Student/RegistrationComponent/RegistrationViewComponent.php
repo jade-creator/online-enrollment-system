@@ -16,7 +16,10 @@ class RegistrationViewComponent extends Component
     public float $totalUnit = 0;
     public $regId;
 
-    protected $listeners = ['refresh' => '$refresh'];
+    protected $listeners = [
+        'refresh' => '$refresh',
+        'sessionFlashAlert',
+    ];
 
     public function mount() {
         $this->registration = new Registration();
@@ -28,17 +31,20 @@ class RegistrationViewComponent extends Component
 
     public function getRegistration()
     {
-        $this->registration = Registration::preRegistered($this->regId);
+        $this->registration = Registration::with([
+                'extensions.registration.grades.prospectus_subject.subject' => function ($query) { $query->withTrashed(); },
+                'extensions.registration.classes.prospectusSubject.subject' => function ($query) { $query->withTrashed(); }
+            ])
+            ->preRegistered($this->regId);
 
         if ( (auth()->user()->role->name == 'admin' || auth()->user()->role->name == 'registrar')
-                && filled($this->registration) && $this->registration->status->name == 'confirming') {
+            && filled($this->registration) && $this->registration->status->name == 'confirming') {
 
-            session()->flash('alert', [
-                'type' => 'info',
-                'message' => 'NOTE: Please review the registration before confirming.',
-            ]);
+            $this->sessionFlashAlert('unflashed-alert', 'info', 'NOTE: Please review the registrations before confirming.', FALSE);
+        }
 
-            $this->emit('alert');
+        if (filled($this->registration) && ! is_null($this->registration->released_at)) {
+            $this->sessionFlashAlert('unflashed-alert', 'warning', 'This registration has been archived and it is now "read-only".', FALSE);
         }
 
         $this->authorize('view', $this->registration);

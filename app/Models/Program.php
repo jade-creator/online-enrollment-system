@@ -11,11 +11,16 @@ class Program extends BaseModel
     use SoftDeletes;
 
     protected $fillable = [
+        'faculty_id',
         'code',
         'program',
         'description',
         'year',
     ];
+
+    public function faculty() { return
+        $this->belongsTo(Faculty::class);
+    }
 
     public function students() { return
         $this->hasMany(Student::class);
@@ -23,10 +28,6 @@ class Program extends BaseModel
 
     public function curriculum() { return
         $this->hasMany(Curriculum::class);
-    }
-
-    public function faculties() { return
-        $this->hasMany(Faculty::class);
     }
 
     public function fees() { return

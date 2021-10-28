@@ -23,16 +23,13 @@
             <x-slot name="head">
                 <div class="col-span-2 flex items-start">
                     <input wire:model="selectPage" wire:loading.attr="disabled" type="checkbox"  class="cursor-pointer border-gray-400 focus:outline-none focus:ring-transparent mx-5 rounded-sm" title="Select Displayed Data">
-                    <x-table.sort-button event="sortFieldSelected('id')">ID</x-table.sort-button>
-                </div>
-                <div class="col-span-1">
                     <x-table.sort-button event="sortFieldSelected('code')">code</x-table.sort-button>
                 </div>
                 <div class="col-span-3">
                     <x-table.sort-button event="sortFieldSelected('program')">program</x-table.sort-button>
                 </div>
                 <x-table.column-title class="col-span-3">description</x-table.column-title>
-                <x-table.column-title class="col-span-2 mx-auto">No. of Years</x-table.column-title>
+                <x-table.column-title class="col-span-3 mx-auto">No. of Years</x-table.column-title>
                 <div class="col-span-1">
                     <x-table.sort-button event="sortFieldSelected('created_at')">latest</x-table.sort-button>
                 </div>
@@ -43,11 +40,17 @@
                     <div wire:key="table-row-{{$program->id}}" x-data="{ open: false }">
                         <x-table.row :active="$this->isSelected($program->id)">
                             <div name="slot" class="grid grid-cols-12 md:gap-2">
-                                <x-table.cell-checkbox :value="$program->id">{{ $program->id ?? 'N/A' }}</x-table.cell-checkbox>
-                                <x-table.cell headerLabel="Code" class="justify-start md:col-span-1">{{ $program->code ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell headerLabel="Program" class="justify-start md:col-span-3">{{ $program->program ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell-checkbox :value="$program->id">{{ $program->code ?? 'N/A' }}</x-table.cell-checkbox>
+                                <x-table.cell headerLabel="Program" class="justify-start md:col-span-3">
+                                    <div class="flex flex-col my-2 md:my-0">
+                                        <div>{!! $program->program ?? '<span class="text-gray-400">N/A</span>' !!}</div>
+                                        <div class="tracking-widest text-gray-500 text-xs pt-0.5">
+                                            {!! $program->faculty->code ?? '<span class="text-gray-400">N/A</span>' !!}
+                                        </div>
+                                    </div>
+                                </x-table.cell>
                                 <x-table.cell headerLabel="Description" class="justify-start md:col-span-3">{{ $program->description ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell headerLabel="No. of years" class="md:justify-center md:col-span-2">{{ $program->year ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="No. of years" class="md:justify-center md:col-span-3">{{ $program->year ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell-action>
                                     @if (!count($selected) > 0)
                                         <x-jet-dropdown align="right" width="60" dropdownClasses="z-10 shadow-2xl">

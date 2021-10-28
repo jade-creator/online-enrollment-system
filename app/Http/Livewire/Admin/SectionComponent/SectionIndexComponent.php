@@ -40,7 +40,7 @@ class SectionIndexComponent extends Livewire\Component
         'releaseStudents',
         'releaseConfirm',
         'fileExport',
-        'alertParent'
+        'sessionFlashAlert'
     ];
 
     protected array $allowedSorts = [
@@ -73,16 +73,6 @@ class SectionIndexComponent extends Livewire\Component
             ->filterWithProspectusByProgram($this->programId)
             ->orderBy($this->sortBy, $this->sortDirection)
             ->dateFiltered($this->dateMin, $this->dateMax);
-    }
-
-    public function alertParent(string $type = '', string $message = '')
-    {
-        session()->flash('alert', [
-            'type' => $type,
-            'message' => $message,
-        ]);
-
-        $this->emit('alert');
     }
 
     public function releaseConfirm(Models\Section $section)

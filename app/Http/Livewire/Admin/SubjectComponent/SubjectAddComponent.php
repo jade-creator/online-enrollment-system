@@ -42,7 +42,6 @@ class SubjectAddComponent extends Component
         $this->validate();
 
         try {
-            $this->authorize('create', Subject::class);
             $subject = (new SubjectService())->store($this->subject);
 
             session()->flash('swal:modal', [

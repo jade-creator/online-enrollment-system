@@ -22,18 +22,26 @@ class StudentRegularAddComponent extends Component
         list($this->prospectusId, $this->type, $this->curriculumCode) = explode( '-', $this->prospectusSlug);
 
         $this->curriculum = Models\Curriculum::where('code', $this->curriculumCode)->firstOrFail();
-
-        $this->prospectus = Models\Prospectus::with([
-            'subjects' => function($query) {
-                return $query->where('curriculum_id', $this->curriculum->id)->get();
-            },
-            'subjects.prerequisites',
-            'subjects.corequisites',
-        ])->findOrFail($this->prospectusId);
     }
 
     public function render() { return
-        view('livewire.admin.pre-enrollment-component.student-regular-add-component');
+        view('livewire.admin.pre-enrollment-component.student-regular-add-component', ['prospectus' => $this->getProspectus()]);
+    }
+
+    public function getProspectus() {
+        $this->prospectus = Models\Prospectus::with([
+                'subjects' => function($query) {
+                    $query->with([
+                        'subject' => function ($query) { $query->withTrashed(); },
+                    ])
+                    ->where('curriculum_id', $this->curriculum->id)
+                    ->get();
+                },
+                'subjects.prerequisites',
+                'subjects.corequisites',
+            ])->findOrFail($this->prospectusId);
+
+        return $this->prospectus;
     }
 
     public function save(RegistrationService $registrationService)
@@ -61,7 +69,6 @@ class StudentRegularAddComponent extends Component
                 'type' => 'success',
                 'message' => 'Saved successfully.',
             ]);
-            $this->emit('alert');
 
             return redirect()->route('pre.registration.view', $registration->id);
         } catch (\Exception $e) {
@@ -69,7 +76,6 @@ class StudentRegularAddComponent extends Component
                 'type' => 'danger',
                 'message' => $e->getMessage(),
             ]);
-            return $this->emit('alert');
         }
     }
 }

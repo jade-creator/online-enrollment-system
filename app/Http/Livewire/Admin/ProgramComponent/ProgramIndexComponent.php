@@ -51,7 +51,8 @@ class ProgramIndexComponent extends Livewire\Component
     public function getRowsQueryProperty()
     {
         return Program::search($this->search)
-            ->select(['id', 'code', 'program', 'description', 'year', 'created_at'])
+            ->with('faculty')
+            ->select(['id', 'faculty_id', 'code', 'program', 'description', 'year', 'created_at'])
             ->orderBy($this->sortBy, $this->sortDirection)
             ->dateFiltered($this->dateMin, $this->dateMax);
     }

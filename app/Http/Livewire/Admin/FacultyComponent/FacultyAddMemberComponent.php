@@ -35,35 +35,34 @@ class FacultyAddMemberComponent extends Component
 
     public function getRowsQueryProperty()
     {
-        return User::select(['id', 'name', 'role_id'])
+        return User::select(['id', 'name', 'role_id', 'person_id'])
             ->with([
+                'person',
                 'employee',
                 'role',
             ])
-            ->whereHas('employee', function ($query){
-                return $query->whereNull('faculty_id')
-                    ->when(filled($this->search), function ($nestedQuery) {
-                        return $nestedQuery->where('custom_id', 'LIKE', '%'.$this->search.'%');
-                    });
+            ->when(filled($this->search), function ($query) {
+                $query->whereHas('person', function ($query) {
+                    $query->where('firstname', 'LIKE', '%'.$this->search.'%')
+                        ->orWhere('middlename', 'LIKE', '%'.$this->search.'%')
+                        ->orWhere('lastname', 'LIKE', '%'.$this->search.'%');
+                });
             })
+            ->whereHas('employee', function ($query) { $query->whereNull('faculty_id'); })
             ->whereIn('role_id', [4,5]);
     }
 
     public function save()
     {
-        if (empty($this->selected)) return $this->addError('selected', 'Please select a member.');
+        if (empty($this->selected)) return $this->emit('no-selected');
 
+        $this->toggleAddingMembers();
         try {
             (new FacultyMemberService())->add($this->faculty->id, $this->selected);
 
-            session()->flash('swal:modal', [
-                'title' => $this->successTitle,
-                'type' => $this->successType,
-                'text' => $this->faculty->name." has been updated.",
-            ]);
-            return redirect(route('admin.faculties.view'));
+            $this->emitUp('sessionFlashAlert', 'alert', 'success', $this->faculty->name.' has been updated.');
         } catch (\Exception $e) {
-            $this->error($e->getMessage());
+            $this->emitUp('sessionFlashAlert', 'alert', 'danger', $e->getMessage());
         }
     }
 

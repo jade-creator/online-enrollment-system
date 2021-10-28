@@ -37,14 +37,9 @@ class FacultyViewComponent extends Component
         try {
             $employee = (new FacultyMemberService())->remove($employee);
 
-            session()->flash('swal:modal', [
-                'title' => $this->successTitle,
-                'type' => $this->successType,
-                'text' => $employee->user->person->full_name.' has been removed.',
-            ]);
-            return redirect(route('admin.faculties.view'));
+            $this->emitUp('sessionFlashAlert', 'alert', 'success', 'Member successfully removed.');
         } catch (\Exception $e) {
-            $this->error($e->getMessage());
+            $this->emitUp('sessionFlashAlert', 'alert', 'danger', $e->getMessage());
         }
     }
 }
