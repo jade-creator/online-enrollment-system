@@ -68,7 +68,8 @@ class SectionIndexComponent extends Livewire\Component
             ->with([
                 'registrations' => function($query) {
                     return $query->enrolled();
-                }
+                },
+                'room' => function ($query) { $query->withTrashed(); }
             ])
             ->filterWithProspectusByProgram($this->programId)
             ->orderBy($this->sortBy, $this->sortDirection)

@@ -126,6 +126,10 @@ class RegistrationStatusService
             }
         }
 
+        $registration->student->isRegular = $registration->isRegular;
+        $registration->student->isNew = $registration->isNew;
+        $registration->update();
+
         return $this->setStatus($registration, $status);
     }
 }

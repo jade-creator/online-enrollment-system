@@ -39,7 +39,7 @@ class SelectSectionForm extends Component
         view('livewire.partials.select-section-form');
     }
 
-    public function save()
+    public function saveSchedule()
     {
         $this->validate();
 
