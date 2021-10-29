@@ -3,6 +3,10 @@
     <div class="h-content w-full p-4 md:p-8">
         <x-table.title tableTitle="Fees">
             @can('create', App\Models\Fee::class)
+                <button wire:click.prevent="$emit('modalAddingCategory')" class="py-2.5 px-4 text-xs text-indigo-500 hover:text-indigo-700 font-bold hover:underline focus:outline-none">
+                    View Categories
+                </button>
+
                 <a href="{{ route('admin.fees.create') }}">
                     <x-table.nav-button>
                         Create New Fee
@@ -48,10 +52,9 @@
 
             <x-slot name="head">
                 <x-table.column-title class="col-span-2">ID</x-table.column-title>
-                <x-table.column-title class="col-span-2">Program</x-table.column-title>
-                <x-table.column-title class="col-span-2">Category</x-table.column-title>
-                <x-table.column-title class="col-span-3">Description</x-table.column-title>
-                <x-table.column-title class="col-span-2">amount</x-table.column-title>
+                <x-table.column-title class="col-span-3">Program</x-table.column-title>
+                <x-table.column-title class="col-span-3">Category</x-table.column-title>
+                <x-table.column-title class="col-span-3">amount</x-table.column-title>
                 <x-table.column-title class="col-span-1">latest</x-table.column-title>
             </x-slot>
 
@@ -60,11 +63,10 @@
                     <div wire:key="table-row-{{$fee->id}}">
                         <x-table.row :active="$this->isSelected($fee->id)">
                             <div name="slot" class="grid grid-cols-12 md:gap-2">
-                                <x-table.cell-checkbox :value="$fee->id">{{ $fee->id ?? 'N/A' }}</x-table.cell-checkbox>
-                                <x-table.cell headerLabel="Program" class="justify-start md:col-span-2">{{ $fee->program->code ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell headerLabel="Category" class="justify-start md:col-span-2">{{ $fee->category->name ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell headerLabel="Description" class="justify-start md:col-span-3">{{ $fee->description ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell headerLabel="Amount" class="justify-start md:col-span-2">{{ $fee->getFormattedPriceAttribute($fee->price) ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell-checkbox :value="$fee->id">{{ $fee->custom_id ?? 'N/A' }}</x-table.cell-checkbox>
+                                <x-table.cell headerLabel="Program" class="justify-start md:col-span-3">{{ $fee->program->program ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Category" class="justify-start md:col-span-3">{{ $fee->category->name ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Amount" class="justify-start md:col-span-3">{{ $fee->getFormattedPriceAttribute($fee->price) ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell-action>
                                     @if (!count($selected) > 0)
                                         <x-jet-dropdown align="right" width="60" dropdownClasses="z-10 shadow-2xl">
@@ -112,9 +114,17 @@
         </x-table.bulk-action-bar>
     </div>
 
-    <div wire:loading>
-        @include('partials.loading')
-    </div>
+    <div>@include('partials.loading')</div>
+
+    <livewire:admin.fee-component.fee-category-add-component>
 
     <livewire:admin.fee-component.fee-destroy-component key="{{ 'admin-fee-destroy-component-'. now() }}"/>
+
+    @if (session()->has('alert'))
+        <x-form.alert type="{{session('alert')['type']}}">{!!session()->pull('alert')['message']!!}</x-form.alert>
+    @endif
+
+    @push('scripts')
+        <script src="{{ asset('js/alert.js') }}"></script>
+    @endpush
 </div>

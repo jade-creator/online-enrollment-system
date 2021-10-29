@@ -36,6 +36,7 @@ class FeeIndexComponent extends Livewire\Component
 
     protected $listeners = [
         'refresh' => '$refresh',
+        'sessionFlashAlert',
         'fileExport',
     ];
 
@@ -50,7 +51,7 @@ class FeeIndexComponent extends Livewire\Component
     public function getRowsQueryProperty()
     {
         return Models\Fee::search($this->search)
-            ->select(['id', 'category_id', 'program_id', 'price', 'description', 'created_at'])
+            ->select(['id', 'custom_id', 'category_id', 'program_id', 'price', 'description', 'created_at'])
             ->filterByCategory($this->categoryId)
             ->filterByProgram($this->programId)
             ->orderBy($this->sortBy, $this->sortDirection)

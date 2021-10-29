@@ -230,18 +230,11 @@
             var programChart = new Chart(program, {
                 type: "bar",
                 data: {
-                    labels: [
-                        "BSIT",
-                        "BSCS",
-                        "BSBA",
-                        "BSHM",
-                        "BSCE",
-                        "BACOMM",
-                    ],
+                    labels: @json($programsCode),
                     datasets: [
                         {
                             label: "Programs",
-                            data: [{{ $bsit }}, {{ $bscs }}, {{ $bsba }}, {{ $bshm }}, {{ $bsce }}, {{ $bacomm }}],
+                            data: @json($programsData),
                             backgroundColor: [
                                 "rgba(255, 99, 132, 0.5)",
                                 "rgba(54, 162, 235, 0.5)",
@@ -269,7 +262,7 @@
                     plugins: {
                         subtitle: {
                             display: true,
-                            text: "Number of program per college as of 2020-2021 S.Y",
+                            text: '{{ $programsTableTitle }}',
                         },
                     },
                 },

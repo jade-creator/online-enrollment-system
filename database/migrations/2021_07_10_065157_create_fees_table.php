@@ -15,6 +15,7 @@ class CreateFeesTable extends Migration
     {
         Schema::create('fees', function (Blueprint $table) {
             $table->id();
+            $table->string('custom_id', 100)->nullable()->default(NULL);
             $table->foreignId('program_id')->constrained();
             $table->foreignId('category_id')->constrained();
             $table->bigInteger('price');

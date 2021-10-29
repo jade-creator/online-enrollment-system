@@ -1,11 +1,7 @@
 <div class="w-full">
 
     <div class="h-content w-full p-4 md:p-8">
-        <x-table.title tableTitle="Fee Maintenance">
-            <x-table.nav-button wire:click="$emit('modalAddingCategory')" wire:loading.attr="disabled">
-                Create New Category
-            </x-table.nav-button>
-        </x-table.title>
+        <x-table.title tableTitle="Fee Maintenance"></x-table.title>
 
         <x-table.main>
             <x-slot name="filter"></x-slot>
@@ -27,8 +23,8 @@
                             <form>
                                 <div class="col-span-3">
                                     <x-jet-label value="{{ __('Program') }}"/>
-                                    <select wire:model.defer="fee.program_id" wire:loading.attr="disabled" name="program" class="truncate pr-5">
-                                        @forelse ($this->programs as $program)
+                                    <select wire:model.defer="fee.program_id" wire:loading.attr="disabled" name="program" class="truncate pr-5 mt-2">
+                                        @forelse ($programs as $program)
                                             @if ($loop->first)
                                                 <option value="" selected>Choose a program</option>
                                             @endif
@@ -40,9 +36,15 @@
                                     <x-jet-input-error for="fee.program_id" class="mt-2"/>
                                 </div>
                                 <div class="col-span-3">
-                                    <x-jet-label value="{{ __('Category') }}"/>
+                                    <div class="w-full flex items-center justify-between">
+                                        <x-jet-label value="{{ __('Category') }}"/>
+
+                                        <button wire:click.prevent="$emit('modalAddingCategory')" class="pb-2 text-xs text-indigo-500 hover:text-indigo-700 font-bold hover:underline focus:outline-none">
+                                            View Categories
+                                        </button>
+                                    </div>
                                     <select wire:model.defer="fee.category_id" wire:loading.attr="disabled" name="category" class="truncate pr-5">
-                                        @forelse ($this->categories as $category)
+                                        @forelse ($categories as $category)
                                             @if ($loop->first)
                                                 <option value="" selected>Choose a category</option>
                                             @endif
@@ -55,12 +57,12 @@
                                 </div>
                                 <div class="col-span-6">
                                     <x-jet-label value="{{ __('Description (optional)') }}"/>
-                                    <textarea wire:model.defer="description" wire:loading.attr="disabled" name="description" class="h-32"></textarea>
+                                    <textarea wire:model.defer="description" wire:loading.attr="disabled" name="description" class="h-32 mt-2"></textarea>
                                     <x-jet-input-error for="description" class="mt-2"/>
                                 </div>
                                 <div class="col-span-3">
                                     <x-jet-label value="{{ __('Amount') }}"/>
-                                    <input wire:model.defer="price" wire:loading.attr="disabled" name="amount" type="number" min="1">
+                                    <input wire:model.defer="price" wire:loading.attr="disabled" name="amount" type="number" min="1" class="mt-2">
                                     <x-jet-input-error for="price" class="mt-2"/>
                                 </div>
                             </form>
@@ -84,9 +86,7 @@
         </x-table.main>
     </div>
 
-    <div wire:loading>
-        @include('partials.loading')
-    </div>
+    <div>@include('partials.loading')</div>
 
-    <livewire:admin.fee-component.fee-category-add-component key="{{ 'admin-fee-category-add-component'.now() }}">
+    <livewire:admin.fee-component.fee-category-add-component>
 </div>

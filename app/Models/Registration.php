@@ -91,6 +91,7 @@ class Registration extends BaseModel
                         'employee.user.person'
                     ]);
                 },
+                'fees.category' => function ($query) { $query->withTrashed(); },
 //                'classes.prospectusSubject',
 //                'classes.employee.user.person',
 //                'classes.employee.user.employee',

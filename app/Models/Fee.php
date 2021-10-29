@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -11,6 +12,7 @@ class Fee extends BaseModel
 
     protected $fillable = [
         'program_id',
+        'custom_id',
         'category_id',
         'price',
         'description',
@@ -20,6 +22,14 @@ class Fee extends BaseModel
         'category',
         'program',
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+        self::creating(function ($model) {
+            $model->custom_id = IdGenerator::generate(['table' => 'fees', 'field' => 'custom_id', 'length' => 10, 'prefix' =>'FEE-']);
+        });
+    }
 
     public function scopeFilterByCategory($query, $categoryId) {
         return $query->when(filled($categoryId), function ($query) use ($categoryId) {
@@ -32,15 +42,6 @@ class Fee extends BaseModel
             return $query->where('program_id', $programId);
         });
     }
-
-//    public function getFormattedPriceAttribute($value) { return
-//        'PHP '.number_format($value, 2, '.', ',');
-//    }
-//
-//    public function formatTwoDecimalPlaces($value) {
-//        $value = $value / 100;
-//        return number_format((float)$value, 2, '.', '');
-//    }
 
     public function getPriceAttribute($value) { return
         $this->formatTwoDecimalPlaces($value);

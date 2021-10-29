@@ -8,10 +8,24 @@ use App\Models\Section;
 use App\Models\Subject;
 use App\Models\Status;
 use App\Models\User;
+use Carbon\Carbon;
 use Livewire\Component;
 
 class Dashboard extends Component
 {
+    public $programs, $programsData;
+
+    public function mount()
+    {
+        $this->programs = Models\Program::get(['id', 'code']);
+
+        $programIds = $this->programs->pluck('id')->toArray();
+
+        foreach ($programIds as $id) {
+            $this->programsData[] = Models\Student::filterByProgram($id)->count();
+        }
+    }
+
     public function render()
     {
         return view('livewire.admin.dashboard', [
@@ -32,12 +46,8 @@ class Dashboard extends Component
             'finalized' => Models\Registration::finalized()->count(),
             'confirming' => Models\Registration::confirming()->count(),
             'pending' => Models\Registration::pending()->count(),
-            'bsit' => Models\Registration::filterByProgram(1)->count(),
-            'bscs' => Models\Registration::filterByProgram(2)->count(),
-            'bsba' => Models\Registration::filterByProgram(3)->count(),
-            'bshm' => Models\Registration::filterByProgram(4)->count(),
-            'bsce' => Models\Registration::filterByProgram(5)->count(),
-            'bacomm' => Models\Registration::filterByProgram(6)->count(),
+            'programsCode' => $this->programs->pluck('code')->toArray(),
+            'programsTableTitle' => "Number of students per program as of SY. ".Carbon::parse(now())->format('Y').'-'.Carbon::parse(now())->addYear()->format('Y'),
         ]);
     }
 

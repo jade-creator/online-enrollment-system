@@ -25,6 +25,16 @@ class Student extends BaseModel
         'isNew' => true,
     ];
 
+    public function scopeFilterByProgram($query, $programId) { return
+        $query->whereBetween('created_at', [
+                now()->startOfYear(),
+                now()->endOfYear(),
+            ])
+            ->when(filled($programId), function ($query) use ($programId) {
+                return $query->where('program_id', $programId);
+            });
+    }
+
     public function grandTotal() { return
         $this->hasManyDeep( Assessment::class, [Registration::class]);
     }

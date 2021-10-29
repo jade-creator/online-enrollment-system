@@ -1,44 +1,43 @@
 <?php
 
-namespace App\Http\Livewire\Admin\FeeComponent;
+namespace App\Http\Livewire\Admin\SectionComponent;
 
-use App\Models\Category;
+Use App\Models\Room;
 use App\Traits\WithFilters;
 use App\Traits\WithSweetAlert;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class FeeCategoryAddComponent extends Component
+class SectionRoomAddComponent extends Component
 {
     use WithSweetAlert, WithFilters, WithPagination;
 
-    public ?Category $category = NULL;
-    public string $action = '';
-    public bool $addingCategory = FALSE, $add = FALSE;
+    public ?Room $room = NULL;
+    public bool $addingRoom = FALSE, $add = FALSE;
     public int $paginateValue = 10;
 
     protected $listeners = [
-        'modalAddingCategory',
-        'confirmDeleteCategory'
+        'modalAddingRoom',
+        'confirmDeleteRoom'
     ];
 
     protected $messages = [
-        'category.name.required' => 'The category field cannot be empty.',
+        'room.name.required' => 'The room field cannot be empty.',
     ];
 
     public function rules()
     {
         return [
-            'category.name' => ['required', 'string', 'max:100', 'unique:categories,name'],
+            'room.name' => ['required', 'string', 'max:100', 'alpha_dash', 'unique:rooms,name'],
         ];
     }
 
     public function mount() {
-        $this->category = new Category();
+        $this->room = new Room();
     }
 
     public function render() { return
-        view('livewire.admin.fee-component.fee-category-add-component', ['categories' => $this->rows]);
+        view('livewire.admin.section-component.section-room-add-component', ['rooms' => $this->rows]);
     }
 
     public function getRowsProperty() { return
@@ -46,25 +45,25 @@ class FeeCategoryAddComponent extends Component
     }
 
     public function getRowsQueryProperty() { return
-        Category::select(['id', 'name'])
+        Room::select(['id', 'name'])
             ->orderBy('created_at', 'desc');
     }
 
     public function save()
     {
-        if ($this->category->exists) {
+        if ($this->room->exists) {
             $this->validate([
-                'category.name' => ['required', 'string', 'max:100', 'unique:categories,name,'.$this->category->id],
+                'room.name' => ['required', 'string', 'max:100', 'alpha_dash', 'unique:rooms,name,'.$this->room->id],
             ]);
         } else {
             $this->validate();
         }
 
         try {
-            $this->category->save();
+            $this->room->save();
 
             $this->fill([
-                'category' => new Category(),
+                'room' => new Room(),
                 'add' => FALSE,
             ]);
 
@@ -74,32 +73,32 @@ class FeeCategoryAddComponent extends Component
         }
     }
 
-    public function modalAddingCategory()
+    public function modalAddingRoom()
     {
         $this->resetValidation();
-        $this->category = new Category();
+        $this->room = new Room();
         $this->toggleModal();
     }
 
     public function toggleModal() {
-        $this->addingCategory = !$this->addingCategory;
+        $this->addingRoom = !$this->addingRoom;
     }
 
-    public function confirmEditCategory(?Category $category = NULL)
+    public function confirmEditRoom(?Room $room = NULL)
     {
-        $this->category = $category;
+        $this->room = $room;
         $this->add = ! $this->add;
     }
 
-    public function confirmDeleteCategory(?Category $category = NULL) {
-        $this->category = $category;
+    public function confirmDeleteRoom(?Room $room = NULL) {
+        $this->room = $room;
     }
 
-    public function deleteCategory() {
-        if (is_null($this->category)) return;
+    public function deleteRoom() {
+        if (is_null($this->room)) return;
 
         try {
-            $this->category->delete();
+            $this->room->delete();
 
             $this->emitUp('refresh');
         } catch (\Exception $e) {

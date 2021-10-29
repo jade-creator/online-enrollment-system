@@ -70,7 +70,7 @@
                                 </div>
                                 <div class="col-span-6">
                                     <x-jet-label for="remarks" value="{{ __('Remarks (optional)') }}" />
-                                    <textarea wire:model.defer="advice.remarks" id="remarks" type="text" name="remarks" autofocus></textarea>
+                                    <textarea wire:model.defer="advice.remarks" id="remarks" name="remarks" autofocus class="h-32"></textarea>
                                     <x-jet-input-error for="advice.remarks" class="mt-2"/>
                                 </div>
                             </form>

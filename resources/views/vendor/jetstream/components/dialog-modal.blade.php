@@ -11,7 +11,7 @@
         @endif
     </h1>
 
-    <div class="max-h-96 overflow-hidden w-full">
+    <div class="max-h-96 overflow-hidden w-full relative">
         {{ $content }}
     </div>
 

@@ -81,7 +81,7 @@
                 {{ __('Back') }}
             </x-jet-secondary-button>
 
-            <x-jet-button class="ml-2 bg-blue-500 hover:blue-700" wire:click="save" wire:loading.attr="disabled">
+            <x-jet-button class="ml-2 bg-blue-500 hover:blue-700" wire:click="saveSchedule" wire:loading.attr="disabled">
                 {{ __('Apply Schedule') }}
             </x-jet-button>
         </x-slot>

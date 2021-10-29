@@ -46,6 +46,13 @@ class PaymentIndexComponent extends Livewire\Component
     public function getRowsQueryProperty()
     {
         return Models\Transaction::search($this->search)
+            ->with([
+                'registration.student.user.person',
+                'registration.assessment',
+                'registration.prospectus' => function ($query) {
+                    $query->with(['program', 'level', 'term']);
+                },
+            ])
             ->when(filled($this->search), function ($query) {
                 return $query->orWhereHas('registration', function ($query) {
                     return $query->where('custom_id', $this->search);
