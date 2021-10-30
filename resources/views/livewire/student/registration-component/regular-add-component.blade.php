@@ -1,11 +1,6 @@
 <div class="max-w-5xl mx-auto p-4 md:p-8">
     @include('partials.view-profile-button')
 
-    @if (session()->has('alert'))
-        <x-form.alert type="{{session('alert')['type']}}">{!!session()->pull('alert')['message']!!}</x-form.alert>
-        <x-jet-section-border/>
-    @endif
-
     <div class="w-full pl-0 md:pl-8">
         <x-jet-form-section submit="">
             <x-slot name="title">
@@ -32,7 +27,7 @@
                         </x-slot>
 
                         <x-slot name="body">
-                            @forelse ($prospectus->subjects as $index => $prospectus_subject)
+                            @forelse ($subjects as $index => $prospectus_subject)
                                 <div wire:key="table-row-{{$prospectus_subject->subject->code}}">
                                     <x-table.row>
                                         <div name="slot" class="grid grid-cols-12 md:gap-2">
@@ -44,7 +39,7 @@
                                                 {{ $loop->first ? '' : ', '  }}
                                                 <span>&nbsp;{{ $requisite->code }}</span>
                                             @empty
-                                                N/A
+                                                {!! '<span class="text-gray-400">N/A</span>' !!}
                                             @endforelse
                                             </x-table.cell>
                                             <x-table.cell headerLabel="pre requisite" class="justify-start md:col-span-3">
@@ -52,8 +47,8 @@
                                                 {{ $loop->first ? '' : ', '  }}
                                                 <span>&nbsp;{{ $requisite->code }}</span>
                                             @empty
-                                                N/A
-                                            @endforelse
+                                                {!! '<span class="text-gray-400">N/A</span>' !!}
+                                                @endforelse
                                             </x-table.cell>
                                         </div>
                                     </x-table.row>
@@ -74,10 +69,6 @@
                     </x-jet-secondary-button>
                 </a>
 
-                <x-jet-action-message class="mr-3 text-red-500 font-bold" on="error">
-                    {{ __('Failed! Please read the error above.') }}
-                </x-jet-action-message>
-
                 @can ('register', $prospectus)
                     <x-jet-button wire:click.prevent="save"  class="ml-2 bg-indigo-700 hover:bg-indigo-800" wire:loading.attr="disabled">
                         {{ __('Register') }}
@@ -87,4 +78,12 @@
         </x-jet-form-section>
         <x-jet-section-border/>
     </div>
+
+    @if (session()->has('alert'))
+        <x-form.alert type="{{session('alert')['type']}}">{!!session()->pull('alert')['message']!!}</x-form.alert>
+    @endif
+
+    @push('scripts')
+        <script src="{{ asset('js/alert.js') }}"></script>
+    @endpush
 </div>

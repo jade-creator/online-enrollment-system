@@ -2,9 +2,11 @@
 
     <div class="h-content w-full p-4 md:p-8">
         <x-table.title tableTitle="Pre Registrations">
-            <x-table.nav-button wire:click="createNewRegistration">
-                Create New Registration
-            </x-table.nav-button>
+            @can ('create', App\Models\Registration::class)
+                <x-table.nav-button wire:click="createNewRegistration" wire:loading.attr="disabled">
+                    Create New Registration
+                </x-table.nav-button>
+            @endcan
         </x-table.title>
 
         <x-table.main>

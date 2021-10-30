@@ -39,8 +39,12 @@
     }
 @endphp
 
-<section id="alert" class="fixed w-11/12 top-12 md:top-16 md:w-1/2 lg:w-1/4 right-5 z-20">
-    <div class="relative items-center w-full py-5 md:py-2 mx-auto max-w-7xl">
+<section x-data="{ open: true }"
+         id="alert" class="fixed w-11/12 top-12 md:top-16 md:w-1/2 lg:w-1/4 right-5 z-20">
+
+    <div x-show="open"
+         x-on:click.stop="open = false"
+         class="relative items-center w-full py-5 md:py-2 mx-auto max-w-7xl cursor-pointer">
         <!------ Component-->
         <div class="p-6 border-l-4 {{$borderColor}} -6 rounded-r-xl {{$bgColor}} relative">
             <div class="flex break-words">

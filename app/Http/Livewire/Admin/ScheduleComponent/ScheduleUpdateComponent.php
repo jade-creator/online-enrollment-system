@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin\ScheduleComponent;
 
 use App\Models;
+use App\Models\Curriculum;
 use App\Services\Schedule;
 use App\Traits\WithSweetAlert;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -12,6 +13,7 @@ class ScheduleUpdateComponent extends Component
 {
     use AuthorizesRequests, WithSweetAlert;
 
+    public Models\Employee $employee;
     public Models\Section $section;
     public Models\Schedule $schedule;
     public array $schedules = [], $profSchedules = [];
@@ -44,31 +46,34 @@ class ScheduleUpdateComponent extends Component
         $this->validate();
 
         $originalDayId = $this->schedule->getOriginal('day_id');
+
+        $this->toggleViewingSchedule();
+
         try {
             $this->authorize('update', $this->schedule);
             $this->schedule = (new Schedule\ScheduleService())->updateProfSchedule($this->schedule, $this->profSchedules);
             $schedule = (new Schedule\ScheduleService())->update($this->schedule, $this->schedules);
 
-            $this->emitUp('alertParent', 'success', $this->schedule->prospectusSubject->subject->code."'s time period in ".$this->section->name." has been updated.");
-            $this->toggleViewingSchedule();
-            $this->emitUp('refresh');
+            $this->emitUp('sessionFlashAlert', 'alert', 'success', "A schedule has been updated in ".$this->section->name);
         } catch (\Exception $e) {
             $this->schedule->day_id = $originalDayId;
             $this->schedule->update();
 
-            $this->toggleViewingSchedule();
-            $this->emitUp('alertParent', 'danger', $e->getMessage());
+            $this->emitUp('sessionFlashAlert', 'alert', 'danger', $e->getMessage());
         }
     }
 
     public function modalViewingSchedule(Models\Section $section, Models\Schedule $schedule)
     {
         $this->resetValidation();
+
         $this->fill([
             'section' => $section,
             'schedule' => $schedule,
-            'prospectusSubjects' => Models\ProspectusSubject::getAllSubjectsInProspectus($section->prospectus->id),
+            'employee' => $schedule->employee,
+            'prospectusSubjects' => Models\ProspectusSubject::getAllSubjectsInProspectus($section->prospectus->id)->unique('subject_id'),
         ]);
+
         $this->toggleViewingSchedule();
 
         try {
@@ -79,9 +84,9 @@ class ScheduleUpdateComponent extends Component
 
             $employee = Models\Employee::with('schedules')->findOrFail($schedule->employee_id);
             $this->profSchedules = $scheduleMergeabilityService->unsetSchedule($employee, $blocks, $this->days);
+
         } catch (\Exception $e) {
-            $this->toggleViewingSchedule();
-            $this->error($e->getMessage());
+            $this->emitUp('sessionFlashAlert', 'alert', 'danger', $e->getMessage());
         }
     }
 

@@ -64,11 +64,11 @@
                                     <p class="text-black font-semibold">{{ $fee->getFormattedPriceAttribute($fee->price) ?? 'N/A' }}</p>
                                 </div>
                             @empty
-                                <p>No added fees under this program.</p>
+                                <p class="col-span-6 text-center font-bold text-red-500">No added fees under this program.</p>
                             @endforelse
                         @elsecan('finalize', $registration)
                             {{-- ADMIN SIDE not computed yet.--}}
-                            @if (is_null($grandTotal))
+                            @if (! isset($grandTotal))
                                 @forelse ($registration->prospectus->program->fees as $fee)
                                     <div class="col-span-6 flex items-center">
                                         <input wire:model.defer="fees.{{ $fee->id }}.0" type="checkbox">
@@ -78,7 +78,7 @@
                                         <input value="{{ $fees[$fee->id][1] }}" type="number" readonly>
                                     </div>
                                 @empty
-                                    <p>No added fees under this program.</p>
+                                    <p class="col-span-6 text-center font-bold text-red-500">No added fees under this program.</p>
                                 @endforelse
                                 <div class="col-span-6">
                                     <x-jet-section-border/>
@@ -106,7 +106,7 @@
                                 @endif
                                 <div class="col-span-6">
                                     <x-jet-label value="{{ __('Remarks') }}"/>
-                                    <textarea wire:model.defer="assessment.remarks" wire:loading.attr="disabled" type="number" min="0"></textarea>
+                                    <textarea wire:model.defer="assessment.remarks" wire:loading.attr="disabled"></textarea>
                                     <x-jet-input-error for="assessment.remarks" class="mt-2"/>
                                 </div>
                             @else

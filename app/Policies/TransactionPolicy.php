@@ -5,7 +5,7 @@ namespace App\Policies;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class TransactionPolicy
+class TransactionPolicy extends BasePolicy
 {
     use HandlesAuthorization;
 
@@ -18,6 +18,6 @@ class TransactionPolicy
     }
 
     public function view(User $user) { return
-        $this->isAdmin();
+        $this->isAuthorized('transaction', 'view', $user);
     }
 }

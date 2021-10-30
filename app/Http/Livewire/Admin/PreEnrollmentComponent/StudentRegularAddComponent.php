@@ -4,12 +4,13 @@ namespace App\Http\Livewire\Admin\PreEnrollmentComponent;
 
 use App\Models;
 use App\Services\Registration\RegistrationService;
+use App\Traits\WithSweetAlert;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
 class StudentRegularAddComponent extends Component
 {
-    use AuthorizesRequests;
+    use AuthorizesRequests, WithSweetAlert;
 
     public Models\Curriculum $curriculum;
     public Models\Student $student;
@@ -53,29 +54,25 @@ class StudentRegularAddComponent extends Component
 
             if (is_null($this->registration)) $this->registration = new Models\Registration();
 
+            $subjects = $this->prospectus->subjects()->where('curriculum_id', $this->curriculum->id)->get();
+
             $this->fill([
                 'registration.section_id' => null,
                 'registration.isNew' => $this->type === 'new' ? 1 : 0,
                 'registration.prospectus_id' => $this->prospectusId,
                 'registration.student_id' => $this->student->id,
-                'registration.total_unit' => $this->prospectus->subjects->sum('unit'),
+                'registration.total_unit' => $subjects->sum('unit'),
                 'registration.curriculum_id' => $this->curriculum->id,
             ]);
 
-            $subjectsId = $registrationService->pluckSubjectsId($this->prospectus->subjects);
+            $subjectsId = $registrationService->pluckSubjectsId($subjects);
             $registration = $registrationService->update($subjectsId, $this->registration);
 
-            session()->flash('alert', [
-                'type' => 'success',
-                'message' => 'Saved successfully.',
-            ]);
+            $this->sessionFlashAlert('alert', 'success', 'Saved successfully.');
 
             return redirect()->route('pre.registration.view', $registration->id);
         } catch (\Exception $e) {
-            session()->flash('alert', [
-                'type' => 'danger',
-                'message' => $e->getMessage(),
-            ]);
+            $this->sessionFlashAlert('alert', 'danger', $e->getMessage());
         }
     }
 }

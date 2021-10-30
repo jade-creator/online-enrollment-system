@@ -2,11 +2,9 @@
 
     <div class="h-content w-full p-4 md:p-8">
         <x-table.title tableTitle="Prospectus">
-            @can('create', App\Models\ProspectusSubject::class)
-                <x-table.nav-button wire:click.prevent="add">
-                    Add Subject
-                </x-table.nav-button>
-            @endcan
+            <x-table.nav-button wire:click.prevent="add">
+                Add Subject
+            </x-table.nav-button>
         </x-table.title>
 
         <x-table.main>
@@ -374,17 +372,14 @@
                                             <div class="block px-4 py-3 text-sm text-gray-500 font-bold">
                                                 {{ __('Actions') }}
                                             </div>
-                                            @can ('update', $prospectus_subject)
-                                                <x-table.cell-button wire:click.prevent="$emit('modalViewingSubject', {{ $prospectus_subject }})" title="View">
-                                                    <x-icons.view-icon/>
-                                                </x-table.cell-button>
-                                            @endcan
 
-                                            @can ('destroy', $prospectus_subject)
-                                                <x-table.cell-button wire:click.prevent="$emit('removeConfirm', {{$prospectus_subject}})" title="Delete" class="rounded-b-md hover:bg-red-500 hover:text-white transition-colors">
-                                                    <x-icons.delete-icon/>
-                                                </x-table.cell-button>
-                                            @endcan
+                                            <x-table.cell-button wire:click.prevent="$emit('modalViewingSubject', {{ $prospectus_subject }})" title="View">
+                                                <x-icons.view-icon/>
+                                            </x-table.cell-button>
+
+                                            <x-table.cell-button wire:click.prevent="$emit('removeConfirm', {{$prospectus_subject}})" title="Delete" class="rounded-b-md hover:bg-red-500 hover:text-white transition-colors">
+                                                <x-icons.delete-icon/>
+                                            </x-table.cell-button>
                                         </div>
                                     </x-slot>
                                 </x-jet-dropdown>

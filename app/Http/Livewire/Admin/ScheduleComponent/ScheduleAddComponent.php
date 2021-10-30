@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin\ScheduleComponent;
 
 use App\Models;
+use App\Models\Curriculum;
 use App\Services\Schedule\ScheduleService;
 use App\Traits\WithFilters;
 use App\Traits\WithSweetAlert;
@@ -66,7 +67,8 @@ class ScheduleAddComponent extends Component
                         ->orWhere('middlename', 'LIKE', '%'.$this->search.'%')
                         ->orWhere('lastname', 'LIKE', '%'.$this->search.'%');
                 });
-            });
+            })
+            ->whereNotNull('faculty_id');
     }
 
     public function save()
@@ -89,10 +91,14 @@ class ScheduleAddComponent extends Component
     public function modalAddingSchedule(Models\Section $section)
     {
         $this->resetValidation();
+
+        $curriculum = Curriculum::findActiveCurriculum($section->prospectus->program_id);
+
         $this->fill([
             'section' => $section,
             'schedule' => new Models\Schedule(),
-            'prospectusSubjects' => Models\ProspectusSubject::getAllSubjectsInProspectus($section->prospectus->id),
+            'prospectusSubjects' => Models\ProspectusSubject::getAllSubjectsInProspectus($section->prospectus->id)
+                ->filter( fn ($subject) => $subject->curriculum_id == $curriculum->id ),
         ]);
         $this->toggleAddingSchedule();
     }

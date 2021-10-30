@@ -11,7 +11,7 @@
         <div class="w-full">
             <form class="sidebar w-full max-h-96 overflow-x-hidden overflow-y-auto">
                 @if (empty($sectionId))
-                    @foreach ($sections as $section)
+                    @forelse ($sections as $section)
                         @if ($section->isFull)
                             <button class="w-full text-left cursor-not-allowed py-3 px-6 bg-gray-50 border-b focus:outline-none" disabled>
                                 <span class="w-full block flex items-center justify-between">
@@ -46,7 +46,11 @@
                                 </span>
                             </button>
                         @endif
-                    @endforeach
+                    @empty
+                        <div class="w-full h-40">
+                            <p class="w-full text-sm text-gray-500 text-center">No result found.</p>
+                        </div>
+                    @endforelse
                 @endif
 
                 <div class="col-span-8">

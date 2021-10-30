@@ -105,10 +105,6 @@
                                                         <x-table.cell-button wire:click.prevent="$emit('removeConfirm', {{$section}})" title="Delete" class="rounded-b-md hover:bg-red-500 hover:text-white transition-colors">
                                                             <x-icons.delete-icon/>
                                                         </x-table.cell-button>
-                                                    @elsecan ('view', App\Models\Section::class)
-                                                        <x-table.cell-button title="Administrative Access">
-                                                            <x-icons.lock-icon/>
-                                                        </x-table.cell-button>
                                                     @endcan
                                                 </div>
                                             </x-slot>

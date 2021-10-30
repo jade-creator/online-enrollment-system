@@ -55,17 +55,14 @@ class ProspectusUpdateComponent extends Component
     {
         $this->validate();
 
+        $this->toggleViewingSubject();
+
         try {
-            $this->authorize('update', $this->prospectusSubject);
             (new ProspectusSubjectService())->update($this->prospectusSubject, $this->curriculumId, $this->preRequisiteSubjects, $this->coRequisiteSubjects);
 
-//            $this->success($this->prospectusSubject->subject->code.' has been updated.');
-            $this->emitUp('alertParent', 'success', $this->prospectusSubject->subject->code.' has been updated.');
-            $this->toggleViewingSubject();
-            $this->emitUp('refresh');
+            $this->emitUp('sessionFlashAlert', 'alert', 'success', $this->prospectusSubject->subject->code.' has been updated.');
         } catch (\Exception $e) {
-//            $this->error($e->getMessage());
-            $this->emitUp('alertParent', 'danger', $e->getMessage());
+            $this->emitUp('sessionFlashAlert', 'alert', 'danger', $e->getMessage());
         }
     }
 

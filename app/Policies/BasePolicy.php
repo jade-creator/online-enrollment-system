@@ -8,25 +8,31 @@ class BasePolicy
 {
     protected $authorizedActions = [
         'section' => [
-            'createClass' => ['admin', 'registrar'],
+            'createClass' => ['admin', 'dean'],
+            'create' => ['admin', 'dean'],
+            'update' => ['admin', 'dean'],
+            'destroy' => ['admin', 'dean'],
+            'release' => ['admin', 'dean'],
         ],
         'schedule' => [
             'update' => ['admin', 'registrar'],
             'destroy' => ['admin', 'registrar'],
         ],
         'assessment' => [
-            'view' => ['admin', 'registrar'],
-            'create' => ['admin', 'registrar'],
+            'view' => ['admin', 'registrar', 'dean'],
+            'create' => ['admin', 'registrar', 'dean'],
         ],
         'registration' => [
             'edit' => ['admin', 'registrar'],
             'enroll' => ['admin', 'registrar'],
             'reject' => ['admin', 'registrar'],
-            'confirm' => ['admin', 'registrar'],
-            'pending' => ['admin', 'registrar'],
+            'confirm' => ['admin', 'registrar', 'dean'],
+            'pending' => ['admin', 'registrar', 'dean'],
+            'finalize' => ['admin', 'registrar', 'dean'],
             'update' => ['admin', 'registrar'],
-            'selectSection' => ['admin', 'registrar', 'student'],
+            'selectSection' => ['admin', 'registrar', 'student', 'dean'],
             'exportRegistration' => ['admin', 'registrar'],
+            'create' => ['admin', 'registrar', 'student'],
         ],
         'grade' => [
             'update' => ['admin', 'registrar'],
@@ -36,6 +42,9 @@ class BasePolicy
         ],
         'prospectus' => [
             'register' => ['admin', 'student', 'registrar'],
+        ],
+        'transaction' => [
+            'view' => ['admin', 'registrar', 'dean']
         ]
     ];
 

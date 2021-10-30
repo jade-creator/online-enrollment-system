@@ -35,6 +35,10 @@ class PaymentIndexComponent extends Livewire\Component
         'fileExport',
     ];
 
+    public function mount() {
+        $this->authorize('view', Models\Transaction::class);
+    }
+
     public function render() { return
         view('livewire.admin.payment-component.payment-index-component', ['transactions' => $this->rows]);
     }
