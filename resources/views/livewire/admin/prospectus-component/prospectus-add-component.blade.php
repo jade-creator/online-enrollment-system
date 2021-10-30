@@ -11,7 +11,7 @@
                     <select wire:model.defer="prospectusSubject.subject_id" name="subject-id" class="w-full mt-1 bg-white flex-1 p-2 tracking-wide border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" autofocus required>
                         @forelse ($subjects as $subject)
                             @if ($loop->first)
-                                <option value="" selected>-- choose a subject --</option>
+                                <option value="" selected>Select a subject</option>
                             @endif
                             <option value="{{ $subject->id ?? 'N/A' }}">{{ $subject->title ?? 'N/A' }}</option>
                         @empty

@@ -11,6 +11,7 @@ class ProspectusSubject extends BaseModel
     use SoftDeletes;
 
     protected $fillable = [
+        'curriculum_id',
         'prospectus_id',
         'subject_id',
         'unit',

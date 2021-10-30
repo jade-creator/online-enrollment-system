@@ -19,11 +19,6 @@
         </a>
     </div>
 
-    @if (session()->has('alert'))
-        <x-form.alert type="{{session('alert')['type']}}">{!!session()->pull('alert')['message']!!}</x-form.alert>
-        <x-jet-section-border/>
-    @endif
-
     <div class="w-full pl-0 md:pl-8">
         <x-jet-form-section submit="">
             <x-slot name="title">

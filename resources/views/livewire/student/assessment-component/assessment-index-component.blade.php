@@ -68,7 +68,7 @@
                             @endforelse
                         @elsecan('finalize', $registration)
                             {{-- ADMIN SIDE not computed yet.--}}
-                            @if (is_null($grandTotal))
+                            @if (! isset($grandTotal))
                                 @forelse ($registration->prospectus->program->fees as $fee)
                                     <div class="col-span-6 flex items-center">
                                         <input wire:model.defer="fees.{{ $fee->id }}.0" type="checkbox">
