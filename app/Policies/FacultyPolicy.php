@@ -6,12 +6,24 @@ use App\Models\User;
 use App\Models\Faculty;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class FacultyPolicy
+class FacultyPolicy extends BasePolicy
 {
     use HandlesAuthorization;
 
-    public function isAdmin(User $user) { return
-        $user->role->name == 'admin';
+    public function isMember(User $user, Faculty $faculty) {
+        switch ($user->role->name) {
+            case 'admin':
+                return TRUE;
+                break;
+
+            case 'dean':
+                return $user->employee->faculty_id == $faculty->id;
+                break;
+
+            default:
+                return FALSE;
+                break;
+        }
     }
 
     public function view(User $user) { return true; }
@@ -21,11 +33,11 @@ class FacultyPolicy
     }
 
     public function addMember(User $user, Faculty $faculty) { return
-        $this->isAdmin($user) || $user->role->name == 'dean';
+        $this->isMember($user, $faculty);
     }
 
     public function removeMember(User $user, Faculty $faculty) { return
-        $this->isAdmin($user) || $user->role->name == 'dean';
+        $this->isMember($user, $faculty);
     }
 
     public function export(User $user) { return
@@ -37,7 +49,7 @@ class FacultyPolicy
     }
 
     public function update(User $user, Faculty $faculty) { return
-        $this->isAdmin($user);
+        $this->isMember($user, $faculty);
     }
 
     public function destroy(User $user, Faculty $faculty) { return

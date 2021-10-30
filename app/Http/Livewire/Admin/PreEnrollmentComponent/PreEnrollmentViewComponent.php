@@ -81,7 +81,6 @@ class PreEnrollmentViewComponent extends Livewire\Component
                         });
             })
             ->where('isExtension', 0)
-//            ->whereNull('released_at')
             ->filterByStatus($this->statusId)
             ->filterByProgram($this->programId)
             ->filterByLevel($this->levelId)
@@ -96,7 +95,7 @@ class PreEnrollmentViewComponent extends Livewire\Component
 
     public function createNewRegistration()
     {
-        $students = Student::all();
+        $students = Student::take(1)->get();
         $message = filled($students) ? 'Please select a student. Click the option and choose "register".'
             : 'No student found as of '.date('M d Y');
 

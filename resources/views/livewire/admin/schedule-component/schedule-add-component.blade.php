@@ -20,7 +20,7 @@
         @endif
 
         <div class="w-full px-6 pt-2 mb-2">
-            <form class="w-full max-h-72 overflow-x-hidden overflow-y-auto">
+            <form class="sidebar w-full max-h-72 overflow-x-hidden overflow-y-auto">
                 <div wire:loading wire:target="search" class="w-full">
                     <div class="w-full h-40 text-blue-500 grid place-items-center">
                         <x-icons.loading-icon color="blue"/>

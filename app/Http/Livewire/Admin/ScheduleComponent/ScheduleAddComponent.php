@@ -66,7 +66,8 @@ class ScheduleAddComponent extends Component
                         ->orWhere('middlename', 'LIKE', '%'.$this->search.'%')
                         ->orWhere('lastname', 'LIKE', '%'.$this->search.'%');
                 });
-            });
+            })
+            ->whereNotNull('faculty_id');
     }
 
     public function save()

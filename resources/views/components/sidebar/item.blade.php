@@ -1,5 +1,5 @@
 @props([ 'title' => 'N/A' ])
 
-<li title="{{ $title }}">
+<li title="{{ $title }}" {{ $attributes }}>
     {{ $slot }}
 </li>

@@ -18,12 +18,16 @@ class LoginResponse implements LoginResponseContract
                 return '/pre-enrollments';
                 break;
 
+            case 'dean':
+                return '/pre-enrollments';
+                break;
+
             case 'student':
                 return '/student/pre-registrations';
                 break;
 
             case 'faculty member':
-                return '/admin/dashboard';
+                return '/pre-enrollments';
                 break;
 
             default:

@@ -38,7 +38,7 @@ class ProspectusIndexComponent extends Component
 
     protected $listeners = [
         'refresh' => '$refresh',
-        'alertParent'
+        'sessionFlashAlert'
     ];
 
     //find or get the first model from a collection.
@@ -93,16 +93,6 @@ class ProspectusIndexComponent extends Component
             'coRequisites' => $this->getProspectusSubjects(),
             'preRequisites' => $this->getPreRequisites(),
         ]);
-    }
-
-    public function alertParent(string $type = '', string $message = '')
-    {
-        session()->flash('alert', [
-            'type' => $type,
-            'message' => $message,
-        ]);
-
-        $this->emit('alert');
     }
 
     public function add()

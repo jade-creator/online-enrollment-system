@@ -8,8 +8,8 @@
             <input wire:model.debounce.1000ms="search" type="text" placeholder="Search" class="text-sm">
         </div>
 
-        <div class="w-full px-6">
-            <form class="w-full max-h-72 overflow-x-hidden overflow-y-auto">
+        <div class="w-full">
+            <form class="sidebar w-full max-h-96 overflow-x-hidden overflow-y-auto">
                 <div wire:loading wire:target="search" class="w-full">
                     <div class="w-full h-40 text-blue-500 grid place-items-center">
                         <x-icons.loading-icon color="blue"/>
