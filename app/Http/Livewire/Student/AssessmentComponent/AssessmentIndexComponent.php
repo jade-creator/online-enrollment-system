@@ -83,7 +83,7 @@ class AssessmentIndexComponent extends Component
         try {
             if (is_null($this->assessment->isPercentage)) $this->assessment->discount_amount = 0;
 
-            $this->authorize('create', $this->assessment);
+            $this->authorize('create', Models\Assessment::class);
 
             $this->grandTotal = (new AssessmentComputationService())->computeGrandTotal($this->additional, $this->totalUnit, $this->fees, $this->assessment);
 

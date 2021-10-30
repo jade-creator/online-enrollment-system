@@ -15,7 +15,7 @@ class CreateFacultiesTable extends Migration
     {
         Schema::create('faculties', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('program_id')->constrained();
+            $table->string('code', 100);
             $table->string('name', 100);
             $table->text('description')->nullable();
             $table->text('mission')->nullable();

@@ -17,7 +17,6 @@ class RegistrationReleaseService
     {
         if ($registrations->count() > 0) {
             foreach ($registrations as $registration ) {
-                $registration->status_id = $this->statusId;
                 $registration->released_at = now();
                 $registration->save();
             }

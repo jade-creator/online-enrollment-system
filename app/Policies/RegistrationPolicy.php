@@ -15,8 +15,8 @@ class RegistrationPolicy extends BasePolicy
     }
 
     public function edit(User $user, Registration $registration) { return
-        $this->isAuthorized('registration', 'edit', $user) && ($registration->status->name == 'pending' ||
-            $registration->status->name == 'confirming');
+        $this->action($user, $registration) && $this->isAuthorized('registration', 'edit', $user)
+            && ($registration->status->name == 'pending' || $registration->status->name == 'confirming');
     }
 
     public function reject(User $user, Registration $registration) { return
@@ -36,7 +36,7 @@ class RegistrationPolicy extends BasePolicy
     }
 
     public function finalize(User $user, Registration $registration) { return
-        $this->isAuthorized('registration', 'enroll', $user) && $registration->status->name == 'finalized';
+        $this->isAuthorized('registration', 'finalize', $user) && $registration->status->name == 'finalized';
     }
 
     public function confirm(User $user, Registration $registration) { return
@@ -77,12 +77,21 @@ class RegistrationPolicy extends BasePolicy
         $registration->status->name == "enrolled" || $registration->status->name == "released";
     }
 
-    public function view(User $user, Registration $registration) { return
-        $this->isAdmin($user) || $user->role->name == 'registrar' || $registration->student->id == $user->student->id; //TODO basePolicy
+    public function view(User $user, Registration $registration)
+    {
+        switch ($user->role->name) {
+            case 'student':
+                return $registration->student->id == $user->student->id;
+                break;
+
+            default:
+                return TRUE;
+                break;
+        }
     }
 
     public function create(User $user) { return
-        $user->role->name == 'student';
+        $this->isAuthorized('registration', 'create', $user);
     }
 
     public function exportGrade(User $user, Registration $registration) { return

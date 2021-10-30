@@ -43,7 +43,10 @@ class FeeAddComponent extends Component
     }
 
     public function render() { return
-        view('livewire.admin.fee-component.fee-add-component');
+        view('livewire.admin.fee-component.fee-add-component', [
+            'programs' => $this->getPrograms(),
+            'categories' => $this->getCategories(),
+        ]);
     }
 
     public function createOrUpdate()
@@ -81,11 +84,11 @@ class FeeAddComponent extends Component
         $this->createOrUpdate();
     }
 
-    public function getProgramsProperty() { return
+    public function getPrograms() { return
         Models\Program::get(['id', 'code']);
     }
 
-    public function getCategoriesProperty() { return
+    public function getCategories() { return
         Models\Category::get(['id', 'name']);
     }
 }

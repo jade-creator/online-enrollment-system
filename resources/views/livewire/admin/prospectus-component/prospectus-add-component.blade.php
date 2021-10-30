@@ -4,14 +4,14 @@
     </x-slot>
 
     <x-slot name="content">
-        <form>
+        <form class="sidebar w-full px-6 mb-2 max-h-96 overflow-x-hidden overflow-y-auto">
             <div class="grid grid-cols-8 gap-6">
                 <div class="mt-4 col-span-8">
                     <x-jet-label for="subject-id" value="{{ __('Subject') }}"/>
                     <select wire:model.defer="prospectusSubject.subject_id" name="subject-id" class="w-full mt-1 bg-white flex-1 p-2 tracking-wide border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" autofocus required>
                         @forelse ($subjects as $subject)
                             @if ($loop->first)
-                                <option value="" selected>-- choose a subject --</option>
+                                <option value="" selected>Select a subject</option>
                             @endif
                             <option value="{{ $subject->id ?? 'N/A' }}">{{ $subject->title ?? 'N/A' }}</option>
                         @empty

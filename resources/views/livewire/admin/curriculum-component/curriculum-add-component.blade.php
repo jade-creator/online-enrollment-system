@@ -25,13 +25,13 @@
                                 </div>
                                 <div class="col-span-6">
                                     <x-jet-label for="description" value="{{ __('Description') }}" />
-                                    <textarea wire:model.defer="curriculum.description" id="description" name="description" autofocus required></textarea>
+                                    <textarea wire:model.defer="curriculum.description" id="description" name="description" autofocus required class="h-32"></textarea>
                                     <x-jet-input-error for="curriculum.description" class="mt-2"/>
                                 </div>
                                 <div class="col-span-3">
                                     <x-jet-label for="programId" value="{{ __('Program') }}" />
                                     <select wire:model.defer="curriculum.program_id" name="programID" required>
-                                        <option value="" selected>-- choose a program --</option>
+                                        <option value="" selected>Select a program</option>
                                         @forelse ($this->programs as $program)
                                             <option value="{{ $program->id ?? 'N/A' }}">{{ $program->code ?? 'N/A' }}</option>
                                         @empty
@@ -43,7 +43,7 @@
                                 <div class="col-span-3">
                                     <x-jet-label for="isActive" value="{{ __('State') }}" />
                                     <select wire:model.defer="curriculum.isActive" id="isActive" name="isActive" autofocus required>
-                                        <option value="" selected>-- select a state --</option>
+                                        <option value="" selected>Select a state</option>
                                         <option value="1" selected>Active</option>
                                         <option value="0" selected>Inactive</option>
                                     </select>

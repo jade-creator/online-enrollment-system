@@ -75,21 +75,99 @@
                         <x-icons.users-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>
+            @elseif (auth()->user()->role->name === 'registrar')
+                <x-sidebar.item title="Pre Enrollment">
+                    <x-sidebar.link routeName="admin.pre.enrollments.view" :routes="['admin.pre.enrollments.view', 'admin.students.registration.create', 'admin.students.regular.create', 'admin.students.irregular.create', 'pre.registration.view']"  name="Pre Enrollment">
+                        <x-icons.pre-enrollment-icon/>
+                    </x-sidebar.link>
+                </x-sidebar.item>
+
+                <x-sidebar.item title="Sections">
+                    <x-sidebar.link routeName="sections.view" :routes="['sections.view']" name="Sections">
+                        <x-icons.section-icon/>
+                    </x-sidebar.link>
+                </x-sidebar.item>
+
+                <x-sidebar.item title="Grades">
+                    <x-sidebar.link routeName="admin.grades.view" :routes="['admin.grades.view']" name="Grades">
+                        <x-icons.grade-icon/>
+                    </x-sidebar.link>
+                </x-sidebar.item>
+
+                <x-sidebar.item title="Payments">
+                    <x-sidebar.link routeName="admin.payments.view" :routes="['admin.payments.view']" name="Payments">
+                        <x-icons.credit-card-icon/>
+                    </x-sidebar.link>
+                </x-sidebar.item>
+
+                <x-sidebar.item title="Users">
+                    <x-sidebar.link routeName="users.students.index" :routes="['users.students.index', 'user.personal.profile.view']" name="Users">
+                        <x-icons.users-icon/>
+                    </x-sidebar.link>
+                </x-sidebar.item>
+            @elseif (auth()->user()->role->name === 'dean')
+                <x-sidebar.item title="Pre Enrollment">
+                    <x-sidebar.link routeName="admin.pre.enrollments.view" :routes="['admin.pre.enrollments.view', 'admin.students.registration.create', 'admin.students.regular.create', 'admin.students.irregular.create', 'pre.registration.view']"  name="Pre Enrollment">
+                        <x-icons.pre-enrollment-icon/>
+                    </x-sidebar.link>
+                </x-sidebar.item>
+
+                <x-sidebar.item title="Grades">
+                    <x-sidebar.link routeName="admin.grades.view" :routes="['admin.grades.view']" name="Grades">
+                        <x-icons.grade-icon/>
+                    </x-sidebar.link>
+                </x-sidebar.item>
+
+                <x-sidebar.item title="Sections">
+                    <x-sidebar.link routeName="sections.view" :routes="['sections.view', 'admin.sections.create', 'admin.sections.update']" name="Sections">
+                        <x-icons.section-icon/>
+                    </x-sidebar.link>
+                </x-sidebar.item>
+
+                <x-sidebar.item title="Prospectus">
+                    <x-sidebar.link routeName="admin.prospectuses.view" :routes="['admin.prospectuses.view']" name="Prospectus">
+                        <x-icons.prospectus-icon/>
+                    </x-sidebar.link>
+                </x-sidebar.item>
+
+                <x-sidebar.item title="Faculties">
+                    <x-sidebar.link routeName="admin.faculties.view" :routes="['admin.faculties.view', 'admin.faculties.update']" name="Faculties">
+                        <x-icons.faculty-icon/>
+                    </x-sidebar.link>
+                </x-sidebar.item>
+
+                <x-sidebar.item title="Payments">
+                    <x-sidebar.link routeName="admin.payments.view" :routes="['admin.payments.view']" name="Payments">
+                        <x-icons.credit-card-icon/>
+                    </x-sidebar.link>
+                </x-sidebar.item>
+            @elseif (auth()->user()->role->name === 'faculty member')
+                <x-sidebar.item title="Grades">
+                    <x-sidebar.link routeName="admin.grades.view" :routes="['admin.grades.view']" name="Grades">
+                        <x-icons.grade-icon/>
+                    </x-sidebar.link>
+                </x-sidebar.item>
+
+                <x-sidebar.item title="Sections">
+                    <x-sidebar.link routeName="sections.view" :routes="['sections.view', 'admin.sections.create', 'admin.sections.update']" name="Sections">
+                        <x-icons.section-icon/>
+                    </x-sidebar.link>
+                </x-sidebar.item>
             @elseif (auth()->user()->role->name === 'student')
                 <x-sidebar.item title="Registrations">
-                    <x-sidebar.link routeName="student.registrations.index" route="student/pre-registrations" name="Registrations">
+                    <x-sidebar.link routeName="student.registrations.index" :routes="['student.registrations.index', 'student.registrations.create']" name="Registrations">
                         <x-icons.pre-enrollment-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>
 
                 <x-sidebar.item title="Prospectus">
-                    <x-sidebar.link routeName="student.grades.view" route="student/grades" name="Prospectus">
+                    <x-sidebar.link routeName="student.grades.view" :routes="['student.grades.view']" name="Prospectus">
                         <x-icons.prospectus-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>
 
                 <x-sidebar.item title="Payments">
-                    <x-sidebar.link routeName="student.payments.view" route="student/payments" name="Payments">
+                    <x-sidebar.link routeName="student.payments.view" :routes="['student.payments.view', 'student.paywithpaypal']" name="Payments">
                         <x-icons.credit-card-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>

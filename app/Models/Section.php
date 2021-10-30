@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Section extends BaseModel
 {
+    use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
     use SoftDeletes;
 
     protected $fillable = [
@@ -13,6 +14,7 @@ class Section extends BaseModel
         'prospectus_id',
         'room_id',
         'seat',
+        'isFull'
     ];
 
     public $with = [
@@ -22,6 +24,10 @@ class Section extends BaseModel
         'prospectus.term:id,term',
         'room:id,name',
     ];
+
+    protected $casts = ['isFull' => 'boolean'];
+
+    protected $attributes = ['isFull' => false];
 
     public function scopeWithSortedSchedules($query) { return
         $query->select(['id', ...$this->fillable, 'created_at'])
@@ -51,6 +57,15 @@ class Section extends BaseModel
             'isExtension' => 0,
             'released_at' => null,
         ])->get();
+    }
+
+    public function days() { return
+        $this->hasManyDeep(
+            Day::class,
+            [Schedule::class],
+            [null, 'id', 'id'],
+            [null, 'schedule_id', 'day_id'],
+        );
     }
 
     public function registrations() { return

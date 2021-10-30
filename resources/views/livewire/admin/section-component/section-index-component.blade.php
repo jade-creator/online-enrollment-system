@@ -3,6 +3,10 @@
     <div class="h-content w-full p-4 md:p-8">
         <x-table.title tableTitle="Sections" :isSelectedAll="$this->selectAll" :count="count($this->selected)">
             @can('create', App\Models\Section::class)
+                <button wire:click.prevent="$emit('modalAddingRoom')" class="py-2.5 px-4 text-xs text-indigo-500 hover:text-indigo-700 font-bold hover:underline focus:outline-none">
+                    View Rooms
+                </button>
+
                 <a href="{{ route('admin.sections.create') }}">
                     <x-table.nav-button>
                         Create New Section
@@ -32,7 +36,7 @@
             <x-slot name="head">
                 <div class="col-span-2 flex items-center" id="columnTitle">
                     <input @click.stop type="checkbox" wire:model="selectPage" class="cursor-pointer border-gray-400 focus:outline-none focus:ring-transparent mx-5 rounded-sm" title="Select Displayed Data">
-                    <x-table.sort-button event="sortFieldSelected('id')">ID</x-table.sort-button>
+                    <x-table.sort-button event="sortFieldSelected('name')">Name</x-table.sort-button>
                 </div>
                 <x-table.column-title class="col-span-3">program</x-table.column-title>
                 <x-table.column-title class="col-span-3">room</x-table.column-title>
@@ -58,7 +62,7 @@
                                         </div>
                                     </div>
                                 </x-table.cell>
-                                <x-table.cell headerLabel="room" class="justify-start md:col-span-3">{{ $section->room->name ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="room" class="justify-start md:col-span-3">{!! $section->room->name ?? '<span class="text-gray-400">N/A</span>' !!}</x-table.cell>
                                 <x-table.cell headerLabel="seats" class="md:justify-start md:col-span-3">
                                     <div class="flex flex-col">
                                         <div class="tracking-widest text-green-500">{{ $section->registrations->count() }}<span class="text-gray-500">/{{ $section->seat ?? 'N/A' }}</span></div>
@@ -101,10 +105,6 @@
                                                         <x-table.cell-button wire:click.prevent="$emit('removeConfirm', {{$section}})" title="Delete" class="rounded-b-md hover:bg-red-500 hover:text-white transition-colors">
                                                             <x-icons.delete-icon/>
                                                         </x-table.cell-button>
-                                                    @elsecan ('view', App\Models\Section::class)
-                                                        <x-table.cell-button title="Administrative Access">
-                                                            <x-icons.lock-icon/>
-                                                        </x-table.cell-button>
                                                     @endcan
                                                 </div>
                                             </x-slot>
@@ -144,9 +144,11 @@
 
     <livewire:admin.section-component.section-destroy-component>
 
-    <livewire:admin.schedule-component.schedule-add-component key="{{ 'schedule-add-component-'.now() }}" :days="$this->days" :professors="$this->professors">
+    <livewire:admin.schedule-component.schedule-add-component key="{{ 'schedule-add-component-'.now() }}" :days="$this->days">
 
     <livewire:admin.schedule-component.schedule-update-component key="{{ 'schedule-update-component-'.now() }}" :days="$this->days" :professors="$this->professors">
+
+    <livewire:admin.section-component.section-room-add-component>
 
     @if (session()->has('alert'))
         <x-form.alert type="{{session('alert')['type']}}">{!!session()->pull('alert')['message']!!}</x-form.alert>

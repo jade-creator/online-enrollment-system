@@ -1,6 +1,6 @@
-<x-jet-dialog-modal wire:model="addingCategory" :closeBtn="true">
+<x-jet-dialog-modal wire:model="addingRoom" :closeBtn="true">
     <x-slot name="title">
-        {{ __('Categories') }}
+        {{ __('Rooms') }}
     </x-slot>
 
     <x-slot name="content">
@@ -8,36 +8,36 @@
             <button wire:click.prevent="$toggle('add')" class="w-full h-full absolute top-0 bg-transparent z-0 focus:outline-none"></button>
 
             <div class="w-full px-6 py-4 bg-white z-50 relative shadow-lg">
-                <x-jet-label value="{{ __('Category Name') }}"/>
-                <input wire:model.defer="category.name" wire:loading.attr="disabled" name="category" type="text" class="text-sm mt-2">
-                <x-jet-input-error for="category.name" class="mt-2"/>
+                <x-jet-label value="{{ __('Room Name') }}"/>
+                <input wire:model.defer="room.name" wire:loading.attr="disabled" name="category" type="text" class="text-sm mt-2">
+                <x-jet-input-error for="room.name" class="mt-2"/>
             </div>
         @endif
 
         <div class="w-full px-6 max-h-72 overflow-x-hidden overflow-y-auto">
-            @forelse ($categories as $category)
-                @if (filled($this->category) && $this->category->id == $category->id && ! $add)
+            @forelse ($rooms as $room)
+                @if (filled($this->room) && $this->room->id == $room->id && ! $add)
                     <div class="flex items-center justify-between bg-red-500 rounded-md">
                         <div class="font-semibold pl-2 text-white">Are you sure ?</div>
 
                         <div class="flex items-center">
-                            <button wire:click.prevent="confirmDeleteCategory" wire:loading.attr="disabled" class="text-xs text-white px-2 py-3 focus:outline-none">
+                            <button wire:click.prevent="confirmDeleteRoom" wire:loading.attr="disabled" class="text-xs text-white px-2 py-3 focus:outline-none">
                                 Cancel
                             </button>
-                            <button wire:click.prevent="deleteCategory" wire:loading.attr="disabled" class="text-xs bg-green-400 hover:bg-green-500 text-white px-2 py-3 focus:outline-none rounded-br-md rounded-tr-md">
+                            <button wire:click.prevent="deleteRoom" wire:loading.attr="disabled" class="text-xs bg-green-400 hover:bg-green-500 text-white px-2 py-3 focus:outline-none rounded-br-md rounded-tr-md">
                                 Confirm
                             </button>
                         </div>
                     </div>
                 @else
                     <div class="flex items-center justify-between px-2 py-3 hover:bg-gray-50 rounded-md">
-                        <div class="font-semibold">{{ $category->name ?? 'N/A'}}</div>
+                        <div class="font-semibold">{{ $room->name ?? 'N/A'}}</div>
                         <div class="flex items-center">
-                            <button wire:click.prevent="confirmEditCategory({{$category}})" wire:loading.attr="disabled" class="text-indigo-500 hover:text-indigo-900 focus:outline-none mx-1" title="Edit">
+                            <button wire:click.prevent="confirmEditRoom({{$room}})" wire:loading.attr="disabled" class="text-indigo-500 hover:text-indigo-900 focus:outline-none mx-1" title="Edit">
                                 <x-icons.edit-icon stroke-width="1" class="w-5 h-5 cursor-pointer"/>
                             </button>
 
-                            <button wire:click.prevent="$emit('confirmDeleteCategory', {{$category}})" wire:loading.attr="disabled" class="text-red-500 hover:text-red-900 focus:outline-none" title="Delete">
+                            <button wire:click.prevent="$emit('confirmDeleteRoom', {{$room}})" wire:loading.attr="disabled" class="text-red-500 hover:text-red-900 focus:outline-none" title="Delete">
                                 <x-icons.delete-icon stroke-width="1" class="w-5 h-5 cursor-pointer"/>
                             </button>
                         </div>
@@ -49,8 +49,8 @@
                 </div>
             @endforelse
 
-            @if (filled($categories))
-                {{ $categories->links('partials.pagination-link') }}
+            @if (filled($rooms))
+                {{ $rooms->links('partials.pagination-link') }}
             @endif
         </div>
     </x-slot>

@@ -12,7 +12,7 @@
             <div class="col-span-6">
                 <x-jet-label for="salutation" value="{{ __('Salutation') }}" />
                 <select wire:model.defer="employee.salutation" wire:loading.attr="disabled" id="salutation" name="salutation" required>
-                    <option value="" selected>-- select a salutation --</option>
+                    <option value="" selected>Select a salutation</option>
                     <option value="Mr.">Mr.</option>
                     <option value="Mrs.">Mrs.</option>
                     <option value="Prof.">Prof.</option>
@@ -60,7 +60,7 @@
             <div class="col-span-6">
                 <x-jet-label for="faculty_id" value="{{ __('Faculty') }}" />
                 <select wire:model.defer="employee.faculty_id" wire:loading.attr="disabled" id="faculty_id" name="faculty_id" required>
-                    <option value="" selected>-- select a faculty --</option>
+                    <option value="" selected>Select a faculty</option>
                     @forelse($this->faculties as $faculty)
                         <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
                     @empty
@@ -72,7 +72,7 @@
             <div class="col-span-6">
                 <x-jet-label for="program_id" value="{{ __('Program') }}" />
                 <select wire:model.defer="student.program_id" wire:loading.attr="disabled" id="program_id" name="program_id" required>
-                    <option value="" selected>-- select a program --</option>
+                    <option value="" selected>Select a program</option>
                     @forelse($this->programs as $program)
                         <option value="{{ $program->id }}">{{ $program->program }}</option>
                     @empty

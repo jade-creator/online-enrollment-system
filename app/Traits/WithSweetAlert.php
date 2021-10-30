@@ -53,4 +53,14 @@ trait WithSweetAlert
             'item' => $item,
         ]);
     }
+
+    public function sessionFlashAlert(string $flash = 'alert', string $type = '', string $message = '', bool $fade = TRUE)
+    {
+        session()->flash( $flash, [
+            'type' => $type,
+            'message' => $message,
+        ]);
+
+        if ($fade) $this->emit('alert');
+    }
 }

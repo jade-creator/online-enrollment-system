@@ -15,6 +15,16 @@ class SectionAddComponent extends Component
     public Models\Section $section;
     public string $programId = '', $levelId = '', $termId = '';
 
+    protected $messages = [
+        'section.name.required' => 'The name field cannot be empty.',
+        'section.name.alpha_dash' => 'The name may only contain letters, numbers, dashes and underscores with no spaces.',
+        'section.room_id.required' => 'The room field cannot be empty.',
+        'section.seat.required' => 'The seat field cannot be empty.',
+        'programId.required' => 'The program field cannot be empty.',
+        'levelId.required' => 'The level field cannot be empty.',
+        'termId.required' => 'The term field cannot be empty.',
+    ];
+
     public function rules()
     {
         return [
@@ -26,16 +36,6 @@ class SectionAddComponent extends Component
             'termId' => ['required'],
         ];
     }
-
-    protected $messages = [
-        'section.name.required' => 'The name field cannot be empty.',
-        'section.name.alpha_dash' => 'The name may only contain letters, numbers, dashes and underscores with no spaces.',
-        'section.room_id.required' => 'The room field cannot be empty.',
-        'section.seat.required' => 'The seat field cannot be empty.',
-        'programId.required' => 'The program field cannot be empty.',
-        'levelId.required' => 'The level field cannot be empty.',
-        'termId.required' => 'The term field cannot be empty.',
-    ];
 
     public function mount() {
         $this->section = new Models\Section();

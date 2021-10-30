@@ -13,6 +13,7 @@ class SubjectUpdateComponent extends Component
     use AuthorizesRequests, WithSweetAlert;
 
     public Subject $subject;
+    public $route;
 
     public function rules()
     {
@@ -29,6 +30,10 @@ class SubjectUpdateComponent extends Component
         'subject.description.required' => 'The description field cannot be empty.',
     ];
 
+    public function mount() {
+        $this->route = url()->previous();
+    }
+
     public function render() { return
         view('livewire.admin.subject-component.subject-update-component');
     }
@@ -38,7 +43,6 @@ class SubjectUpdateComponent extends Component
         $this->validate();
 
         try {
-            $this->authorize('update', $this->subject);
             $subject = (new SubjectService())->update($this->subject);
 
             session()->flash('swal:modal', [
@@ -46,7 +50,8 @@ class SubjectUpdateComponent extends Component
                 'type' => $this->successType,
                 'text' => $subject->code.' has been updated.',
             ]);
-            return redirect(route('admin.subjects.view'));
+
+            return redirect($this->route);
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }

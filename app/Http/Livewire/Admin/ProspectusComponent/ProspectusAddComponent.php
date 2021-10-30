@@ -66,15 +66,14 @@ class ProspectusAddComponent extends Component
     {
         $this->validate();
 
+        $this->toggleAddingSubject();
+
         try {
-            $this->authorize('create', ProspectusSubject::class);
             $prospectusSubject = (new ProspectusSubjectService())->store($this->prospectusSubject, $this->prospectusId, $this->curriculumId, $this->preRequisiteSubjects, $this->coRequisiteSubjects);
 
-            $this->emitUp('alertParent', 'success', $prospectusSubject->subject->code.' has been added.');
-            $this->toggleAddingSubject();
-            $this->emitUp('refresh');
+            $this->emitUp('sessionFlashAlert', 'alert', 'success', $prospectusSubject->subject->code.' has been added.');
         }catch (\Exception $e) {
-            $this->emitUp('alertParent', 'danger', $e->getMessage());
+            $this->emitUp('sessionFlashAlert', 'alert', 'danger', $e->getMessage());
         }
     }
 

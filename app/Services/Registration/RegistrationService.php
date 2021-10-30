@@ -23,8 +23,11 @@ class RegistrationService
 
     public function isSubjectsAvailable(Models\Registration $registration, $schedules) : bool
     {
-        $subjectsEnrolled = $registration->grades->pluck('subject_id')->toArray();
-        $schedules = array_unique($schedules->pluck('prospectus_subject_id')->toArray());
+//        $subjectsEnrolled = $registration->grades->pluck('subject_id')->toArray();
+//        $schedules = array_unique($schedules->pluck('prospectus_subject_id')->toArray());
+
+        $subjectsEnrolled = $registration->grades->pluck('prospectus_subject.subject_id')->toArray();
+        $schedules = array_unique($schedules->pluck('prospectusSubject.subject_id')->toArray());
 
         if (is_array($subjectsEnrolled)
             && is_array($schedules)
@@ -44,8 +47,11 @@ class RegistrationService
         $registration->update();
 
         //get schedules that student enrolled to.
-        $grades = $registration->grades->pluck('subject_id')->toArray();
-        $schedules = $schedules->filter(fn ($schedule) => in_array($schedule->prospectus_subject_id, $grades));
+//        $grades = $registration->grades->pluck('subject_id')->toArray();
+//        $schedules = $schedules->filter(fn ($schedule) => in_array($schedule->prospectus_subject_id, $grades));
+
+        $grades = $registration->grades->pluck('prospectus_subject.subject_id')->toArray();
+        $schedules = $schedules->filter(fn ($schedule) => in_array($schedule->prospectusSubject->subject_id, $grades));
 
         $registration->classes()->sync($schedules->pluck('id')->toArray());
 

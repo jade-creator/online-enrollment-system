@@ -41,7 +41,7 @@
                             <div name="slot" class="grid grid-cols-12 md:gap-2">
                                 <x-table.cell-checkbox :value="$curriculum->id">{{ $curriculum->code ?? 'N/A' }}</x-table.cell-checkbox>
                                 <x-table.cell headerLabel="Code" class="justify-start md:col-span-2">{{ $curriculum->program->code ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell headerLabel="Description" class="justify-start md:col-span-3" title="{{$curriculum->description ?? 'N/A'}}">{{ $curriculum->description ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Description" class="justify-start md:col-span-3" title="{{ $curriculum->description ?? 'N/A' }}">{!! $curriculum->description ?? '<span class="text-gray-400">N/A</span>' !!}</x-table.cell>
                                 <x-table.cell headerLabel="state" class="md:justify-center md:col-span-2">{!! $curriculum->state_element !!}</x-table.cell>
                                 <x-table.cell headerLabel="School Year" class="md:justify-center md:col-span-2">{{ $curriculum->school_year ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell-action>

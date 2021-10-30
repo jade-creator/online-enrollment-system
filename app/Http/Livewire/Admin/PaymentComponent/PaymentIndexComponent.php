@@ -35,6 +35,10 @@ class PaymentIndexComponent extends Livewire\Component
         'fileExport',
     ];
 
+    public function mount() {
+        $this->authorize('view', Models\Transaction::class);
+    }
+
     public function render() { return
         view('livewire.admin.payment-component.payment-index-component', ['transactions' => $this->rows]);
     }
@@ -46,6 +50,13 @@ class PaymentIndexComponent extends Livewire\Component
     public function getRowsQueryProperty()
     {
         return Models\Transaction::search($this->search)
+            ->with([
+                'registration.student.user.person',
+                'registration.assessment',
+                'registration.prospectus' => function ($query) {
+                    $query->with(['program', 'level', 'term']);
+                },
+            ])
             ->when(filled($this->search), function ($query) {
                 return $query->orWhereHas('registration', function ($query) {
                     return $query->where('custom_id', $this->search);

@@ -37,7 +37,10 @@ class RegistrationAddComponent extends Component
         'termId.required' => 'The term field cannot be empty.',
     ];
 
-    public function mount() {
+    public function mount()
+    {
+        $this->authorize('create', Models\Registration::class);
+
         $this->fill([
             'registration' => new Models\Registration(),
             'programId' => auth()->user()->student->program_id,

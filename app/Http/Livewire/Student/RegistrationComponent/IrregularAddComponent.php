@@ -24,6 +24,8 @@ class IrregularAddComponent extends Component
 
     public function mount(RegistrationService $registrationService)
     {
+        $this->registration = new Models\Registration();
+
         //check if irregular students are allowed to enroll.
         $setting = Models\Setting::latest()->get()->first();
         if (filled($setting)) $this->authorize('view', $setting);
@@ -60,16 +62,16 @@ class IrregularAddComponent extends Component
         }
 
         //get all subjects eligible for enrollment/retake.
-        foreach ($this->prospectuses as $prospectus) {
-            $subjects = [];
+        foreach ($this->prospectuses as $index_P => $prospectus) {
+                $subjects = [];
 
             foreach ($prospectus->subjects as $subject) {
                 $subjects[] = $subject->id;
 
                 //remove if subject is taken but failed.
-                if (array_key_exists($subject->id, $this->grades)
-                        && $this->grades[$subject->id]['is_passed'] == TRUE) {
-                    unset($subjects[array_search($subject->id, $subjects)]);
+                if (array_key_exists($subject->subject->id, $this->grades)
+                    && $this->grades[$subject->subject->id]['is_passed'] == TRUE) {
+                    unset($subjects[array_search($subject->subject->id, $subjects)]);
                 }
 
                 //remove subject if one of pre-requisites is failed.
@@ -83,7 +85,7 @@ class IrregularAddComponent extends Component
                 if ($preRequisiteIsFailed) unset($subjects[array_search($subject->id, $subjects)]);
             }
 
-            $this->selected[] = $subjects;
+            $this->selected[$index_P] = $subjects;
         }
 
         $this->origSelectedSubjects = $this->selected;
@@ -98,11 +100,13 @@ class IrregularAddComponent extends Component
         $this->authorize('register', $this->prospectus);
 
         try {
-            $registration = (new RegistrationIrregularService())->store($this->prospectuses, auth()->user()->student->id, $this->curriculum->id, $this->selected);
+            $this->registration = (new RegistrationIrregularService())->store($this->prospectuses, auth()->user()->student->id, $this->curriculum->id, $this->selected);
 
-            return redirect()->route('pre.registration.view', $registration->id);
+            $this->sessionFlashAlert('alert', 'success', 'Saved successfully.');
+
+            return redirect()->route('pre.registration.view', $this->registration->id);
         } catch (\Exception $e) {
-            $this->error($e->getMessage());
+            $this->sessionFlashAlert('alert', 'danger', $e->getMessage());
         }
     }
 }

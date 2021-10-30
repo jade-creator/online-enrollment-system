@@ -19,11 +19,6 @@
         </a>
     </div>
 
-    @if (session()->has('alert'))
-        <x-form.alert type="{{session('alert')['type']}}">{!!session()->pull('alert')['message']!!}</x-form.alert>
-        <x-jet-section-border/>
-    @endif
-
     <div class="w-full pl-0 md:pl-8">
         <x-jet-form-section submit="">
             <x-slot name="title">
@@ -62,7 +57,7 @@
                                                     {{ $loop->first ? '' : ', '  }}
                                                     <span>&nbsp;{{ $requisite->code }}</span>
                                                 @empty
-                                                    N/A
+                                                    {!! '<span class="text-gray-400">N/A</span>' !!}
                                                 @endforelse
                                             </x-table.cell>
                                             <x-table.cell headerLabel="pre requisite" class="justify-start md:col-span-3">
@@ -70,7 +65,7 @@
                                                     {{ $loop->first ? '' : ', '  }}
                                                     <span>&nbsp;{{ $requisite->code }}</span>
                                                 @empty
-                                                    N/A
+                                                    {!! '<span class="text-gray-400">N/A</span>' !!}
                                                 @endforelse
                                             </x-table.cell>
                                         </div>

@@ -86,8 +86,12 @@ class Registration extends BaseModel
             ->with([
                 ...$this->relationships,
                 'classes' => function ($query) {
-                    $query->withTrashed()->with(['prospectusSubject', 'employee.user.person']);
+                    $query->with([
+                        'prospectusSubject.subject' => function ($query) { $query->withTrashed(); },
+                        'employee.user.person'
+                    ]);
                 },
+                'fees.category' => function ($query) { $query->withTrashed(); },
 //                'classes.prospectusSubject',
 //                'classes.employee.user.person',
 //                'classes.employee.user.employee',
@@ -96,9 +100,9 @@ class Registration extends BaseModel
                 'grades:id,registration_id,subject_id,mark_id,value',
                 'grades.mark',
                 'grades.prospectus_subject',
-                'grades.prospectus_subject.subject:id,code,title',
-                'grades.prospectus_subject.prerequisites',
-                'grades.prospectus_subject.corequisites',
+                'grades.prospectus_subject.subject' => function ($query) { $query->withTrashed(); },
+                'grades.prospectus_subject.prerequisites' => function ($query) { $query->withTrashed(); },
+                'grades.prospectus_subject.corequisites' => function ($query) { $query->withTrashed(); },
             ])
             ->findOrFail($regId);
     }

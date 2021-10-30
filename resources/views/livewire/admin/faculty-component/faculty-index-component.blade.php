@@ -23,15 +23,13 @@
             <x-slot name="head">
                 <div class="col-span-2 flex items-center">
                     <input wire:model="selectPage" wire:loading.attr="disabled" type="checkbox" class="cursor-pointer mx-5" title="Select Displayed Data">
-                    <x-table.sort-button event="sortFieldSelected('id')">ID</x-table.sort-button>
+                    <x-table.sort-button event="sortFieldSelected('code')">code</x-table.sort-button>
                 </div>
-                <div class="col-span-2">
-                    <x-table.sort-button event="sortFieldSelected('code')">name</x-table.sort-button>
+                <div class="col-span-3">
+                    <x-table.sort-button event="sortFieldSelected('name')">name</x-table.sort-button>
                 </div>
-                <x-table.column-title class="col-span-1">Program</x-table.column-title>
-                <x-table.column-title class="col-span-2">description</x-table.column-title>
-                <x-table.column-title class="col-span-2">Mission</x-table.column-title>
-                <x-table.column-title class="col-span-2">Vision</x-table.column-title>
+                <x-table.column-title class="col-span-4">description</x-table.column-title>
+                <x-table.column-title class="justify-center col-span-2">Members count</x-table.column-title>
                 <div class="col-span-1">
                     <x-table.sort-button event="sortFieldSelected('created_at')">latest</x-table.sort-button>
                 </div>
@@ -42,12 +40,10 @@
                     <div wire:key="table-row-{{$faculty->id}}" x-data="{ open: false }">
                         <x-table.row :active="$this->isSelected($faculty->id)">
                             <div name="slot" class="grid grid-cols-12 md:gap-2">
-                                <x-table.cell-checkbox :value="$faculty->id">{{ $faculty->id ?? 'N/A' }}</x-table.cell-checkbox>
-                                <x-table.cell headerLabel="Name" class="justify-start md:col-span-2">{{ $faculty->name ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell headerLabel="program" class="justify-start md:col-span-1">{{ $faculty->program->code ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell headerLabel="Description" class="justify-start md:col-span-2">{{ $faculty->description ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell headerLabel="Mission" class="justify-start md:col-span-2">{{ $faculty->mission ?? 'N/A' }}</x-table.cell>
-                                <x-table.cell headerLabel="Vision" class="justify-start md:col-span-2">{{ $faculty->vision ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell-checkbox :value="$faculty->id">{{ $faculty->code ?? 'N/A' }}</x-table.cell-checkbox>
+                                <x-table.cell headerLabel="Name" class="justify-start md:col-span-3">{{ $faculty->name ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Description" class="justify-start md:col-span-4">{{ $faculty->description ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Members count" class="justify-start md:justify-center md:col-span-2">{{ $faculty->employees->count() ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell-action>
                                     @if (!count($selected) > 0)
                                         <x-jet-dropdown align="right" width="60" dropdownClasses="z-10 shadow-2xl">
@@ -104,11 +100,17 @@
         </x-table.bulk-action-bar>
     </div>
 
-    <div wire:loading>
-        @include('partials.loading')
-    </div>
+    <div>@include('partials.loading')</div>
 
     <livewire:admin.faculty-component.faculty-add-member-component>
 
     <livewire:admin.faculty-component.faculty-destroy-component>
-<div>
+
+    @if (session()->has('alert'))
+        <x-form.alert type="{{session('alert')['type']}}">{!!session()->pull('alert')['message']!!}</x-form.alert>
+    @endif
+
+    @push('scripts')
+        <script src="{{ asset('js/alert.js') }}"></script>
+    @endpush
+</div>

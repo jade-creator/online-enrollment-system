@@ -12,12 +12,17 @@ class GradeUpdateComponent extends Component
 {
     use AuthorizesRequests, WithSweetAlert;
 
-    public Grade $grade;
+    public ?Grade $grade = NULL;
     public string $code = '', $type = 'scale';
     public ?string $value = '';
-    public bool $viewingGrade = false;
+    public bool $viewingGrade = FALSE;
 
     protected $listeners = ['modalViewingGrade'];
+
+    protected $messages = [
+        'type.required' => 'The type field cannot be empty.',
+        'value.required_if' => 'The value field cannot be empty.',
+    ];
 
     public function rules()
     {
@@ -26,10 +31,6 @@ class GradeUpdateComponent extends Component
             'value' => ['required_if:type,scale'],
         ];
     }
-
-    protected $messages = [
-        'value.required_if' => 'The value is required.',
-    ];
 
     public function render() { return
         view('livewire.admin.grade-component.grade-update-component');
@@ -48,6 +49,7 @@ class GradeUpdateComponent extends Component
             'grade' => $grade,
             'code' => $grade->prospectus_subject->subject->code,
         ]);
+
         $this->toggleModal();
     }
 
@@ -55,20 +57,24 @@ class GradeUpdateComponent extends Component
     {
         $this->validate();
 
+        $this->toggleModal();
+
         try {
             $this->authorize('update', $this->grade);
             $this->grade->value = $this->value;
             $grade = (new GradeService())->update($this->grade, $this->type);
 
-            $this->emitUp('alertParent', 'success', 'Sem Grade updated: '.$grade->fresh()->mark->name);
-            $this->toggleModal();
-            $this->emitUp('refresh');
+            $this->emitUp( 'sessionFlashAlert', 'alert', 'success', 'Sem Grade updated: '.$grade->fresh()->mark->name);
         } catch (\Exception $e) {
-            $this->emitUp('alertParent', 'danger', $e->getMessage());
+            $this->emitUp( 'sessionFlashAlert', 'alert', 'danger', $e->getMessage());
         }
     }
 
     public function toggleModal() : bool { return
         $this->viewingGrade = !$this->viewingGrade;
+    }
+
+    public function updatedViewingGrade($value) {
+        if (! $value) $this->reset('grade');
     }
 }

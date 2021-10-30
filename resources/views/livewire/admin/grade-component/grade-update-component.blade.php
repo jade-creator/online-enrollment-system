@@ -1,19 +1,18 @@
 <x-jet-dialog-modal wire:model="viewingGrade" maxWidth="sm">
     <x-slot name="title">
-        {{ __("Student's Grade") }}
+        @if (filled($grade))
+            {{ $code ?? 'N/A' }}
+        @else
+            {{ __("Student's Grade") }}
+        @endif
     </x-slot>
 
     <x-slot name="content">
-        <form>
-            <div class="col-span-6 mb-2">
-                <x-jet-label for="code" value="{{ __('Subject Code') }}" class="my-2" />
-                <input wire:model="code" readonly type="text" id="code">
-            </div>
-
-            <div class="col-span-6">
+        <form class="w-full px-6 mb-2">
+            <div class="w-full">
                 <x-jet-label for="type" value="{{ __('Grade') }}" class="my-2"/>
                 <select wire:model="type" wire:loading.attr="disabled" name="type">
-                    <option value="">-- select a grade --</option>
+                    <option value="">Select a grade</option>
                     <option value="scale">Scale</option>
                     <option value="Incomplete">Incomplete</option>
                     <option value="Dropped">Dropped</option>
@@ -23,7 +22,7 @@
             </div>
 
             @if ($type == 'scale')
-                <div class="col-span-6">
+                <div class="w-full">
                     <x-jet-label for="value" value="" class="my-2"/>
                     <input wire:model.defer="value" wire:loading.attr="disabled" type="number" id="value" name="value" step="0.01" min="1" max="100" placeholder="0 - 100">
                     <x-jet-input-error for="value" class="mt-2"/>

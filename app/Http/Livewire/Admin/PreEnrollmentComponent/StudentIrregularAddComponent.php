@@ -4,12 +4,13 @@ namespace App\Http\Livewire\Admin\PreEnrollmentComponent;
 
 use App\Models;
 use App\Services\Registration\RegistrationIrregularService;
+use App\Traits\WithSweetAlert;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
 class StudentIrregularAddComponent extends Component
 {
-    use AuthorizesRequests;
+    use AuthorizesRequests, WithSweetAlert;
 
     public Models\Curriculum $curriculum;
     public Models\Student $student;
@@ -28,14 +29,28 @@ class StudentIrregularAddComponent extends Component
 
         //set prospectus, subject prereqs and coreqs.
         $this->prospectus = Models\Prospectus::findOrFail($this->prospectusId);
+    }
+
+    public function render() { return
+        view('livewire.admin.pre-enrollment-component.student-irregular-add-component', ['prospectuses' => $this->getProspectuses()]);
+    }
+
+    public function getProspectuses()
+    {
         $this->prospectuses = Models\Prospectus::with([
                 'subjects' => function($query) {
-                    return $query->where('curriculum_id', $this->curriculum->id)->get();
+                    $query->with([
+                        'subject' => function ($query) { $query->withTrashed(); },
+                    ])
+                        ->where('curriculum_id', $this->curriculum->id)
+                        ->get();
                 },
                 'subjects.prerequisites',
                 'subjects.corequisites',
             ])
             ->orderBy('id', 'DESC')->getAllPrecedingProspectuses($this->prospectus, TRUE);
+
+        if (filled($this->selected)) return $this->prospectuses;
 
         //get all grades.
         $registrations = Models\Registration::where('student_id', $this->student->id)
@@ -52,16 +67,21 @@ class StudentIrregularAddComponent extends Component
         }
 
         //get all subjects eligible for enrollment/retake.
-        foreach ($this->prospectuses as $prospectus) {
-            $subjects = [];
+//        foreach ($this->prospectuses as $prospectus) {
+        foreach ($this->prospectuses as $index_P => $prospectus) {
+                $subjects = [];
 
             foreach ($prospectus->subjects as $subject) {
                 $subjects[] = $subject->id;
 
                 //remove if subject is taken but failed.
-                if (array_key_exists($subject->id, $this->grades)
-                    && $this->grades[$subject->id]['is_passed'] == TRUE) {
-                    unset($subjects[array_search($subject->id, $subjects)]);
+//                if (array_key_exists($subject->id, $this->grades)
+//                    && $this->grades[$subject->id]['is_passed'] == TRUE) {
+//                    unset($subjects[array_search($subject->id, $subjects)]);
+//                }
+                if (array_key_exists($subject->subject->id, $this->grades)
+                    && $this->grades[$subject->subject->id]['is_passed'] == TRUE) {
+                    unset($subjects[array_search($subject->subject->id, $subjects)]);
                 }
 
                 //remove subject if one of pre-requisites is failed.
@@ -75,14 +95,12 @@ class StudentIrregularAddComponent extends Component
                 if ($preRequisiteIsFailed) unset($subjects[array_search($subject->id, $subjects)]);
             }
 
-            $this->selected[] = $subjects;
+            $this->selected[$index_P] = $subjects;
         }
 
         $this->origSelectedSubjects = $this->selected;
-    }
 
-    public function render() { return
-        view('livewire.admin.pre-enrollment-component.student-irregular-add-component');
+        return $this->prospectuses;
     }
 
     public function save()
@@ -96,7 +114,7 @@ class StudentIrregularAddComponent extends Component
 
             if (filled($this->registration)) $this->authorize('edit', $this->registration);
 
-            $this->authorize('register', $this->prospectus); \Debugbar::info($this->selected);
+            $this->authorize('register', $this->prospectus);
 
             if (is_null($this->registration)) {
                 $this->registration = (new RegistrationIrregularService())->store($this->prospectuses, $this->student->id, $this->curriculum->id, $this->selected);
@@ -104,20 +122,11 @@ class StudentIrregularAddComponent extends Component
                 $this->registration = (new RegistrationIrregularService())->update($this->registration, $this->prospectuses, $this->curriculum->id, $this->selected);
             };
 
-            session()->flash('alert', [
-                'type' => 'success',
-                'message' => 'Saved successfully.',
-            ]);
-            $this->emit('alert');
+            $this->sessionFlashAlert('alert', 'success', 'Saved successfully.');
 
             return redirect()->route('pre.registration.view', $this->registration->id);
         } catch (\Exception $e) {
-            session()->flash('alert', [
-                'type' => 'danger',
-                'message' => $e->getMessage(),
-            ]);
-
-            return $this->emit('alert');
+            $this->sessionFlashAlert('alert', 'danger', $e->getMessage());
         }
     }
 }
