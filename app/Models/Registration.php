@@ -86,7 +86,8 @@ class Registration extends BaseModel
             ->with([
                 ...$this->relationships,
                 'classes' => function ($query) {
-                    $query->with([
+                    $query->withTrashed()
+                        ->with([
                         'prospectusSubject.subject' => function ($query) { $query->withTrashed(); },
                         'employee.user.person'
                     ]);
