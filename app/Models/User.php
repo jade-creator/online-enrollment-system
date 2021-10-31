@@ -2,11 +2,18 @@
 
 namespace App\Models;
 
+use App\Traits\WithSweetAlert;
+use Cloudinary\Cloudinary;
+use CloudinaryLabs\CloudinaryLaravel\MediaAlly;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Laravel\Jetstream\Features;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -17,6 +24,8 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    use MediaAlly;
+    use WithSweetAlert;
 
     /**
      * The attributes that are mass assignable.
@@ -29,6 +38,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'role_id',
         'person_id',
+        'profile_photo_path',
         'approved_at',
     ];
 
@@ -61,6 +71,43 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function updateProfilePhoto(?UploadedFile $photo = NULL)
+    {
+        try {
+            if ($photo) {
+                $uploadUrl = \CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::upload($photo->getRealPath())->getSecurePath();
+
+                Auth::user()->update([
+                    'profile_photo_path' => $uploadUrl,
+                ]);
+            }
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
+        }
+    }
+
+    public function getProfilePhotoUrlAttribute()
+    {
+        return $this->profile_photo_path ?? $this->defaultProfilePhotoUrl();
+    }
+
+    public function deleteProfilePhoto()
+    {
+        if (! Features::managesProfilePhotos()) {
+            return;
+        }
+
+        try {
+            Auth::user()->update([
+                'profile_photo_path' => NULL,
+            ]);
+
+            return redirect()->route('profile.show');
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
+        }
+    }
 
     public function scopeStudent($query) { return
         $query->whereHas('role', function($query) {
