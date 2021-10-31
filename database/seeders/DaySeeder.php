@@ -21,6 +21,7 @@ class DaySeeder extends Seeder
             ['name' => 'Thursday'],
             ['name' => 'Friday'],
             ['name' => 'Saturday'],
+            ['name' => 'Sunday'],
         ];
 
         DB::table('days')->insert($days);
