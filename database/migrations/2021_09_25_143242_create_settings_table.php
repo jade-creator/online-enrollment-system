@@ -15,6 +15,11 @@ class CreateSettingsTable extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
+            $table->text('profile_photo_path')->nullable()->default(NULL);
+            $table->string('school_name', 100)->nullable()->default(NULL);
+            $table->string('school_email', 100)->nullable()->default(NULL);
+            $table->text('school_address')->nullable()->default(NULL);
+            $table->text('school_description')->nullable()->default(NULL);
             $table->boolean('auto_account_approval')->default(1);
             $table->boolean('allow_irregular_student_to_enroll')->default(1);
             $table->timestamps();

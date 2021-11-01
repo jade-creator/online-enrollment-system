@@ -61,6 +61,7 @@ Route::get('/grade-pdf', [PDFController::class, 'downloadGrade'])->name('grade.p
 Route::get('/classlist-pdf', [PDFController::class, 'downloadClassList'])->name('classlist.pdf');
 //------END GUEST-------
 
+
 Route::middleware(['auth:sanctum', 'verified'])->group(function (){
     // account settings
     Route::group(['middleware' => 'user.detail', 'prefix' => 'user', 'as' => 'user.'], function (){
@@ -115,6 +116,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
                 Route::get('', UserComponent\UserIndexComponent::class)->name('view');
                 Route::get('/create', UserComponent\UserAddComponent::class)->name('create');
             });
+
+            //admin settings route
+            Route::get('/settings', \App\Http\Livewire\Admin\SettingsComponent::class)->middleware('password.confirm')->name('settings');
         });
     });
     // end admin
