@@ -182,7 +182,7 @@
                                                 wire:click.prevent="unarchive('Registration', {{$registration}}, 'released_at')"
                                                 x-show="open"
                                                 @click="open = ! open"
-                                                class="md:w-5 text-gray-400 text-yellow-500 hover:text-yellow-600 mx-1">Unarchive</x-icons.edit-icon>
+                                                class="md:w-5 text-yellow-500 hover:text-yellow-600 mx-1">Unarchive</x-icons.edit-icon>
                                         </x-table.cell-action>
                                     @endif
                                 @endif

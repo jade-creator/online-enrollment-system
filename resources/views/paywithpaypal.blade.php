@@ -43,7 +43,7 @@
                         {{ csrf_field() }}
                         <div class="w-full px-4 py-5 sm:p-6 shadow sm:rounded-tl-md sm:rounded-tr-md bg-white">
                             <div>
-                                <p class="uppercase font-extrabold text-2xl font-mono">SUMMARY</p>
+                                <p class="text-indigo-500 uppercase font-extrabold text-2xl">SUMMARY</p>
                             </div>
                             <div class="grid grid-cols-6 gap-6">
                                 <div class="col-span-6 flex items-center justify-between pt-4">
@@ -78,7 +78,7 @@
                                 </div>
 
                                 <div class="col-span-6 flex items-center justify-between">
-                                    <label class="text-black font-mono upppercase">RUNNING BALANCE</label>
+                                    <label class="text-indigo-500 upppercase">RUNNING BALANCE</label>
                                     <input id="balance" type="hidden" name="balance" value="{{ $registration->assessment->balance ?? 0 }}" min="0" class="hidden">
                                     <span>{{ $registration->assessment->getFormattedPriceAttribute($registration->assessment->balance) ?? '--' }}</span>
                                 </div>
@@ -90,7 +90,7 @@
                                 @can ('action', $registration)
                                     <div class="col-span-6 grid grid-cols-6">
                                             <input id="amount" type="number" name="amount" value="{{ old('amount') }}" min="0" autofocus class="col-span-4">
-                                            <button type="submit" class="md:text-sm py-2.5 ml-2 bg-black font-black rounded-md text-white col-span-2">
+                                            <button type="submit" class="md:text-sm py-2.5 ml-2 bg-indigo-500 font-black rounded-md text-white col-span-2 hover:bg-indigo-700">
                                                 Enter Amount
                                             </button>
                                     </div>
