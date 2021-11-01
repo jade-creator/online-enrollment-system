@@ -115,6 +115,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
                 Route::get('', UserComponent\UserIndexComponent::class)->name('view');
                 Route::get('/create', UserComponent\UserAddComponent::class)->name('create');
             });
+
+            //admin settings route
+            Route::get('/settings', \App\Http\Livewire\Admin\SettingsComponent::class)->name('settings');
         });
     });
     // end admin
