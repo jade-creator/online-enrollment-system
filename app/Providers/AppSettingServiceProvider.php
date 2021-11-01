@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Setting;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -29,7 +30,7 @@ class AppSettingServiceProvider extends ServiceProvider
         $setting = new Setting();
         $lifeTime = now()->addMinutes(10);
 
-        if (Cache::missing('school_profile_photo_path')) {
+        if (Cache::missing('school_profile_photo_path') && Schema::hasTable('settings')) {
             $setting = \App\Models\Setting::get()->first();
         }
 
