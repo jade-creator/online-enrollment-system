@@ -32,7 +32,7 @@ class SettingsComponent extends Component
             'setting.school_name' => ['required', 'max:100', 'string'],
             'setting.school_email' => ['required', 'max:100', 'string'],
             'setting.school_address' => ['required', 'max:200', 'string'],
-            'setting.school_description' => ['required', 'max:1000', 'string'],
+            'setting.school_description' => ['nullable', 'max:1000', 'string'],
             'setting.auto_account_approval' => ['required', 'boolean'],
             'setting.allow_irregular_student_to_enroll' => ['required', 'boolean'],
         ];
@@ -52,10 +52,8 @@ class SettingsComponent extends Component
         $rules = $this->rules();
         unset($rules['setting.auto_account_approval'], $rules['setting.allow_irregular_student_to_enroll']);
 
-        $this->validate($rules);
-
         try {
-            if ($this->photo) {
+            if (filled($this->photo)) {
                 $uploadUrl = \CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::upload($this->photo->getRealPath())->getSecurePath();
 
                 $this->setting->profile_photo_path = $uploadUrl ?? NULL;
@@ -64,6 +62,8 @@ class SettingsComponent extends Component
             $this->setting->update();
 
             $this->sessionFlashAlert('alert', 'success', 'School Information Updated Successfully.');
+
+            if (filled($this->photo)) return redirect()->route('admin.settings');
         } catch (\Exception $e) {
             $this->sessionFlashAlert('alert', 'danger', $e->getMessage(), FALSE);
         }
@@ -76,6 +76,7 @@ class SettingsComponent extends Component
             $this->setting->update();
 
             $this->sessionFlashAlert('alert', 'success', 'Logo Removed.');
+            return redirect()->route('admin.settings');
         } catch (\Exception $e) {
             $this->sessionFlashAlert('alert', 'danger', $e->getMessage(), FALSE);
         }

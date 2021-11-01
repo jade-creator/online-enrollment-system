@@ -7,7 +7,7 @@
 
     <div class="w-full max-w-4xl mx-auto p-4 sm:px-6 lg:px-8">
         <div class="w-full py-10 sm:px-6 lg:px-8">
-            <x-jet-form-section submit="updateSchoolInformation">
+            <x-jet-form-section submit="">
                 <x-slot name="title">
                     {{ __('School Information') }}
                 </x-slot>
@@ -50,10 +50,10 @@
                             </x-jet-secondary-button>
 
                             @if ($setting->profile_photo_path)
-                                <x-jet-secondary-button type="button hover:bg-gray-100" class="mt-2" wire:click="deleteProfilePhoto">
+                                <x-jet-secondary-button class="mt-2 hover:bg-gray-100" wire:click.prevent="deleteProfilePhoto" formaction="#">
                                     {{ __('Remove photo') }}
                                 </x-jet-secondary-button>
-                                <p class="mt-3 text-xs text-gray-500 font-semibold">{{ __("Click 'Update Profile' after selecting a new photo to save.")}}</p>
+                                <p x-cloak class="mt-3 text-xs text-gray-500 font-semibold">{{ __("Click 'Update Profile' after selecting a new photo to save.")}}</p>
                             @endif
 
                             <x-jet-input-error for="photo" class="mt-2" />
@@ -86,14 +86,14 @@
                 </x-slot>
 
                 <x-slot name="actions">
-                    <x-jet-button class="bg-indigo-700 hover:bg-indigo-800" wire:target="photo">
+                    <x-jet-button wire:click.stop="updateSchoolInformation" class="bg-indigo-700 hover:bg-indigo-800" wire:target="photo">
                         {{ __('Update') }}
                     </x-jet-button>
                 </x-slot>
             </x-jet-form-section>
 
             <x-form.unflashed-alert class="my-4" type="info">
-                Note: Changes can take effect in the system for about 10 minutes after updating it successfully.
+                Note: Changes can take effect in the system for about 10 minutes after updating it successfully. Click "update" when selecting a new logo.
             </x-form.unflashed-alert>
             <x-jet-section-border/>
 
