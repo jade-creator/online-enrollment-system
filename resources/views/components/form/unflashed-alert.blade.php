@@ -39,7 +39,7 @@
     }
 @endphp
 
-<section>
+<section {{ $attributes }}>
     <div class="relative items-center w-full max-w-7xl">
         <!------ Component-->
         <div class="p-6 border-2 {{$borderColor}} rounded-md {{$bgColor}}">

@@ -11,7 +11,7 @@ class PDFController extends Controller
         $pdf = PDF::loadview('pdf.registration');
         return $pdf->stream('registration.pdf');
     }
-    
+
     public function downloadGrade() {
         $pdf = PDF::loadview('pdf.grade');
         return $pdf->stream('grade.pdf');
@@ -21,5 +21,5 @@ class PDFController extends Controller
         $pdf = PDF::loadview('pdf.classlist');
         return $pdf->stream('classlist.pdf');
     }
-    
+
 }

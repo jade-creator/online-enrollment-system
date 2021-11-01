@@ -33,7 +33,12 @@ class RegistrationViewComponent extends Component
     {
         $this->registration = Registration::with([
                 'extensions.registration.grades.prospectus_subject.subject' => function ($query) { $query->withTrashed(); },
-                'extensions.registration.classes.prospectusSubject.subject' => function ($query) { $query->withTrashed(); }
+                'extensions.registration.classes' => function ($query) {
+                    $query->withTrashed()
+                        ->with([
+                            'prospectusSubject.subject' => function ($query) { $query->withTrashed(); }
+                        ]);
+                },
             ])
             ->preRegistered($this->regId);
 

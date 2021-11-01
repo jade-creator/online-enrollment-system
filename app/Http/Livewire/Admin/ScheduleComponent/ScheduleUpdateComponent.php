@@ -47,12 +47,29 @@ class ScheduleUpdateComponent extends Component
 
         $originalDayId = $this->schedule->getOriginal('day_id');
 
+        $curriculum = Curriculum::findActiveCurriculum($this->section->prospectus->program_id);
+
         $this->toggleViewingSchedule();
 
         try {
             $this->authorize('update', $this->schedule);
-            $this->schedule = (new Schedule\ScheduleService())->updateProfSchedule($this->schedule, $this->profSchedules);
-            $schedule = (new Schedule\ScheduleService())->update($this->schedule, $this->schedules);
+
+            if ($this->schedule->created_at->gt($curriculum->created_at)) {
+                $this->schedule = (new Schedule\ScheduleService())->updateProfSchedule($this->schedule, $this->profSchedules);
+                (new Schedule\ScheduleService())->update($this->schedule, $this->schedules);
+            } else {
+                $schedule = new Models\Schedule();
+
+                $schedule->prospectus_subject_id = $this->schedule->prospectus_subject_id;
+                $schedule->employee_id = $this->schedule->employee_id;
+                $schedule->day_id = $this->schedule->day_id;
+                $schedule->start_time = $this->schedule->start_time;
+                $schedule->end_time = $this->schedule->end_time;
+
+                (new Schedule\ScheduleService())->store($this->section, $schedule, $this->days);
+
+                $this->schedule->delete();
+            }
 
             $this->emitUp('sessionFlashAlert', 'alert', 'success', "A schedule has been updated in ".$this->section->name);
         } catch (\Exception $e) {
