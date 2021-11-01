@@ -15,7 +15,7 @@
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
                     <img src="{{ $school_profile_photo_path }}" alt="{{ $school_name }}" class="bg-white rounded-full block h-9 w-9"/>
-                    <p class="pl-2 text-white font-bold">{{ $school_name }}</p>
+                    <p class="pl-2 text-white font-bold">{{ $school_name ?? config('app.name', 'Laravel') }}</p>
                 </div>
             </div>
 

@@ -18,6 +18,7 @@ class SettingSeeder extends Seeder
 
         $setting = [
             'school_name' => 'University',
+            'school_email' => 'olcollegeenrollmentsystem@gmail.com',
             'auto_account_approval' => 1,
             'allow_irregular_student_to_enroll' => 1,
             'created_at' => now(),
