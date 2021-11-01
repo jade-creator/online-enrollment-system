@@ -56,9 +56,11 @@ Route::get('/view-pdf', function () {
 });
 
 // Downlaod pdf
-Route::get('/registration-pdf', [PDFController::class, 'downloadRegistration'])->name('registration.pdf');
-Route::get('/grade-pdf', [PDFController::class, 'downloadGrade'])->name('grade.pdf');
-Route::get('/classlist-pdf', [PDFController::class, 'downloadClassList'])->name('classlist.pdf');
+Route::get('/registration-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('registration.pdf');
+Route::get('/grade-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('grade.pdf');
+Route::get('/classlist-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('classlist.pdf');
+Route::get('/masterlist-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('masterlist.pdf');
+Route::get('/schedule-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('schedule.pdf');
 //------END GUEST-------
 
 

@@ -35,7 +35,7 @@
                                 <x-table.column-title class="col-span-2">section</x-table.column-title>
                                 <x-table.column-title class="col-span-2">day</x-table.column-title>
                                 <x-table.column-title class="col-span-2">time</x-table.column-title>
-                                <x-table.column-title class="col-span-1">unit</x-table.column-title>
+                                <x-table.column-title class="col-span-1 md:justify-center">unit</x-table.column-title>
                             </x-slot>
                         @endif
 
@@ -92,7 +92,7 @@
                                                     <span>-</span>
                                                     <span>{{ \Carbon\Carbon::parse($schedule->end_time)->format('g: ia') ?? 'N/A' }}</span>
                                                 </x-table.cell>
-                                                <x-table.cell headerLabel="unit" class="md:col-span-1 justify-center">{{ $schedule->prospectusSubject->unit ?? 'N/A' }}</x-table.cell>
+                                                <x-table.cell headerLabel="unit" class="md:col-span-1 md:justify-center">{{ $schedule->prospectusSubject->unit ?? 'N/A' }}</x-table.cell>
                                             </div>
                                         </x-table.row>
                                     </div>

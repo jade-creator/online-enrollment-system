@@ -67,6 +67,15 @@ table {
     margin-bottom: 2.5rem;
 }
 
+.mb-4 {
+    margin-top: 3rem;
+}
+
+.px-3 {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+}
+
 .center {
     text-align: center;
 }

@@ -56,14 +56,15 @@
                 <div class="col-span-8">
                     <div class="grid grid-cols-8 gap-2 col-span-8 py-2 text-left shadow-sm">
                         @foreach ($days as $day)
-                            <div class="col-span-8 font-bold rounded-base px-6 py-2 sticky top-0 bg-white shadow-sm">
+                            <div class="col-span-8 font-bold rounded-base px-6 py-2 sticky top-0 bg-white text-indigo-500 shadow-sm">
                                 {{$day->name ?? 'N/A'}}
                             </div>
 
                             @foreach ($day->schedules as $schedule)
                                 <div class="col-span-8 rounded-md p-2 px-6 flex items-center justify-between text-xs font-bold">
-                                    <div class="w-1/2 md:w-4/6">
-                                        <p class="truncate">{{$schedule->prospectusSubject->subject->code ?? 'N/A'}} - {{$schedule->prospectusSubject->subject->title ?? 'N/A'}}</p>
+                                    <div class="w-1/4 sm:w-4/6 flex items-center">    
+                                        <p class="truncate">{{$schedule->prospectusSubject->subject->code ?? 'N/A'}} </p>
+                                        <p class="hidden sm:block">&nbsp- {{$schedule->prospectusSubject->subject->title ?? 'N/A'}}</p>
                                     </div>
                                     <div class="flex items-center">
                                         <div class="border border-gray-300 rounded-md p-2">{{\Carbon\Carbon::parse($schedule->start_time)->format('h:i a') ?? 'N/A'}}</div>

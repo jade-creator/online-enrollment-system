@@ -1,4 +1,4 @@
-<div class="grid grid-cols-12 md:gap-2 px-4 py-4 md:py-0">
+<div class="grid grid-cols-12 md:gap-2 px-4 py-4 md:py-0 overflow-hidden">
     @forelse ($grades as $grade)
         <x-table.cell headerLabel="Code" class="md:col-span-1">{{ $grade->prospectus_subject->subject->code ?? 'N/A' }}</x-table.cell>
         <x-table.cell headerLabel="Title" class="md:col-span-2">{{ $grade->prospectus_subject->subject->title ?? 'N/A' }}</x-table.cell>
