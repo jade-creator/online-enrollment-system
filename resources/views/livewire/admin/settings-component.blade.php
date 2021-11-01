@@ -18,7 +18,7 @@
 
                 <x-slot name="form">
                     <div class="col-span-6">
-                        <div x-data="{photoPreview: {{is_null($photo) ? 'false' : 'true'}}}" class="col-span-6 sm:col-span-5">
+                        <div x-data="{photoName: null, photoPreview: null}" class="col-span-6 sm:col-span-5">
                             <input type="file" class="hidden"
                                    wire:model="photo"
                                    x-ref="photo"
@@ -31,7 +31,7 @@
                                         reader.readAsDataURL($refs.photo.files[0]);
                                 "/>
 
-                            <x-jet-label for="photo" value="{{ __('Logo') }}" />
+                            <x-jet-label for="photo" value="{{ __('School Logo') }}" />
 
                             <!-- Current Profile Photo -->
                             <div class="mt-2" x-show="! photoPreview" x-cloak>
@@ -40,7 +40,7 @@
 
                             <!-- New Profile Photo Preview -->
                             <div class="mt-2" x-show="photoPreview">
-                                <span class="block rounded-full w-20 h-20"
+                                <span class="block rounded-full w-32 h-32"
                                       x-bind:style="'background-size: cover; background-repeat: no-repeat; background-position: center center; background-image: url(\'' + photoPreview + '\');'">
                                 </span>
                             </div>
