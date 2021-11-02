@@ -120,7 +120,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
             });
 
             //admin settings route
-            Route::get('/settings', \App\Http\Livewire\Admin\SettingsComponent::class)->middleware('password.confirm')->name('settings');
+            Route::get('/settings', \App\Http\Livewire\Admin\SettingsComponent::class)->name('settings');
+
+            //admin backup route
+            Route::view('/backup', 'laravel_backup_panel::layout')->middleware('password.confirm')->name('backup');
         });
     });
     // end admin

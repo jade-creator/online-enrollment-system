@@ -159,6 +159,20 @@
                 </x-slot>
             </x-jet-form-section>
             <x-jet-section-border/>
+
+            <div class="md:grid md:grid-cols-3 md:gap-6">
+                <div class="md:col-span-3">
+                    <div class="px-4 sm:px-0">
+                        <h3 class="text-2xl text-gray-900">{{ 'Database Backup' }}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <x-form.unflashed-alert class="my-4" type="warning">
+                Note: Authorized Personnel only. Please be careful when sharing the database backups to anyone, it contains sensitive information.
+                <a href="{{ route('admin.backup') }}" class="underline hover:text-indigo-500">Backup now.</a>
+            </x-form.unflashed-alert>
+            <x-jet-section-border/>
         </div>
     </div>
 
