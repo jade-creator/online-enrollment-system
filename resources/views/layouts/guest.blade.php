@@ -4,6 +4,11 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <meta property="og:image" content="{{ $school_profile_photo_path }}">
+        <meta property="og:image:type" content="image/jpeg">
+        <meta property="og:image:width" content="200">
+        <meta property="og:image:height" content="200">
+        <meta property="og:description" content="{{ filled($school_email) ? 'Email us @ '.$school_email : config('app.name', 'Laravel') }}">
         <link rel="icon" href="{{ $school_profile_photo_path }}">
         <title>{{ $school_name ?? config('app.name', 'Laravel') }}</title>
 

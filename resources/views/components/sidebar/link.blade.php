@@ -5,11 +5,12 @@
     'parameter' => '',
     'value' => 'N/A',
     'name' => 'N/A',
-    'activeColor' => 'bg-indigo-500 text-white hover:bg-indigo-100'
+    'activeColor' => 'bg-indigo-500 text-white hover:bg-indigo-100',
+    'defaultColor' => 'bg-white hover:bg-indigo-100'
 ])
 
 @php
-    $bgColor = in_array(request()->route()->getName(), is_string($routes) ? [] : $routes) ? $activeColor : 'bg-white hover:bg-indigo-100';
+    $bgColor = in_array(request()->route()->getName(), is_string($routes) ? [] : $routes) ? $activeColor : $defaultColor;
 @endphp
 
 <a href="{{is_string($parameter) ? route($routeName) : route($routeName, $parameter)}}"

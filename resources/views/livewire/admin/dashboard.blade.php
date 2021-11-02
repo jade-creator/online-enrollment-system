@@ -56,31 +56,36 @@
 
                 {{-- RECENTLY ENROLLED WIDGET--}}
                 <x-dashboard.slot>
-                    <x-dashboard.widget :default="false">
-                        <div class="flex flex-row justify-between mb-6">
+                    <x-dashboard.widget :default="false" class="max-h-72">
+                        <div class="flex flex-row justify-between mb-6 sticky top-0 bg-white">
                             <div class="flex flex-col">
                                 <div class="text-sm font-light text-gray-500">Recently Enrolled</div>
                                 <div class="text-sm font-bold"><span>All Levels</span></div>
                             </div>
                             <div class="mt-2 text-gray-400 hover:text-green-500 cursor-pointer">
-                                <i class="fas fa-redo-alt"></i>
+                                <i wire:click.prevent="$refresh" class="fas fa-redo-alt"></i>
                             </div>
                         </div>
-                        @foreach ($this->recentlyEnrollees as $enrollee)
-                            <div class="flex items-center justify-start p-2 space-x-4 mb-5">
-                                <div class="flex-shrink-0 w-10">
-                                    <img class="h-10 w-10 rounded-full" src="{{ $enrollee->student->user->profile_photo_url }}" alt="{{ $enrollee->student->user->person->firstname }}">
-                                </div>
-                                <div class="flex flex-col w-full">
-                                    <div class="flex flex-row justify-between text-sm font-bold">
-                                        <div class="w-52"><p class="truncate">{{ $enrollee->student->user->person->full_name }}</p></div>
+
+                        <div class="h-44 overflow-x-hidden overflow-y-scroll sidebar relative">
+                            @forelse ($this->recentlyEnrollees as $enrollee)
+                                <div class="flex items-center justify-start p-2 space-x-4 mb-6">
+                                    <div class="flex-shrink-0 w-10">
+                                        <img class="h-10 w-10 rounded-full" src="{{ $enrollee->student->user->profile_photo_url ?? 'N/A' }}" alt="{{ $enrollee->student->user->person->firstname ?? 'N/A' }}">
                                     </div>
-                                    <div class="text-sm">{{ $enrollee->section->name ?? 'N/A' }}
-                                    <span class="mx-1">{{ Carbon\Carbon::parse($enrollee->created_at)->format('F j') }}</span>
+                                    <div class="flex flex-col w-full">
+                                        <div class="flex flex-row justify-between text-sm font-bold">
+                                            <div class="w-52"><p class="truncate">{{ $enrollee->student->user->person->full_name ?? 'N/A' }}</p></div>
+                                        </div>
+                                        <div class="text-sm">{{ $enrollee->section->name ?? 'N/A' }}
+                                            <span class="mx-1">{{ Carbon\Carbon::parse($enrollee->created_at)->format('F j') ?? 'N/A' }}</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endforeach
+                            @empty
+                                <p class="text-gray-300 text-xs text-center">No result found.</p>
+                            @endforelse
+                        </div>
                     </x-dashboard.widget>
                 </x-dashboard.slot>
             </x-dashboard.container>
@@ -92,14 +97,10 @@
                 </x-dashboard.chart>
             </x-dashboard.container>
         </div>
-
-        <div wire:loading>
-            @include('partials.loading')
-        </div>
     </div>
 
-    @push('scripts')
-        <!-- Chart.js -->
+@push('scripts')
+    <!-- Chart.js -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js" integrity="sha512-Wt1bJGtlnMtGP0dqNFH1xlkLBNpEodaiQ8ZN5JLA5wpc1sUlk/O5uuOMNgvzddzkpvZ9GLyYNa8w2s7rqiTk5Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script defer>
             var gender = document.getElementById("genderChart").getContext("2d");
@@ -233,7 +234,7 @@
                     labels: @json($programsCode),
                     datasets: [
                         {
-                            label: "Programs",
+                            label: "Students",
                             data: @json($programsData),
                             backgroundColor: [
                                 "rgba(255, 99, 132, 0.5)",
@@ -269,4 +270,4 @@
             });
         </script>
     @endpush
- </div>
+</div>
