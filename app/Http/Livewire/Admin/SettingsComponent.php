@@ -19,10 +19,6 @@ class SettingsComponent extends Component
     protected $message = [
         'photo.image' => 'The profile must be a type of: img, png or jpg.',
         'photo.max' => 'Exceeded image size limit of 1024 bytes.',
-        'setting.school_name.required' => 'The school name field cannot be empty.',
-        'setting.school_email.required' => 'The school email field cannot be empty.',
-        'setting.school_address.required' => 'The school address field cannot be empty.',
-        'setting.school_description.required' => 'The school description field cannot be empty.',
     ];
 
     public function rules()
@@ -51,6 +47,8 @@ class SettingsComponent extends Component
     {
         $rules = $this->rules();
         unset($rules['setting.auto_account_approval'], $rules['setting.allow_irregular_student_to_enroll']);
+
+        $this->validate($rules);
 
         try {
             if (filled($this->photo)) {
