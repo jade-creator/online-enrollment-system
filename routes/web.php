@@ -52,7 +52,7 @@ Route::get('/', function () {
 
 // View pdf
 Route::get('/view-pdf', function () {
-    return view('pdf.registration');
+    return view('pdf.dashboard-overview');
 });
 
 // Downlaod pdf
@@ -61,6 +61,7 @@ Route::get('/grade-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloa
 Route::get('/classlist-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('classlist.pdf');
 Route::get('/masterlist-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('masterlist.pdf');
 Route::get('/schedule-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('schedule.pdf');
+Route::get('/dashboard-overview/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('dashboard-overview.pdf');
 //------END GUEST-------
 
 

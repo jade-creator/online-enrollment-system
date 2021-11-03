@@ -63,12 +63,32 @@ table {
     width: 250px;
 }
 
+.w-half {
+    width: 50%;
+}
+
+.w-one-fourth {
+    width: 25%;
+}
+
 .mb-3 {
     margin-bottom: 2.5rem;
 }
 
 .mb-4 {
     margin-top: 3rem;
+}
+
+.pl-1 {
+    padding-left: 1rem;
+}
+
+.pl-2 {
+    padding-left: 2rem;
+}
+
+.pl-3 {
+    padding-left: 2.5rem;
 }
 
 .px-3 {
@@ -108,6 +128,10 @@ table {
     font-weight: bold;
 }
 
+.lighter {
+    font-weight: lighter;
+}
+
 .italic {
     font-style: italic;
 }
@@ -130,6 +154,29 @@ table {
 
 .text-sm {
     font-size: 8;
+}
+
+.size-14 {
+    font-size: 14px;
+}
+
+.text-primary {
+    color: rgba(99, 102, 241, 1);
+}
+
+.text-black {
+    color: rgb(0, 0, 0);
+}
+.text-gray {
+    color: #9c9c9c;
+}
+
+.border-0 {
+    border: 0px solid transparent;
+}
+
+.rounded-0 {
+    border-radius: 0;
 }
 
 .double-container {
@@ -227,6 +274,44 @@ table {
     border: 2px solid rgba(99, 102, 241, 1);
     padding: 15px 20px;
     margin-top: 5px;
+}
+
+/* Unique design for dashboard-overview.pdf */
+.cards {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.cards .card {
+    position: relative;
+    width: 170px;
+    height: 60px;
+    margin-left: 5.5px;
+    margin-bottom: 5.5px;
+    display: inline-block;
+    background: white;
+    border-radius: 0.5rem;
+    border: 1px solid rgb(197, 197, 197);
+    overflow: hidden;
+}
+
+.cards .card .card-text {
+    position: absolute;
+    left: 15px;
+    top: 12px;
+}
+
+.cards .card .card-text p:first-child {
+    font-weight: lighter;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 10px;
+}
+
+.cards .card .card-text p:last-child {
+    margin-top: 5px;
+    font-weight: 700;
+    color: rgba(99, 102, 241, 1);
 }
 
 footer {
