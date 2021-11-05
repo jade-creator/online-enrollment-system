@@ -5,21 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Print Classlist</title>
+    <title>{{ $section->name.'-'.$section->prospectus->term->term ?? 'Print ' }} - Classlist</title>
+    <link rel="icon" href="{{ $school_profile_photo_path }}">
     <link rel="stylesheet" href="{{ asset('css/pdf.css') }}">
 </head>
 
 <body>
-    <div class="watermark"></div>
+    <div class="watermark" style="background-image: url({{$school_profile_photo_path}})"></div>
     <div class="logo-container mb-3 center">
-        <img src="https://drive.google.com/uc?export=view&id=1l2yy9vCB5pFaJwewAGiiOMU3BmQdsG8Q" alt="logo" width="50" height="50">
-        <p class="truncate-widest bold">UNIVERSITY</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet, amet.</p>
+        <img src="{{ $school_profile_photo_path }}" alt="logo" width="50" height="50"/>
+        <p class="truncate-widest bold">{{ $school_name ?? env('APP_NAME', 'University') }}</p>
+        <p>{{ $school_address }}</p>
     </div>
     <div class="container">
         <table class="container-title">
             <tr>
-                <td class="center truncate-widest">CLASSLIST - BSIT4E</td>
+                <td class="center truncate-widest uppercase">CLASSLIST - {{$section->name ?? 'N/A'}}</td>
             </tr>
         </table>
         <table class="ordinary-table">
@@ -27,22 +28,27 @@
                 <th>ID</th>
                 <th>Name</th>
                 <th>Status</th>
-                <th>Balance</th>
+                <th>Classification</th>
             </tr>
-            @for ($i = 0; $i <= 100; $i++)
+
+            @forelse ($registrations as $registration)
                 <tr>
-                    <td class="center">STD00001</td>
-                    <td>Mark Lawrence Parone Samson</td>
-                    <td class="center">Enrolled</td>
-                    <td class="right">PHP 100,000.00</td>
+                    <td class="center">{{ $registration->student->custom_id ?? 'N/A' }}</td>
+                    <td>{{ $registration->student->user->person->full_name ?? 'N/A' }}</td>
+                    <td class="center" style="text-transform: uppercase">{{ $registration->status->name ?? 'N/A' }}</td>
+                    <td class="center" style="text-transform: uppercase">{{ $registration->classification ?? 'N/A' }}</td>
                 </tr>
-            @endfor
+            @empty
+                <tr>
+                    <td rowspan="4">No result found.</td>
+                </tr>
+            @endforelse
         </table>
     </div>
 
     <footer>
         <p>{{ Carbon\Carbon::parse(now())->format('F j, Y') }}</p>
-        <p>Pasig City, Metro Manila 1600 | Visit us: university.edu.ph</p>
+        <p>{{ $school_address ?? 'N/A' }} | Visit us: {{ env('APP_URL', 'university-ph.herokuapp.com') ?? 'N/A' }}</p>
     </footer>
 </body>
 </html>
