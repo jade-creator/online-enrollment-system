@@ -182,7 +182,7 @@
 
     <footer>
         <p>{{ Carbon\Carbon::parse(now())->format('F j, Y') }}</p>
-        <p>Pasig City, Metro Manila 1600 | Visit us: university.edu.ph</p>
+        <p>{{ $school_address ?? 'N/A' }} | Visit us: {{ env('APP_URL', 'university-ph.herokuapp.com') ?? 'N/A' }}</p>
     </footer>
 </body>
 </html>

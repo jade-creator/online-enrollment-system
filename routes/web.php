@@ -58,7 +58,7 @@ Route::get('/view-pdf', function () {
 // Downlaod pdf test
 //done Route::get('/registration-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('registration.pdf');
 //done Route::get('/grade-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('grade.pdf');
-Route::get('/classlist-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('classlist.pdf');
+//done Route::get('/classlist-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('classlist.pdf');
 Route::get('/masterlist-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('masterlist.pdf');
 Route::get('/schedule-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('schedule.pdf');
 Route::get('/dashboard-overview/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('dashboard-overview.pdf');
@@ -153,7 +153,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
 
         //stream pdf
         Route::get('/registration-pdf/{registration}', [PDFController::class, 'streamRegistration'])->name('stream.registration.pdf');
-        Route::get('/grade-pdf/{registration}/', [PDFController::class, 'streamGrade'])->name('stream.grade.pdf');
+        Route::get('/grade-pdf/{registration}', [PDFController::class, 'streamGrade'])->name('stream.grade.pdf');
     });
     //end: admin and registrar
 
@@ -198,6 +198,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
         });
 
         Route::get('/sections', SectionComponent\SectionIndexComponent::class)->name('sections.view');
+
+        Route::get('/class-list/{section}', [PDFController::class, 'streamClasslist'])->name('stream.class-list.pdf');
     });
     //end: all except student
 

@@ -101,6 +101,14 @@
                                                         </x-table.cell-button>
                                                     @endcan
 
+                                                    @can ('printClaslist', $section)
+                                                        <a href="{{ route('stream.class-list.pdf', $section) }}" target="_blank">
+                                                            <x-table.cell-button title="Print Classlist">
+                                                                <x-icons.list-icon/>
+                                                            </x-table.cell-button>
+                                                        </a>
+                                                    @endcan
+
                                                     @can ('destroy', $section)
                                                         <x-table.cell-button wire:click.prevent="$emit('removeConfirm', {{$section}})" title="Delete" class="rounded-b-md hover:bg-red-500 hover:text-white transition-colors">
                                                             <x-icons.delete-icon/>

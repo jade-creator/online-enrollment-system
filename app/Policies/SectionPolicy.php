@@ -25,10 +25,16 @@ class SectionPolicy extends BasePolicy
     }
 
     public function release(User $user, Section $section) { return
-        $this->isAuthorized('section', 'release', $user) && $section->registrations->count() != 0;
+        $this->isAuthorized('section', 'release', $user)
+            && $section->registrations->count() != 0;
     }
 
     public function createClass(User $user) { return
         $this->isAuthorized('section', 'createClass', $user);
+    }
+
+    public function printClaslist(User $user, Section $section) { return
+        $this->isAuthorized('section', 'printClasslist', $user)
+            && $section->registrations->count() != 0;
     }
 }

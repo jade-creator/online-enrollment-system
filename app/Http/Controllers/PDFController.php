@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Registration;
+use App\Models\Section;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use PDF;
 
 class PDFController extends Controller
 {
+    use AuthorizesRequests;
+
     public $totalUnit = 0;
 
     public function downloadPDF($pdflocation, $pdfname) {
@@ -19,6 +23,18 @@ class PDFController extends Controller
     {
         $pdf = PDF::loadView($templateLocation, $array);
         return $pdf->stream($fileName);
+    }
+
+    public function streamClasslist(Section $section)
+    {
+        $this->authorize('printClaslist', $section);
+
+        $registrations = $section->registrations()->with('student.user.person')->whereNull('released_at')->get();
+
+        return $this->stream('pdf.classlist', [
+            'section' => $section,
+            'registrations' => $registrations
+        ], $section->name.'-'.$section->prospectus->term->term.'-classlist.pdf');
     }
 
     public function streamGrade(Registration $registration)

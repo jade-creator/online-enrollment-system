@@ -13,6 +13,7 @@ class BasePolicy
             'update' => ['admin', 'dean'],
             'destroy' => ['admin', 'dean'],
             'release' => ['admin', 'dean'],
+            'printClasslist' => ['admin', 'dean', 'registrar', 'faculty member'],
         ],
         'schedule' => [
             'update' => ['admin', 'registrar'],
