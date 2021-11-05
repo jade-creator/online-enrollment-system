@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ $registration->student->user->person->full_name ?? 'Print Grade' }}</title>
+    <title>{{ $registration->student->user->person->full_name ?? 'Print ' }} - Grade Report</title>
+    <link rel="icon" href="{{ $school_profile_photo_path }}">
     <link rel="stylesheet" href="{{ asset('css/pdf.css') }}">
     <style>
         /*PDF SIZE*/
@@ -14,11 +15,11 @@
 </head>
 
 <body>
-    <div class="watermark"></div>
+    <div class="watermark" style="background-image: url({{$school_profile_photo_path}})"></div>
     <div class="logo-container mb-3 center">
-        <img src="https://drive.google.com/uc?export=view&id=1l2yy9vCB5pFaJwewAGiiOMU3BmQdsG8Q" alt="logo" width="50" height="50">
-        <p class="truncate-widest bold">UNIVERSITY</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet, amet.</p>
+        <img src="{{ $school_profile_photo_path }}" alt="logo" width="50" height="50"/>
+        <p class="truncate-widest bold">{{ $school_name ?? env('APP_NAME', 'University') }}</p>
+        <p>{{ $school_address }}</p>
     </div>
 
     <!-- GENERAL WEIGHTED AVERAGE -->

@@ -222,7 +222,7 @@
                 </x-sidebar.item>
 
                 <x-sidebar.item title="Grades">
-                    <x-sidebar.link routeName="admin.grades.view" :routes="['admin.grades.view']" name="Grades">
+                    <x-sidebar.link routeName="admin.grades.view" :routes="['admin.grades.view', 'admin.grade.report']" name="Grades">
                         <x-icons.grade-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>

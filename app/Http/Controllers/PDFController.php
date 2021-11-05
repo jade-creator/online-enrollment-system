@@ -21,6 +21,21 @@ class PDFController extends Controller
         return $pdf->stream($fileName);
     }
 
+    public function streamGrade(Registration $registration)
+    {
+        request()->query('professors') && filled(request()->query('professors')) ? parse_str(request()->query('professors'), $professors) : $professors = [];
+        request()->query('grades') && filled(request()->query('grades')) ? parse_str(request()->query('grades'), $grades) : $grades = [];
+        request()->query('notComputed') && filled(request()->query('notComputed')) ? parse_str(request()->query('notComputed'), $notComputed) : $notComputed = [];
+
+        return $this->stream('pdf.grade', [
+            'registration' => $registration,
+            'professors' => $professors['professors'],
+            'computedGrade' => request()->query('computedGrade') ?? 0,
+            'grades' => $grades['grades'] ?? [],
+            'notComputed' => $notComputed['notComputed'] ?? []
+        ], $registration->student->user->person->full_name.'-grade.pdf');
+    }
+
     public function streamRegistration(Registration $registration)
     {
         $schedules = $registration->classes()
@@ -34,12 +49,5 @@ class PDFController extends Controller
             'totalUnit' => request()->query('totalUnit') ?? 0,
             'prospectus_subjects' => $schedules
         ], $registration->student->user->person->full_name.'-registration.pdf');
-
-//        $pdf = PDF::loadView('pdf.registration', [
-//            'registration' => $registration,
-//            'totalUnit' => request()->query('totalUnit') ?? 0,
-//            'prospectus_subjects' => $schedules
-//        ]);
-//        return $pdf->stream('registration.pdf');
     }
 }

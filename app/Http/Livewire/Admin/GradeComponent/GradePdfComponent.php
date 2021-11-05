@@ -72,27 +72,27 @@ class GradePdfComponent extends Component
         $this->grade = $cwa / count($this->grades);
     }
 
-    public function createPdf()
-    {
-        try {
-            $pdf = PDF::loadView('pdf.grade', [
-                'registration' => $this->registration,
-                'professors' => $this->professors,
-                'computedGrade' => $this->grade,
-                'grades' => $this->grades,
-                'notComputed' => $this->notComputed,
-            ])->output();
-
-            $this->info('Please wait for the file to be downloaded...');
-
-            return response()->streamDownload(
-                fn () => print($pdf),
-                $this->registration->student->user->person->full_name . '-grade-report.pdf'
-            );
-        } catch (\Exception $e) {
-            $this->error($e->getMessage());
-        }
-    }
+//    public function createPdf()
+//    {
+//        try {
+//            $pdf = PDF::loadView('pdf.grade', [
+//                'registration' => $this->registration,
+//                'professors' => $this->professors,
+//                'computedGrade' => $this->grade,
+//                'grades' => $this->grades,
+//                'notComputed' => $this->notComputed,
+//            ])->output();
+//
+//            $this->info('Please wait for the file to be downloaded...');
+//
+//            return response()->streamDownload(
+//                fn () => print($pdf),
+//                $this->registration->student->user->person->full_name . '-grade-report.pdf'
+//            );
+//        } catch (\Exception $e) {
+//            $this->error($e->getMessage());
+//        }
+//    }
 
     public function downloadConfirm() { return
         $this->confirm('createPdf', 'Are you sure? Please click "OK" to confirm.');
