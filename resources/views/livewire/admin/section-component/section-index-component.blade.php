@@ -38,8 +38,8 @@
                     <input @click.stop type="checkbox" wire:model="selectPage" class="cursor-pointer border-gray-400 focus:outline-none focus:ring-transparent mx-5 rounded-sm" title="Select Displayed Data">
                     <x-table.sort-button event="sortFieldSelected('name')">Name</x-table.sort-button>
                 </div>
-                <x-table.column-title class="col-span-3">program</x-table.column-title>
-                <x-table.column-title class="col-span-3">room</x-table.column-title>
+                <x-table.column-title class="col-span-4">program</x-table.column-title>
+                <x-table.column-title class="col-span-2">room</x-table.column-title>
                 <div class="col-span-3 text-center" id="seats-col">
                     <x-table.sort-button event="sortFieldSelected('seat')">seats</x-table.sort-button>
                 </div>
@@ -54,7 +54,7 @@
                         <x-table.row :active="$this->isSelected($section->id)">
                             <div name="slot" class="grid grid-cols-12 md:gap-2">
                                 <x-table.cell-checkbox :value="$section->id">{{ $section->name ?? 'N/A' }}</x-table.cell-checkbox>
-                                <x-table.cell headerLabel="program" class="justify-start md:col-span-3">
+                                <x-table.cell headerLabel="program" class="justify-start md:col-span-4 truncate">
                                     <div class="flex flex-col my-2 md:my-0">
                                         <div>{!! $section->prospectus->program->program ?? '<span class="text-gray-400">N/A</span>' !!}</div>
                                         <div class="tracking-widest text-gray-500 text-xs pt-0.5">
@@ -62,9 +62,9 @@
                                         </div>
                                     </div>
                                 </x-table.cell>
-                                <x-table.cell headerLabel="room" class="justify-start md:col-span-3">{!! $section->room->name ?? '<span class="text-gray-400">N/A</span>' !!}</x-table.cell>
+                                <x-table.cell headerLabel="room" class="justify-start md:col-span-2">{!! $section->room->name ?? '<span class="text-gray-400">N/A</span>' !!}</x-table.cell>
                                 <x-table.cell headerLabel="seats" class="md:justify-start md:col-span-3">
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col py-2 md:py-0">
                                         <div class="tracking-widest text-green-500">{{ $section->registrations->count() }}<span class="text-gray-500">/{{ $section->seat ?? 'N/A' }}</span></div>
                                         <progress id="bar" value="{{ $section->registrations->count() }}" max="{{ $section->seat ?? 'N/A' }}"></progress>
                                     </div>
