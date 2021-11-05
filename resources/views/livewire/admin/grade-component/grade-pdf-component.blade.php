@@ -46,7 +46,16 @@
                                 <a href="{{ route('pre.registration.view', $registration->id) }}">
                                     <p class="hover:text-indigo-500 underline text-sm text-gray-600">View Details</p>
                                 </a>
-                                <p wire:click.prevent="downloadConfirm" wire:loading.class="pointer-events-none" class="hover:text-indigo-500 underline text-sm text-gray-600 mx-4 cursor-pointer">Download Grade Report</p>
+                                <a href="{{ route('stream.grade.pdf', [
+                                        'registration' => $registration,
+                                        'professors' => http_build_query(array('professors' => $professors)),
+                                        'computedGrade' => $grade,
+                                        'grades' => http_build_query(array('grades' => $grades)),
+                                        'notComputed' => http_build_query(array('notComputed' => $notComputed)),
+                                    ]) }}"
+                                    target="_blank">
+                                    <p class="hover:text-indigo-500 underline text-sm text-gray-600 mx-4 cursor-pointer">Print Grade Report</p>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -76,8 +85,8 @@
                             <x-table.cell headerLabel="Title" class="md:col-span-2">{{ $grade->prospectus_subject->subject->title ?? 'N/A' }}</x-table.cell>
                             <x-table.cell headerLabel="Professor" class="md:col-span-3">{{ $professors[$grade->subject_id][0] ?? 'N/A' }}</x-table.cell>
                             <x-table.cell headerLabel="section" class="md:col-span-2">{{ $registration->section->name ?? 'N/A' }}</x-table.cell>
-                            <x-table.cell headerLabel="grade" class="md:col-span-2">{{ $grade->value ?? 'N/A' }}</x-table.cell>
-                            <x-table.cell headerLabel="Remark" class="md:col-span-1">{{ $grade->mark->name ?? 'N/A' }}</x-table.cell>
+                            <x-table.cell headerLabel="grade" class="md:col-span-2">{!! $grade->value ?? '<span class="text-gray-400">N/A</span>' !!}</x-table.cell>
+                            <x-table.cell headerLabel="Remark" class="md:col-span-1">{!! $grade->mark->name_element ?? 'N/A' !!}</x-table.cell>
                         @empty
                             <x-table.no-result>No added classes yet.🤔</x-table.no-result>
                         @endforelse
@@ -89,8 +98,8 @@
                                     <x-table.cell headerLabel="Title" class="md:col-span-2">{{ $grade->prospectus_subject->subject->title ?? 'N/A' }}</x-table.cell>
                                     <x-table.cell headerLabel="Professor" class="md:col-span-3">{{ $professors[$grade->subject_id][0] ?? 'N/A' }}</x-table.cell>
                                     <x-table.cell headerLabel="section" class="md:col-span-2">{{ $extension->registration->section->name ?? 'N/A' }}</x-table.cell>
-                                    <x-table.cell headerLabel="grade" class="md:col-span-2">{{ $grade->value ?? 'N/A' }}</x-table.cell>
-                                    <x-table.cell headerLabel="Remark" class="md:col-span-1">{{ $grade->mark->name ?? 'N/A' }}</x-table.cell>
+                                    <x-table.cell headerLabel="grade" class="md:col-span-2">{!! $grade->value ?? '<span class="text-gray-400">N/A</span>' !!}</x-table.cell>
+                                    <x-table.cell headerLabel="Remark" class="md:col-span-1">{!! $grade->mark->name_element ?? 'N/A' !!}</x-table.cell>
                                 @endforeach
                             @endforeach
                         @endif

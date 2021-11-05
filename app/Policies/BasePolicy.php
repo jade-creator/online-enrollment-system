@@ -37,7 +37,7 @@ class BasePolicy
             'unarchive' => ['admin', 'registrar'],
         ],
         'grade' => [
-            'update' => ['admin', 'registrar'],
+            'update' => ['admin', 'dean', 'faculty member'],
             'export' => ['admin', 'registrar'],
         ],
         'person' => [

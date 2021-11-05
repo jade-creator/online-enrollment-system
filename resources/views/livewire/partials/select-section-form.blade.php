@@ -62,9 +62,9 @@
 
                             @foreach ($day->schedules as $schedule)
                                 <div class="col-span-8 rounded-md p-2 px-6 flex items-center justify-between text-xs font-bold">
-                                    <div class="w-1/4 sm:w-4/6 flex items-center">    
+                                    <div class="w-1/4 sm:w-4/6 flex items-center">
                                         <p class="truncate">{{$schedule->prospectusSubject->subject->code ?? 'N/A'}} </p>
-                                        <p class="hidden sm:block">&nbsp- {{$schedule->prospectusSubject->subject->title ?? 'N/A'}}</p>
+                                        <p class="hidden sm:block">&nbsp; {{$schedule->prospectusSubject->subject->title ?? 'N/A'}}</p>
                                     </div>
                                     <div class="flex items-center">
                                         <div class="border border-gray-300 rounded-md p-2">{{\Carbon\Carbon::parse($schedule->start_time)->format('h:i a') ?? 'N/A'}}</div>
