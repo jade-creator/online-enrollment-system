@@ -55,8 +55,8 @@ Route::get('/view-pdf', function () {
     return view('pdf.dashboard-overview');
 });
 
-// Downlaod pdf
-Route::get('/registration-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('registration.pdf');
+// Downlaod pdf test
+//done Route::get('/registration-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('registration.pdf');
 Route::get('/grade-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('grade.pdf');
 Route::get('/classlist-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('classlist.pdf');
 Route::get('/masterlist-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('masterlist.pdf');
@@ -150,6 +150,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
         });
 
         Route::get('users/students', UserComponent\StudentIndexComponent::class)->name('users.students.index');
+
+        //stream pdf
+        Route::get('/registration-pdf/{registration}', [PDFController::class, 'streamRegistration'])->name('stream.registration.pdf');
     });
     //end: admin and registrar
 

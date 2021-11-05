@@ -1,7 +1,7 @@
 <div class="w-full">
 
     <div class="h-content w-full p-4 md:p-8">
-        <x-table.title tableTitle="Users" :isSelectedAll="$this->selectAll" :count="count($this->selected)"></x-table.title>
+        <x-table.title tableTitle="Students" :isSelectedAll="$this->selectAll" :count="count($this->selected)"></x-table.title>
 
         <x-table.main>
             <x-slot name="filter">

@@ -31,18 +31,24 @@ class AssessmentIndexComponent extends Component
         ];
     }
 
-    public function mount() {
-        try {
-            if ($this->registration->prospectus->program->fees->isNotEmpty()) {
-                $category = Models\Category::where('name', 'Tuition Fee (multiplied by unit/s)')->first();
+    public function fees()
+    {
+        if ($this->registration->prospectus->program->fees->isNotEmpty()) {
+            $category = Models\Category::where('name', 'Tuition Fee (multiplied by unit/s)')->first();
 
-                foreach ($this->registration->prospectus->program->fees as $fee) {
-                    $totalFee = $fee->price;
-                    if ($category && $fee->category_id == $category->id) $totalFee = $this->totalUnit * $fee->price;
+            foreach ($this->registration->prospectus->program->fees as $fee) {
+                $totalFee = $fee->price;
+                if ($category && $fee->category_id == $category->id) $totalFee = $this->totalUnit * $fee->price;
 
-                    $this->fees[$fee->id] = [TRUE, $totalFee];
-                }
+                $this->fees[$fee->id] = [TRUE, $totalFee];
             }
+        }
+    }
+
+    public function mount()
+    {
+        try {
+            $this->fees();
 
             $this->fill([
                 'assessment' => new Models\Assessment(),
@@ -88,6 +94,8 @@ class AssessmentIndexComponent extends Component
             $this->grandTotal = (new AssessmentComputationService())->computeGrandTotal($this->additional, $this->totalUnit, $this->fees, $this->assessment);
 
             $this->registration = (new RegistrationService())->saveFees($this->registration, $this->fees);
+
+            $this->registration = $this->registration->fresh();
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }

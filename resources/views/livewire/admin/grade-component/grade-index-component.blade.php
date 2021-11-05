@@ -70,11 +70,13 @@
                                                     </x-table.cell-button>
                                                 </a>
 
-                                                <a href="{{ route('admin.grade.report', $registration) }}">
-                                                    <x-table.cell-button title="Grade Report">
-                                                        <x-icons.grade-icon/>
-                                                    </x-table.cell-button>
-                                                </a>
+                                                @can ('export', \App\Models\Grade::class)
+                                                    <a href="{{ route('admin.grade.report', $registration) }}">
+                                                        <x-table.cell-button title="Grade Report">
+                                                            <x-icons.grade-icon/>
+                                                        </x-table.cell-button>
+                                                    </a>
+                                                @endcan
                                             </div>
                                         </x-slot>
                                     </x-jet-dropdown>

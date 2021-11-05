@@ -15,7 +15,10 @@
                 </x-sidebar.item>
 
                 <div x-data="{ dropdown: false }">
-                    <x-sidebar.dropdown :routes="['admin.pre.enrollments.view', 'admin.advising.view', 'sections.view']" title="Pre Enrollment">
+                    <x-sidebar.dropdown :routes="['admin.pre.enrollments.view', 'admin.advising.view', 'admin.students.registration.create',
+                        'admin.students.regular.create', 'admin.students.irregular.create', 'sections.view', 'admin.advising.create',
+                        'admin.advising.update', 'admin.sections.create', 'admin.sections.update']" title="Pre Enrollment">
+
                         <x-icons.pre-enrollment-icon/>
                     </x-sidebar.dropdown>
 
@@ -41,7 +44,7 @@
 
                         <x-sidebar.link
                             routeName="admin.advising.view"
-                            :routes="['admin.advising.view']"
+                            :routes="['admin.advising.view', 'admin.advising.create', 'admin.advising.update']"
                             name="Advising Schedules"
                             activeColor="bg-indigo-100 hover:bg-indigo-50"
                             defaultColor="bg-gray-100 hover:bg-gray-200">
@@ -56,7 +59,7 @@
 
                         <x-sidebar.link
                             routeName="sections.view"
-                            :routes="['sections.view']"
+                            :routes="['sections.view', 'admin.sections.create', 'admin.sections.update']"
                             name="Sections"
                             activeColor="bg-indigo-100 hover:bg-indigo-50"
                             defaultColor="bg-gray-100 hover:bg-gray-200">
@@ -66,7 +69,10 @@
                 </div>
 
                 <div x-data="{ dropdown: false }">
-                    <x-sidebar.dropdown :routes="['admin.curricula.view', 'admin.prospectuses.view', 'admin.programs.view', 'admin.subjects.view']" title="Curricula">
+                    <x-sidebar.dropdown :routes="['admin.curricula.view', 'admin.prospectuses.view', 'admin.programs.view',
+                        'admin.subjects.view', 'admin.curricula.create', 'admin.curricula.update', 'admin.programs.create',
+                        'admin.programs.update', 'admin.subjects.create', 'admin.subjects.update']" title="Curricula">
+
                         <x-icons.curriculum-icon/>
                     </x-sidebar.dropdown>
 
@@ -77,7 +83,7 @@
 
                         <x-sidebar.link
                             routeName="admin.curricula.view"
-                            :routes="['admin.curricula.view']"
+                            :routes="['admin.curricula.view', 'admin.curricula.create', 'admin.curricula.update']"
                             name="View List"
                             activeColor="bg-indigo-100 hover:bg-indigo-50"
                             defaultColor="bg-gray-100 hover:bg-gray-200">
@@ -107,7 +113,7 @@
 
                         <x-sidebar.link
                             routeName="admin.programs.view"
-                            :routes="['admin.programs.view']"
+                            :routes="['admin.programs.view', 'admin.programs.create', 'admin.programs.update']"
                             name="Programs"
                             activeColor="bg-indigo-100 hover:bg-indigo-50"
                             defaultColor="bg-gray-100 hover:bg-gray-200">
@@ -122,7 +128,7 @@
 
                         <x-sidebar.link
                             routeName="admin.subjects.view"
-                            :routes="['admin.subjects.view']"
+                            :routes="['admin.subjects.view', 'admin.subjects.create', 'admin.subjects.update']"
                             name="Subjects"
                             activeColor="bg-indigo-100 hover:bg-indigo-50"
                             defaultColor="bg-gray-100 hover:bg-gray-200">
@@ -132,19 +138,20 @@
                 </div>
 
                 <x-sidebar.item title="Grading">
-                    <x-sidebar.link routeName="admin.grades.view" :routes="['admin.grades.view']" name="Grading">
+                    <x-sidebar.link routeName="admin.grades.view" :routes="['admin.grades.view', 'admin.grade.report']" name="Grading">
+
                         <x-icons.grade-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>
 
                 <x-sidebar.item title="Faculties">
-                    <x-sidebar.link routeName="admin.faculties.view" :routes="['admin.faculties.view']" name="Faculties">
+                    <x-sidebar.link routeName="admin.faculties.view" :routes="['admin.faculties.view', 'admin.faculties.create', 'admin.faculties.update']" name="Faculties">
                         <x-icons.faculty-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>
 
                 <x-sidebar.item title="Fees">
-                    <x-sidebar.link routeName="admin.fees.view" :routes="['admin.fees.view']" name="Fees">
+                    <x-sidebar.link routeName="admin.fees.view" :routes="['admin.fees.view', 'admin.fees.create', 'admin.fees.update']" name="Fees">
                         <x-icons.fee-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>
@@ -156,7 +163,8 @@
                 </x-sidebar.item>
 
                 <div x-data="{ dropdown: false }">
-                    <x-sidebar.dropdown :routes="['admin.users.view', 'users.students.index']" title="Users">
+                    <x-sidebar.dropdown :routes="['admin.users.view', 'users.students.index', 'admin.users.create', 'user.personal.profile.view',
+                    'admin.student.update']" title="Users">
                         <x-icons.users-icon/>
                     </x-sidebar.dropdown>
 
@@ -167,7 +175,7 @@
 
                         <x-sidebar.link
                             routeName="admin.users.view"
-                            :routes="['admin.users.view']"
+                            :routes="['admin.users.view', 'admin.users.create', 'user.personal.profile.view']"
                             name="View List"
                             activeColor="bg-indigo-100 hover:bg-indigo-50"
                             defaultColor="bg-gray-100 hover:bg-gray-200">
@@ -182,7 +190,7 @@
 
                         <x-sidebar.link
                             routeName="users.students.index"
-                            :routes="['users.students.index']"
+                            :routes="['users.students.index', 'admin.student.update']"
                             name="Students"
                             activeColor="bg-indigo-100 hover:bg-indigo-50"
                             defaultColor="bg-gray-100 hover:bg-gray-200">
@@ -225,14 +233,14 @@
                     </x-sidebar.link>
                 </x-sidebar.item>
 
-                <x-sidebar.item title="Users">
-                    <x-sidebar.link routeName="users.students.index" :routes="['users.students.index', 'user.personal.profile.view']" name="Users">
+                <x-sidebar.item title="Students">
+                    <x-sidebar.link routeName="users.students.index" :routes="['users.students.index', 'user.personal.profile.view', 'admin.student.update']" name="Students">
                         <x-icons.users-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>
             @elseif (auth()->user()->role->name === 'dean')
                 <x-sidebar.item title="Pre Enrollment">
-                    <x-sidebar.link routeName="admin.pre.enrollments.view" :routes="['admin.pre.enrollments.view', 'admin.students.registration.create', 'admin.students.regular.create', 'admin.students.irregular.create', 'pre.registration.view']"  name="Pre Enrollment">
+                    <x-sidebar.link routeName="admin.pre.enrollments.view" :routes="['admin.pre.enrollments.view', 'pre.registration.view']"  name="Pre Enrollment">
                         <x-icons.pre-enrollment-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>
@@ -267,6 +275,12 @@
                     </x-sidebar.link>
                 </x-sidebar.item>
             @elseif (auth()->user()->role->name === 'faculty member')
+                <x-sidebar.item title="Pre Enrollment">
+                    <x-sidebar.link routeName="admin.pre.enrollments.view" :routes="['admin.pre.enrollments.view', 'pre.registration.view']"  name="Pre Enrollment">
+                        <x-icons.pre-enrollment-icon/>
+                    </x-sidebar.link>
+                </x-sidebar.item>
+
                 <x-sidebar.item title="Grades">
                     <x-sidebar.link routeName="admin.grades.view" :routes="['admin.grades.view']" name="Grades">
                         <x-icons.grade-icon/>
@@ -280,7 +294,7 @@
                 </x-sidebar.item>
             @elseif (auth()->user()->role->name === 'student')
                 <x-sidebar.item title="Registrations">
-                    <x-sidebar.link routeName="student.registrations.index" :routes="['student.registrations.index', 'student.registrations.create']" name="Registrations">
+                    <x-sidebar.link routeName="student.registrations.index" :routes="['student.registrations.index', 'student.registrations.create', 'pre.registration.view', 'student.registrations.regular.create', 'student.registrations.irregular.create']" name="Registrations">
                         <x-icons.pre-enrollment-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>

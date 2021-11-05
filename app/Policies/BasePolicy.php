@@ -33,9 +33,12 @@ class BasePolicy
             'selectSection' => ['admin', 'registrar', 'student', 'dean'],
             'exportRegistration' => ['admin', 'registrar'],
             'create' => ['admin', 'registrar', 'student'],
+            'archive' => ['admin', 'registrar'],
+            'unarchive' => ['admin', 'registrar'],
         ],
         'grade' => [
             'update' => ['admin', 'registrar'],
+            'export' => ['admin', 'registrar'],
         ],
         'person' => [
             'view' => ['admin', 'registrar', 'dean', 'faculty member'],

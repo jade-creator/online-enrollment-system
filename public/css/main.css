@@ -23,3 +23,20 @@
 .sidebar::-webkit-scrollbar-thumb:hover {
     background: #bdc3c7;
 }
+
+#bar {
+    height: .2rem;
+    text-align: center;
+}
+
+#bar::-moz-progress-bar {
+    background: lightgray;
+}
+
+#bar::-webkit-progress-value {
+    background: #18d618;
+}
+
+#bar::-webkit-progress-bar {
+    background: lightgray;
+}
