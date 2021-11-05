@@ -110,7 +110,6 @@
                                     <x-jet-input-error for="assessment.remarks" class="mt-2"/>
                                 </div>
                             @else
-                                {{-- ADMIN SIDE computed.--}}
                                 @foreach ($registration->fees as $index => $fee)
                                     @if ($fees[$fee->id][0] == TRUE)
                                         <div class="col-span-6 flex items-center justify-between">

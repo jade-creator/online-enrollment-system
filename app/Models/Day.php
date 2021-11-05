@@ -47,6 +47,42 @@ class Day extends Model
         }
     }
 
+    public function getShortAbbrevAttribute()
+    {
+        switch ($this->attributes['name']) {
+            case 'Monday':
+                return 'M';
+                break;
+
+            case 'Tuesday':
+                return 'T';
+                break;
+
+            case 'Wednesday':
+                return 'W';
+                break;
+
+            case 'Thursday':
+                return 'TH';
+                break;
+
+            case 'Friday':
+                return 'F';
+                break;
+
+            case 'Saturday':
+                return 'S';
+                break;
+
+            case 'Sunday':
+                return 'SU';
+                break;
+
+            default:
+                return 'N/A';
+        }
+    }
+
     public function schedules() { return
         $this->hasMany(Schedule::class);
     }

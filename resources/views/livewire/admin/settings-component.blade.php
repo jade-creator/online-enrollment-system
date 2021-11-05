@@ -153,7 +153,7 @@
                 </x-slot>
 
                 <x-slot name="actions">
-                    <x-jet-button class="bg-indigo-700 hover:bg-indigo-800">
+                    <x-jet-button class="bg-indigo-700 hover:bg-indigo-800" wire:target="updateProcess">
                         {{ __('Update') }}
                     </x-jet-button>
                 </x-slot>

@@ -164,17 +164,19 @@
                                                             </a>
                                                         @endcan
 
-                                                        <x-table.cell-button wire:click="archive('Registration', {{$registration}}, 'released_at')" wire:loading.attr="disabled" @click.stop title="Archive">
-                                                            <x-icons.edit-icon/>
-                                                        </x-table.cell-button>
+                                                        @can ('archive', \App\Models\Registration::class)
+                                                            <x-table.cell-button wire:click="archive('Registration', {{$registration}}, 'released_at')" wire:loading.attr="disabled" @click.stop title="Archive">
+                                                                <x-icons.edit-icon/>
+                                                            </x-table.cell-button>
+                                                        @endcan
                                                     </div>
                                                 </x-slot>
                                             </x-jet-dropdown>
                                         @endif
                                     </x-table.cell-action>
                                 @else
-                                    @if (!count($selected) > 0)
-                                        <x-table.cell-action x-data="{ open: true }" @click.stop>
+                                    <x-table.cell-action x-data="{ open: true }" @click.stop>
+                                        @if (!count($selected) > 0 && auth()->user()->can('unarchive', \App\Models\Registration::class))
                                             <a href="{{ route('pre.registration.view', $registration->id) }}">
                                                 <x-icons.view-icon class="md:w-5 my-3 text-gray-400 hover:text-indigo-500 mx-1" stroke-width="2">View Details</x-icons.view-icon>
                                             </a>
@@ -183,8 +185,10 @@
                                                 x-show="open"
                                                 @click="open = ! open"
                                                 class="md:w-5 text-yellow-500 hover:text-yellow-600 mx-1">Unarchive</x-icons.edit-icon>
-                                        </x-table.cell-action>
-                                    @endif
+                                        @else
+                                            <span title="Authorized Access"><x-icons.lock-icon/></span>
+                                        @endif
+                                    </x-table.cell-action>
                                 @endif
                             </div>
                         </x-table.row>

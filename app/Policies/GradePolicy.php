@@ -15,4 +15,8 @@ class GradePolicy extends BasePolicy
     public function update(User $user, Grade $grade) { return
         $this->isAuthorized('grade', 'update', $user);
     }
+
+    public function export(User $user) { return
+        $this->isAuthorized('grade', 'export', $user);
+    }
 }

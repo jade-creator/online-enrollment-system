@@ -104,6 +104,15 @@ class UserSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'faculty3',
+                'email' => 'faculty3@gmail.com',
+                'password' => Hash::make('qwert@1Q'),
+                'email_verified_at' => now(),
+                'role_id' => 5,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ];
 
         $persons = Person::factory()->count(count($users))->create();

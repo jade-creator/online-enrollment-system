@@ -17,10 +17,16 @@
                     </div>
                 </div>
                 @can ('exportRegistration', $registration)
-                    <x-jet-button wire:click.prevent="createPdf" wire:loading.attr="disabled" class="bg-indigo-700 hover:bg-indigo-800 flex items-end">
-                        <x-icons.export-icon/>
-                        <span>{{ __('Export as PDF')}}</span>
-                    </x-jet-button>
+                    <a href="{{ route('stream.registration.pdf', [
+                        'registration' => $registration,
+                        'totalUnit' => $totalUnit
+                    ]) }}"
+                       target="_blank">
+                        <x-jet-button class="bg-indigo-700 hover:bg-indigo-800 flex items-end">
+                            <x-icons.export-icon/>
+                            <span class="mx-2">{{ __('Print Details')}}</span>
+                        </x-jet-button>
+                    </a>
                 @endcan
 
                 @can ('edit', $registration)
@@ -152,7 +158,7 @@
                         <x-jet-input type="text" class="mt-1" value="{{ $registration->student->user->person->detail->religion ?? 'N/A' }}" readonly/>
                     </div>
                     <div class="col-span-3">
-                        <x-jet-label value="{{ __('Citizenship:') }}"/>
+                        <x-jet-label value="{{ __('Country of Citizenship:') }}"/>
                         <x-jet-input type="text" class="mt-1" value="{{ $registration->student->user->person->detail->country->name ?? 'N/A' }}" readonly/>
                     </div>
                 </form>

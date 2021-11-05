@@ -93,9 +93,6 @@ class Registration extends BaseModel
                     ]);
                 },
                 'fees.category' => function ($query) { $query->withTrashed(); },
-//                'classes.prospectusSubject',
-//                'classes.employee.user.person',
-//                'classes.employee.user.employee',
                 'student.user.person.contact',
                 'student.user.person.detail.country',
                 'grades:id,registration_id,subject_id,mark_id,value',
@@ -156,41 +153,40 @@ class Registration extends BaseModel
     }
 
     //dashboard
-    public function scopeFinalized($query)
-    {
-        return $query->where([
-            'status_id' => 3,
-            'isExtension' => 0,
-            'released_at' => null,
-        ])->get();
-    }
+//    public function scopeFinalized($query)
+//    {
+//        return $query->where([
+//            'status_id' => 3,
+//            'isExtension' => 0,
+//            'released_at' => null,
+//        ])->get();
+//    }
 
     //dashboard
-    public function scopeConfirming($query)
-    {
-        return $query->where([
-            'status_id' => 2,
-            'isExtension' => 0,
-            'released_at' => null,
-        ])->get();
-    }
+//    public function scopeConfirming($query)
+//    {
+//        return $query->where([
+//            'status_id' => 2,
+//            'isExtension' => 0,
+//            'released_at' => null,
+//        ])->get();
+//    }
 
     //dashboard
-    public function scopePending($query)
-    {
-        return $query->where([
-            'status_id' => 1,
-            'isExtension' => 0,
-            'released_at' => null,
-        ])->get();
-    }
+//    public function scopePending($query)
+//    {
+//        return $query->where([
+//            'status_id' => 1,
+//            'isExtension' => 0,
+//            'released_at' => null,
+//        ])->get();
+//    }
 
     //section index
     public function scopeEnrolled($query)
     {
         return $query->where([
                 'status_id' => $this->statusEnrolled()->id,
-//                'isExtension' => 0,
                 'released_at' => null,
             ]);
     }

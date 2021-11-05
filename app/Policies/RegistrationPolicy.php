@@ -112,6 +112,14 @@ class RegistrationPolicy extends BasePolicy
         $this->isAuthorized('registration', 'update', $user) && $registration->status->name != 'released';
     }
 
+    public function archive(User $user) { return
+        $this->isAuthorized('registration', 'archive', $user);
+    }
+
+    public function unarchive(User $user) { return
+        $this->isAuthorized('registration', 'unarchive', $user);
+    }
+
     public function destroy(User $user, Registration $registration) { return
         $this->isAdmin($user);
     }
