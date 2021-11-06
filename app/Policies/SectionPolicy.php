@@ -33,7 +33,7 @@ class SectionPolicy extends BasePolicy
         $this->isAuthorized('section', 'createClass', $user);
     }
 
-    public function printClaslist(User $user, Section $section) { return
+    public function printClasslist(User $user, Section $section) { return
         $this->isAuthorized('section', 'printClasslist', $user)
             && $section->registrations->count() != 0;
     }

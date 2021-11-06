@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Day;
 use App\Models\Registration;
 use App\Models\Section;
+use App\Services\Schedule\CalendarService;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use PDF;
@@ -23,6 +26,17 @@ class PDFController extends Controller
     {
         $pdf = PDF::loadView($templateLocation, $array);
         return $pdf->stream($fileName);
+    }
+
+    public function streamSchedule(Section $section)
+    {
+        $weekDays = Day::get(['id', 'name']);
+        $calendarData = (new CalendarService())->generateCalendarData($section, $weekDays);
+
+        return $this->stream('pdf.schedule', [
+            'calendarData' => $calendarData,
+            'weekDays' => $weekDays
+        ], $section->name.'-schedule.pdf');
     }
 
     public function streamClasslist(Section $section)

@@ -7,48 +7,52 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Print Schedule</title>
     <link rel="stylesheet" href="{{ asset('css/pdf.css') }}">
+    <style>
+        /*PDF SIZE*/
+        @page { size: 20cm 30cm landscape; }
+    </style>
 </head>
 
 <body>
-    <div class="watermark"></div>
+    <div class="watermark" style="background-image: url({{$school_profile_photo_path}})"></div>
     <div class="logo-container mb-3 center">
-        <img src="https://drive.google.com/uc?export=view&id=1l2yy9vCB5pFaJwewAGiiOMU3BmQdsG8Q" alt="logo" width="50" height="50">
-        <p class="truncate-widest bold">UNIVERSITY</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet, amet.</p>
+        <img src="{{ $school_profile_photo_path }}" alt="logo" width="50" height="50"/>
+        <p class="truncate-widest bold">{{ $school_name ?? env('APP_NAME', 'University') }}</p>
+        <p>{{ $school_address }}</p>
     </div>
-    @for ($j = 0; $j <= 6; $j++)
-        <div class="mb-4 container">
-            <table class="container-title">
+
+    <div class="mb-4 container">
+        <table class="container-title">
+            <tr>
+                <td class="center truncate-widest">BSIT4E SCHEDULE</td>
+            </tr>
+        </table>
+        <table class="ordinary-table">
+            <tr>
+                <th width="125">Time</th>
+                @foreach($weekDays as $day)
+                    <th>{{ $day->name ?? 'N/A' }}</th>
+                @endforeach
+            </tr>
+            @foreach ($calendarData as $time => $days)
                 <tr>
-                    <td class="center truncate-widest">BSIT4E SCHEDULE</td>
+                    <td class="center">
+                        {{ \Carbon\Carbon::parse(substr($time, 0, 5))->format('h:ia').' - '.\Carbon\Carbon::parse(substr($time, 6))->format('h:ia') }}
+                    </td>
+                    @foreach($days as $value)
+                        @if (is_array($value))
+                            <td rowspan="{{ $value['rowspan'] }}" class="center" style="background-color:#f0f0f0">
+                                {{ $value['class_name'] }}<br>
+                                Faculty: {{ $value['teacher_name'] }}
+                            </td>
+                        @elseif ($value === 1)
+                            <td></td>
+                        @endif
+                    @endforeach
                 </tr>
-            </table>
-            <table class="ordinary-table">
-                <tr>
-                    <th>Code</th>
-                    <th>Monday</th>
-                    <th>Tuesday</th>
-                    <th>Wednesday</th>
-                    <th>Thursday</th>
-                    <th>Friday</th>
-                    <th>Saturday</th>
-                    <th>Sunday</th>
-                </tr>
-                @for ($i = 0; $i <= 5; $i++)
-                    <tr>
-                        <td>MATH</td>
-                        <td class="center">05:13pm - 05:13pm</td>
-                        <td class="center">05:13pm - 05:13pm</td>
-                        <td class="center">05:13pm - 05:13pm</td>
-                        <td class="center">05:13pm - 05:13pm</td>
-                        <td class="center">05:13pm - 05:13pm</td>
-                        <td class="center">05:13pm - 05:13pm</td>
-                        <td class="center">05:13pm - 05:13pm</td>
-                    </tr>
-                @endfor
-            </table>
-        </div>
-    @endfor
+            @endforeach
+        </table>
+    </div>
 
     <footer>
         <p>{{ Carbon\Carbon::parse(now())->format('F j, Y') }}</p>

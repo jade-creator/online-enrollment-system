@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -23,6 +24,10 @@ class Schedule extends Model
         'section',
         'day',
     ];
+
+    public function getDifferenceAttribute() { return
+        Carbon::parse($this->end_time)->diffInMinutes($this->start_time);
+    }
 
     public function employee() { return
         $this->belongsTo(Employee::class);

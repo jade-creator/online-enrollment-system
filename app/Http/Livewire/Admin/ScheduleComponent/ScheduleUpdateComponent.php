@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin\ScheduleComponent;
 use App\Models;
 use App\Models\Curriculum;
 use App\Services\Schedule;
+use App\Services\Schedule\TimeService;
 use App\Traits\WithSweetAlert;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
@@ -26,10 +27,9 @@ class ScheduleUpdateComponent extends Component
     {
         return [
             'schedule.prospectus_subject_id' => ['required'],
-            'schedule.employee_id' => ['required'],
             'schedule.day_id' => ['required'],
-            'schedule.start_time' => ['required'],
-            'schedule.end_time' => ['required', 'after:schedule.start_time'],
+            'schedule.start_time' => ['required', 'after_or_equal:'.\Carbon\Carbon::parse(config('app.calendar.start_time'))->format('h:i A')],
+            'schedule.end_time' => ['required', 'after:schedule.start_time', 'before_or_equal:'.\Carbon\Carbon::parse(config('app.calendar.end_time'))->format('h:i A')],
         ];
     }
 
@@ -46,6 +46,8 @@ class ScheduleUpdateComponent extends Component
         $this->validate();
 
         $originalDayId = $this->schedule->getOriginal('day_id');
+        $originalStartTime = $this->schedule->getOriginal('start_time');
+        $originalEndTime = $this->schedule->getOriginal('end_time');
 
         $curriculum = Curriculum::findActiveCurriculum($this->section->prospectus->program_id);
 
@@ -74,6 +76,8 @@ class ScheduleUpdateComponent extends Component
             $this->emitUp('sessionFlashAlert', 'alert', 'success', "A schedule has been updated in ".$this->section->name);
         } catch (\Exception $e) {
             $this->schedule->day_id = $originalDayId;
+            $this->schedule->start_time = $originalStartTime;
+            $this->schedule->end_time = $originalEndTime;
             $this->schedule->update();
 
             $this->emitUp('sessionFlashAlert', 'alert', 'danger', $e->getMessage());
@@ -109,5 +113,18 @@ class ScheduleUpdateComponent extends Component
 
     public function toggleViewingSchedule() {
         $this->viewingSchedule = !$this->viewingSchedule;
+    }
+
+    public function getTimeRangesProperty()
+    {
+        $timeRange = (new TimeService)->generateTimeRange(config('app.calendar.start_time'), config('app.calendar.end_time'));
+
+        $timeOptions = [];
+        foreach ($timeRange as $times) {
+            $timeOptions[] = $times['start'];
+            $timeOptions[] = $times['end'];
+        }
+
+        return array_unique($timeOptions);
     }
 }

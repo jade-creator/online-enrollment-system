@@ -60,7 +60,7 @@ Route::get('/view-pdf', function () {
 //done Route::get('/grade-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('grade.pdf');
 //done Route::get('/classlist-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('classlist.pdf');
 Route::get('/masterlist-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('masterlist.pdf');
-Route::get('/schedule-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('schedule.pdf');
+//done Route::get('/schedule-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('schedule.pdf');
 Route::get('/dashboard-overview/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('dashboard-overview.pdf');
 //------END GUEST-------
 
@@ -200,6 +200,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
         Route::get('/sections', SectionComponent\SectionIndexComponent::class)->name('sections.view');
 
         Route::get('/class-list/{section}', [PDFController::class, 'streamClasslist'])->name('stream.class-list.pdf');
+        Route::get('/schedule-timetable/{section}', [PDFController::class, 'streamSchedule'])->name('stream.schedule.pdf');
     });
     //end: all except student
 
