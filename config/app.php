@@ -237,4 +237,8 @@ return [
 
     ],
 
+    'calendar' => [
+        'start_time'    => '06:00',
+        'end_time'      => '20:00',
+    ],
 ];
