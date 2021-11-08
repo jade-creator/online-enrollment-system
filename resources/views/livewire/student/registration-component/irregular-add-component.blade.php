@@ -71,7 +71,7 @@
                                                                         {{ $loop->first ? '' : ', '  }}
                                                                         <span>&nbsp;{{ $requisite->code }}</span>
                                                                     @empty
-                                                                        N/A
+                                                                        {!! '<span class="text-gray-400">N/A</span>' !!}
                                                                     @endforelse
                                                                 </x-table.cell>
                                                                 <x-table.cell headerLabel="pre requisite" class="justify-start md:col-span-3">
@@ -79,7 +79,7 @@
                                                                         {{ $loop->first ? '' : ', '  }}
                                                                         <span>&nbsp;{{ $requisite->code }}</span>
                                                                     @empty
-                                                                        N/A
+                                                                        {!! '<span class="text-gray-400">N/A</span>' !!}
                                                                     @endforelse
                                                                 </x-table.cell>
                                                             </div>

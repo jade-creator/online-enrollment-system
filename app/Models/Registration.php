@@ -152,36 +152,6 @@ class Registration extends BaseModel
         Status::where('name', 'enrolled')->first();
     }
 
-    //dashboard
-//    public function scopeFinalized($query)
-//    {
-//        return $query->where([
-//            'status_id' => 3,
-//            'isExtension' => 0,
-//            'released_at' => null,
-//        ])->get();
-//    }
-
-    //dashboard
-//    public function scopeConfirming($query)
-//    {
-//        return $query->where([
-//            'status_id' => 2,
-//            'isExtension' => 0,
-//            'released_at' => null,
-//        ])->get();
-//    }
-
-    //dashboard
-//    public function scopePending($query)
-//    {
-//        return $query->where([
-//            'status_id' => 1,
-//            'isExtension' => 0,
-//            'released_at' => null,
-//        ])->get();
-//    }
-
     //section index
     public function scopeEnrolled($query)
     {

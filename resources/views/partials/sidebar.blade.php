@@ -17,7 +17,7 @@
                 <div x-data="{ dropdown: false }">
                     <x-sidebar.dropdown :routes="['admin.pre.enrollments.view', 'admin.advising.view', 'admin.students.registration.create',
                         'admin.students.regular.create', 'admin.students.irregular.create', 'sections.view', 'admin.advising.create',
-                        'admin.advising.update', 'admin.sections.create', 'admin.sections.update']" title="Pre Enrollment">
+                        'admin.advising.update', 'admin.sections.create', 'admin.sections.update', 'pre.registration.view']" title="Pre Enrollment">
 
                         <x-icons.pre-enrollment-icon/>
                     </x-sidebar.dropdown>
@@ -29,7 +29,7 @@
 
                         <x-sidebar.link
                             routeName="admin.pre.enrollments.view"
-                            :routes="['admin.pre.enrollments.view']"
+                            :routes="['admin.pre.enrollments.view', 'pre.registration.view']"
                             name="View List"
                             activeColor="bg-indigo-100 hover:bg-indigo-50"
                             defaultColor="bg-gray-100 hover:bg-gray-200">

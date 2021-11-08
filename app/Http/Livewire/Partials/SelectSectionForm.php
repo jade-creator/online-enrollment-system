@@ -114,6 +114,8 @@ class SelectSectionForm extends Component
             ->where('section_id', $this->sectionId)
             ->get();
 
-        if ($this->days->isNotEmpty()) $this->section = $this->days->first()->schedules->first()->section;
+        if ($this->days->isNotEmpty()) $this->section = $this->days->first(function ($day) {
+            return $day->schedules->isNotEmpty();
+        })->schedules->first()->section ?? NULL;
     }
 }

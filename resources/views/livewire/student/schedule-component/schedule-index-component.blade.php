@@ -72,30 +72,47 @@
                                     <x-table.no-result>No subjects found. Sorry! Unable to register.🤔</x-table.no-result>
                                 @endforelse
                             @else
-                                @forelse ($registration->classes as $schedule)
-                                    <div wire:key="table-row-{{$schedule->prospectusSubject->subject->code}}">
-                                        <x-table.row>
-                                            <div name="slot" class="grid grid-cols-12 md:gap-2">
-                                                <x-table.cell headerLabel="code" class="md:col-span-2">{{ $schedule->prospectusSubject->subject->code ?? 'N/A' }}</x-table.cell>
-                                                @if ( auth()->user()->role->name == 'student' && ($registration->status->name !== 'enrolled' && $registration->status->name !== 'released') )
-                                                    <x-table.cell headerLabel="title" class="truncate md:col-span-3">{{ $schedule->prospectusSubject->subject->title ?? 'N/A' }}</x-table.cell>
-                                                @else
-                                                    <x-table.cell headerLabel="professor" class="truncate md:col-span-3">
-                                                        <span>{{ $schedule->employee->user->salutation ?? '' }}</span>
-                                                        <span>{{ $schedule->employee->user->person->full_name ?? 'N/A' }}</span>
-                                                    </x-table.cell>
-                                                @endif
-                                                <x-table.cell headerLabel="section" class="md:col-span-2">{{ $schedule->section->name ?? 'N/A' }}</x-table.cell>
-                                                <x-table.cell headerLabel="day" class="md:col-span-2">{{ $schedule->day->name ?? 'N/A' }}</x-table.cell>
-                                                <x-table.cell headerLabel="time" class="md:col-span-2">
-                                                    <span>{{ \Carbon\Carbon::parse($schedule->start_time)->format('g: ia') ?? 'N/A' }}</span>
-                                                    <span>-</span>
-                                                    <span>{{ \Carbon\Carbon::parse($schedule->end_time)->format('g: ia') ?? 'N/A' }}</span>
-                                                </x-table.cell>
-                                                <x-table.cell headerLabel="unit" class="md:col-span-1 md:justify-center">{{ $schedule->prospectusSubject->unit ?? 'N/A' }}</x-table.cell>
-                                            </div>
-                                        </x-table.row>
-                                    </div>
+                                @forelse ($prospectus_subjects  as $subjects)
+                                    @foreach ($subjects as $start_times)
+                                        @foreach ($start_times as $end_times)
+                                            @foreach ($end_times as $employees)
+                                                @foreach ($employees as $schedules)
+                                                    @foreach ($schedules as $schedule)
+                                                        @if ($loop->first)
+                                                            <div wire:key="table-row-{{$schedule->prospectusSubject->subject->code}}">
+                                                                <x-table.row>
+                                                                    <div name="slot" class="grid grid-cols-12 md:gap-2">
+                                                                        <x-table.cell headerLabel="code" class="md:col-span-2">{{ $schedule->prospectusSubject->subject->code ?? 'N/A' }}</x-table.cell>
+                                                                        @if ( auth()->user()->role->name == 'student' && ($registration->status->name !== 'enrolled' && $registration->status->name !== 'released') )
+                                                                            <x-table.cell headerLabel="title" class="truncate md:col-span-3">{{ $schedule->prospectusSubject->subject->title ?? 'N/A' }}</x-table.cell>
+                                                                        @else
+                                                                            <x-table.cell headerLabel="professor" class="truncate md:col-span-3">
+                                                                                <span>{{ $schedule->employee->user->salutation ?? '' }}</span>
+                                                                                <span>{{ $schedule->employee->user->person->full_name ?? 'N/A' }}</span>
+                                                                            </x-table.cell>
+                                                                        @endif
+                                                                        <x-table.cell headerLabel="section" class="md:col-span-2">{{ $schedule->section->name ?? 'N/A' }}</x-table.cell>
+                                                                        <x-table.cell headerLabel="day" class="md:col-span-2">
+                                                                            @foreach ($schedules->sortBy('day_id', SORT_REGULAR, false) as $schedule)
+                                                                                {{$loop->first ? '' : ','}}
+                                                                                <span>{{$schedule->day->short_abbrev ?? 'N/A'}}</span>
+                                                                            @endforeach
+                                                                        </x-table.cell>
+                                                                        <x-table.cell headerLabel="time" class="md:col-span-2">
+                                                                            <span>{{ \Carbon\Carbon::parse($schedule->start_time)->format('g: ia') ?? 'N/A' }}</span>
+                                                                            <span>-</span>
+                                                                            <span>{{ \Carbon\Carbon::parse($schedule->end_time)->format('g: ia') ?? 'N/A' }}</span>
+                                                                        </x-table.cell>
+                                                                        <x-table.cell headerLabel="unit" class="md:col-span-1 md:justify-center">{{ $schedule->prospectusSubject->unit ?? 'N/A' }}</x-table.cell>
+                                                                    </div>
+                                                                </x-table.row>
+                                                            </div>
+                                                        @endif
+                                                    @endforeach
+                                                @endforeach
+                                            @endforeach
+                                        @endforeach
+                                    @endforeach
                                 @empty
                                     <x-table.no-result>No subjects found. Sorry! Unable to register.🤔</x-table.no-result>
                                 @endforelse

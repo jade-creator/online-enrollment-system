@@ -2,9 +2,20 @@
     <div class="w-full mb-6 pt-3">
         <div>
             <x-dashboard.container>
-                <div class="flex flex-col">
-                    <div class="transition text-xs uppercase font-light text-gramy-500">{{ __('OVERVIEW') }}</div>
-                    <div class="text-xl font-bold">{{ __('Dashboard') }}</div>
+                <div class="w-full flex items-center justify-between">
+                    <div class="flex flex-col">
+                        <div class="transition text-xs uppercase font-light text-gramy-500">{{ __('OVERVIEW') }}</div>
+                        <div class="text-xl font-bold">{{ __('Dashboard') }}</div>
+                    </div>
+
+                    <a href="{{ route('admin.stream.dashboard.pdf') }}" target="_blank">
+                        <x-table.nav-button>
+                            <span class="block flex items-center">
+                                <x-icons.export-icon/>
+                                <span class="mx-2">Print Report</span>
+                            </span>
+                        </x-table.nav-button>
+                    </a>
                 </div>
             </x-dashboard.container>
 
@@ -263,7 +274,7 @@
                     plugins: {
                         subtitle: {
                             display: true,
-                            text: '{{ $programsTableTitle }}',
+                            text: '{{ "Number of students per program as of SY. ".\Carbon\Carbon::parse(now())->format('Y').'-'.\Carbon\Carbon::parse(now())->addYear()->format('Y') }}',
                         },
                     },
                 },

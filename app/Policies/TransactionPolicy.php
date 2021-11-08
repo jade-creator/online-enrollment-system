@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -9,15 +10,16 @@ class TransactionPolicy extends BasePolicy
 {
     use HandlesAuthorization;
 
-    public function isAdmin(User $user) { return
-        $user->role->name == 'admin';
-    }
-
     public function create(User $user) { return
-        $user->role->name == 'student';
+        $this->isAuthorized('transaction', 'create', $user);
     }
 
     public function view(User $user) { return
         $this->isAuthorized('transaction', 'view', $user);
+    }
+
+    public function export(User $user, Transaction $transaction) { return
+        $this->isAuthorized('transaction', 'export', $user)
+            && $transaction->paypal_is_verified;
     }
 }

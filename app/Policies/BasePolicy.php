@@ -48,7 +48,12 @@ class BasePolicy
             'register' => ['admin', 'student', 'registrar'],
         ],
         'transaction' => [
-            'view' => ['admin', 'registrar', 'dean']
+            'view' => ['admin', 'registrar', 'dean'],
+            'export' => ['admin', 'student'],
+            'create' => ['student'],
+        ],
+        'faculty' => [
+            'masterlist' => ['admin', 'registrar']
         ]
     ];
 

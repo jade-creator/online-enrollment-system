@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Print Schedule</title>
+    <link rel="icon" href="{{ $school_profile_photo_path }}">
     <link rel="stylesheet" href="{{ asset('css/pdf.css') }}">
     <style>
         /*PDF SIZE*/
@@ -24,7 +25,7 @@
     <div class="mb-4 container">
         <table class="container-title">
             <tr>
-                <td class="center truncate-widest">BSIT4E SCHEDULE</td>
+                <td class="center truncate-widest">{{$section->name ?? 'N/A'}} SCHEDULE</td>
             </tr>
         </table>
         <table class="ordinary-table">
@@ -56,7 +57,7 @@
 
     <footer>
         <p>{{ Carbon\Carbon::parse(now())->format('F j, Y') }}</p>
-        <p>Pasig City, Metro Manila 1600 | Visit us: university.edu.ph</p>
+        <p>{{ $school_address ?? 'N/A' }} | Visit us: {{ env('APP_URL', 'university-ph.herokuapp.com') ?? 'N/A' }}</p>
     </footer>
 </body>
 </html>

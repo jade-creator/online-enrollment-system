@@ -55,4 +55,8 @@ class FacultyPolicy extends BasePolicy
     public function destroy(User $user, Faculty $faculty) { return
         $this->isAdmin($user);
     }
+
+    public function masterlist(User $user) { return
+        $this->isAuthorized('faculty', 'masterlist', $user);
+    }
 }

@@ -22,6 +22,10 @@ class Person extends Model
         'isCompleteDetail',
     ];
 
+    public function getShortFullNameReversedAttribute() { return
+        ucfirst($this->lastname).', '.ucfirst($this->firstname).' '.ucfirst($this->middlename[0]).'.';
+    }
+
     public function getFullNameAttribute() { return
         "{$this->firstname} {$this->middlename} {$this->lastname} {$this->suffix}";
     }

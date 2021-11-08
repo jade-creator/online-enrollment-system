@@ -78,7 +78,6 @@ class Dashboard extends Component
                 return $registration->status_id == 1;
             })->count(),
             'programsCode' => $this->programs->pluck('code')->toArray(),
-            'programsTableTitle' => "Number of students per program as of SY. ".Carbon::parse(now())->format('Y').'-'.Carbon::parse(now())->addYear()->format('Y'),
         ]);
     }
 
