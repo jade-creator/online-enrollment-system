@@ -89,6 +89,8 @@
                 <th>Code</th>
                 <th>Title</th>
                 <th>Professor</th>
+                <th>Section</th>
+                <th>Semester</th>
                 <th>Day</th>
                 <th>Time</th>
                 <th>Unit</th>
@@ -106,6 +108,8 @@
                                                 <td class="center">{{ $schedule->prospectusSubject->subject->code ?? 'N/A' }}</td>
                                                 <td class="center">{{ $schedule->prospectusSubject->subject->title ?? 'N/A' }}</td>
                                                 <td class="center">{{ $schedule->employee->user->person->full_name ?? 'N/A' }}</td>
+                                                <td class="center">{{ $schedule->section->name ?? 'N/A' }}</td>
+                                                <td class="center">{{ $schedule->section->prospectus->term->term ?? 'N/A' }}</td>
                                                 <td class="center">
                                                     @foreach ($schedules->sortBy('day_id', SORT_REGULAR, false) as $schedule)
                                                         {{$loop->first ? '' : ','}}
@@ -173,7 +177,7 @@
         </div>
         <div class="right-container">
             <div id="signatures">
-                <h4>Present this certificate for any transaction within the University.</h6>
+                <h4>Present this certificate for any transaction within the University.</h4>
                 <p>Student Signature</p>
                 <p>Approved By:</p>
             </div>

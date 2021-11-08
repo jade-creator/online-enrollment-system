@@ -7,6 +7,12 @@
                     Create New Registration
                 </x-table.nav-button>
             @endcan
+
+            @can ('masterlist', \App\Models\Faculty::class)
+                <a href="{{route('stream.masterlist.pdf')}}" target="_blank" class="mx-4">
+                    <span class="hover:text-indigo-500" title="Print Masterlist"><x-icons.export-icon/></span>
+                </a>
+            @endcan
         </x-table.title>
 
         <x-table.main>

@@ -60,6 +60,14 @@
                                                             </x-table.cell-button>
                                                         </a>
                                                     @endcan
+
+                                                    @can ('export', $transaction)
+                                                        <a href="{{ route('stream.transaction.pdf', $transaction) }}" target="_blank">
+                                                            <x-table.cell-button title="Print Details">
+                                                                <x-icons.export-icon/>
+                                                            </x-table.cell-button>
+                                                        </a>
+                                                    @endcan
                                                 </div>
                                             </x-slot>
                                         </x-jet-dropdown>

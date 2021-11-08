@@ -59,9 +59,9 @@ Route::get('/view-pdf', function () {
 //done Route::get('/registration-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('registration.pdf');
 //done Route::get('/grade-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('grade.pdf');
 //done Route::get('/classlist-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('classlist.pdf');
-Route::get('/masterlist-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('masterlist.pdf');
+//Route::get('/masterlist-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('masterlist.pdf');
 //done Route::get('/schedule-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('schedule.pdf');
-Route::get('/dashboard-overview/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('dashboard-overview.pdf');
+//done Route::get('/dashboard-overview/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('dashboard-overview.pdf');
 //------END GUEST-------
 
 
@@ -125,6 +125,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
 
             //admin backup route
             Route::view('/backup', 'laravel_backup_panel::layout')->middleware('password.confirm')->name('backup');
+
+            Route::get('/dashboard-overview-pdf', [PDFController::class, 'streamDashboard'])->name('stream.dashboard.pdf');
         });
     });
     // end admin
@@ -154,6 +156,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
         //stream pdf
         Route::get('/registration-pdf/{registration}', [PDFController::class, 'streamRegistration'])->name('stream.registration.pdf');
         Route::get('/grade-pdf/{registration}', [PDFController::class, 'streamGrade'])->name('stream.grade.pdf');
+        Route::get('/masterlist-pdf', [PDFController::class, 'streamMasterlist'])->name('stream.masterlist.pdf');
     });
     //end: admin and registrar
 
@@ -211,6 +214,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
         });
 
         Route::get('/user/personal-profile/{userId}', User\UserProfileComponent::class)->name('user.personal.profile.view');
+
+        Route::get('/paypal-transaction/pdf/{transaction}', [PDFController::class, 'streamTransaction'])->name('stream.transaction.pdf');
     });
     // end: all
 

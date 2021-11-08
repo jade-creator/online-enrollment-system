@@ -68,6 +68,14 @@
                                                             </a>
                                                         @endcan
 
+                                                        @can ('export', $transaction)
+                                                            <a href="{{ route('stream.transaction.pdf', $transaction) }}" target="_blank">
+                                                                <x-table.cell-button title="Print Details">
+                                                                    <x-icons.export-icon/>
+                                                                </x-table.cell-button>
+                                                            </a>
+                                                        @endcan
+
                                                         <x-table.cell-button wire:click="archive('Transaction', {{$transaction}}, 'archived_at')" wire:loading.attr="disabled" @click.stop title="Archive">
                                                             <x-icons.edit-icon/>
                                                         </x-table.cell-button>
