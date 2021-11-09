@@ -145,6 +145,7 @@ class PDFController extends Controller
         $calendarData = (new CalendarService())->generateCalendarData($section, $weekDays);
 
         return $this->stream('pdf.schedule', [
+            'section' => $section,
             'calendarData' => $calendarData,
             'weekDays' => $weekDays
         ], $section->name.'-schedule.pdf');

@@ -14,7 +14,7 @@
             </div>
         @endif
 
-        <div class="w-full px-6 max-h-72 overflow-x-hidden overflow-y-auto">
+        <div class="sidebar w-full px-6 max-h-72 overflow-x-hidden overflow-y-auto">
             @forelse ($rooms as $room)
                 @if (filled($this->room) && $this->room->id == $room->id && ! $add)
                     <div class="flex items-center justify-between bg-red-500 rounded-md">

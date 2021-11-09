@@ -44,7 +44,7 @@
                                         <x-jet-label value="{{ __('Category') }}"/>
 
                                         <button wire:click.prevent="$emit('modalAddingCategory')" class="pb-2 text-xs text-indigo-500 hover:text-indigo-700 font-bold hover:underline focus:outline-none">
-                                            View Categories
+                                            Category List
                                         </button>
                                     </div>
                                     <select wire:model.defer="fee.category_id" wire:loading.attr="disabled" name="category">

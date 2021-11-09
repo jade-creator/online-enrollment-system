@@ -4,7 +4,7 @@
         <x-table.title tableTitle="Sections" :isSelectedAll="$this->selectAll" :count="count($this->selected)">
             @can('create', App\Models\Section::class)
                 <button wire:click.prevent="$emit('modalAddingRoom')" class="py-2.5 px-4 text-xs text-indigo-500 hover:text-indigo-700 font-bold hover:underline focus:outline-none">
-                    View Rooms
+                    Room List
                 </button>
 
                 <a href="{{ route('admin.sections.create') }}">

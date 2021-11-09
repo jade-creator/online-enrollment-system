@@ -4,7 +4,7 @@
         <x-table.title tableTitle="Fees">
             @can('create', App\Models\Fee::class)
                 <button wire:click.prevent="$emit('modalAddingCategory')" class="py-2.5 px-4 text-xs text-indigo-500 hover:text-indigo-700 font-bold hover:underline focus:outline-none">
-                    View Categories
+                    Category List
                 </button>
 
                 <a href="{{ route('admin.fees.create') }}">

@@ -71,7 +71,6 @@
                                                                 <x-table.cell headerLabel="Code" class="justify-start md:col-span-2">
                                                                     <div class="flex items-center">
                                                                         @if (in_array($prospectus_subject->id, $origSelectedSubjects[$index_P]))
-                                                                            {{--                                                                    @if (in_array($prospectus_subject->subject->id, $origSelectedSubjects[$index_P]))--}}
                                                                             <input wire:key="{{ $prospectus_subject->id.'-'.$loop->index }}" wire:model.defer="selected.{{ $index_S }}.{{ $index_s }}" wire:loading.attr="disabled" type="checkbox" id="selected[{{ $index_S }}][{{ $index_s }}]" name="selected[{{ $index_S }}][{{ $index_s }}]" value="{{ $prospectus_subject->id }}">
                                                                         @else
                                                                             @if (array_key_exists($prospectus_subject->subject_id, $this->grades)
