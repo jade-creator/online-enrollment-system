@@ -1,7 +1,7 @@
 <div class="w-full flex flex-1">
     <x-table.filter>
         <div name='slot'>
-            
+
         </div>
     </x-table.filter>
 
@@ -10,14 +10,14 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center justify-between">
                     <div class="text-2xl font-bold text-gray-500">Subjects</div>
-        
+
                     @if ( count($this->selected) > 0 && !$this->selectAll )
                         <div class="px-2 text-green-600 font-bold">{{ __('[')}}
                             <span>{{ count($this->selected) }}</span>
                             <span>{{ __('selected ]')}}</span>
                         </div>
                     @endif
-        
+
                     @if ( $this->selectAll )
                         <div class="px-2 text-green-600 font-bold">{{ __('[')}}
                             <span>{{ __('selected all ')}}</span>
@@ -32,7 +32,7 @@
 
         <x-table.main>
             <x-slot name="paginationLink">
-                {{ $subjects->links() }} 
+                {{ $subjects->links() }}
             </x-slot>
 
             <x-slot name="head">
@@ -52,9 +52,9 @@
 
             <x-slot name="body">
                 @forelse ($subjects as $subject)
-                    <div class="{{ $this->isSelected($subject->id) ? 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-gray-200 border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer' 
+                    <div class="{{ $this->isSelected($subject->id) ? 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-gray-200 border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer'
                         : 'w-full p-2 my-1 rounded-md shadow hover:shadow-md bg-white border-t border-l border-r border-gray-200 border-opacity-80 cursor-pointer' }}">
-                        
+
                         <div class="grid grid-cols-12 gap-2">
                             <div class="col-span-12 md:col-span-3 truncate font-bold text-xs">
                                 <div class="flex items-center">
@@ -89,7 +89,7 @@
                                                 </button>
                                             </span>
                                         </x-slot>
-            
+
                                         <x-slot name="content">
                                             <div class="w-60">
                                                 <div class="block px-4 py-3 text-sm text-gray-500 font-bold">
@@ -103,7 +103,7 @@
                                                             <path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
                                                          </svg>
                                                         <p class="pl-2">{{ __('View')}}</p>
-                                                    </button> 
+                                                    </button>
                                                 </div>
                                                 <div>
                                                     <button wire:click.prevent="removeConfirm({{ $subject }})" class="flex w-full px-4 py-2 hover:bg-red-500 hover:text-white rounded-b-md outline-none focus:outline-none transition-all duration-300 ease-in-out">
@@ -125,8 +125,8 @@
                             </div>
                         </div>
                     </div>
-                @empty  
-                    <x-table.no-result title="No subject found.🤔"/> 
+                @empty
+                    <x-table.no-result title="No subject found.🤔"/>
                 @endforelse
             </x-slot>
         </x-table.main>
@@ -181,9 +181,7 @@
         @endif
     </div>
 
-    <div wire:loading wire:target="paginateValue, search, selectPage, previousPage, nextPage, confirmingExport">
-        @include('partials.loading')
-    </div>
+    <div>@include('partials.loading')</div>
 
     <!-- Export User/s Confirmation Modal -->
     <x-jet-dialog-modal wire:model="confirmingExport">

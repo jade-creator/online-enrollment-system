@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Print Schedule</title>
+    <title>{{$section->name ?? 'N/A'}} Schedule</title>
     <link rel="icon" href="{{ $school_profile_photo_path }}">
     <link rel="stylesheet" href="{{ asset('css/pdf.css') }}">
     <style>

@@ -74,7 +74,7 @@
                                         <x-jet-label value="{{ __('Rooms') }}"/>
 
                                         <button wire:click.prevent="$emit('modalAddingRoom')" class="pb-2 text-xs text-indigo-500 hover:text-indigo-700 font-bold hover:underline focus:outline-none">
-                                            View Rooms
+                                            Room List
                                         </button>
                                     </div>
 

@@ -26,7 +26,7 @@
                                 <div class="col-span-3">
                                     <x-jet-label for="role_id" value="{{ __('Role') }}" />
                                     <select wire:model="role_id" wire:loading.attr="disabled" name="role_id" autofocus required>
-                                        <option value="">-- select a role --</option>
+                                        <option value="">Select a role</option>
                                         <option value="1">Admin</option>
                                         <option value="2">Student</option>
                                         <option value="3">Registrar</option>
