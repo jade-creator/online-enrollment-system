@@ -177,11 +177,14 @@ class PaypalPaymentController extends Controller
 
         if ($result->getState() == 'approved') {
             try {
+                $name = $payment->getPayer()->getPayerInfo()->getFirstName().' '.$payment->getPayer()->getPayerInfo()->getLastName();
+                $email = $payment->getPayer()->getPayerInfo()->getEmail();
+                $status = $payment->getPayer()->getStatus();
                 $transactions = $payment->getTransactions();
                 $relatedResources = $transactions[0]->getRelatedResources();
                 $sale = $relatedResources[0]->getSale();
 
-                $registration = (new PaypalPaymentService())->store($registration, $sale->getId(), $amount);
+                $registration = (new PaypalPaymentService())->store($registration, $sale->getId(), $amount, $name, $email, $status);
 
                 return redirect()->route('student.payments.view')->with('swal:modal', [
                     'title' => $this->successTitle,

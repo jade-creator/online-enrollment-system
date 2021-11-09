@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\PaymentComponent;
 
+use App\Exports\TransactionsExport;
 use App\Models;
 use App\Traits;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -64,5 +65,14 @@ class PaymentIndexComponent extends Livewire\Component
             })
             ->orderBy($this->sortBy, $this->sortDirection)
             ->dateFiltered($this->dateMin, $this->dateMax);
+    }
+
+    public function fileExport()
+    {
+        try {
+            return $this->excelFileExport((new TransactionsExport($this->selected)), 'transaction-collection.xlsx');
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
+        }
     }
 }

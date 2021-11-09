@@ -118,7 +118,12 @@ class SectionIndexComponent extends Livewire\Component
             ->get();
     }
 
-    public function fileExport() { return
-        $this->excelFileExport((new SectionsExport($this->selected)), 'section-collection.xlsx');
+    public function fileExport()
+    {
+        try {
+            return $this->excelFileExport((new SectionsExport($this->selected)), 'section-collection.xlsx');
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
+        }
     }
 }

@@ -1,2 +1,1 @@
-<x-jet-application-mark class="w-24 h-24" />
-
+<img src="{{ $school_profile_photo_path }}" alt="{{ $school_name }}" class="bg-white rounded-full block h- w-24"/>

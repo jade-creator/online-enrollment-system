@@ -35,7 +35,7 @@
 
             <x-slot name="head">
                 <div class="col-span-2 flex items-center" id="columnTitle">
-                    <input @click.stop type="checkbox" wire:model="selectPage" class="cursor-pointer border-gray-400 focus:outline-none focus:ring-transparent mx-5 rounded-sm" title="Select Displayed Data">
+                    <input @click.stop type="checkbox" wire:model="selectPage" class="mx-3 cursor-pointer border-gray-500 border-opacity-50 focus:outline-none focus:ring focus:ring-transparent rounded-sm" title="Select Displayed Data">
                     <x-table.sort-button event="sortFieldSelected('name')">Name</x-table.sort-button>
                 </div>
                 <x-table.column-title class="col-span-4">program</x-table.column-title>

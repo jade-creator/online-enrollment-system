@@ -30,6 +30,7 @@ class ProgramsExport implements FromQuery, WithHeadings, WithMapping
             'Program',
             'Description',
             'Number of Years',
+            'Faculty'
         ];
     }
 
@@ -40,6 +41,7 @@ class ProgramsExport implements FromQuery, WithHeadings, WithMapping
             $program->program ?? 'N/A',
             $program->description ?? 'N/A',
             $program->year ?? 'N/A',
+            $program->faculty->code ?? 'N/A',
         ];
     }
 }

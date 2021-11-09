@@ -32,7 +32,7 @@
 
             <x-slot name="head">
                 <div class="col-span-2 flex items-center">
-                    <input wire:loading.attr="disabled" type="checkbox" wire:model="selectPage" class="cursor-pointer border-gray-400 focus:outline-none focus:ring-transparent mx-5 rounded-sm" title="Select Displayed Data">
+                    <input wire:model="selectPage" wire:loading.attr="disabled" type="checkbox" class="mx-3 cursor-pointer border-gray-500 border-opacity-50 focus:outline-none focus:ring focus:ring-transparent rounded-sm" title="Select Displayed Data">
                     <x-table.sort-button event="sortFieldSelected('id')">id</x-table.sort-button>
                 </div>
                 <div class="col-span-3"><x-table.sort-button event="sortFieldSelected('name')">Username</x-table.sort-button></div>

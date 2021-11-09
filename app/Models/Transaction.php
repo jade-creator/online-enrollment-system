@@ -17,7 +17,7 @@ class Transaction extends BaseModel
         'paypal_transaction_id',
         'paypal_name',
         'paypal_email',
-        'paypal_is_verified',
+        'paypal_status',
         'amount',
         'running_balance',
         'archived_at',
@@ -27,10 +27,6 @@ class Transaction extends BaseModel
         'registration.assessment'
     ];
 
-    protected $casts = ['paypal_is_verified' => 'boolean'];
-
-    protected $attributes = ['paypal_is_verified' => false];
-
     protected $dates = ['archived_at'];
 
     public static function boot()
@@ -39,10 +35,6 @@ class Transaction extends BaseModel
         self::creating(function ($model) {
             $model->custom_id = IdGenerator::generate(['table' => 'transactions', 'field' => 'custom_id', 'length' => 10, 'prefix' =>'TRN-']);
         });
-    }
-
-    public function getPaypalIsVerifiedTextAttribute() { return
-        $this->attributes['paypal_is_verified'] == TRUE ? 'Verified' : 'Unverified';
     }
 
     public function getPaymentElementAttribute()

@@ -19,7 +19,8 @@
             </x-slot>
 
             <x-slot name="head">
-                <div class="col-span-2">
+                <div class="col-span-2 flex items-center">
+                    <input wire:model="selectPage" wire:loading.attr="disabled" type="checkbox" class="mx-3 cursor-pointer border-gray-500 border-opacity-50 focus:outline-none focus:ring focus:ring-transparent rounded-sm" title="Select Displayed Data">
                     <x-table.sort-button event="sortFieldSelected('code')">code</x-table.sort-button>
                 </div>
                 <div class="col-span-3">

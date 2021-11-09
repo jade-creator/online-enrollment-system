@@ -2,6 +2,7 @@
     <x-jet-authentication-card>
         <x-slot name="logo">
             <x-jet-authentication-card-logo />
+
             <p class="mt-4 text-xl font-extrabold">{{ __('Log in to your account')}}</p>
             <p class="text-sm">{{__('Or')}}
                 <a class="font-medium text-indigo-700 hover:text-indigo-800" href="{{ route('register') }}">

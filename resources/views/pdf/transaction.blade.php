@@ -56,7 +56,7 @@
             <tr>
                 <td style="text-align: left; padding-bottom: 10px;">Registration ID: {{$transaction->registration->custom_id ?? '--'}}</td>
                 <td style="text-align: left; padding-bottom: 10px;">Subtotal</td>
-                <td style="text-align: right; padding-bottom: 10px;">{{$transaction->getFormattedPriceAttribute($transaction->registration->assessment->balance) ?? '--'}}</td>
+                <td style="text-align: right; padding-bottom: 10px;">{{$transaction->registration->totalFees() ?? '--'}}</td>
             </tr>
             <tr>
                 <td style="text-align: left; padding-bottom: 10px;"></td>
@@ -83,7 +83,7 @@
             <tr>
                 <td style="text-align: left; padding-bottom: 10px;"></td>
                 <td style="text-align: left; padding-bottom: 10px;">Balance</td>
-                <td style="text-align: right; padding-bottom: 10px;">{{$transaction->getFormattedPriceAttribute($transaction->registration->assessment->balance) ?? '--'}}</td>
+                <td style="text-align: right; padding-bottom: 10px;">{{$transaction->getFormattedPriceAttribute($transaction->running_balance) ?? '--'}}</td>
             </tr>
         </table>
     </div>
@@ -96,7 +96,7 @@
             </tr>
             <tr>
                 <td style="text-align: left;"></td>
-                <td style="text-align: left; padding-bottom: 5px; color: #adacac">The sender of this payment is <span style="font-weight: bolder; color: limegreen">{{ $transaction->paypal_is_verified_text ?? 'N/A' }}</span></td>
+                <td style="text-align: left; padding-bottom: 5px; color: #adacac">The sender of this payment is <span style="font-weight: bolder;">{{ $transaction->paypal_status ?? 'N/A' }}</span></td>
             </tr>
             <tr>
                 <td style="text-align: left;"></td>

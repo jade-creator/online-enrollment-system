@@ -38,7 +38,7 @@ class FeesExport implements FromQuery, WithHeadings, WithMapping
     public function map($fee): array
     {
         return [
-            $fee->id ?? 'N/A',
+            $fee->custom_id ?? 'N/A',
             $fee->category->name ?? 'N/A',
             $fee->program->code ?? 'N/A',
             $fee->description ?? 'N/A',

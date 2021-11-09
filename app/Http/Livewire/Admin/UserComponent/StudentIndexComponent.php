@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\UserComponent;
 
+use App\Exports\StudentsExport;
 use App\Models;
 use App\Traits;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -29,7 +30,7 @@ class StudentIndexComponent extends Livewire\Component
     protected $listeners = [
         'DeselectPage' => 'updatedSelectPage',
         'refresh' => '$refresh',
-//        'fileExport', TODO
+        'fileExport',
     ];
 
     protected array $allowedSorts = ['custom_id'];
@@ -57,5 +58,14 @@ class StudentIndexComponent extends Livewire\Component
             })
             ->orderBy($this->sortBy, $this->sortDirection)
             ->dateFiltered($this->dateMin, $this->dateMax);
+    }
+
+    public function fileExport()
+    {
+        try {
+            return $this->excelFileExport((new StudentsExport($this->selected)), 'students-collection.xlsx');
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
+        }
     }
 }

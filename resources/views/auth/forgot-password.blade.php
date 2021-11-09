@@ -25,13 +25,13 @@
             </div>
 
             <div class="flex items-center justify-between mt-4">
-                
+
                 <a href="{{route('login')}}">
                     <x-jet-secondary-button>
                         {{ __('Back') }}
                     </x-jet-secondary-button>
                 </a>
-                
+
                 <x-jet-button class="bg-indigo-700 hover:bg-indigo-800">
                     {{ __('Email Password Reset Link') }}
                 </x-jet-button>
