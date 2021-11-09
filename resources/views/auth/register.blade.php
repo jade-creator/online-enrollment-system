@@ -2,6 +2,7 @@
     <x-jet-authentication-card>
         <x-slot name="logo">
             <x-jet-authentication-card-logo />
+
             <p class="mt-4 text-xl font-extrabold">{{ __('Create an account')}}</p>
             <p class="text-sm">
                 <a class="font-medium text-indigo-700 hover:text-indigo-800" href="{{ route('login') }}">
@@ -18,7 +19,7 @@
             <div>
                 <x-jet-label for="role" value="{{ __('Role') }}"/>
                 <select x-model="role_id" id="role" class="block mt-1 w-full" name="role" autofocus autocomplete="role">
-                    <option value="0">-- select a role --</option>
+                    <option value="0">Select a role</option>
                     <option value="2">Student</option>
                     <option value="5">Faculty Member</option>
                 </select>

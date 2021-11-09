@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\AdvisingComponent;
 
+use App\Exports\AdviceExport;
 use App\Models;
 use App\Traits;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -63,5 +64,14 @@ class AdvisingIndexComponent extends Livewire\Component
 
     public function getProgramsProperty() { return
         Models\Program::get(['id', 'code']);
+    }
+
+    public function fileExport()
+    {
+        try {
+            return $this->excelFileExport((new AdviceExport($this->selected)), 'adivising-schedules-collection.xlsx');
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
+        }
     }
 }

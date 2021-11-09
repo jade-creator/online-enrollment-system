@@ -13,7 +13,10 @@
             </x-slot>
 
             <x-slot name="head">
-                <x-table.column-title class="col-span-2">Transaction ID</x-table.column-title>
+                <div class="col-span-2 flex items-center">
+                    <input wire:model="selectPage" wire:loading.attr="disabled" type="checkbox" class="mx-3 cursor-pointer border-gray-500 border-opacity-50 focus:outline-none focus:ring focus:ring-transparent rounded-sm" title="Select Displayed Data">
+                    <x-table.sort-button event="sortFieldSelected('code')">Transaction ID</x-table.sort-button>
+                </div>
                 <x-table.column-title class="col-span-2">Paypal</x-table.column-title>
                 <x-table.column-title class="col-span-2">Amount</x-table.column-title>
                 <x-table.column-title class="col-span-2">Balance</x-table.column-title>
@@ -134,9 +137,13 @@
                 @endforelse
             </x-slot>
         </x-table.main>
+
+        <x-table.bulk-action-bar :count="count($selected)">
+            <x-table.bulk-action-button nameButton="Export" event="confirmFileExport">
+                <x-icons.export-icon/>
+            </x-table.bulk-action-button>
+        </x-table.bulk-action-bar>
     </div>
 
-    <div wire:loading>
-        @include('partials.loading')
-    </div>
+    <div>@include('partials.loading')</div>
 </div>

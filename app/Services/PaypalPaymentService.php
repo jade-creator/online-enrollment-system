@@ -10,7 +10,7 @@ class PaypalPaymentService
     /**
      * @throws \Exception
      */
-    public function store(Registration $registration, $paypalTransactionId, float $amount = 0) : Registration
+    public function store(Registration $registration, $paypalTransactionId, float $amount = 0, string $name = '', string $email = '', string $status = '') : Registration
     {
         if (is_null($registration->assessment)) throw new \Exception('Assessment not found!');
         if ($registration->assessment->balance < $amount) throw new \Exception('Payment Amount Exceeds!');
@@ -23,6 +23,9 @@ class PaypalPaymentService
             'paypal_transaction_id' => $paypalTransactionId,
             'amount' => $amount,
             'running_balance' => $total,
+            'paypal_name' => $name,
+            'paypal_email' => $email,
+            'paypal_status' => $status,
         ]);
 
         return $registration;

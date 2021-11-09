@@ -12,7 +12,7 @@ class SectionsExport implements FromQuery, WithHeadings, WithMapping
 {
     use Exportable;
     protected $sections;
-    
+
     public function __construct($sections)
     {
         $this->sections = $sections;
@@ -28,8 +28,12 @@ class SectionsExport implements FromQuery, WithHeadings, WithMapping
         return [
             'Section ID',
             'Name',
-            'Remarks',
+            'Program',
+            'Level',
+            'Semester',
             'Room',
+            'No. of Seats',
+            'Slots'
         ];
     }
 
@@ -38,8 +42,12 @@ class SectionsExport implements FromQuery, WithHeadings, WithMapping
         return [
             $section->id ?? 'N/A',
             $section->name ?? 'N/A',
-            $section->remarks ?? 'N/A',
+            $section->prospectus->program->program ?? 'N/A',
+            $section->prospectus->level->level ?? 'N/A',
+            $section->prospectus->term->term ?? 'N/A',
             $section->room->name ?? 'N/A',
+            $section->seat ?? 'N/A',
+            $section->registrations->count() ?? 'N/A',
         ];
     }
 }

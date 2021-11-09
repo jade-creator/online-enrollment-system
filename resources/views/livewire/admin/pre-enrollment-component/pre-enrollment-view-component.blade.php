@@ -69,7 +69,7 @@
 
             <x-slot name="head">
                 <div class="col-span-2 flex items-center">
-                    <input wire:model="selectPage" wire:loading.attr="disabled" type="checkbox" title="Select Displayed Data" class="mx-5">
+                    <input wire:model="selectPage" wire:loading.attr="disabled" type="checkbox" title="Select Displayed Data" class="mx-3 cursor-pointer border-gray-500 border-opacity-50 focus:outline-none focus:ring focus:ring-transparent rounded-sm">
                     <x-table.sort-button event="sortFieldSelected('id')">reg. ID</x-table.sort-button>
                 </div>
                 <x-table.column-title class="col-span-2">Student</x-table.column-title>

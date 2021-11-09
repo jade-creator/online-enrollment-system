@@ -42,8 +42,8 @@
             </x-slot>
 
             <x-slot name="head">
-                <div class="col-span-3 flex items-start">
-                    <input wire:model="selectPage" wire:loading.attr="disabled" type="checkbox"  class="cursor-pointer mx-5" title="Select Displayed Data">
+                <div class="col-span-3 flex items-center">
+                    <input wire:model="selectPage" wire:loading.attr="disabled" type="checkbox"  class="mx-3 cursor-pointer border-gray-500 border-opacity-50 focus:outline-none focus:ring focus:ring-transparent rounded-sm" title="Select Displayed Data">
                     <x-table.sort-button event="sortFieldSelected('id')">Program</x-table.sort-button>
                 </div>
                 <x-table.column-title class="col-span-3">Date/s</x-table.column-title>
@@ -62,9 +62,6 @@
                                 <div class="col-span-12 md:col-span-3 truncate font-bold text-xs self-center rounded-t-md bg-indigo-500 md:bg-transparent">
                                     <div class="flex items-center">
                                         <input wire:model="selected" wire:loading.attr="disabled" value="{{ $adviceItem->id }}" @click.stop type="checkbox" class="cursor-pointer border-gray-500 border-opacity-50 focus:outline-none focus:ring focus:ring-transparent ml-3 mr-5 rounded-sm">
-{{--                                        <div class="h-10 flex items-center text-white md:text-black">--}}
-{{--                                            {{ $adviceItem->program->code ?? 'N/A' }}--}}
-{{--                                        </div>--}}
                                         <div class="h-10 flex flex-col my-2 md:my-0">
                                             <div>{{ $adviceItem->program->code ?? 'All Programs' }}</div>
                                             <div class="tracking-widest text-gray-500 text-xs pt-0.5">
@@ -75,8 +72,6 @@
                                 </div>
                                 <x-table.cell headerLabel="Date/s" class="justify-start md:col-span-3">{{ $adviceItem->date ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="Time" class="justify-start md:col-span-2">{{ $adviceItem->time ?? 'N/A' }}</x-table.cell>
-{{--                                <x-table.cell headerLabel="Program" class="justify-start md:col-span-1">{{ $adviceItem->program->code ?? 'All' }}</x-table.cell>--}}
-{{--                                <x-table.cell headerLabel="Level" class="justify-start md:col-span-1">{{ $adviceItem->level->level ?? 'All' }}</x-table.cell>--}}
                                 <x-table.cell headerLabel="Link" class="justify-start md:col-span-3">
                                     @isset ($adviceItem->link)
                                         <a href="{{ $adviceItem->link }}" class="underline text-blue-500" target="_blank">{{ $adviceItem->link }}</a>
@@ -136,9 +131,7 @@
         </x-table.bulk-action-bar>
     </div>
 
-    <div wire:loading>
-        @include('partials.loading')
-    </div>
+    <div>@include('partials.loading')</div>
 
     <livewire:admin.advising-component.advising-destroy-component>
 </div>

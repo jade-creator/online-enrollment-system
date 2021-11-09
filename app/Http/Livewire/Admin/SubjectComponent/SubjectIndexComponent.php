@@ -65,7 +65,12 @@ class SubjectIndexComponent extends Livewire\Component
         $this->emit('alert');
     }
 
-    public function fileExport() { return
-        $this->excelFileExport((new SubjectsExport($this->selected)), 'subject-collection.xlsx');
+    public function fileExport()
+    {
+        try {
+            return $this->excelFileExport((new SubjectsExport($this->selected)), 'subject-collection.xlsx');
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
+        }
     }
 }

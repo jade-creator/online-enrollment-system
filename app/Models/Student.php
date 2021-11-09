@@ -35,6 +35,14 @@ class Student extends BaseModel
             });
     }
 
+    public function getClassificationAttribute() { return
+        $this->attributes['isRegular'] ? 'Regular' : 'Irregular';
+    }
+
+    public function getIsNewAttribute($value) { return
+        $value ? 'New' : 'Old';
+    }
+
     public function grandTotal() { return
         $this->hasManyDeep( Assessment::class, [Registration::class]);
     }

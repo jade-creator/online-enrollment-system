@@ -12,7 +12,7 @@
 
             <x-slot name="head">
                 <div class="col-span-2 flex items-center">
-                    <input wire:loading.attr="disabled" type="checkbox" wire:model="selectPage" class="cursor-pointer border-gray-400 focus:outline-none focus:ring-transparent mx-5 rounded-sm" title="Select Displayed Data">
+                    <input wire:model="selectPage" wire:loading.attr="disabled" type="checkbox" class="mx-3 cursor-pointer border-gray-500 border-opacity-50 focus:outline-none focus:ring focus:ring-transparent rounded-sm" title="Select Displayed Data">
                     <x-table.sort-button event="sortFieldSelected('custom_id')">student id</x-table.sort-button>
                 </div>
                 <x-table.column-title class="col-span-4">user account</x-table.column-title>
@@ -81,13 +81,11 @@
             </x-slot>
         </x-table.main>
 
-{{--        <x-table.bulk-action-bar :count="count($selected)">--}}
-{{--            @can('export', App\Models\User::class)--}}
-{{--                <x-table.bulk-action-button nameButton="Export" event="confirmFileExport">--}}
-{{--                    <x-icons.export-icon/>--}}
-{{--                </x-table.bulk-action-button>--}}
-{{--            @endcan--}}
-{{--        </x-table.bulk-action-bar>--}}
+        <x-table.bulk-action-bar :count="count($selected)">
+            <x-table.bulk-action-button nameButton="Export" event="confirmFileExport">
+                <x-icons.export-icon/>
+            </x-table.bulk-action-button>
+        </x-table.bulk-action-bar>
     </div>
 
     <div>@include('partials.loading')</div>
