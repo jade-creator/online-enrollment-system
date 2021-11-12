@@ -2,9 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Responses\LoginResponse;
 use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class RedirectIfAuthenticated
@@ -23,22 +25,27 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
+                $home = (new LoginResponse())->redirectUrl(auth()->user()->role->name);
 
-                $role = Auth::user()->role->name;
+                return $request->wantsJson()
+                    ? new Response('', 201)
+                    : redirect($home);
 
-                switch ($role) {
-                    case 'admin':
-                        return redirect('/admin/dashboard');
-                        break;
-
-                    case 'student':
-                        return redirect('/student/pre-registrations');
-                        break;
-
-                    default:
-                        return redirect(RouteServiceProvider::HOME);
-                        break;
-                }
+//                $role = Auth::user()->role->name;
+//
+//                switch ($role) {
+//                    case 'admin':
+//                        return redirect('/admin/dashboard');
+//                        break;
+//
+//                    case 'student':
+//                        return redirect('/student/pre-registrations');
+//                        break;
+//
+//                    default:
+//                        return redirect(RouteServiceProvider::HOME);
+//                        break;
+//                }
             }
         }
 
