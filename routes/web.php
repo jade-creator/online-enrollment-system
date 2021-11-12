@@ -77,7 +77,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
 
     // start admin
     Route::middleware(['role:admin'])->group(function () {
-        Route::get('/user/personal-details/employee', AdminDetailForm::class)->middleware(['detail'])->name('user.personal-details.admin');
+//        Route::get('/user/personal-details/employee', AdminDetailForm::class)->middleware(['detail'])->name('user.personal-details.admin');
 
         Route::group(['middleware' => ['user.detail', 'approved'], 'prefix' => 'admin', 'as' => 'admin.'], function (){
 
@@ -189,6 +189,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
 
     //start: all except student
     Route::middleware(['role:admin|registrar|dean|faculty member', 'user.detail', 'approved'])->group(function () {
+        Route::get('/user/personal-details/employee', AdminDetailForm::class)->middleware(['detail'])->name('user.personal-details.admin');
+
         Route::group(['as' => 'admin.'], function () {
             Route::get('/pre-enrollments', PreEnrollmentComponent\PreEnrollmentViewComponent::class)->name('pre.enrollments.view');
 
