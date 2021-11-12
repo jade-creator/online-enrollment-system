@@ -39,43 +39,56 @@ class Dashboard extends Component
             'sections' => Models\Section::get('id')->count(),
             'subjects' => Models\Subject::get('id')->count(),
             'female' => $this->userCollection->filter(function ($user) {
-                return $user->person->detail->gender ?? 'N/A' == 'Female';
+                $gender = $user->person->detail->gender ?? 'N/A';
+                return $gender == 'Female';
             })->count(),
             'male' => $this->userCollection->filter(function ($user) {
-                return $user->person->detail->gender ?? 'N/A' == 'Male';
+                $gender = $user->person->detail->gender ?? 'N/A';
+                return $gender == 'Male';
             })->count(),
             'other' => $this->userCollection->filter(function ($user) {
-                return $user->person->detail->gender ?? 'N/A' == 'Other';
+                $gender = $user->person->detail->gender ?? 'N/A';
+                return $gender == 'Other';
             })->count(),
             'prefer' => $this->userCollection->filter(function ($user) {
-                return $user->person->detail->gender ?? 'N/A' == 'Prefer not to say';
+                $gender = $user->person->detail->gender ?? 'N/A';
+                return $gender == 'Prefer not to say';
             })->count(),
             'admin' => $this->userCollection->filter(function ($user) {
-                return $user->role->name ?? 'N/A' == 'admin';
+                $role = $user->role->name ?? 'N/A';
+                return $role == 'admin';
             })->count(),
             'student' => $this->userCollection->filter(function ($user) {
-                return $user->role->name ?? 'N/A' == 'student';
+                $role = $user->role->name ?? 'N/A';
+                return $role == 'student';
             })->count(),
             'registrar' => $this->userCollection->filter(function ($user) {
-                return $user->role->name ?? 'N/A' == 'registrar';
+                $role = $user->role->name ?? 'N/A';
+                return $role == 'registrar';
             })->count(),
             'dean' => $this->userCollection->filter(function ($user) {
-                return $user->role->name ?? 'N/A' == 'dean';
+                $role = $user->role->name ?? 'N/A';
+                return $role == 'dean';
             })->count(),
             'faculty' => $this->userCollection->filter(function ($user) {
-                return $user->role->name ?? 'N/A' == 'faculty member';
+                $role = $user->role->name ?? 'N/A';
+                return $role == 'faculty member';
             })->count(),
             'enrolled' => $this->registrationCollection->filter(function ($registration) {
-                return $registration->status_id ?? 'N/A' == 4;
+                $status = $registration->status_id ?? 'N/A';
+                return $status == 4;
             })->count(),
             'finalized' => $this->registrationCollection->filter(function ($registration) {
-                return $registration->status_id ?? 'N/A' == 3;
+                $status = $registration->status_id ?? 'N/A';
+                return $status == 3;
             })->count(),
             'confirming' => $this->registrationCollection->filter(function ($registration) {
-                return $registration->status_id ?? 'N/A' == 2;
+                $status = $registration->status_id ?? 'N/A';
+                return $status == 2;
             })->count(),
             'pending' => $this->registrationCollection->filter(function ($registration) {
-                return $registration->status_id ?? 'N/A' == 1;
+                $status = $registration->status_id ?? 'N/A';
+                return $status == 1;
             })->count(),
             'programsCode' => $this->programs->pluck('code')->toArray(),
         ]);
