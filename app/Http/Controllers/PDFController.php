@@ -75,43 +75,56 @@ class PDFController extends Controller
             'sections' => Section::get('id')->count(),
             'subjects' => Subject::get('id')->count(),
             'female' => $userCollection->filter(function ($user) {
-                return $user->person->detail->gender == 'Female';
+                $gender = $user->person->detail->gender ?? 'N/A';
+                return $gender == 'Female';
             })->count(),
             'male' => $userCollection->filter(function ($user) {
-                return $user->person->detail->gender == 'Male';
+                $gender = $user->person->detail->gender ?? 'N/A';
+                return $gender == 'Male';
             })->count(),
             'other' => $userCollection->filter(function ($user) {
-                return $user->person->detail->gender == 'Other';
+                $gender = $user->person->detail->gender ?? 'N/A';
+                return $gender == 'Other';
             })->count(),
             'prefer' => $userCollection->filter(function ($user) {
-                return $user->person->detail->gender == 'Prefer not to say';
+                $gender = $user->person->detail->gender ?? 'N/A';
+                return $gender == 'Prefer not to say';
             })->count(),
             'admin' => $userCollection->filter(function ($user) {
-                return $user->role->name == 'admin';
+                $role = $user->role->name ?? 'N/A';
+                return $role == 'admin';
             })->count(),
             'student' => $userCollection->filter(function ($user) {
-                return $user->role->name == 'student';
+                $role = $user->role->name ?? 'N/A';
+                return $role == 'student';
             })->count(),
             'registrar' => $userCollection->filter(function ($user) {
-                return $user->role->name == 'registrar';
+                $role = $user->role->name ?? 'N/A';
+                return $role == 'registrar';
             })->count(),
             'dean' => $userCollection->filter(function ($user) {
-                return $user->role->name == 'dean';
+                $role = $user->role->name ?? 'N/A';
+                return $role == 'dean';
             })->count(),
             'faculty' => $userCollection->filter(function ($user) {
-                return $user->role->name == 'faculty member';
+                $role = $user->role->name ?? 'N/A';
+                return $role == 'faculty member';
             })->count(),
             'enrolled' => $registrationCollection->filter(function ($registration) {
-                return $registration->status_id == 4;
+                $status = $registration->status_id ?? 'N/A';
+                return $status == 4;
             })->count(),
             'finalized' => $registrationCollection->filter(function ($registration) {
-                return $registration->status_id == 3;
+                $status = $registration->status_id ?? 'N/A';
+                return $status == 3;
             })->count(),
             'confirming' => $registrationCollection->filter(function ($registration) {
-                return $registration->status_id == 2;
+                $status = $registration->status_id ?? 'N/A';
+                return $status == 2;
             })->count(),
             'pending' => $registrationCollection->filter(function ($registration) {
-                return $registration->status_id == 1;
+                $status = $registration->status_id ?? 'N/A';
+                return $status == 1;
             })->count(),
             'programsData' => $programsData,
         ], 'dashboard-overview.pdf');

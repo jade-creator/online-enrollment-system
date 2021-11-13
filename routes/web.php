@@ -77,7 +77,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
 
     // start admin
     Route::middleware(['role:admin'])->group(function () {
-        Route::get('/user/personal-details/employee', AdminDetailForm::class)->middleware(['detail'])->name('user.personal-details.admin');
+//        Route::get('/user/personal-details/employee', AdminDetailForm::class)->middleware(['detail'])->name('user.personal-details.admin');
 
         Route::group(['middleware' => ['user.detail', 'approved'], 'prefix' => 'admin', 'as' => 'admin.'], function (){
 
@@ -188,22 +188,26 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
     //end: admin and dean.
 
     //start: all except student
-    Route::middleware(['role:admin|registrar|dean|faculty member', 'user.detail', 'approved'])->group(function () {
-        Route::group(['as' => 'admin.'], function () {
-            Route::get('/pre-enrollments', PreEnrollmentComponent\PreEnrollmentViewComponent::class)->name('pre.enrollments.view');
+    Route::middleware(['role:admin|registrar|dean|faculty member'])->group(function () {
+        Route::get('/user/personal-details/employee', AdminDetailForm::class)->middleware(['detail'])->name('user.personal-details.admin');
 
-            Route::get('/grades', GradeComponent\GradeIndexComponent::class)->name('grades.view');
+        Route::middleware(['user.detail', 'approved'])->group(function () {
+            Route::group(['as' => 'admin.'], function () {
+                Route::get('/pre-enrollments', PreEnrollmentComponent\PreEnrollmentViewComponent::class)->name('pre.enrollments.view');
 
-            //admin payment routes
-            Route::group(['prefix' => 'payments', 'as' => 'payments.'], function (){
-                Route::get('', PaymentComponent\PaymentIndexComponent::class)->name('view');
+                Route::get('/grades', GradeComponent\GradeIndexComponent::class)->name('grades.view');
+
+                //admin payment routes
+                Route::group(['prefix' => 'payments', 'as' => 'payments.'], function (){
+                    Route::get('', PaymentComponent\PaymentIndexComponent::class)->name('view');
+                });
             });
+
+            Route::get('/sections', SectionComponent\SectionIndexComponent::class)->name('sections.view');
+
+            Route::get('/class-list/{section}', [PDFController::class, 'streamClasslist'])->name('stream.class-list.pdf');
+            Route::get('/schedule-timetable/{section}', [PDFController::class, 'streamSchedule'])->name('stream.schedule.pdf');
         });
-
-        Route::get('/sections', SectionComponent\SectionIndexComponent::class)->name('sections.view');
-
-        Route::get('/class-list/{section}', [PDFController::class, 'streamClasslist'])->name('stream.class-list.pdf');
-        Route::get('/schedule-timetable/{section}', [PDFController::class, 'streamSchedule'])->name('stream.schedule.pdf');
     });
     //end: all except student
 
