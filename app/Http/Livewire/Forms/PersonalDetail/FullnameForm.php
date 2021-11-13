@@ -25,7 +25,7 @@ class FullnameForm extends Component
 
     protected $rules = [
         'employee.faculty_id' => ['nullable'],
-        'employee.salutation' => ['required'],
+        'employee.salutation' => ['nullable'],
         'student.program_id' => ['required'],
         'student.isRegular' => ['required'],
         'student.isNew' => ['required'],
