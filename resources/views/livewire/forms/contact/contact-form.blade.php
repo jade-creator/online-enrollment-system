@@ -29,7 +29,7 @@
         </x-jet-action-message>
 
         <x-jet-button class="bg-indigo-700 hover:bg-indigo-800" wire:loading.attr="disabled">
-            {{ __('Save and Proceed') }}
+            {{ __('Save') }}
         </x-jet-button>
     </x-slot>
 </x-jet-form-section>

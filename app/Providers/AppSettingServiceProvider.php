@@ -47,7 +47,7 @@ class AppSettingServiceProvider extends ServiceProvider
                 ? Cache::get('school_description') : $setting->school_description ?? 'N/A',
         ];
 
-        Cache::put($data, $lifeTime);
+        if (Cache::missing('school_profile_photo_path')) Cache::put($data, $lifeTime);
 
         View::share([
             'school_profile_photo_path' => $data['school_profile_photo_path'],

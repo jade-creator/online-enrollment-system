@@ -11,8 +11,8 @@
         @if (auth()->user()->role->name != 'student')
             <div class="col-span-6">
                 <x-jet-label for="salutation" value="{{ __('Salutation') }}" />
-                <select wire:model.defer="employee.salutation" wire:loading.attr="disabled" id="salutation" name="salutation" required>
-                    <option value="" selected>Select a salutation</option>
+                <select wire:model.defer="employee.salutation" wire:loading.attr="disabled" id="salutation" name="salutation">
+                    <option value= "" selected>Select a salutation</option>
                     <option value="Mr.">Mr.</option>
                     <option value="Mrs.">Mrs.</option>
                     <option value="Prof.">Prof.</option>
@@ -59,7 +59,7 @@
         @if (auth()->user()->role->name != 'student')
             <div class="col-span-6">
                 <x-jet-label for="faculty_id" value="{{ __('Faculty') }}" />
-                <select wire:model.defer="employee.faculty_id" wire:loading.attr="disabled" id="faculty_id" name="faculty_id" required>
+                <select wire:model.defer="employee.faculty_id" wire:loading.attr="disabled" id="faculty_id" name="faculty_id">
                     <option value="" selected>Select a faculty</option>
                     @forelse($this->faculties as $faculty)
                         <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
@@ -121,7 +121,7 @@
         </x-jet-action-message>
 
         <x-jet-button class="bg-indigo-700 hover:bg-indigo-800" wire:loading.attr="disabled">
-            {{ __('Save and Proceed') }}
+            {{ __('Save') }}
         </x-jet-button>
     </x-slot>
 </x-jet-form-section>
