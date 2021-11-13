@@ -32,7 +32,7 @@ class AppSettingServiceProvider extends ServiceProvider
 
         if (Cache::missing('school_profile_photo_path') && Schema::hasTable('settings')) {
             $setting = \App\Models\Setting::get()->first();
-        }
+        } 
 
         $data = [
             'school_profile_photo_path' => Cache::has('school_profile_photo_path')
