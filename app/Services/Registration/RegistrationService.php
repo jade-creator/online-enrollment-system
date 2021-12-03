@@ -8,6 +8,19 @@ use FontLib\TrueType\Collection;
 
 class RegistrationService
 {
+    public function combineTotalUnits(Models\Registration $registration)
+    {
+        $totalUnit = $registration->total_unit;
+
+        if (! $registration->isExtension && $registration->extensions->isNotEmpty()) {
+            foreach ($registration->extensions as $extension) {
+                $totalUnit += $extension->registration->total_unit;
+            }
+        }
+
+        return $totalUnit ?? 0;
+    }
+
     public function saveFees(Models\Registration $registration, array $fees = []) : Models\Registration
     {
         if (count($fees) == 0) return $registration;

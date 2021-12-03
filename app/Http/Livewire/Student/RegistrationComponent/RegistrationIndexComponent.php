@@ -32,6 +32,13 @@ class RegistrationIndexComponent extends Livewire\Component
 
     protected array $allowedSorts = ['id'];
 
+    public function getListeners() : array
+    {
+        return [
+            'refresh-registration-index-component:'.auth()->user()->id => '$refresh'
+        ];
+    }
+
     public function render() { return
         view('livewire.student.registration-component.registration-index-component', ['registrations' => $this->rows]);
     }

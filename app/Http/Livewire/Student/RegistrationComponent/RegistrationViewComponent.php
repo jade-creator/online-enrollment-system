@@ -55,13 +55,6 @@ class RegistrationViewComponent extends Component
 
         $this->authorize('view', $this->registrationMain);
 
-        $this->totalUnit = $this->registrationMain->total_unit;
-        if (! $this->registrationMain->isExtension && $this->registrationMain->extensions->isNotEmpty()) {
-            foreach ($this->registrationMain->extensions as $extension) {
-                $this->totalUnit += $extension->registration->total_unit;
-            }
-        }
-
         return $this->registrationMain;
     }
 

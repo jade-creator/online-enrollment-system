@@ -6,6 +6,23 @@ use App\Models;
 
 class ScheduleService
 {
+    public function mergeSchedules(Models\Registration $registration)
+    {
+        $schedules = $registration->classes;
+
+        if ($registration->extensions->isNotEmpty()) {
+            foreach ($registration->extensions as $extension) {
+                $schedules = $schedules->merge($extension->registration->classes);
+            }
+        }
+
+        return $schedules
+            ->sort(function($class) {
+                return [$class->start_time, $class->day_id];
+            })
+            ->groupBy(['prospectus_subject_id', 'section_id', 'start_time', 'end_time', 'employee_id']);
+    }
+
     /**
      * @throws \Exception
      */

@@ -14,19 +14,19 @@ switch ($align) {
         break;
     case 'right':
     default:
-        $alignmentClasses = 'origin-top-right -right-24 md:right-0';
+        $alignmentClasses = 'origin-top-right right-0';
         break;
 }
 
 switch ($width) {
-    case '48':
-        $width = 'w-48';
+    case '80':
+        $width = 'sm:w-80';
         break;
 }
 @endphp
 
 <div class="relative" x-data="{ open: false }" @click.away="open = false" @close.stop="open = false">
-    <div @click="open = ! open">
+    <div @click="open = ! open" class="relative">
         {{ $trigger }}
     </div>
 
@@ -37,7 +37,7 @@ switch ($width) {
             x-transition:leave="transition ease-in duration-75"
             x-transition:leave-start="transform opacity-100 scale-100"
             x-transition:leave-end="transform opacity-0 scale-95"
-            class="absolute mt-2 {{ $width }} rounded-md {{ $alignmentClasses }} {{ $dropdownClasses }}"
+            class="absolute mt-2 w-52 {{ $width }} rounded-md {{ $alignmentClasses }} {{ $dropdownClasses }} overflow-hidden"
             style="display: none;"
             @click="open = false">
         <div class="rounded-md ring-1 ring-black ring-opacity-5 border border-gray-300 {{ $contentClasses }}">

@@ -19,7 +19,6 @@
                 @can ('exportRegistration', $registration)
                     <a href="{{ route('stream.registration.pdf', [
                         'registration' => $registration,
-                        'totalUnit' => $totalUnit
                     ]) }}"
                        target="_blank">
                         <x-jet-button class="bg-indigo-700 hover:bg-indigo-800 flex items-end">

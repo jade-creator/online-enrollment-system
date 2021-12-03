@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\RegistrationStatusUpdated;
+use App\Events\StudentPreRegistered;
+use App\Listeners\SendRegistrationStatusNotification;
+use App\Listeners\SendStudentRegistrationNotification;
 use App\Models\User;
 use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
@@ -19,6 +23,12 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+        StudentPreRegistered::class => [
+            SendStudentRegistrationNotification::class,
+        ],
+        RegistrationStatusUpdated::class => [
+            SendRegistrationStatusNotification::class,
         ],
     ];
 

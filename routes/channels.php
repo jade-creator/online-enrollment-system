@@ -13,6 +13,14 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
-    return (int) $user->id === (int) $id;
+Broadcast::channel('pre-registration.{studentId}', function ($user, $studentId) {
+    return (int) $user->student->id === (int) $studentId;
+});
+
+Broadcast::channel('notification-updated-count.{userId}', function ($user, $userId) {
+    return (int) $user->id === (int) $userId;
+});
+
+Broadcast::channel('registration-status.{studentId}', function ($user, $studentId) {
+    return (int) $user->student->id === (int) $studentId;
 });

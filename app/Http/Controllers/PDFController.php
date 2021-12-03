@@ -11,7 +11,9 @@ use App\Models\Student;
 use App\Models\Subject;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Services\Registration\RegistrationService;
 use App\Services\Schedule\CalendarService;
+use App\Services\Schedule\ScheduleService;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
@@ -191,26 +193,14 @@ class PDFController extends Controller
         ], $registration->student->user->person->full_name.'-grade.pdf');
     }
 
-    public function streamRegistration(Registration $registration)
+    public function streamRegistration(Registration $registration = null)
     {
-        $schedules = $registration->classes;
-
-        if ($registration->extensions->isNotEmpty()) {
-            foreach ($registration->extensions as $extension) {
-                $schedules = $schedules->merge($extension->registration->classes);
-            }
-        }
-
-        $schedules = $schedules
-            ->sort(function($class) {
-                return [$class->start_time, $class->day_id];
-            })
-            ->groupBy(['prospectus_subject_id', 'section_id', 'start_time', 'end_time', 'employee_id']);
+        if (is_null($registration)) $registration = Registration::find(request()->query('id'));
 
         return $this->stream('pdf.registration', [
             'registration' => $registration,
-            'totalUnit' => request()->query('totalUnit') ?? 0,
-            'prospectus_subjects' => $schedules
+            'totalUnit' => (new RegistrationService())->combineTotalUnits($registration),
+            'prospectus_subjects' => (new ScheduleService())->mergeSchedules($registration),
         ], $registration->student->user->person->full_name.'-registration.pdf');
     }
 }
