@@ -57,13 +57,7 @@ Route::get('/view-pdf', function () {
 
 // Downlaod pdf test
 //done Route::get('/registration-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('registration.pdf');
-//done Route::get('/grade-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('grade.pdf');
-//done Route::get('/classlist-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('classlist.pdf');
-//Route::get('/masterlist-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('masterlist.pdf');
-//done Route::get('/schedule-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('schedule.pdf');
-//done Route::get('/dashboard-overview/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('dashboard-overview.pdf');
 //------END GUEST-------
-
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function (){
     // account settings
@@ -154,7 +148,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
         Route::get('users/students', UserComponent\StudentIndexComponent::class)->name('users.students.index');
 
         //stream pdf
-        Route::get('/registration-pdf/{registration}', [PDFController::class, 'streamRegistration'])->name('stream.registration.pdf');
         Route::get('/grade-pdf/{registration}', [PDFController::class, 'streamGrade'])->name('stream.grade.pdf');
         Route::get('/masterlist-pdf', [PDFController::class, 'streamMasterlist'])->name('stream.masterlist.pdf');
     });
@@ -215,11 +208,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
     Route::middleware(['role:admin|registrar|student|dean|faculty member', 'user.detail'])->group(function (){
         Route::middleware('approved')->group(function () {
             Route::get('/pre-registration/{regId}/details', RegistrationComponent\RegistrationViewComponent::class)->name('pre.registration.view');
+
+            Route::get('/notifications', User\UserNotificationComponent::class)->name('user.notification.index');
         });
 
         Route::get('/user/personal-profile/{userId}', User\UserProfileComponent::class)->name('user.personal.profile.view');
 
         Route::get('/paypal-transaction/pdf/{transaction}', [PDFController::class, 'streamTransaction'])->name('stream.transaction.pdf');
+        Route::get('/registration-pdf/{registration?}', [PDFController::class, 'streamRegistration'])->name('stream.registration.pdf');
     });
     // end: all
 

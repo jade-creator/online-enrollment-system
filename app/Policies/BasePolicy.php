@@ -32,7 +32,7 @@ class BasePolicy
             'finalize' => ['admin', 'registrar', 'dean'],
             'update' => ['admin', 'registrar'],
             'selectSection' => ['admin', 'registrar', 'student', 'dean'],
-            'exportRegistration' => ['admin', 'registrar'],
+            'exportRegistration' => ['admin', 'registrar', 'student'],
             'create' => ['admin', 'registrar', 'student'],
             'archive' => ['admin', 'registrar'],
             'unarchive' => ['admin', 'registrar'],

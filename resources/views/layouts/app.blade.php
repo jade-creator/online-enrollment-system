@@ -47,7 +47,7 @@
             <main class="pt-12">
                 <!-- Page Heading -->
                 @if (isset($header))
-                    <header class="bg-white shadow pl-0 lg:pl-14 pt-1">
+                    <header class="bg-white shadow pl-0 lg:pl-14 pt-1 bg-red-900">
                         <div class="w-full mx-auto px-4 flex flex-row items-center">
                             <div class="py-4">
                                 {{ $header }}
@@ -106,5 +106,32 @@
         @endif
 
         @stack('scripts')
+
+        <script>
+            window.addEventListener('DOMContentLoaded', function() {
+                const userId = '{{auth()->user()->id}}';
+                const studentId = '{{auth()->user()->student->id ?? 0}}';
+
+                Echo.private('pre-registration.'+studentId)
+                    .listen('StudentPreRegistered', (e) => {
+                        window.livewire.emit('refresh-notification-component:'+userId);
+                        window.livewire.emit('refresh-registration-index-component:'+userId);
+                        window.livewire.emit('refresh-user-notification-component:'+userId);
+                    });
+
+                Echo.private('notification-updated-count.'+userId)
+                    .listen('NotificationUpdatedCount', (e) => {
+                        window.livewire.emit('refresh-notification-component:'+userId);
+                        window.livewire.emit('refresh-user-notification-component:'+userId);
+                    });
+
+                Echo.private('registration-status.'+studentId)
+                    .listen('RegistrationStatusUpdated', (e) => {
+                        window.livewire.emit('refresh-notification-component:'+userId);
+                        window.livewire.emit('refresh-user-notification-component:'+userId);
+                        console.log('it worked');
+                    });
+            });
+        </script>
     </body>
 </html>

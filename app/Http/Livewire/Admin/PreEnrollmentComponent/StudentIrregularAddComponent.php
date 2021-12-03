@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\PreEnrollmentComponent;
 
+use App\Events\StudentPreRegistered;
 use App\Models;
 use App\Services\Registration\RegistrationIrregularService;
 use App\Traits\WithSweetAlert;
@@ -121,6 +122,9 @@ class StudentIrregularAddComponent extends Component
             } else {
                 $this->registration = (new RegistrationIrregularService())->update($this->registration, $this->prospectuses, $this->curriculum->id, $this->selected);
             };
+
+            //dispatch event
+            StudentPreRegistered::dispatch($this->registration, auth()->user());
 
             $this->sessionFlashAlert('alert', 'success', 'Saved successfully.');
 

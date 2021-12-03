@@ -40,7 +40,7 @@ class Program extends BaseModel
 
     public static function search($search)
     {
-        $search = '%'.$search.'%';
+            $search = '%'.$search.'%';
 
         return empty($search) ? static::query()
             : static::where(function ($query) use ($search){

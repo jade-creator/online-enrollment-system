@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Partials;
 
+use App\Events\RegistrationStatusUpdated;
 use App\Models;
 use App\Services\Registration\RegistrationStatusService;
 use App\Traits\WithSweetAlert;
@@ -56,8 +57,21 @@ class RegistrationFormButtons extends Component
         $this->confirm('enroll', "Are you sure?. ");
     }
 
-    public function enroll() {
-        $this->authorizeAction('enroll', $this->registration->student->user->person->full_name.' has been enrolled');
+    public function enroll()
+    {
+        try {
+            $this->authorizeAction('enroll', $this->registration->student->user->person->full_name.' has been enrolled');
+
+            //dispatch event
+            RegistrationStatusUpdated::dispatch(
+                $this->registration->id,
+                $this->registration->student->id,
+                auth()->user()->id,
+                '<a class="underline text-blue-500" href="'.route('stream.registration.pdf', ['id' => $this->registration->id]).'">Please click here to print your certification.</a>',
+            );
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
+        }
     }
 
     public function finalizeConfirm() { return
@@ -96,8 +110,20 @@ class RegistrationFormButtons extends Component
         $this->confirm('reject', "Are you sure? Registration's status will be rejected.");
     }
 
-    public function reject() {
-        $this->authorizeAction('reject', $this->registration->student->user->person->full_name."'s registration was rejected.");
+    public function reject()
+    {
+        try {
+            $this->authorizeAction('reject', $this->registration->student->user->person->full_name."'s registration was rejected.");
+
+            //dispatch event
+            RegistrationStatusUpdated::dispatch(
+                $this->registration->id,
+                $this->registration->student->id,
+                auth()->user()->id,
+            );
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
+        }
     }
 
     public function getSections() { return

@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\PreEnrollmentComponent;
 
+use App\Events\StudentPreRegistered;
 use App\Models;
 use App\Services\Registration\RegistrationService;
 use App\Traits\WithSweetAlert;
@@ -67,6 +68,9 @@ class StudentRegularAddComponent extends Component
 
             $subjectsId = $registrationService->pluckSubjectsId($subjects);
             $registration = $registrationService->update($subjectsId, $this->registration);
+
+            //dispatch event
+            StudentPreRegistered::dispatch($registration, auth()->user());
 
             $this->sessionFlashAlert('alert', 'success', 'Saved successfully.');
 
