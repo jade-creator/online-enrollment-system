@@ -32,7 +32,7 @@
                             <button wire:click.prevent="$set('sectionId', {{$section->id}})" class="w-full text-left focus:outline-none py-3 px-6 hover:bg-gray-100 border-b">
                                 <span class="w-full flex items-center justify-between">
                                     <span class="block text-lg font-semibold">{{ $section->name ?? 'N/A' }}</span>
-                                    <span class="text-sm font-bold text-gray-400">{{$section->registrations->count() ?? 'N/A'}} / {{$section->seat ?? 'N/A'}}</span>
+                                    <span class="text-sm font-bold text-gray-400">{{$section->registrations->count() ?? 'N/A'}} / {{$school_max_slots_per_section ?? 'N/A'}}</span>
                                 </span>
 
                                 <span class="block text-xs py-2">

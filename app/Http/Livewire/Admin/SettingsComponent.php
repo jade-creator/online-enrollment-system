@@ -31,6 +31,7 @@ class SettingsComponent extends Component
             'setting.school_description' => ['nullable', 'max:1000', 'string'],
             'setting.auto_account_approval' => ['required', 'boolean'],
             'setting.allow_irregular_student_to_enroll' => ['required', 'boolean'],
+            'setting.max_slots' => ['required', 'numeric', 'min:1'],
         ];
     }
 

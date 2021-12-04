@@ -83,6 +83,12 @@
                         <textarea id="settings-school-description" class="h-32 mt-2 block w-full" wire:model.defer="setting.school_description">{!! $setting->school_description !!}</textarea>
                         <x-jet-input-error for="setting.school_description" class="mt-2" />
                     </div>
+
+                    <div class="col-span-6">
+                        <x-jet-label for="max-slots" value="{{ __('Maximum slots per section') }}" />
+                        <x-jet-input id="max-slots" type="number" min="1" class="mt-1 block w-full" wire:model.defer="setting.max_slots" />
+                        <x-jet-input-error for="setting.max_slots" class="mt-2" />
+                    </div>
                 </x-slot>
 
                 <x-slot name="actions">
