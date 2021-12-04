@@ -34,6 +34,7 @@ class SectionService
         $prospectus = $this->find($programId, $levelId, $termId);
 
         $section->prospectus_id = $prospectus->id;
+        $section->seat = 0;
         $section->save();
 
         return $section;

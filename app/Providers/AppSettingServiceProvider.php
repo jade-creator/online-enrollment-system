@@ -32,7 +32,7 @@ class AppSettingServiceProvider extends ServiceProvider
 
         if (Cache::missing('school_profile_photo_path') && Schema::hasTable('settings')) {
             $setting = \App\Models\Setting::get()->first();
-        } 
+        }
 
         $data = [
             'school_profile_photo_path' => Cache::has('school_profile_photo_path')
@@ -45,6 +45,8 @@ class AppSettingServiceProvider extends ServiceProvider
                 ? Cache::get('school_address') : $setting->school_address ?? 'N/A',
             'school_description' => Cache::has('school_description')
                 ? Cache::get('school_description') : $setting->school_description ?? 'N/A',
+            'school_max_slots_per_section' => Cache::has('school_max_slots_per_section')
+                ? Cache::get('school_max_slots_per_section') : $setting->max_slots ?? 'N/A',
         ];
 
         if (Cache::missing('school_profile_photo_path')) Cache::put($data, $lifeTime);
@@ -54,7 +56,8 @@ class AppSettingServiceProvider extends ServiceProvider
             'school_name' => $data['school_name'],
             'school_email' => $data['school_email'],
             'school_address' => $data['school_address'],
-            'school_description' => $data['school_description']
+            'school_description' => $data['school_description'],
+            'school_max_slots_per_section' => $data['school_max_slots_per_section'],
         ]);
     }
 }

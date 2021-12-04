@@ -65,8 +65,8 @@
                                 <x-table.cell headerLabel="room" class="justify-start md:col-span-2">{!! $section->room->name ?? '<span class="text-gray-400">N/A</span>' !!}</x-table.cell>
                                 <x-table.cell headerLabel="seats" class="md:justify-start md:col-span-3">
                                     <div class="flex flex-col py-2 md:py-0">
-                                        <div class="tracking-widest text-green-500">{{ $section->registrations->count() }}<span class="text-gray-500">/{{ $section->seat ?? 'N/A' }}</span></div>
-                                        <progress id="bar" value="{{ $section->registrations->count() }}" max="{{ $section->seat ?? 'N/A' }}"></progress>
+                                        <div class="tracking-widest text-green-500">{{ $section->registrations->count() }}<span class="text-gray-500">/{{ $school_max_slots_per_section ?? 'N/A' }}</span></div>
+                                        <progress id="bar" value="{{ $section->registrations->count() }}" max="{{ $school_max_slots_per_section ?? 'N/A' }}"></progress>
                                     </div>
                                 </x-table.cell>
                                 <x-table.cell-action>

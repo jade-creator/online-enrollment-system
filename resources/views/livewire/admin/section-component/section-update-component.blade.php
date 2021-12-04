@@ -24,12 +24,11 @@
                                     <x-jet-input-error for="section.name" class="mt-2"/>
                                 </div>
                                 <div class="col-span-3">
-                                    <x-jet-label for="seat" value="{{ __('Seat') }}" />
-                                    <x-jet-input wire:model.defer="section.seat" id="seat" type="number" name="seat" autofocus required class="mt-2"/>
-                                    <x-jet-input-error for="section.seat" class="mt-2"/>
+                                    <x-jet-label for="seat" value="{{ __('Available Seats') }}" />
+                                    <x-jet-input id="seat" type="text" name="seat" class="mt-2 bg-gray-100 cursor-not-allowed" readonly value="{{ $school_max_slots_per_section }}"/>
                                 </div>
                                 <div class="col-span-3">
-                                    <x-jet-label for="currentNumberOfStudents" value="{{ __('Current no. of students') }}" />
+                                    <x-jet-label for="currentNumberOfStudents" value="{{ __('Current no. of Enrolled Students') }}" />
                                     <x-jet-input wire:model.defer="currentNumberOfStudents" type="number" name="currentNumberOfStudents" readonly class="mt-2 bg-gray-100 cursor-not-allowed"/>
                                     <x-jet-input-error for="currentNumberOfStudents" class="mt-2"/>
                                 </div>

@@ -3,6 +3,7 @@
 namespace App\Services\Section;
 
 use App\Models\Section;
+use App\Models\Setting;
 
 class SectionAvailabilityService
 {
@@ -17,7 +18,16 @@ class SectionAvailabilityService
             }])
             ->find($sectionId);
 
-        if ($section->seat == $section->registrations->count()) throw new \Exception($section->name.' is already full.');
+        $setting = Setting::get()->first();
+
+        if ($setting->max_slots <= $section->registrations->count()) {
+
+            if ($section->isFull == 0) $section->update(['isFull' => 1]);
+
+            throw new \Exception($section->name.' is already full.');
+        } else {
+            if ($section->isFull == 1) $section->update(['isFull' => 0]);
+        }
 
         return false;
     }

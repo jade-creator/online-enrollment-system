@@ -17,6 +17,7 @@ class Setting extends Model
         'school_description',
         'auto_account_approval',
         'allow_irregular_student_to_enroll',
+        'max_slots',
     ];
 
     protected $casts = [

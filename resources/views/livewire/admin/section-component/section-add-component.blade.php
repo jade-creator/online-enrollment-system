@@ -18,15 +18,10 @@
 
                         <x-slot name="form">
                             <form>
-                                <div class="col-span-3">
+                                <div class="col-span-6">
                                     <x-jet-label for="name" value="{{ __('Name') }}" />
                                     <x-jet-input wire:model.defer="section.name" id="name" type="text" name="name" autofocus required class="mt-2"/>
                                     <x-jet-input-error for="section.name" class="mt-2"/>
-                                </div>
-                                <div class="col-span-3">
-                                    <x-jet-label for="seat" value="{{ __('Seat') }}" />
-                                    <x-jet-input wire:model.defer="section.seat" id="seat" type="number" name="seat" autofocus required class="mt-2"/>
-                                    <x-jet-input-error for="section.seat" class="mt-2"/>
                                 </div>
                                 <div class="col-span-3">
                                     <x-jet-label for="programId" value="{{ __('Program') }}" />
