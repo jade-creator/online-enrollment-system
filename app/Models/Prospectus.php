@@ -50,6 +50,16 @@ class Prospectus extends Model
         return $subjects->map(fn($prospectus) => $prospectus->subject);
     }
 
+    //get all next prospectus greater than/greater than or equal to current.
+    public function scopeGetAllNextProspectuses($query, $prospectus, $includeCurrent = false) { return
+        $query->where([
+            ['id', $includeCurrent ? '>=' : '>', $prospectus->id],
+            ['level_id', '>=', $prospectus->level_id],
+            ['program_id', '=', $prospectus->program_id],
+        ])
+        ->get();
+    }
+
     //get all preceding prospectus less than/less than or equal to current.
     public function scopeGetAllPrecedingProspectuses($query, $prospectus, $includeCurrent = false) { return
         $query->where([

@@ -13,19 +13,6 @@ class RegistrationIrregularService
         return $subjects->sum('unit');
     }
 
-    public function createNewRegistration(int $prospectusId, int $studentId, int $curriculumId, int $total_unit = 0,  int $isExtension = 0) : Models\Registration
-    {
-        $registration = new Models\Registration();
-        $registration->prospectus_id = $prospectusId;
-        $registration->student_id = $studentId;
-        $registration->isRegular = 0;
-        $registration->isExtension = $isExtension;
-        $registration->total_unit = $total_unit;
-        $registration->curriculum_id = $curriculumId;
-
-        return $registration;
-    }
-
     /**
      * @throws \Exception
      */
@@ -35,17 +22,23 @@ class RegistrationIrregularService
 
         $registrationService = new RegistrationService();
         $registrationMain = NULL;
-        $extensions = [];
+        $extensions = array();
+        $registrationIds = array();
 
+        //create registrations and extensions if any.
         foreach ($prospectuses as $index => $prospectus) {
             if (is_array($selected) && empty($selected[$index])) continue;
 
             if ($index == 0) {
-                $registration = $this->createNewRegistration($prospectus->id, $studentId, $curriculumId, $this->calculateTotalUnit($prospectus, $selected[0]));
+                $registration = $registrationService->createNewRegistration($prospectus->id, $studentId, $curriculumId, $this->calculateTotalUnit($prospectus, $selected[0]));
                 $registrationMain = $registrationService->store($selected[0], $registration);
+
+                array_push($registrationIds, $registrationMain->id);
             } else {
-                $registration = $this->createNewRegistration($prospectus->id, $studentId, $curriculumId, $this->calculateTotalUnit($prospectus, $selected[$index]), 1);
+                $registration = $registrationService->createNewRegistration($prospectus->id, $studentId, $curriculumId, $this->calculateTotalUnit($prospectus, $selected[$index]), true);
                 $registration = $registrationService->store($selected[$index], $registration);
+
+                array_push($registrationIds, $registration->id);
 
                 $extension = new Models\Extension();
                 $extension->extension_id = $registration->id;
@@ -54,6 +47,7 @@ class RegistrationIrregularService
             }
         }
 
+        //attach extensions to main registration if any.
         if (is_array($selected) && sizeof($selected) > 1 && $registrationMain != NULL) $registrationMain->extensions()->saveMany($extensions);
 
         return $registrationMain;
@@ -81,7 +75,7 @@ class RegistrationIrregularService
 
                 $registration = $registrationService->store($selected[0], $registration);
             } else {
-                $registrationExtension = $this->createNewRegistration($prospectus->id, $registration->student_id, $curriculumId, $this->calculateTotalUnit($prospectus, $selected[$index]), 1);
+                $registrationExtension = $registrationService->createNewRegistration($prospectus->id, $registration->student_id, $curriculumId, $this->calculateTotalUnit($prospectus, $selected[$index]), true);
                 $registrationExtension = $registrationService->store($selected[$index], $registrationExtension);
 
                 $extension = new Models\Extension();

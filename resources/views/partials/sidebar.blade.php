@@ -16,8 +16,8 @@
 
                 <div x-data="{ dropdown: false }">
                     <x-sidebar.dropdown :routes="['admin.pre.enrollments.view', 'admin.advising.view', 'admin.students.registration.create',
-                        'admin.students.regular.create', 'admin.students.irregular.create', 'sections.view', 'admin.advising.create',
-                        'admin.advising.update', 'admin.sections.create', 'admin.sections.update', 'pre.registration.view']" title="Pre Enrollment">
+                        'admin.students.regular.create', 'admin.students.irregular.create', 'sections.view', 'section.students.view', 'admin.advising.create',
+                        'admin.advising.update', 'admin.sections.create', 'admin.sections.update', 'pre.registration.view', 'admin.bulk.students.regular.create']" title="Pre Enrollment">
 
                         <x-icons.pre-enrollment-icon/>
                     </x-sidebar.dropdown>
@@ -29,7 +29,7 @@
 
                         <x-sidebar.link
                             routeName="admin.pre.enrollments.view"
-                            :routes="['admin.pre.enrollments.view', 'pre.registration.view']"
+                            :routes="['admin.pre.enrollments.view', 'pre.registration.view', 'admin.bulk.students.regular.create']"
                             name="View List"
                             activeColor="bg-indigo-100 hover:bg-indigo-50"
                             defaultColor="bg-gray-100 hover:bg-gray-200">
@@ -59,7 +59,7 @@
 
                         <x-sidebar.link
                             routeName="sections.view"
-                            :routes="['sections.view', 'admin.sections.create', 'admin.sections.update']"
+                            :routes="['sections.view', 'admin.sections.create', 'admin.sections.update', 'section.students.view']"
                             name="Sections"
                             activeColor="bg-indigo-100 hover:bg-indigo-50"
                             defaultColor="bg-gray-100 hover:bg-gray-200">
@@ -210,13 +210,15 @@
                 </x-sidebar.item>
             @elseif (auth()->user()->role->name === 'registrar')
                 <x-sidebar.item title="Pre Enrollment">
-                    <x-sidebar.link routeName="admin.pre.enrollments.view" :routes="['admin.pre.enrollments.view', 'admin.students.registration.create', 'admin.students.regular.create', 'admin.students.irregular.create', 'pre.registration.view']"  name="Pre Enrollment">
+                    <x-sidebar.link routeName="admin.pre.enrollments.view" :routes="['admin.pre.enrollments.view',
+                        'admin.students.registration.create', 'admin.students.regular.create', 'admin.students.irregular.create',
+                        'pre.registration.view', 'admin.bulk.students.regular.create']"  name="Pre Enrollment">
                         <x-icons.pre-enrollment-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>
 
                 <x-sidebar.item title="Sections">
-                    <x-sidebar.link routeName="sections.view" :routes="['sections.view']" name="Sections">
+                    <x-sidebar.link routeName="sections.view" :routes="['sections.view', 'section.students.view']" name="Sections">
                         <x-icons.section-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>
@@ -252,7 +254,7 @@
                 </x-sidebar.item>
 
                 <x-sidebar.item title="Sections">
-                    <x-sidebar.link routeName="sections.view" :routes="['sections.view', 'admin.sections.create', 'admin.sections.update']" name="Sections">
+                    <x-sidebar.link routeName="sections.view" :routes="['sections.view', 'admin.sections.create', 'admin.sections.update', 'section.students.view']" name="Sections">
                         <x-icons.section-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>
@@ -288,7 +290,7 @@
                 </x-sidebar.item>
 
                 <x-sidebar.item title="Sections">
-                    <x-sidebar.link routeName="sections.view" :routes="['sections.view', 'admin.sections.create', 'admin.sections.update']" name="Sections">
+                    <x-sidebar.link routeName="sections.view" :routes="['sections.view', 'admin.sections.create', 'admin.sections.update', 'section.students.view']" name="Sections">
                         <x-icons.section-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>

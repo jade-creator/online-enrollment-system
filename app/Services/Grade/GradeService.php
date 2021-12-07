@@ -3,6 +3,7 @@
 namespace App\Services\Grade;
 
 use App\Models\Grade;
+use App\Models\Registration;
 
 class GradeService
 {
@@ -73,5 +74,50 @@ class GradeService
         $grade->update();
 
         return $grade;
+    }
+
+    public function findStudentsGrade(array $registrationIds = [], string $prospectusSubjectId = '') : array
+    {
+        $registrations = Registration::with('grades')->find($registrationIds);
+        $gradeIds = [];
+
+        foreach ($registrations as $registration) {
+            foreach ($registration->grades as $grade) {
+                if ((int) $grade->subject_id === (int) $prospectusSubjectId) array_push($gradeIds, $grade->id);
+            }
+        }
+
+        return $gradeIds;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function bulkUpdateThroughRegistrations(array $selected = [], string $prospectusSubjectId = '', string $type = '', string $value = '') : void
+    {
+        if (empty($selected)) throw new \Exception('No students selected.');
+
+        $gradeIds = $this->findStudentsGrade($selected, $prospectusSubjectId);
+
+        $gradeRemarkService = new GradeRemarkService();
+
+        Grade::query()->when($type == 'scale', function ($query) use ($gradeIds, $value, $type, $gradeRemarkService) {
+                if ($value > 0 && $value <= 100) {
+                    $value = $this->equivalency(round($value, 2));
+
+                    $query->whereIn('id', $gradeIds)->update([
+                        'isScale' => 1,
+                        'value' => $value,
+                        'mark_id' => $gradeRemarkService->getMark($value, $type),
+                    ]);
+                };
+            })
+            ->when($type != 'scale', function ($query) use ($gradeIds, $type, $gradeRemarkService) {
+                $query->whereIn('id', $gradeIds)->update([
+                    'isScale' => 0,
+                    'value' => $type == 'Dropped' ? 5 : null,
+                    'mark_id' => $gradeRemarkService->findRemark($type),
+                ]);
+            });
     }
 }
