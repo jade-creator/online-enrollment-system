@@ -62,6 +62,8 @@
             </main>
         </div>
 
+        <livewire:partials.job-batching-progress-tracker-component/>
+
         @stack('modals')
         @livewireScripts
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>

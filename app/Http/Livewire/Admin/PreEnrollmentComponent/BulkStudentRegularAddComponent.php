@@ -15,7 +15,7 @@ class BulkStudentRegularAddComponent extends Component
     use WithSweetAlert, WithBulkActions, WithPagination;
 
     public Models\Section $section;
-    public Models\Section $assignedSection;
+    public ?Models\Section $assignedSection = null;
     public Models\Prospectus $prospectus;
     public Models\Curriculum $curriculum;
     public string $prospectusSlug = '', $prospectusId = '', $type = 'Regular', $curriculumCode = '', $sectionId = '';
@@ -134,10 +134,17 @@ class BulkStudentRegularAddComponent extends Component
                 return $this->confirm('selectSection', $message.'Do you want to assign the students to another section?');
             }
 
-            (new RegistrationRegularService())->registerRegularStudents($this->prospectus, $this->assignedSection, auth()->user()->id,
+            $batch = (new RegistrationRegularService())->registerRegularStudents($this->prospectus, $this->assignedSection, auth()->user()->id,
                 $this->curriculum->id, $this->selected);
+
+            $this->emit('updateBatchId', $batch->id);
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }
+
+        $this->fill([
+            'selected' => array(),
+            'originalSelected' => array()
+        ]);
     }
 }

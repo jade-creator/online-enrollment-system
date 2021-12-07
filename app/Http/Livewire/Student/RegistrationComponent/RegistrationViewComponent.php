@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Student\RegistrationComponent;
 
 use App\Models\Registration;
+use App\Services\Registration\RegistrationService;
 use App\Traits\WithSweetAlert;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
@@ -54,6 +55,8 @@ class RegistrationViewComponent extends Component
         }
 
         $this->authorize('view', $this->registrationMain);
+
+        $this->totalUnit = (new RegistrationService())->combineTotalUnits($this->registrationMain);
 
         return $this->registrationMain;
     }

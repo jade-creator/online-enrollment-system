@@ -4,12 +4,13 @@ namespace App\Services\Registration;
 
 use App\Jobs\CreatePreRegistration;
 use App\Models;
+use Illuminate\Bus\Batch;
 use Illuminate\Support\Facades\Bus;
 
 class RegistrationRegularService
 {
     public function registerRegularStudents(Models\Prospectus $prospectus, Models\Section $section,
-        string $notificationSenderUserId = '', string $curriculumId = '', array $studentIds = [])
+        string $notificationSenderUserId = '', string $curriculumId = '', array $studentIds = []) : Batch
     {
         if (empty($studentIds)) throw new \Exception('There are no students to enroll!');
 
@@ -23,11 +24,9 @@ class RegistrationRegularService
                 $totalUnits,false,true, $subjectIds, $notificationSenderUserId));
         }
 
-        $batch = Bus::batch($jobs)
+        return Bus::batch($jobs)
             ->name($section->name." Pre Registrations' students")
             ->dispatch();
-
-        //return the batch, create batch tracking progress component.
     }
 
     public function filterEligibleStudentIdsForEnrollment(array $registrationIds = [], string $curriculumId = '') : array

@@ -103,7 +103,8 @@
 
                                                     <a href="{{ route('section.students.view', $section) }}">
                                                         <x-table.cell-button title="Student List">
-                                                            <x-icons.view-icon/>
+{{--                                                            <x-icons.view-icon/>--}}
+                                                            <x-icons.student-icon/>
                                                         </x-table.cell-button>
                                                     </a>
 

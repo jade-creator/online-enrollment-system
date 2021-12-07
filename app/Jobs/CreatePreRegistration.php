@@ -74,9 +74,9 @@ class CreatePreRegistration implements ShouldQueue
         $updatedRegistration = $registrationService->selectSection($createdRegistration, $section->id, $section->schedules);
 
         //get user notification sender
-        $user = User::find($this->notificationSenderId);
+//        $user = User::find($this->notificationSenderId);
 
         //dispatch event
-        StudentPreRegistered::dispatch($createdRegistration, $user);
+//        StudentPreRegistered::dispatch($createdRegistration, $user);
     }
 }
