@@ -134,6 +134,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
     //start: admin and registrar
     Route::middleware(['role:admin|registrar', 'user.detail', 'approved'])->group(function () {
         Route::group(['as' => 'admin.'], function () {
+            Route::get('/pre-enrollments/section/{section}/students/{prospectusSlug}', PreEnrollmentComponent\BulkStudentRegularAddComponent::class)->name('bulk.students.regular.create');
+
             Route::get('/pre-enrollments/student/{student}/create/{registration?}', PreEnrollmentComponent\StudentRegistrationAddComponent::class)->name('students.registration.create');
 
             Route::get('/pre-enrollments/student/{student}/regular/{prospectusSlug}/create/{registration?}', PreEnrollmentComponent\StudentRegularAddComponent::class)->name('students.regular.create');
@@ -197,6 +199,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
             });
 
             Route::get('/sections', SectionComponent\SectionIndexComponent::class)->name('sections.view');
+            Route::get('/section/{section}/students', SectionComponent\ViewStudentComponent::class)->name('section.students.view');
 
             Route::get('/class-list/{section}', [PDFController::class, 'streamClasslist'])->name('stream.class-list.pdf');
             Route::get('/schedule-timetable/{section}', [PDFController::class, 'streamSchedule'])->name('stream.schedule.pdf');

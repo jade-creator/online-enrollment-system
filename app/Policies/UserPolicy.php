@@ -5,7 +5,7 @@ namespace App\Policies;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class UserPolicy
+class UserPolicy extends BasePolicy
 {
     use HandlesAuthorization;
 
@@ -33,5 +33,9 @@ class UserPolicy
 
     public function deactivate(User $user, User $userAccount) { return
         $this->isAdmin($user) && $userAccount->approved_at == null;
+    }
+
+    public function enroll(User $user) { return
+        $this->isAuthorized('user', 'enroll', $user);
     }
 }

@@ -54,6 +54,9 @@ class BasePolicy
         ],
         'faculty' => [
             'masterlist' => ['admin', 'registrar']
+        ],
+        'user' => [
+            'enroll' => ['admin', 'registrar']
         ]
     ];
 

@@ -6,6 +6,15 @@ use App\Models;
 
 class ProspectusService
 {
+    public function findNextProspectus(Models\Section $section) : Models\Prospectus
+    {
+        $prospectuses = Models\Prospectus::getAllNextProspectuses($section->prospectus);
+
+        if (is_null($prospectuses->first())) throw new \Exception('No more semester to be enrolled in!');
+
+        return $prospectuses->first();
+    }
+
     /**
      * @throws \Exception
      */

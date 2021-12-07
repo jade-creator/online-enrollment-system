@@ -68,7 +68,6 @@ class StudentIrregularAddComponent extends Component
         }
 
         //get all subjects eligible for enrollment/retake.
-//        foreach ($this->prospectuses as $prospectus) {
         foreach ($this->prospectuses as $index_P => $prospectus) {
                 $subjects = [];
 
@@ -76,10 +75,6 @@ class StudentIrregularAddComponent extends Component
                 $subjects[] = $subject->id;
 
                 //remove if subject is taken but failed.
-//                if (array_key_exists($subject->id, $this->grades)
-//                    && $this->grades[$subject->id]['is_passed'] == TRUE) {
-//                    unset($subjects[array_search($subject->id, $subjects)]);
-//                }
                 if (array_key_exists($subject->subject->id, $this->grades)
                     && $this->grades[$subject->subject->id]['is_passed'] == TRUE) {
                     unset($subjects[array_search($subject->subject->id, $subjects)]);

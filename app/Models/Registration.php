@@ -32,6 +32,18 @@ class Registration extends BaseModel
         'curriculum',
     ];
 
+    protected $casts = [
+        'isRegular' => 'boolean',
+        'isNew' => 'boolean',
+        'isExtension' => 'boolean',
+    ];
+
+    protected $attributes = [
+        'isRegular' => true,
+        'isNew' => false,
+        'isExtension' => false,
+    ];
+
     public static function boot()
     {
         parent::boot();

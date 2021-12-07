@@ -8,6 +8,32 @@ use FontLib\TrueType\Collection;
 
 class RegistrationService
 {
+    public function releaseAllRegistrations($registrations)
+    {
+        $registrations = $registrations->filter(function ($registration) {
+            return $registration->released_at == null;
+        });
+
+        $registrationIds = $registrations->pluck('id')->toArray();
+
+        Models\Registration::whereIn('id', $registrationIds)->update(['released_at' => now()]);
+    }
+
+    public function createNewRegistration(string $prospectusId = '', string $studentId = '', string $curriculumId = '',
+      int $totalUnit = 0, bool $isExtension = false, bool $isRegular = false) : Models\Registration
+    {
+        $registration = new Models\Registration();
+
+        $registration->prospectus_id = $prospectusId;
+        $registration->student_id = $studentId;
+        $registration->isRegular = $isRegular;
+        $registration->isExtension = $isExtension;
+        $registration->total_unit = $totalUnit;
+        $registration->curriculum_id = $curriculumId;
+
+        return $registration;
+    }
+
     public function combineTotalUnits(Models\Registration $registration)
     {
         $totalUnit = $registration->total_unit;
@@ -34,19 +60,19 @@ class RegistrationService
         return $registration;
     }
 
-    public function isSubjectsAvailable(Models\Registration $registration, $schedules) : bool
+    public function arrayMatches(array $subjectEnrolledIds = [], array $scheduleSubjectIds = []) :bool
     {
-//        $subjectsEnrolled = $registration->grades->pluck('subject_id')->toArray();
-//        $schedules = array_unique($schedules->pluck('prospectus_subject_id')->toArray());
-
-        $subjectsEnrolled = $registration->grades->pluck('prospectus_subject.subject_id')->toArray();
-        $schedules = array_unique($schedules->pluck('prospectusSubject.subject_id')->toArray());
-
-        if (is_array($subjectsEnrolled)
-            && is_array($schedules)
-            && array_intersect($subjectsEnrolled, $schedules) == $subjectsEnrolled) return TRUE;
+        if (is_array($subjectEnrolledIds)
+            && is_array($scheduleSubjectIds)
+            && array_intersect($subjectEnrolledIds, $scheduleSubjectIds) == $subjectEnrolledIds) return TRUE;
 
         return FALSE;
+    }
+
+    public function isSubjectsAvailable(Models\Registration $registration, $schedules) : bool
+    {
+        return $this->arrayMatches($registration->grades->pluck('prospectus_subject.subject_id')->toArray(),
+            array_unique($schedules->pluck('prospectusSubject.subject_id')->toArray()));
     }
 
     /**
@@ -60,9 +86,6 @@ class RegistrationService
         $registration->update();
 
         //get schedules that student enrolled to.
-//        $grades = $registration->grades->pluck('subject_id')->toArray();
-//        $schedules = $schedules->filter(fn ($schedule) => in_array($schedule->prospectus_subject_id, $grades));
-
         $grades = $registration->grades->pluck('prospectus_subject.subject_id')->toArray();
         $schedules = $schedules->filter(fn ($schedule) => in_array($schedule->prospectusSubject->subject_id, $grades));
 
@@ -82,6 +105,7 @@ class RegistrationService
     {
         if (empty($selected)) throw new \Exception('No Selected Subject/s.');
 
+        //update registration status to pending.
         $status = Models\Status::where('name', 'pending')->firstOrFail();
         $mark = Models\Mark::where('name', 'TBA')->firstOrFail();
 
@@ -89,15 +113,22 @@ class RegistrationService
         $registration->save();
 
         //attach enrolled subjects as grades on registration.
-        $grades = [];
+        $grades = array();
+
         foreach ($selected as $id) {
-            if (isset($id) && $id != FALSE) $grades[] = new Models\Grade([
+            if (isset($id) && $id != FALSE) array_push($grades, new Models\Grade([
                 'subject_id' => $id,
                 'mark_id' => $mark->id,
-            ]);
+            ]));
         }
 
         $registration->grades()->saveMany($grades);
+
+        //release previous registrations
+        if (! $registration->isExtension) $this->releaseAllRegistrations(Models\Registration::where('student_id', $registration->student_id)
+            ->where('id', '!=', $registration->id)
+            ->whereNull('released_at')
+            ->get());
 
         return $registration;
     }
