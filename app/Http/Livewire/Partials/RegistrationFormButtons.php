@@ -68,7 +68,7 @@ class RegistrationFormButtons extends Component
             (new SendNotification())->dispatch(
                  auth()->user()->id,
                  $this->registration->student->user_id,
-                'Hi '.$this->registration->student->user->person->name."! Registration ID ".$this->registration->custom_id."'s status: ".$this->registration->status->name,
+                'Hi '.$this->registration->student->user->person->firstname."! Registration ID ".$this->registration->custom_id."'s status: ".$this->registration->status->name,
                 '<a class="underline text-blue-500" href="'.route('stream.registration.pdf', ['id' => $this->registration->id]).'">Please click here to print your certification.</a>',
             );
         } catch (\Exception $e) {
@@ -121,7 +121,7 @@ class RegistrationFormButtons extends Component
             (new SendNotification())->dispatch(
                 auth()->user()->id,
                 $this->registration->student->user_id,
-                'Hi '.$this->registration->student->user->person->name."! Registration ID ".$this->registration->custom_id."'s status: ".$this->registration->status->name
+                'Hi '.$this->registration->student->user->person->firstname."! Registration ID ".$this->registration->custom_id."'s status: ".$this->registration->status->name
             );
         } catch (\Exception $e) {
             $this->error($e->getMessage());

@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Events\CreateNotification;
 use App\Models\User;
 use App\Notifications\NewNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -23,12 +24,12 @@ class SendNewNotification
     /**
      * Handle the event.
      *
-     * @param  object  $event
+     * @param CreateNotification $event
      * @return void
      */
-    public function handle($event)
+    public function handle(CreateNotification $event)
     {
-        $sender = User::find($event->senderId);
+        $sender = empty($event->senderId) ? NULL : User::find($event->senderId);
         $recipient = User::find($event->recipientId);
 
         Notification::send($recipient, (new NewNotification($sender->profile_photo_url ?? '', $sender->person->shortFullName ?? '',
