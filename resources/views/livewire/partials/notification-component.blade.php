@@ -28,12 +28,25 @@
                         @foreach ($notifications->take(10) as $notification)
                             <x-jet-dropdown-link href="{{ route('user.notification.index', ['search' => $notification->id]) }}" class="border-b {{ is_null($notification->read_at) ? 'bg-blue-50 hover:bg-blue-100' : '' }}">
                                 <span class="block flex items-start py-3">
-                                    <img class="h-8 sm:h-12 w-8 sm:w-12 rounded-full object-cover" src="{{ $notification->data['by']['profile_photo_url'] ?? $school_profile_photo_path }}" alt="avatar">
-                                    <span class="font-bold text-gray-600 text-xs sm:text-sm mx-2">{{ $notification->data['by']['person']['firstname'] ?? $school_name }} {{ $notification->data['by']['person']['lastname'] ?? '' }}
-                                        <span class="font-normal">- {{ $notification->data['title'] ?? 'No message found.' }}
-                                            <span class="italic text-gray-400">{{ $notification->created_at->diffForHumans() ?? '' }}</span>
+                                    @if (array_key_exists('senderPhotoUrl', $notification->data))
+                                        <img class="h-8 sm:h-12 w-8 sm:w-12 rounded-full object-cover" src="{{ $notification->data['senderPhotoUrl'] == '' ? $school_profile_photo_path : $notification->data['senderPhotoUrl'] }}" alt="avatar">
+                                    @else
+                                        <img class="h-8 sm:h-12 w-8 sm:w-12 rounded-full object-cover" src="{{ $school_profile_photo_path ?? '' }}" alt="avatar">
+                                    @endif
+
+                                    @if (array_key_exists('sender', $notification->data))
+                                        <span class="font-bold text-gray-600 text-xs sm:text-sm mx-2">{{ $notification->data['sender'] == '' ? $school_name : $notification->data['sender'] }}
+                                            <span class="font-normal">- {{ $notification->data['title'] ?? 'No message found.' }}
+                                                <span class="italic text-gray-400">{{ $notification->created_at->diffForHumans() ?? '' }}</span>
+                                            </span>
                                         </span>
-                                    </span>
+                                    @else
+                                        <span class="font-bold text-gray-600 text-xs sm:text-sm mx-2">{{ $school_name ?? '' }}
+                                            <span class="font-normal">- {{ $notification->data['title'] ?? 'No message found.' }}
+                                                <span class="italic text-gray-400">{{ $notification->created_at->diffForHumans() ?? '' }}</span>
+                                            </span>
+                                        </span>
+                                    @endif
                                 </span>
                             </x-jet-dropdown-link>
                         @endforeach

@@ -2,12 +2,12 @@
 
 namespace App\Jobs;
 
-use App\Events\StudentPreRegistered;
 use App\Models\Prospectus;
 use App\Models\Section;
-use App\Models\User;
+use App\Models\Student;
 use App\Services\Registration\RegistrationRegularService;
 use App\Services\Registration\RegistrationService;
+use App\Services\SendNotification;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -30,6 +30,7 @@ class CreatePreRegistration implements ShouldQueue
     public bool $isRegular;
     public array $selectedSubjectIds;
     public string $notificationSenderId;
+    public string $notificationRecipientId;
 
     /**
      * Create a new job instance.
@@ -68,15 +69,20 @@ class CreatePreRegistration implements ShouldQueue
 
         $createdRegistration = $registrationService->store($this->selectedSubjectIds, $registration);
 
-        //update registration's section
+        //update registration's section.
         $section = Section::with('schedules')->find($this->sectionId);
 
         $updatedRegistration = $registrationService->selectSection($createdRegistration, $section->id, $section->schedules);
 
-        //get user notification sender
-//        $user = User::find($this->notificationSenderId);
+        //get recipient info.
+        $student = Student::with('user.person')->find($this->studentId);
 
-        //dispatch event
-//        StudentPreRegistered::dispatch($createdRegistration, $user);
+        //send notification
+        (new SendNotification())->dispatch(
+            $this->notificationSenderId,
+            $student->user_id,
+            'Congrats '.$student->user->person->firstname."! you've been pre-registered.",
+            '<a class="underline text-blue-500" href="'.route('pre.registration.view', ['regId' => $updatedRegistration->id]).'">View Details.</a>',
+        );
     }
 }

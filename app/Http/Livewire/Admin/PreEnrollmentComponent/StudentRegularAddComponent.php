@@ -2,9 +2,9 @@
 
 namespace App\Http\Livewire\Admin\PreEnrollmentComponent;
 
-use App\Events\StudentPreRegistered;
 use App\Models;
 use App\Services\Registration\RegistrationService;
+use App\Services\SendNotification;
 use App\Traits\WithSweetAlert;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
@@ -70,7 +70,12 @@ class StudentRegularAddComponent extends Component
             $registration = $registrationService->update($subjectsId, $this->registration);
 
             //dispatch event
-            StudentPreRegistered::dispatch($registration, auth()->user());
+            (new SendNotification())->dispatch(
+                auth()->user()->id,
+                $this->student->user_id,
+                'Congrats '.$this->student->user->person->firstname."! you've been pre-registered.",
+                '<a class="underline text-blue-500" href="'.route('pre.registration.view', ['regId' => $registration->id]).'">View Details.</a>',
+            );
 
             $this->sessionFlashAlert('alert', 'success', 'Saved successfully.');
 

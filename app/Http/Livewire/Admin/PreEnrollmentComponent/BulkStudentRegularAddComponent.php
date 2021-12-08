@@ -138,6 +138,13 @@ class BulkStudentRegularAddComponent extends Component
                 $this->curriculum->id, $this->selected);
 
             $this->emit('updateBatchId', $batch->id);
+
+            $this->emit('sendNotificationWhenFinished', [
+                '',
+                auth()->user()->id,
+                $batch->name.' just finished.',
+            ]);
+
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }

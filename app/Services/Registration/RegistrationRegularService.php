@@ -4,6 +4,7 @@ namespace App\Services\Registration;
 
 use App\Jobs\CreatePreRegistration;
 use App\Models;
+use App\Services\SendNotification;
 use Illuminate\Bus\Batch;
 use Illuminate\Support\Facades\Bus;
 
@@ -25,7 +26,7 @@ class RegistrationRegularService
         }
 
         return Bus::batch($jobs)
-            ->name($section->name." Pre Registrations' students")
+            ->name($section->name." Pre Registration")
             ->dispatch();
     }
 
