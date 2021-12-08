@@ -2,8 +2,6 @@
 
 namespace App\Events;
 
-use App\Models\Registration;
-use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -12,22 +10,25 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class StudentPreRegistered implements ShouldBroadcast
+class CreateNotification implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public Registration $registration;
-    public User $user;
-
+    public string $senderId;
+    public string $recipientId;
+    public string $title;
+    public string $body;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Registration $registration, User $user)
+    public function __construct($senderId, $recipientId, $title, $body)
     {
-        $this->registration = $registration;
-        $this->user = $user;
+        $this->senderId = $senderId;
+        $this->recipientId = $recipientId;
+        $this->title = $title;
+        $this->body = $body;
     }
 
     /**
@@ -37,6 +38,6 @@ class StudentPreRegistered implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('pre-registration.'.$this->registration->student_id);
+        return new PrivateChannel('notification.'.$this->recipientId);
     }
 }

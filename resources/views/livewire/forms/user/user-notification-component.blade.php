@@ -11,8 +11,8 @@
                 <div class="my-2 p-4 rounded-lg border-b border-gray-200 {{ is_null($notification->read_at) ? 'bg-blue-50' : '' }}">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center">
-                            <img class="h-8 sm:h-12 w-8 sm:w-12 rounded-full object-cover" src="{{ $notification->data['by']['profile_photo_url'] ?? $school_profile_photo_path }}" alt="avatar">
-                            <h1 class="font-bold mx-2">{{ $notification->data['by']['person']['firstname'] ?? $school_name }} {{ $notification->data['by']['person']['lastname'] ?? '' }}</h1>
+                            <img class="h-8 sm:h-12 w-8 sm:w-12 rounded-full object-cover shadow-sm" src="{{ $notification->data['senderPhotoUrl'] == '' ? $school_profile_photo_path : $notification->data['senderPhotoUrl'] }}" alt="avatar">
+                            <h1 class="font-bold mx-2">{{ $notification->data['sender'] == '' ? $school_name : $notification->data['sender'] }}</h1>
                         </div>
                         <div>
                             <span class="italic text-gray-400 mx-2">{{ $notification->created_at->diffForHumans() ?? '' }}</span>

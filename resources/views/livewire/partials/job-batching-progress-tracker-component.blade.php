@@ -25,9 +25,13 @@
             </section>
 
             <script>
-                window.setInterval(function () {
-                        window.livewire.emit('updateBatchId', '{{$batch->id}}')
+                const setIntervalId = window.setInterval(function () {
+                    window.livewire.emit('updateBatchId', '{{$batch->id}}')
                 }, 2000);
+
+                window.addEventListener('stop-interval', event => {
+                    window.clearInterval(setIntervalId);
+                });
             </script>
         @endif
     @endauth

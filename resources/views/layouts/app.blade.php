@@ -112,26 +112,20 @@
         <script>
             window.addEventListener('DOMContentLoaded', function() {
                 const userId = '{{auth()->user()->id}}';
-                const studentId = '{{auth()->user()->student->id ?? 0}}';
 
-                Echo.private('pre-registration.'+studentId)
-                    .listen('StudentPreRegistered', (e) => {
-                        window.livewire.emit('refresh-notification-component:'+userId);
-                        window.livewire.emit('refresh-registration-index-component:'+userId);
-                        window.livewire.emit('refresh-user-notification-component:'+userId);
-                    });
+                function refreshNotificationComponents() {
+                    window.livewire.emit('refresh-notification-component:'+userId);
+                    window.livewire.emit('refresh-user-notification-component:'+userId);
+                }
 
                 Echo.private('notification-updated-count.'+userId)
                     .listen('NotificationUpdatedCount', (e) => {
-                        window.livewire.emit('refresh-notification-component:'+userId);
-                        window.livewire.emit('refresh-user-notification-component:'+userId);
+                        refreshNotificationComponents();
                     });
 
-                Echo.private('registration-status.'+studentId)
-                    .listen('RegistrationStatusUpdated', (e) => {
-                        window.livewire.emit('refresh-notification-component:'+userId);
-                        window.livewire.emit('refresh-user-notification-component:'+userId);
-                        console.log('it worked');
+                Echo.private('notification.'+userId)
+                    .listen('CreateNotification', (e) => {
+                        refreshNotificationComponents();
                     });
             });
         </script>
