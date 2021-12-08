@@ -14,7 +14,7 @@ class AddMaxSlotsToSettings extends Migration
     public function up()
     {
         Schema::table('settings', function (Blueprint $table) {
-            $table->unsignedSmallInteger('max_slots');
+            $table->unsignedSmallInteger('max_slots')->nullable();
         });
     }
 
