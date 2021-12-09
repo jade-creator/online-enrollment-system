@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Curriculum;
 use App\Models\Day;
+use App\Models\Employee;
 use App\Models\Faculty;
 use App\Models\Program;
+use App\Models\ProspectusSubject;
 use App\Models\Registration;
 use App\Models\Section;
 use App\Models\Student;
@@ -32,6 +35,17 @@ class PDFController extends Controller
     {
         $pdf = PDF::loadView($templateLocation, $array);
         return $pdf->stream($fileName);
+    }
+
+    public function streamCurriculum(Curriculum $curriculum)
+    {
+        return $this->stream('pdf.curriculum', [
+            'curriculum' => $curriculum->load([
+                'program.prospectuses.subjects' => function ($query) use ($curriculum) {
+                    $query->where('curriculum_id', $curriculum->id);
+                }
+            ]),
+        ], $curriculum->code.'.pdf');
     }
 
     public function streamTransaction(Transaction $transaction)
@@ -166,15 +180,19 @@ class PDFController extends Controller
         ], $section->name.'-schedule.pdf');
     }
 
-    public function streamClasslist(Section $section)
+    public function streamClasslist(Employee $employee, ProspectusSubject $prospectusSubject, Section $section)
     {
-        $this->authorize('printClaslist', $section);
-
-        $registrations = $section->registrations()->with('student.user.person')->whereNull('released_at')->get();
-
         return $this->stream('pdf.classlist', [
+            'employee' => $employee,
+            'prospectusSubject' => $prospectusSubject,
             'section' => $section,
-            'registrations' => $registrations
+            'registrations' => $section->registrations()
+                ->enrolled()
+                ->whereHas('grades', function ($query) use ($prospectusSubject) {
+                    $query->where('subject_id', $prospectusSubject->id);
+                })
+                ->with('student.user.person')
+                ->get()
         ], $section->name.'-'.$section->prospectus->term->term.'-classlist.pdf');
     }
 

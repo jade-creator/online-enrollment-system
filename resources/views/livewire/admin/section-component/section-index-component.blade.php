@@ -103,18 +103,9 @@
 
                                                     <a href="{{ route('section.students.view', $section) }}">
                                                         <x-table.cell-button title="Student List">
-{{--                                                            <x-icons.view-icon/>--}}
                                                             <x-icons.student-icon/>
                                                         </x-table.cell-button>
                                                     </a>
-
-{{--                                                    @can ('printClasslist', $section)--}}
-{{--                                                        <a href="{{ route('stream.class-list.pdf', $section) }}" target="_blank">--}}
-{{--                                                            <x-table.cell-button title="Print Classlist">--}}
-{{--                                                                <x-icons.list-icon/>--}}
-{{--                                                            </x-table.cell-button>--}}
-{{--                                                        </a>--}}
-{{--                                                    @endcan--}}
 
                                                     <a href="{{ route('stream.schedule.pdf', $section) }}" target="_blank">
                                                         <x-table.cell-button title="Print Timetable">

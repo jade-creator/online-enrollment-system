@@ -21,28 +21,26 @@
                 <x-table.cell headerLabel="Time" class="md:col-span-2">{{ \Carbon\Carbon::parse($schedule->start_time)->format('h:i a') ?? 'N/A' }} - {{ \Carbon\Carbon::parse($schedule->end_time)->format('h:i a') ?? 'N/A' }}</x-table.cell>
                 <x-table.cell-action>
                     @can ('update', $schedule)
-                        <x-table.cell-button wire:click.prevent="$emit('modalViewingSchedule', {{ $section }}, {{ $schedule }})">
-                            <div class="w-full text-center">
-                                <x-icons.edit-icon class="hidden md:block"/>
-                                <div class="flex justify-center md:hidden">
-                                    <span>Edit</span>
-                                    <x-icons.corner-right-up />
-                                </div>
-                            </div>
-                        </x-table.cell-button>
+                        <button wire:click.prevent="$emit('modalViewingSchedule', {{ $section }}, {{ $schedule }})" title="Edit" class="w-min py-2 px-1 focus:outline-none hover:text-yellow-500">
+                            <x-icons.edit-icon/>
+                        </button>
                     @endcan
 
                     @can ('destroy', $schedule)
-                        <x-table.cell-button wire:click.prevent="$emit('removeScheduleConfirm', {{ $schedule }})">
-                            <div class="w-full text-center">
-                                <x-icons.delete-icon class="hidden md:block"/>
-                                <div class="flex justify-center md:hidden">
-                                    <span>Delete</span>
-                                    <x-icons.corner-right-up />
-                                </div>
-                            </div>
-                        </x-table.cell-button>
+                        <button wire:click.prevent="$emit('removeScheduleConfirm', {{ $schedule }})" title="Delete" class="w-min py-2 px-1 focus:outline-none hover:text-red-500">
+                            <x-icons.delete-icon/>
+                        </button>
                     @endcan
+
+                    <a href="{{ route('stream.class-list.pdf', [
+                            'employee' => $schedule->employee,
+                            'prospectusSubject' => $schedule->prospectusSubject,
+                            'section' => $section
+                        ]) }}" target="_blank">
+                        <button title="Print Classlist" class="w-min py-2 px-1 focus:outline-none hover:text-indigo-500">
+                            <x-icons.export-icon/>
+                        </button>
+                    </a>
                 </x-table.cell-action>
             @empty
                 <x-table.no-result>No added classes yet.🤔</x-table.no-result>
