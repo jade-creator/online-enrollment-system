@@ -80,6 +80,12 @@
                                                         </x-table.cell-button>
                                                     </a>
 
+                                                    <a href="{{route('stream.curriculum.pdf', $curriculum)}}" target="_blank">
+                                                        <x-table.cell-button title="Print Curriculum">
+                                                            <x-icons.export-icon/>
+                                                        </x-table.cell-button>
+                                                    </a>
+
                                                     @can ('destroy', $curriculum)
                                                         <x-table.cell-button wire:click.prevent="$emit('removeConfirm', {{$curriculum}})" title="Delete" class="rounded-b-md hover:bg-red-500 hover:text-white transition-colors">
                                                             <x-icons.delete-icon/>

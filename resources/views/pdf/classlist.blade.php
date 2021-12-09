@@ -17,6 +17,26 @@
         <p class="truncate-widest bold">{{ $school_name ?? env('APP_NAME', 'University') }}</p>
         <p>{{ $school_address }}</p>
     </div>
+    <div class="container" style="margin-top: 5px;">
+        <table>
+            <tr>
+                <th style="color: rgba(99, 102, 241, 1); text-align: left">
+                    Course Instructor:
+                </th>
+                <th style="color: rgba(99, 102, 241, 1); text-align: left">
+                    Course/Subject:
+                </th>
+            </tr>
+            <tr>
+                <th style="text-align: left">
+                    Prof. {{ $employee->user->person->full_name ?? 'N/A' }}
+                </th>
+                <th style="text-align: left">
+                    {{ $prospectusSubject->subject->code ?? 'N/A' }}
+                </th>
+            </tr>
+        </table>
+    </div>
     <div class="container">
         <table class="container-title">
             <tr>
@@ -28,15 +48,13 @@
                 <th>ID</th>
                 <th>Name</th>
                 <th>Status</th>
-                <th>Classification</th>
             </tr>
 
             @forelse ($registrations as $registration)
                 <tr>
                     <td class="center">{{ $registration->student->custom_id ?? 'N/A' }}</td>
                     <td>{{ $registration->student->user->person->full_name ?? 'N/A' }}</td>
-                    <td class="center" style="text-transform: uppercase">{{ $registration->status->name ?? 'N/A' }}</td>
-                    <td class="center" style="text-transform: uppercase">{{ $registration->classification ?? 'N/A' }}</td>
+                    <td class="center" style="text-transform: uppercase">{{ $registration->status->name ?? 'N/A' }}/{{ $registration->classification ?? 'N/A' }}</td>
                 </tr>
             @empty
                 <tr>

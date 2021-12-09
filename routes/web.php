@@ -201,8 +201,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
             Route::get('/sections', SectionComponent\SectionIndexComponent::class)->name('sections.view');
             Route::get('/section/{section}/students', SectionComponent\ViewStudentComponent::class)->name('section.students.view');
 
-            Route::get('/class-list/{section}', [PDFController::class, 'streamClasslist'])->name('stream.class-list.pdf');
+            Route::get('/class-list/prof/{employee}/subj/{prospectusSubject}/section/{section}', [PDFController::class, 'streamClasslist'])->name('stream.class-list.pdf');
             Route::get('/schedule-timetable/{section}', [PDFController::class, 'streamSchedule'])->name('stream.schedule.pdf');
+            Route::get('/curriculum/{curriculum}', [PDFController::class, 'streamCurriculum'])->name('stream.curriculum.pdf');
         });
     });
     //end: all except student
