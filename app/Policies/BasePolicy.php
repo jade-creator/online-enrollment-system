@@ -51,6 +51,7 @@ class BasePolicy
             'view' => ['admin', 'registrar', 'dean'],
             'export' => ['admin', 'student'],
             'create' => ['student'],
+            'cash' => ['admin', 'registrar', 'dean', 'faculty'],
         ],
         'faculty' => [
             'masterlist' => ['admin', 'registrar']

@@ -157,7 +157,7 @@
                 </x-sidebar.item>
 
                 <x-sidebar.item title="Payments">
-                    <x-sidebar.link routeName="admin.payments.view" :routes="['admin.payments.view']" name="Payments">
+                    <x-sidebar.link routeName="admin.payments.view" :routes="['admin.payments.view', 'user.payment.index']" name="Payments">
                         <x-icons.credit-card-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>
@@ -230,7 +230,7 @@
                 </x-sidebar.item>
 
                 <x-sidebar.item title="Payments">
-                    <x-sidebar.link routeName="admin.payments.view" :routes="['admin.payments.view']" name="Payments">
+                    <x-sidebar.link routeName="admin.payments.view" :routes="['admin.payments.view', 'user.payment.index']" name="Payments">
                         <x-icons.credit-card-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>
@@ -272,7 +272,7 @@
                 </x-sidebar.item>
 
                 <x-sidebar.item title="Payments">
-                    <x-sidebar.link routeName="admin.payments.view" :routes="['admin.payments.view']" name="Payments">
+                    <x-sidebar.link routeName="admin.payments.view" :routes="['admin.payments.view', 'user.payment.index']" name="Payments">
                         <x-icons.credit-card-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>
@@ -308,7 +308,7 @@
                 </x-sidebar.item>
 
                 <x-sidebar.item title="Payments">
-                    <x-sidebar.link routeName="student.payments.view" :routes="['student.payments.view', 'student.paywithpaypal']" name="Payments">
+                    <x-sidebar.link routeName="student.payments.view" :routes="['student.payments.view', 'user.payment.index']" name="Payments">
                         <x-icons.credit-card-icon/>
                     </x-sidebar.link>
                 </x-sidebar.item>

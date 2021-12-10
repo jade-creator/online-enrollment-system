@@ -27,7 +27,7 @@
                     <input wire:model="selectPage" wire:loading.attr="disabled" type="checkbox" title="Select Displayed Data" class="mx-3 cursor-pointer border-gray-500 border-opacity-50 focus:outline-none focus:ring focus:ring-transparent rounded-sm">
                     <x-table.sort-button event="sortFieldSelected('id')">Transaction ID</x-table.sort-button>
                 </div>
-                <x-table.column-title class="col-span-2">Paypal</x-table.column-title>
+                <x-table.column-title class="col-span-2">Name</x-table.column-title>
                 <x-table.column-title class="col-span-2">Amount</x-table.column-title>
                 <x-table.column-title class="col-span-2">Balance</x-table.column-title>
                 <x-table.column-title class="col-span-3">Payment</x-table.column-title>
@@ -40,12 +40,11 @@
                         <x-table.row :active="$this->isSelected($transaction->id)">
                             <div name="slot" class="grid grid-cols-12 md:gap-2">
                                 <x-table.cell-checkbox :value="$transaction->id">{{ $transaction->custom_id ?? 'N/A' }}</x-table.cell-checkbox>
-                                <x-table.cell headerLabel="Paypal" class="justify-start md:col-span-2">
-                                    <div class="hidden md:block flex flex-col">
-                                        <div>{{ $transaction->paypal_transaction_id ?? '--' }}</div>
-                                        <div class="font-bold text-gray-400 text-xs pt-0.5">{{ $transaction->created_at->timezone('Asia/Manila')->format('M. d, Y g:i:s A') ?? 'N/A' }}</div>
+                                <x-table.cell headerLabel="Name" class="justify-start md:col-span-2">
+                                    <div class="flex flex-col my-2 md:my-0">
+                                        <div>{{ $transaction->name ?? 'N/A'}}</div>
+                                        <div class="font-bold text-gray-400 text-xs pt-0.5">{{ $transaction->email ?? 'N/A' }}</div>
                                     </div>
-                                    <div class="block md:hidden my-4">{{ $transaction->paypal_transaction_id ?? 'N/A' }}</div>
                                 </x-table.cell>
                                 <x-table.cell headerLabel="Amount" class="justify-start md:col-span-2">{{ $transaction->getFormattedPriceAttribute($transaction->amount) ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="Balance" class="justify-start md:col-span-2">{{ $transaction->getFormattedPriceAttribute($transaction->running_balance) ?? 'N/A' }}</x-table.cell>
@@ -71,13 +70,11 @@
                                                             </a>
                                                         @endcan
 
-                                                        @can ('export', $transaction)
-                                                            <a href="{{ route('stream.transaction.pdf', $transaction) }}" target="_blank">
-                                                                <x-table.cell-button title="Print Details">
-                                                                    <x-icons.export-icon/>
-                                                                </x-table.cell-button>
-                                                            </a>
-                                                        @endcan
+                                                        <a href="{{ route('stream.transaction.pdf', $transaction) }}" target="_blank">
+                                                            <x-table.cell-button title="Print Details">
+                                                                <x-icons.export-icon/>
+                                                            </x-table.cell-button>
+                                                        </a>
 
                                                         <x-table.cell-button wire:click="archive('Transaction', {{$transaction}}, 'archived_at')" wire:loading.attr="disabled" @click.stop title="Archive">
                                                             <x-icons.edit-icon/>
@@ -119,7 +116,7 @@
                                         <x-table.cell headerLabel="Registration ID" class="md:col-span-2">{{ $transaction->registration->custom_id ?? 'N/A' }}</x-table.cell>
                                         <x-table.cell headerLabel="level" class="md:col-span-2">{{ $transaction->registration->prospectus->level->level ?? 'N/A' }}</x-table.cell>
                                         <x-table.cell headerLabel="semester" class="md:col-span-2">{{ $transaction->registration->prospectus->term->term ?? 'N/A' }}</x-table.cell>
-                                        <x-table.cell headerLabel="total" class="md:col-span-2">PHP 100.00</x-table.cell>
+                                        <x-table.cell headerLabel="total" class="md:col-span-2">{{$transaction->getFormattedPriceAttribute($transaction->registration->assessment->grand_total) ?? '--'}}</x-table.cell>
                                         <x-table.cell headerLabel="date" class="md:col-span-3">{{ $transaction->registration->created_at->timezone('Asia/Manila')->format('M. d, Y') ?? 'N/A' }}</x-table.cell>
                                         <x-table.cell-action>
                                             <a href="{{ route('pre.registration.view', $transaction->registration->id ?? '') }}">

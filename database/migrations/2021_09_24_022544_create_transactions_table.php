@@ -17,10 +17,9 @@ class CreateTransactionsTable extends Migration
             $table->id();
             $table->foreignId('registration_id')->constrained();
             $table->string('custom_id', 100);
-            $table->string('paypal_transaction_id', 100)->nullable()->default(null);
-            $table->string('paypal_name', 100)->nullable()->default(null);
-            $table->string('paypal_email', 100)->nullable()->default(null);
-            $table->string('paypal_status', 100)->nullable()->default(NULL);
+            $table->string('name', 100)->nullable()->default(null);
+            $table->string('email', 100)->nullable()->default(null);
+            $table->string('status', 100)->nullable()->default(NULL);
             $table->bigInteger('amount');
             $table->bigInteger('running_balance');
             $table->timestamp('archived_at')->nullable()->default(NULL);

@@ -13,11 +13,11 @@ class Transaction extends BaseModel
 
     protected $fillable = [
         'registration_id',
+        'collector_id',
         'custom_id',
-        'paypal_transaction_id',
-        'paypal_name',
-        'paypal_email',
-        'paypal_status',
+        'name',
+        'email',
+        'status',
         'amount',
         'running_balance',
         'archived_at',
@@ -39,16 +39,21 @@ class Transaction extends BaseModel
 
     public function getPaymentElementAttribute()
     {
-        $status = $this->attributes['paypal_transaction_id'] == NULL ? 'failed' : 'completed';
+        $status = $this->attributes['status'];
         $color = '';
 
         switch ($status) {
-            case 'failed':
+            case 'FAILED':
                 $color = 'border border-red-500 text-red-500';
                 break;
 
-            case 'completed':
+            case 'COMPLETED':
                 $color = 'border border-green-500 text-green-500';
+                break;
+
+            default:
+                $color = 'border border-gray-500 text-gray-500';
+                break;
         }
 
         return '<span class="px-2 py-1 rounded text-white uppercase '.$color.'">'.$status.'</span>';
@@ -83,6 +88,10 @@ class Transaction extends BaseModel
     public function setAmountAttribute($value)
     {
         $this->attributes['amount'] = $this->addTwoZeroDigits($value);
+    }
+
+    public function collector() { return
+        $this->belongsTo(User::class, 'collector_id');
     }
 
     public function registration() { return

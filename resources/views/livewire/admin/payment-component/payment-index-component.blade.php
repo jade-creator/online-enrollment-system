@@ -17,7 +17,7 @@
                     <input wire:model="selectPage" wire:loading.attr="disabled" type="checkbox" class="mx-3 cursor-pointer border-gray-500 border-opacity-50 focus:outline-none focus:ring focus:ring-transparent rounded-sm" title="Select Displayed Data">
                     <x-table.sort-button event="sortFieldSelected('code')">Transaction ID</x-table.sort-button>
                 </div>
-                <x-table.column-title class="col-span-2">Paypal</x-table.column-title>
+                <x-table.column-title class="col-span-2">Name</x-table.column-title>
                 <x-table.column-title class="col-span-2">Amount</x-table.column-title>
                 <x-table.column-title class="col-span-2">Balance</x-table.column-title>
                 <x-table.column-title class="col-span-3">Payment</x-table.column-title>
@@ -30,16 +30,11 @@
                         <x-table.row :active="$this->isSelected($transaction->id)">
                             <div name="slot" class="grid grid-cols-12 gap-2">
                                 <x-table.cell-checkbox :value="$transaction->id">{{ $transaction->custom_id ?? 'N/A' }}</x-table.cell-checkbox>
-                                <x-table.cell headerLabel="Paypal Transaction ID" class="justify-start md:col-span-2">
-                                    <div class="hidden md:block flex flex-col">
-                                        <div>
-                                            <a href="{{ 'https://www.sandbox.paypal.com/activity/payment/'.$transaction->paypal_transaction_id }}" class="underline text-blue-500" target="_blank">
-                                                {{ $transaction->paypal_transaction_id ?? '--' }}
-                                            </a>
-                                        </div>
-                                        <div class="font-bold text-gray-400 text-xs pt-0.5">{{ $transaction->created_at->timezone('Asia/Manila')->format('M. d, Y g:i:s A') ?? 'N/A' }}</div>
+                                <x-table.cell headerLabel="Name" class="justify-start md:col-span-2">
+                                    <div class="flex flex-col my-2 md:my-0">
+                                        <div>{{ $transaction->name ?? 'N/A'}}</div>
+                                        <div class="font-bold text-gray-400 text-xs pt-0.5">{{ $transaction->email ?? 'N/A' }}</div>
                                     </div>
-                                    <div class="block md:hidden my-4">{{ $transaction->paypal_transaction_id ?? 'N/A' }}</div>
                                 </x-table.cell>
                                 <x-table.cell headerLabel="Amount" class="justify-start md:col-span-2">{{ $transaction->getFormattedPriceAttribute($transaction->amount) ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="Balance" class="justify-start md:col-span-2">{{ $transaction->getFormattedPriceAttribute($transaction->running_balance) ?? 'N/A' }}</x-table.cell>
