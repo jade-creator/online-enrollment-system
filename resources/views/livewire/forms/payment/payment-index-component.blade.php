@@ -1,4 +1,5 @@
-<x-app-layout>
+<div class="w-full">
+
     <div class="w-full mx-auto pt-8">
         <div class="w-full pl-0 md:pl-8">
             <div class="md:grid md:grid-cols-3 md:gap-6">
@@ -15,10 +16,10 @@
                         <div class="my-2">
                             @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
                                 <div class="flex items-start">
-                                    <img class="border border-gray-200 mt-1 h-28 w-28 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="photo"/>
+                                    <img class="border border-gray-200 mt-1 h-28 w-28 rounded-full object-cover" src="{{ $registration->student->user->profile_photo_url }}" alt="photo"/>
                                     <div class="px-6 py-2 flex flex-col text-2xl w-full">
                                         <div class="flex items-center justify-between w-full">
-                                            <h2 class="font-extrabold">{{ auth()->user()->person->short_full_name }}</h2>
+                                            <h2 class="font-extrabold">{{ $registration->student->user->person->short_full_name }}</h2>
                                             <p class="hidden md:block text-gray-500 text-md">{{ $registration->custom_id ?? 'N/A' }}</p>
                                         </div>
                                         <p class="text-sm text-gray-600 mt-1 tracking-widest">{{ $registration->classification }}</p>
@@ -39,8 +40,7 @@
                         <div class="w-full md:w-11/12 border-t border-gray-200 mb-10"></div>
                     </div>
 
-                    <form class="col-span-6 xl:col-span-2 w-full md:w-8/12 lg:w-1/2 xl:w-full grid place-items-center" method="POST" id="payment-form" role="form" action="{!! URL::route('student.paypal') !!}" >
-                        {{ csrf_field() }}
+                    <div class="col-span-6 xl:col-span-2 w-full md:w-8/12 lg:w-1/2 xl:w-full grid place-items-center">
                         <div class="w-full px-4 py-5 sm:p-6 shadow sm:rounded-tl-md sm:rounded-tr-md bg-white">
                             <div>
                                 <p class="text-indigo-500 uppercase font-extrabold text-2xl">SUMMARY</p>
@@ -58,7 +58,7 @@
 
                                 <div class="col-span-6 flex items-center justify-between">
                                     <label>Discount @if (filled($registration->assessment->isPercentage))
-                                        {{$registration->assessment->discount_type ?? ''}} @endif</label>
+                                            {{$registration->assessment->discount_type ?? ''}} @endif</label>
                                     <span>
                                         @if (filled($registration->assessment->isPercentage))
                                             {{$registration->assessment->discount_amount}}
@@ -88,26 +88,23 @@
                                 </div>
 
                                 @can ('action', $registration)
-                                    <div class="col-span-6 grid grid-cols-6">
-                                            <input id="amount" type="number" name="amount" value="{{ old('amount') }}" min="0" autofocus class="col-span-4">
-                                            <button type="submit" class="md:text-sm py-2.5 ml-2 bg-indigo-500 font-black rounded-md text-white col-span-2 hover:bg-indigo-700">
-                                                Enter Amount
-                                            </button>
-                                    </div>
+                                    <livewire:partials.paypal-smart-button-component :registration="$registration" :totalBalance="$registration->assessment->balance" key="'paypal-smart-button-component-'{{now()}}"/>
                                 @endcan
-
-                                <div class="col-span-6">
-                                    <x-jet-input-error for="amount" class="mt-2"/>
-                                </div>
                             </div>
                         </div>
-                        <div class="my-6 text-gray-400 text-md flex items-center justify-center">
-                            <x-icons.lock-icon/>
-                            <span>Secured payment with <span class="font-bold text-indigo-500">Pay</span><span class="font-bold text-blue-400">Pal</span></span>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</x-app-layout>
+
+    <div>@include('partials.loading')</div>
+
+    @if (session()->has('alert'))
+        <x-form.alert type="{{session('alert')['type']}}">{!!session()->pull('alert')['message']!!}</x-form.alert>
+    @endif
+
+    @push('scripts')
+        <script src="{{ asset('js/alert.js') }}"></script>
+    @endpush
+</div>

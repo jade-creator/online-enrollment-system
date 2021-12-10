@@ -19,7 +19,10 @@ class TransactionPolicy extends BasePolicy
     }
 
     public function export(User $user, Transaction $transaction) { return
-        $this->isAuthorized('transaction', 'export', $user)
-            && filled($transaction->paypal_transaction_id);
+        $this->isAuthorized('transaction', 'export', $user);
+    }
+
+    public function cash(User $user) { return
+        $this->isAuthorized('transaction', 'cash', $user);
     }
 }

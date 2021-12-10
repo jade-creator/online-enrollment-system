@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\PaypalPaymentController;
 use App\Http\Livewire\Admin\AdvisingComponent;
 use App\Http\Livewire\Admin\Dashboard;
 use App\Http\Livewire\Admin\CurriculumComponent;
@@ -16,6 +15,7 @@ use App\Http\Livewire\Admin\SubjectComponent;
 use App\Http\Livewire\Forms\Contact\ContactShow;
 use App\Http\Livewire\Forms\Guardian\GuardianShow;
 use App\Http\Livewire\Forms\Education\EducationShow;
+use App\Http\Livewire\Forms\Payment;
 use App\Http\Livewire\Forms\PersonalDetail\AdminDetailForm;
 use App\Http\Livewire\Forms\PersonalDetail\StudentDetailForm;
 use App\Http\Livewire\Forms\PersonalDetail\PersonalDetailShow;
@@ -55,10 +55,6 @@ Route::get('/view-pdf', function () {
     return view('pdf.dashboard-overview');
 });
 
-// Downlaod pdf test
-//done Route::get('/registration-pdf/{pdflocation}/{pdfname}', [PDFController::class, 'downloadPDF'])->name('registration.pdf');
-//------END GUEST-------
-
 Route::middleware(['auth:sanctum', 'verified'])->group(function (){
     // account settings
     Route::group(['middleware' => 'user.detail', 'prefix' => 'user', 'as' => 'user.'], function (){
@@ -71,7 +67,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
 
     // start admin
     Route::middleware(['role:admin'])->group(function () {
-//        Route::get('/user/personal-details/employee', AdminDetailForm::class)->middleware(['detail'])->name('user.personal-details.admin');
 
         Route::group(['middleware' => ['user.detail', 'approved'], 'prefix' => 'admin', 'as' => 'admin.'], function (){
 
@@ -214,6 +209,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
             Route::get('/pre-registration/{regId}/details', RegistrationComponent\RegistrationViewComponent::class)->name('pre.registration.view');
 
             Route::get('/notifications', User\UserNotificationComponent::class)->name('user.notification.index');
+
+            Route::get('/payment/{registration}', Payment\PaymentIndexComponent::class)->name('user.payment.index');
         });
 
         Route::get('/user/personal-profile/{userId}', User\UserProfileComponent::class)->name('user.personal.profile.view');
@@ -239,9 +236,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
             Route::get('/grades', Student\StudentGradeViewComponent::class)->name('grades.view');
 
             //paypal routes
-            Route::get('paywithpaypal/{registrationId?}', [PaypalPaymentController::class, 'payWithPaypal'])->name('paywithpaypal');
-            Route::post('paypal', [PaypalPaymentController::class, 'postPaymentWithpaypal'])->name('paypal');
-            Route::get('paypal', [PaypalPaymentController::class, 'getPaymentStatus'])->name('status');
             Route::get('/payments', Student\Payment\PaymentIndexComponent::class)->name('payments.view');
         });
     });

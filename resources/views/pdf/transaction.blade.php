@@ -24,7 +24,7 @@
             <table style="font-size: 14px;">
                 <tr>
                     <td style="text-align: left;">Transaction Details</td>
-                    <td style="text-align: right;">{{ $transaction->created_at->timezone('Asia/Manila')->format('M. d, Y g:i:s A') ?? 'N/A' }} | Paypal Transaction ID: {{ $transaction->paypal_transaction_id ?? 'N/A' }}</td>
+                    <td style="text-align: right;">{{ $transaction->created_at->timezone('Asia/Manila')->format('M. d, Y g:i:s A') ?? 'N/A' }} | Transaction ID: {{ $transaction->custom_id ?? 'N/A' }}</td>
                 </tr>
             </table>
         </div>
@@ -33,11 +33,11 @@
     <div class="" style="width: 100%; padding: 10px 0; margin: 0 10px; border-bottom: 2px solid #c7c4c4; border-bottom-style: dotted;">
         <table style="font-size: 14px;">
             <tr>
-                <td style="text-align: left;">Payment received from {{$transaction->paypal_name ?? 'N/A'}}</td>
+                <td style="text-align: left;">Payment received from {{$transaction->name ?? 'N/A'}}</td>
                 <td style="text-align: right;">Amount</td>
             </tr>
             <tr>
-                <td style="text-align: left;">Payment Status: {{$transaction->paypal_transaction_id == NULL ? 'Failed' : 'Completed'}}</td>
+                <td style="text-align: left;">Payment Status: {{$transaction->status ?? 'N/A'}}</td>
                 <td style="text-align: right; font-size: 20px; font-weight: bolder;">{{$transaction->getFormattedPriceAttribute($transaction->amount) ?? 'N/A'}}</td>
             </tr>
         </table>
@@ -92,19 +92,19 @@
         <table style="font-size: 14px; width: 70%;">
             <tr>
                 <td style="text-align: left; padding-bottom: 5px;">Paid by</td>
-                <td style="text-align: left; padding-bottom: 5px;">{{$transaction->paypal_name ?? 'N/A' }}</td>
+                <td style="text-align: left; padding-bottom: 5px;">{{$transaction->name ?? 'N/A' }}</td>
             </tr>
             <tr>
                 <td style="text-align: left;"></td>
-                <td style="text-align: left; padding-bottom: 5px; color: #adacac">The sender of this payment is <span style="font-weight: bolder;">{{ $transaction->paypal_status ?? 'N/A' }}</span></td>
+                <td style="text-align: left; padding-bottom: 5px;">{{ $transaction->email ?? 'N/A' }}</td>
             </tr>
             <tr>
-                <td style="text-align: left;"></td>
-                <td style="text-align: left; padding-bottom: 5px;">{{ $transaction->paypal_email ?? 'N/A' }}</td>
-            </tr>
-            <tr>
-                <td style="text-align: left; padding-top: 5px; padding-bottom: 5px;">Payment Sent to</td>
-                <td style="text-align: left; padding-top: 5px; padding-bottom: 5px;">olcollegeenrollmentsystem@test.com</td>
+                <td style="text-align: left; padding-top: 5px; padding-bottom: 5px;">Collected by</td>
+                @if (filled($transaction->collector_id))
+                    <td style="text-align: left; padding-top: 5px; padding-bottom: 5px;">{{ $transaction->collector->person->shortFullName ?? 'N/A' }}</td>
+                @else
+                    <td style="text-align: left; padding-top: 5px; padding-bottom: 5px;">{{ $school_name ?? 'N/A' }}</td>
+                @endif
             </tr>
         </table>
     </div>

@@ -91,7 +91,7 @@
                                                     </a>
 
                                                     @can ('pay', $registration)
-                                                        <a href="{{ route('student.paywithpaypal', $registration->custom_id) }}">
+                                                        <a href="{{ route('user.payment.index', $registration) }}">
                                                             <x-table.cell-button title="Pay">
                                                                 <x-icons.fee-icon/>
                                                             </x-table.cell-button>

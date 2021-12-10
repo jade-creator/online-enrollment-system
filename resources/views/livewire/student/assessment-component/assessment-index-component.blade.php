@@ -152,17 +152,10 @@
                 <x-slot name="actions">
                     @can ('action', $registration)
                         @isset ($registration->assessment)
-                            @can ('proceedToPayment', $registration->assessment)
-                                <a class="w-full text-white py-2 rounded-md bg-indigo-500 hover:bg-indigo-800 flex items-center justify-center" href="{{ route('student.paywithpaypal', ['registrationId' => $this->registration->custom_id]) }}">
-                                    <span>Proceed to Payment</span>
-                                    <x-icons.right-arrow-icon />
-                                </a>
-                            @elsecan ('view', $registration->assessment)
-                                <a class="w-full text-white py-2 rounded-md bg-indigo-500 hover:bg-indigo-800 flex items-center justify-center" href="{{ route('admin.payments.view', ['search' => $this->registration->custom_id]) }}">
-                                    <x-icons.fee-icon/>
-                                    <span class="mx-2">PAID AMOUNT: {{ $registration->assessment->paid_amount ?? 'N/A' }}</span>
-                                </a>
-                            @endcan
+                            <a class="w-full text-white py-2 rounded-md bg-indigo-500 hover:bg-indigo-800 flex items-center justify-center" href="{{ route('user.payment.index', ['registration' => $this->registration]) }}">
+                                <span>Proceed to Payment</span>
+                                <x-icons.right-arrow-icon />
+                            </a>
                         @else
                             @if (! isset($grandTotal))
                                 @can ('finalize', $registration)

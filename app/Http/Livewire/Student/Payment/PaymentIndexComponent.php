@@ -88,7 +88,7 @@ class PaymentIndexComponent extends Livewire\Component
             })
             ->first();
 
-        if (filled($registration)) return $this->redirect(route('student.paywithpaypal', $registration->custom_id));
+        if (filled($registration)) return $this->redirect(route('user.payment.index', $registration));
 
         return session()->flash('alert', [
             'type' => 'info',

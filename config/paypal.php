@@ -9,4 +9,7 @@ return [
         'log.FileName' => storage_path() . '/logs/paypal.log',
         'log.LogLevel' => 'FINE'
     ),
+    'currency_code' => 'PHP',
+    'shipping_preference' => 'NO_SHIPPING',
+    'locale' => 'en_PH'
 ];
