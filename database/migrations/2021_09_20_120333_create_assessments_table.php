@@ -22,6 +22,7 @@ class CreateAssessmentsTable extends Migration
             $table->bigInteger('grand_total')->default(0);
             $table->bigInteger('balance')->default(0);
             $table->text('remarks')->nullable();
+            $table->boolean('isUnifastBeneficiary')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

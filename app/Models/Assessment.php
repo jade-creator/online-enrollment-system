@@ -16,7 +16,16 @@ class Assessment extends BaseModel
         'grand_total',
         'balance',
         'remarks',
+        'isUnifastBeneficiary',
     ];
+
+    protected $casts = [ 'isUnifastBeneficiary' => 'boolean', ];
+
+    protected $attributes = [ 'isUnifastBeneficiary' => false, ];
+
+    public function getIsUnifastRecepientAttribute() { return
+        $this->attributes['isUnifastBeneficiary'] == true ? 'Yes' : 'No';
+    }
 
     public function getPaidAmountAttribute()
     {

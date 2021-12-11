@@ -46,6 +46,12 @@
                             <p class="text-gray-600 text-base">Remarks</p>
                             <textarea readonly>{{ $assessment->remarks ?? 'N/A' }}</textarea>
                         </div>
+                        @if ($assessment->isUnifastBeneficiary)
+                            <div class="col-span-6 flex items-center justify-between">
+                                <p class="text-gray-600 text-base">Unifast Beneficiary</p>
+                                <p class="text-black font-semibold uppercase">{{ $assessment->isUnifastRecepient ?? 'N/A' }}</p>
+                            </div>
+                        @endif
                         <div class="col-span-6 flex justify-between items-center font-bold">
                             <p class="text-lg text-black">Total Amount</p>
                             <p class="text-lg text-green-500">{{ $assessment->getFormattedPriceAttribute($assessment->grand_total) ?? 'N/A' }}</p>
@@ -109,6 +115,20 @@
                                     <textarea wire:model.defer="assessment.remarks" wire:loading.attr="disabled"></textarea>
                                     <x-jet-input-error for="assessment.remarks" class="mt-2"/>
                                 </div>
+                                <div class="col-span-6">
+                                    <x-jet-label value="{{ __('Unifast Beneficiary') }}"/>
+                                    <fieldset name="type" class="w-100 flex items-center gap-6">
+                                        <label for="yes" class="w-1/2 border border-gray-300 hover:border-indigo-400 rounded-md p-2 flex items-center cursor-pointer">
+                                            <input wire:model.defer="isUnifastBeneficiary" wire:loading.attr="disabled" id="yes" type="radio" value="1" name="type" class="mr-2 outline-none">
+                                            <label for="yes" class="cursor-pointer">Yes</label>
+                                        </label>
+                                        <label for="no" class="w-1/2 border border-gray-300 hover:border-indigo-400 rounded-md p-2 flex items-center cursor-pointer">
+                                            <input wire:model.defer="isUnifastBeneficiary" wire:loading.attr="disabled" id="no" type="radio" value="0" name="type" class="mr-2">
+                                            <label for="no" class="cursor-pointer">No</label>
+                                        </label>
+                                    </fieldset>
+                                    <x-jet-input-error for="isUnifastBeneficiary" class="mt-2"/>
+                                </div>
                             @else
                                 @foreach ($registration->fees as $index => $fee)
                                     @if ($fees[$fee->id][0] == TRUE)
@@ -140,6 +160,12 @@
                                     <p class="text-gray-600 text-base">Remarks</p>
                                     <textarea readonly>{{ $assessment->remarks ?? 'N/A' }}</textarea>
                                 </div>
+                                @if ($isUnifastBeneficiary)
+                                    <div class="col-span-6 flex items-center justify-between">
+                                        <p class="text-gray-600 text-base">Unifast Beneficiary</p>
+                                        <p class="text-black font-semibold uppercase">{{ $isUnifastBeneficiary == true ? 'Yes' : 'No' }}</p>
+                                    </div>
+                                @endif
                                 <div class="col-span-6 flex justify-between items-center font-bold">
                                     <p class="text-lg text-black">Total Amount</p>
                                     <p class="text-lg text-green-500">{{ $assessment->getFormattedPriceAttribute($grandTotal) ?? 'N/A' }}</p>
