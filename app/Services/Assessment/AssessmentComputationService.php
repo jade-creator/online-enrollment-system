@@ -6,6 +6,17 @@ use App\Models;
 
 class AssessmentComputationService
 {
+    public function computeAmountDue(float $grandTotal = 0, float $downpayment = 0, ?bool $isFullPayment = true) : float
+    {
+        if (is_null($isFullPayment)) return 0;
+
+        $remainingAmount = $grandTotal - $downpayment;
+
+        if ($isFullPayment) return $remainingAmount;
+
+        return $remainingAmount / 2;
+    }
+
     /**
      * @throws \Exception
      */

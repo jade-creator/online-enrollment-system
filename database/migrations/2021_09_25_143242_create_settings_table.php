@@ -22,6 +22,8 @@ class CreateSettingsTable extends Migration
             $table->text('school_description')->nullable()->default(NULL);
             $table->boolean('auto_account_approval')->default(1);
             $table->boolean('allow_irregular_student_to_enroll')->default(1);
+            $table->smallInteger('downpayment_minimum_percentage')->default(0);
+            $table->boolean('enable_penalty')->default(1);
             $table->timestamps();
         });
     }

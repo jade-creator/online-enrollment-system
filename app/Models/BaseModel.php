@@ -24,4 +24,8 @@ class BaseModel extends Model
         $value = $value / 100;
         return number_format((float)$value, 2, '.', '');
     }
+
+    public function addTwoZeroDigits($value) { return
+        $value * 100;
+    }
 }

@@ -20,6 +20,7 @@ class Transaction extends BaseModel
         'status',
         'amount',
         'running_balance',
+        'penalty',
         'archived_at',
     ];
 
@@ -68,6 +69,10 @@ class Transaction extends BaseModel
         });
     }
 
+    public function getPenaltyAttribute($value) { return
+        $this->formatTwoDecimalPlaces($value);
+    }
+
     public function getRunningBalanceAttribute($value) { return
         $this->formatTwoDecimalPlaces($value);
     }
@@ -76,8 +81,9 @@ class Transaction extends BaseModel
         $this->formatTwoDecimalPlaces($value);
     }
 
-    public function addTwoZeroDigits($value) { return
-        $value * 100;
+    public function setPenaltyAttribute($value)
+    {
+        $this->attributes['penalty'] = $this->addTwoZeroDigits($value);
     }
 
     public function setRunningBalanceAttribute($value)
