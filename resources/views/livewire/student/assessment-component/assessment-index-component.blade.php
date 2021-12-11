@@ -117,7 +117,7 @@
                                 </div>
                                 <div class="col-span-6">
                                     <x-jet-label value="{{ __('Unifast Beneficiary') }}"/>
-                                    <fieldset name="type" class="w-100 flex items-center gap-6">
+                                    <fieldset name="type" class="w-100 flex items-center gap-6 mt-2">
                                         <label for="yes" class="w-1/2 border border-gray-300 hover:border-indigo-400 rounded-md p-2 flex items-center cursor-pointer">
                                             <input wire:model.defer="isUnifastBeneficiary" wire:loading.attr="disabled" id="yes" type="radio" value="1" name="type" class="mr-2 outline-none">
                                             <label for="yes" class="cursor-pointer">Yes</label>
@@ -158,7 +158,7 @@
                                 </div>
                                 <div class="col-span-6">
                                     <p class="text-gray-600 text-base">Remarks</p>
-                                    <textarea readonly>{{ $assessment->remarks ?? 'N/A' }}</textarea>
+                                    <textarea readonly class="mt-2">{{ $assessment->remarks ?? 'N/A' }}</textarea>
                                 </div>
                                 @if ($isUnifastBeneficiary)
                                     <div class="col-span-6 flex items-center justify-between">
@@ -169,6 +169,47 @@
                                 <div class="col-span-6 flex justify-between items-center font-bold">
                                     <p class="text-lg text-black">Total Amount</p>
                                     <p class="text-lg text-green-500">{{ $assessment->getFormattedPriceAttribute($grandTotal) ?? 'N/A' }}</p>
+                                </div>
+                                <div x-data="{ open: false }" x-show="{{! $isUnifastBeneficiary}}" x-cloak class="col-span-6">
+                                    <div class="w-full flex items-center justify-between">
+                                        <p class="text-gray-600 text-base">Downpayment {{$this->setting->downpayment ?? 'N/A'}}</p>
+                                        <p class="text-black font-semibold">{{ $assessment->getFormattedPriceAttribute($downpayment) ?? 'N/A' }}</p>
+                                    </div>
+
+                                    <div class="w-full mt-4">
+                                        <x-jet-label value="{{ __('Payment Type') }}"/>
+                                        <fieldset name="payment_type" class="w-100 flex items-center gap-6 mt-2">
+                                            <label @click="open = true" for="full" class="w-1/2 border border-gray-300 hover:border-indigo-400 rounded-md p-2 flex items-center cursor-pointer">
+                                                <input @click="open = true" wire:model="isFullPayment" wire:loading.attr="disabled" id="full" type="radio" value="1" name="payment_type" class="mr-2 outline-none">
+                                                <label for="full" class="cursor-pointer">Full Payment</label>
+                                            </label>
+                                            <label @click="open = false" for="partial" class="w-1/2 border border-gray-300 hover:border-indigo-400 rounded-md p-2 flex items-center cursor-pointer">
+                                                <input @click="open = false" wire:model="isFullPayment" wire:loading.attr="disabled" id="partial" type="radio" value="0" name="payment_type" class="mr-2">
+                                                <label for="partial" class="cursor-pointer">Partial Payment</label>
+                                            </label>
+                                        </fieldset>
+                                        <x-jet-input-error for="isFullPayment" class="mt-2"/>
+                                    </div>
+
+                                    <div class="w-full grid grid-cols-6 gap-6 mt-4">
+                                        <div class="col-span-6 flex items-center justify-between">
+                                            <p class="text-gray-600 text-base">Amount Due</p>
+                                            <p wire:target="isFullPayment" wire:loading.class="hidden" class="text-black font-semibold">{{ $assessment->getFormattedPriceAttribute($amountDue) ?? 'N/A' }}</p>
+                                            <p wire:target="isFullPayment" wire:loading.class.remove="hidden" class="hidden"><x-icons.loading-icon/></p>
+                                        </div>
+
+                                        <div :class="{'col-span-6': open, '': ! open }" class="col-span-3">
+                                            <x-jet-label x-show="! open" x-cloak for="first_due_date" value="{{ __('Midterm') }}" />
+                                            <x-jet-input wire:model.defer="first_due_date" wire:loading.attr="disabled" id="first_due_date" type="date" autocomplete="first_due_date"/>
+                                            <x-jet-input-error for="first_due_date" class="mt-2"/>
+                                        </div>
+
+                                        <div x-show="! open" x-cloak class="col-span-3">
+                                            <x-jet-label for="first_due_date" value="{{ __('Finals') }}" />
+                                            <x-jet-input wire:model.defer="second_due_date" wire:loading.attr="disabled" id="first_due_date" type="date" autocomplete="first_due_date"/>
+                                            <x-jet-input-error for="second_due_date" class="mt-2"/>
+                                        </div>
+                                    </div>
                                 </div>
                             @endif
                         @endcan
@@ -196,12 +237,12 @@
                                     </x-jet-button>
                                 @endcan
                             @else
-                                <div class="w-full flex flex-col">
-                                    <x-jet-button wire:click="save" wire:loading.attr="disabled" class="w-full bg-green-500 hover:bg-green-600 flex items-center justify-center">
+                                <div class="w-full flex flex-col md:flex-row md:items-center md:gap-6">
+                                    <x-jet-button wire:click="save" wire:target="save" class="w-full md:w-1/2 bg-green-500 hover:bg-green-600 flex items-center justify-center">
                                         <x-icons.fee-icon/>
                                         <span class="mx-2">{{ __('PLACE FEES') }}</span>
                                     </x-jet-button>
-                                    <x-jet-button wire:click="cancel" class="w-full text-indigo-500 border-indigo-500 bg-white hover:bg-gray-200 flex items-center justify-center my-2">
+                                    <x-jet-button wire:click="cancel" wire:target="cancel" class="w-full md:w-1/2 text-indigo-500 border-indigo-500 bg-white hover:bg-gray-200 flex items-center justify-center my-2">
                                         <x-icons.reject-icon/>
                                         <span class="mx-2">{{ __('CANCEL') }}</span>
                                     </x-jet-button>

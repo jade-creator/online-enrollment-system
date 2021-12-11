@@ -23,6 +23,8 @@ class SettingSeeder extends Seeder
             'school_address' => 'Alcalde St., Kapisagan Pasig City',
             'auto_account_approval' => 1,
             'allow_irregular_student_to_enroll' => 1,
+            'max_slots' => 40,
+            'downpayment_minimum_percentage' => 30,
             'created_at' => now(),
             'updated_at' => now()
         ];

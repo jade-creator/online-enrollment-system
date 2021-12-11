@@ -22,6 +22,7 @@ class CreateTransactionsTable extends Migration
             $table->string('status', 100)->nullable()->default(NULL);
             $table->bigInteger('amount');
             $table->bigInteger('running_balance');
+            $table->bigInteger('penalty')->default(0);
             $table->timestamp('archived_at')->nullable()->default(NULL);
             $table->timestamps();
             $table->softDeletes();
