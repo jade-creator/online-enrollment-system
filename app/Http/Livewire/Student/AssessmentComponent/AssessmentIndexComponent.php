@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Student\AssessmentComponent;
 use App\Models;
 use App\Services\Assessment\AssessmentComputationService;
 use App\Services\Assessment\AssessmentService;
+use App\Services\ProgramService;
 use App\Services\Registration\RegistrationService;
 use App\Traits\WithSweetAlert;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -20,10 +21,12 @@ class AssessmentIndexComponent extends Component
     public float $totalUnit = 0;
     public string $additional = '0';
     public array $fees = [];
+    public bool $isUnifastBeneficiary = false;
 
     public function rules()
     {
         return [
+            'isUnifastBeneficiary' => ['required'],
             'additional' => ['required', 'numeric', 'min:0'],
             'assessment.isPercentage' => ['nullable'],
             'assessment.discount_amount' => ['required', 'numeric', 'min:0'],
@@ -31,32 +34,20 @@ class AssessmentIndexComponent extends Component
         ];
     }
 
-    public function fees()
-    {
-        if ($this->registration->prospectus->program->fees->isNotEmpty()) {
-            $category = Models\Category::where('name', 'Tuition Fee (multiplied by unit/s)')->first();
-
-            foreach ($this->registration->prospectus->program->fees as $fee) {
-                $totalFee = $fee->price;
-                if ($category && $fee->category_id == $category->id) $totalFee = $this->totalUnit * $fee->price;
-
-                $this->fees[$fee->id] = [TRUE, $totalFee];
-            }
-        }
-    }
-
     public function mount()
     {
         try {
-            $this->fees();
+            $this->fees = (new ProgramService())->combineFees($this->registration, $this->totalUnit);
 
-            $this->fill([
-                'assessment' => new Models\Assessment(),
-                'assessment.isPercentage' => null,
-                'assessment.discount_amount' => 0,
-            ]);
-
-            if (isset($this->registration->assessment)) $this->assessment = $this->registration->assessment;
+            if (isset($this->registration->assessment)) {
+                $this->assessment = $this->registration->assessment;
+            } else {
+                $this->fill([
+                    'assessment' => new Models\Assessment(),
+                    'assessment.isPercentage' => null,
+                    'assessment.discount_amount' => 0,
+                ]);
+            }
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }
@@ -70,6 +61,7 @@ class AssessmentIndexComponent extends Component
     {
         try {
             $this->fill([
+                'assessment.isUnifastBeneficiary' => $this->isUnifastBeneficiary,
                 'assessment.additional' => $this->additional,
                 'assessment.grand_total' => $this->grandTotal,
                 'assessment.balance' => $this->grandTotal,
@@ -87,15 +79,16 @@ class AssessmentIndexComponent extends Component
         $this->validate();
 
         try {
-            if (is_null($this->assessment->isPercentage)) $this->assessment->discount_amount = 0;
-
             $this->authorize('create', Models\Assessment::class);
 
-            $this->grandTotal = (new AssessmentComputationService())->computeGrandTotal($this->additional, $this->totalUnit, $this->fees, $this->assessment);
+            $this->fill([
+                'grandTotal' => $this->isUnifastBeneficiary == true ? 0
+                    : (new AssessmentComputationService())->computeGrandTotal($this->additional, $this->totalUnit,
+                    $this->fees, $this->assessment),
+                'registration' => (new RegistrationService())->saveFees($this->registration, $this->fees),
+            ]);
 
-            $this->registration = (new RegistrationService())->saveFees($this->registration, $this->fees);
-
-            $this->registration = $this->registration->fresh();
+            $this->registration->refresh();
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }

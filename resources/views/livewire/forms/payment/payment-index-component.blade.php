@@ -73,6 +73,13 @@
                                     <span>{{ $registration->assessment->getFormattedPriceAttribute($registration->assessment->grand_total) ?? '--' }}</span>
                                 </div>
 
+                                @if ($registration->assessment->isUnifastBeneficiary)
+                                    <div class="col-span-6 flex items-center justify-between">
+                                        <label>Unifast Beneficiary</label>
+                                        <span class="uppercase">{{ $registration->assessment->isUnifastRecepient ?? '--' }}</span>
+                                    </div>
+                                @endif
+
                                 <div class="col-span-6">
                                     <div class="w-full border-t border-gray-200"></div>
                                 </div>
