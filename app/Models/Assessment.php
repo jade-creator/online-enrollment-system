@@ -20,8 +20,10 @@ class Assessment extends BaseModel
         'remarks',
         'isUnifastBeneficiary',
         'isFullPayment',
+        'downpayment_due_date',
         'first_due_date',
         'second_due_date',
+        'approver_id',
     ];
 
     protected $casts = [
@@ -33,6 +35,10 @@ class Assessment extends BaseModel
         'isUnifastBeneficiary' => false,
         'isFullPayment' => false,
     ];
+
+    public function getPaymentTypeAttribute() { return
+        $this->attributes['isFullPayment'] == true ? 'Full Payment' : 'Partial Payment';
+    }
 
     public function getIsUnifastRecepientAttribute() { return
         $this->attributes['isUnifastBeneficiary'] == true ? 'Yes' : 'No';
@@ -91,6 +97,10 @@ class Assessment extends BaseModel
 
     public function getDiscountTypeAttribute() { return
         $this->attributes['isPercentage'] ? 'Percentage' : 'Amount';
+    }
+
+    public function approver() { return
+        $this->belongsTo(User::class, 'approver_id');
     }
 
     public function registration() { return
