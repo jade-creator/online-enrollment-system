@@ -20,6 +20,7 @@ class Registration extends BaseModel
         'student_id',
         'prospectus_id',
         'curriculum_id',
+        'registrar_id',
     ];
 
     public array $relationships = [
@@ -175,6 +176,10 @@ class Registration extends BaseModel
 
     public function totalFees() { return
         $this->getFormattedPriceAttribute($this->formatTwoDecimalPlaces($this->fees()->sum('total_fee')));
+    }
+
+    public function registrar() { return
+        $this->belongsTo(User::class, 'registrar_id');
     }
 
     public function curriculum() { return
