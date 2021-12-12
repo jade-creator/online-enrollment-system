@@ -30,8 +30,9 @@ class SettingsComponent extends Component
             'setting.school_address' => ['required', 'max:200', 'string'],
             'setting.school_description' => ['nullable', 'max:1000', 'string'],
             'setting.auto_account_approval' => ['required', 'boolean'],
-            'setting.allow_irregular_student_to_enroll' => ['required', 'boolean'],
             'setting.max_slots' => ['required', 'numeric', 'min:1'],
+            'setting.downpayment_minimum_percentage' => ['required', 'numeric', 'min:1', 'max:100'],
+            'setting.penalty_percentage' => ['required', 'numeric', 'min:1', 'max:100'],
         ];
     }
 
@@ -47,7 +48,9 @@ class SettingsComponent extends Component
     public function updateSchoolInformation()
     {
         $rules = $this->rules();
-        unset($rules['setting.auto_account_approval'], $rules['setting.allow_irregular_student_to_enroll']);
+        unset($rules['setting.auto_account_approval'],
+              $rules['setting.downpayment_minimum_percentage'],
+              $rules['setting.penalty_percentage']);
 
         $this->validate($rules);
 
@@ -83,18 +86,29 @@ class SettingsComponent extends Component
 
     public function updateProcess()
     {
-        $this->validate([
-            'setting.auto_account_approval' => ['required', 'boolean'],
-            'setting.allow_irregular_student_to_enroll' => ['required', 'boolean']
-        ]);
+        $this->validateOnly('setting.auto_account_approval');
+
+        try {
+            $this->setting->update(['auto_account_approval' => $this->setting->auto_account_approval,]);
+
+            $this->sessionFlashAlert('alert', 'success', 'Processes updated successfully.');
+        } catch (\Exception $e) {
+            $this->sessionFlashAlert('alert', 'danger', $e->getMessage(), FALSE);
+        }
+    }
+
+    public function updatePayments()
+    {
+        $this->validateOnly('setting.downpayment_minimum_percentage');
+        $this->validateOnly('setting.penalty_percentage');
 
         try {
             $this->setting->update([
-                'auto_account_approval' => $this->setting->auto_account_approval,
-                'allow_irregular_student_to_enroll' => $this->setting->allow_irregular_student_to_enroll
+                'downpayment_minimum_percentage' => $this->setting->downpayment_minimum_percentage,
+                'penalty_percentage' => $this->setting->penalty_percentage,
             ]);
 
-            $this->sessionFlashAlert('alert', 'success', 'Processes updated successfully.');
+            $this->sessionFlashAlert('alert', 'success', 'Payments updated successfully.');
         } catch (\Exception $e) {
             $this->sessionFlashAlert('alert', 'danger', $e->getMessage(), FALSE);
         }
