@@ -11,6 +11,24 @@
                             @endcannot
                         </div>
 
+                        <div class="px-2">
+                            @if (filled($this->registration->assessment->dueDateOnLate) && is_null($transactionPenalty))
+                                <x-form.unflashed-alert type="danger">
+                                    Late payment for {{\Carbon\Carbon::parse($this->registration->assessment->dueDateOnLate)->format('F j, Y')}}.
+                                    You will be able to pay, once the {{$school_name}} issued a penalty.
+                                </x-form.unflashed-alert>
+                            @elseif ($this->registration->assessment->isUnifastBeneficiary)
+                                <x-form.unflashed-alert type="info">
+                                    UniFAST Scholarship Beneficiary.
+                                </x-form.unflashed-alert>
+                            @elseif ($this->registration->assessment->isActiveDueDatePayable === false && is_null($transactionPenalty))
+                                <x-form.unflashed-alert type="info">
+                                    The {{$school_name ?? 'N/A'}} will only accept payments according to the designated due dates,
+                                    unless penalty is given due to late payment. Please follow the dates on the payment breakdown section.
+                                </x-form.unflashed-alert>
+                            @endif
+                        </div>
+
                         <x-jet-label class="block md:hidden font-extrabold text-xl">{{ $registration->custom_id ?? 'N/A' }}</x-jet-label>
 
                         <div class="my-2">
@@ -85,7 +103,7 @@
                                 </div>
 
                                 <div class="col-span-6 flex items-center justify-between">
-                                    <label class="text-indigo-500 upppercase">RUNNING BALANCE</label>
+                                    <label class="text-indigo-500 uppercase">RUNNING BALANCE</label>
                                     <input id="balance" type="hidden" name="balance" value="{{ $registration->assessment->balance ?? 0 }}" min="0" class="hidden">
                                     <span>{{ $registration->assessment->getFormattedPriceAttribute($registration->assessment->balance) ?? '--' }}</span>
                                 </div>
@@ -94,8 +112,101 @@
                                     <div class="w-full border-t border-gray-200"></div>
                                 </div>
 
+                                @if (! $registration->assessment->isUnifastBeneficiary)
+                                    <div class="col-span-6 flex items-center justify-between">
+                                        <label class="text-indigo-500 uppercase">payment breakdown</label>
+                                    </div>
+
+                                    <div class="col-span-6 flex items-center justify-between">
+                                        <label>Downpayment</label>
+                                        <span>{{ $registration->assessment->getFormattedPriceAttribute($registration->assessment->downpayment) ?? '--' }}</span>
+                                    </div>
+
+                                    <div class="col-span-6 flex items-center justify-between">
+                                        <label>Due Date</label>
+                                        <span class="{{ $this->checkDateStatus($registration->assessment->downpayment_due_date) }}">
+                                            {{ Carbon\Carbon::parse($registration->assessment->downpayment_due_date)->format('F j, Y') ?? '--' }}
+                                        </span>
+                                    </div>
+
+                                    <div class="col-span-6 flex items-center justify-between">
+                                        <label>Payment Type</label>
+                                        <span>{{ $registration->assessment->payment_type ?? '--' }}</span>
+                                    </div>
+
+                                    <div class="col-span-6 flex items-center justify-between">
+                                        <label>Amount Due</label>
+                                        <span>{{ $registration->assessment->getFormattedPriceAttribute($registration->assessment->amount_due) ?? '--' }}</span>
+                                    </div>
+
+                                    @if ($registration->assessment->isFullPayment)
+                                        <div class="col-span-6 flex items-center justify-between">
+                                            <label>Due Date</label>
+                                            <span class="{{ $this->checkDateStatus($registration->assessment->first_due_date) }}">
+                                                {{ Carbon\Carbon::parse($registration->assessment->first_due_date)->format('F j, Y') ?? '--' }}
+                                            </span>
+                                        </div>
+                                    @else
+                                        <div class="col-span-6 flex items-center justify-between">
+                                            <label>Midterm</label>
+                                            <span class="{{ $this->checkDateStatus($registration->assessment->first_due_date) }}">
+                                                {{ Carbon\Carbon::parse($registration->assessment->first_due_date)->format('F j, Y') ?? '--' }}
+                                            </span>
+                                        </div>
+                                        <div class="col-span-6 flex items-center justify-between">
+                                            <label>Finals</label>
+                                            <span class="{{ $this->checkDateStatus($registration->assessment->second_due_date) }}">
+                                                {{ Carbon\Carbon::parse($registration->assessment->second_due_date)->format('F j, Y') ?? '--' }}
+                                            </span>
+                                        </div>
+                                    @endif
+
+                                    <div class="col-span-6">
+                                        <div class="w-full border-t border-gray-200"></div>
+                                    </div>
+
+                                    <div class="col-span-6 flex items-center justify-between">
+                                        <label class="text-indigo-500 uppercase">AMOUNT TO PAY</label>
+                                        <span class="font-bold text-green-500">{{ $registration->assessment->getFormattedPriceAttribute($registration->assessment->amountToPay) ?? '--' }}</span>
+                                    </div>
+
+                                    @if ($transactionPenalty)
+                                        <div class="col-span-6 flex items-center justify-between">
+                                            <label>Penalty {{$setting->penalty ?? 'N/A'}}</label>
+                                            <span class="text-red-500">+ {{$transactionPenalty->getFormattedPriceAttribute($transactionPenalty->penalty) ?? 'N/A'}}</span>
+                                        </div>
+
+                                        <div class="col-span-6">
+                                            <div class="w-full border-t border-gray-200"></div>
+                                        </div>
+
+                                        <div class="col-span-6 flex items-center justify-between">
+                                            <label></label>
+                                            <span class="text-green-600 font-black">{{$transactionPenalty->getFormattedPriceAttribute($transactionPenalty->charge) ?? 'N/A'}}</span>
+                                        </div>
+                                    @else
+                                        <div class="col-span-6">
+                                            <div class="w-full border-t border-gray-200"></div>
+                                        </div>
+                                    @endif
+                                @endif
                                 @can ('action', $registration)
-                                    <livewire:partials.paypal-smart-button-component :registration="$registration" :totalBalance="$registration->assessment->balance" key="'paypal-smart-button-component-'{{now()}}"/>
+                                    @if ($registration->assessment->amountToPay > 0 &&
+                                            (! $disableButton || filled($transactionPenalty)))
+                                        <livewire:partials.paypal-smart-button-component
+                                            :registration="$registration"
+                                            :transaction="$transactionPenalty"
+                                            :disableButton="$disableButton"
+                                            key="'paypal-smart-button-component-'{{now()}}"/>
+                                    @endif
+                                @endcan
+
+                                @can ('reject', $registration)
+                                    @if (is_null($transactionPenalty) && filled($this->registration->assessment->dueDateOnLate))
+                                        <button wire:click.prevent="issue" wire:loading.attr="disabled" class="py-2 col-span-6 outline-none underline text-sm text-red-500 hover:text-red-400 border border-red-500 text-center hover:bg-gray-50">
+                                            Issue a Penalty
+                                        </button>
+                                    @endif
                                 @endcan
                             </div>
                         </div>

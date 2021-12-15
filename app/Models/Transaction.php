@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\PaymentService;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -30,6 +31,8 @@ class Transaction extends BaseModel
 
     protected $dates = ['archived_at'];
 
+    public string $completed = 'COMPLETED', $failed = 'FAILED', $pending = 'PENDING';
+
     public static function boot()
     {
         parent::boot();
@@ -44,12 +47,16 @@ class Transaction extends BaseModel
         $color = '';
 
         switch ($status) {
-            case 'FAILED':
+            case $this->failed:
                 $color = 'border border-red-500 text-red-500';
                 break;
 
-            case 'COMPLETED':
+            case $this->completed:
                 $color = 'border border-green-500 text-green-500';
+                break;
+
+            case $this->pending:
+                $color = 'border border-yellow-500 text-yellow-500';
                 break;
 
             default:
@@ -67,6 +74,10 @@ class Transaction extends BaseModel
                 return $query->where('student_id', $studentId);
             });
         });
+    }
+
+    public function getChargeAttribute() { return
+        $this->amount + $this->penalty;
     }
 
     public function getPenaltyAttribute($value) { return

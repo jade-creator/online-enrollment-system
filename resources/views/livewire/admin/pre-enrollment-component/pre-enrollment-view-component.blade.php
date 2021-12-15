@@ -92,24 +92,24 @@
                                                 <div class="mx-1">{{ $registration->custom_id ?? 'N/A' }}</div>
                                             </div>
                                             <div class="font-bold text-gray-400 text-xs pt-0.5">pending assessment</div>
-                                        @elseif (filled($registration->assessment) && $registration->assessment->grand_total == $registration->assessment->balance)
+                                        @elseif ($registration->assessment->isUnifastBeneficiary)
                                             <div class="flex items-center">
-                                                <div class="font-bold rounded-full bg-blue-500 flex items-center justify-center" style="height: 8px; width: 8px; font-size: 5px;">&nbsp;</div>
+                                                <div class="font-bold rounded-full bg-blue-300 flex items-center justify-center" style="height: 8px; width: 8px; font-size: 5px;">&nbsp;</div>
                                                 <div class="mx-1">{{ $registration->custom_id ?? 'N/A' }}</div>
                                             </div>
-                                            <div class="font-bold text-gray-400 text-xs pt-0.5">finalized assessment</div>
-                                        @elseif (filled($registration->assessment) && 1 > $registration->assessment->balance)
+                                            <div class="font-bold text-gray-400 text-xs pt-0.5">UniFAST Scholarship</div>
+                                        @elseif ($registration->assessment->isFullPayment)
                                             <div class="flex items-center">
                                                 <div class="font-bold rounded-full bg-green-500 flex items-center justify-center" style="height: 8px; width: 8px; font-size: 5px;">&nbsp;</div>
                                                 <div class="mx-1">{{ $registration->custom_id ?? 'N/A' }}</div>
                                             </div>
-                                            <div class="font-bold text-gray-400 text-xs pt-0.5">fully paid</div>
-                                        @elseif (filled($registration->assessment) && $registration->assessment->grand_total > $registration->assessment->balance)
+                                            <div class="font-bold text-gray-400 text-xs pt-0.5">Full Payment</div>
+                                        @elseif (! $registration->assessment->isFullPayment)
                                             <div class="flex items-center">
                                                 <div class="font-bold rounded-full bg-indigo-600 flex items-center justify-center" style="height: 8px; width: 8px; font-size: 5px;">&nbsp;</div>
                                                 <div class="mx-1">{{ $registration->custom_id ?? 'N/A' }}</div>
                                             </div>
-                                            <div class="font-bold text-gray-400 text-xs pt-0.5">partially paid</div>
+                                            <div class="font-bold text-gray-400 text-xs pt-0.5">Partial Payment</div>
                                         @else
                                             <div>{{ $registration->custom_id ?? 'N/A' }}</div>
                                         @endif

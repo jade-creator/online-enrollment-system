@@ -58,7 +58,7 @@
 
                                                     <a href="{{ route('user.personal.profile.view', $student->user->id) }}">
                                                         <x-table.cell-button title="Personal Profile">
-                                                            <x-icons.view-icon/>
+                                                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" id="user" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                                                         </x-table.cell-button>
                                                     </a>
 

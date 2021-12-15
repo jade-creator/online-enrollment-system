@@ -141,6 +141,7 @@ class RegistrationStatusService
         $registration->update();
 
         $registration = $this->setStatus($registration, $status);
+        $registration->refresh();
 
         //dispatch event
         (new SendNotification())->dispatch(

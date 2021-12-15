@@ -1,6 +1,6 @@
 <div class="grid grid-cols-12 gap-6">
-    @if ((isset($registration) && $registration->status->name !== 'pending')
-            && $registration->status->name !== 'confirming' && $registration->status->name !== 'denied')
+    @if ( (isset($registration) && $registration->status->name !== 'pending') 
+        && $registration->status->name !== 'confirming' && $registration->status->name !== 'denied')
         <div class="col-span-12 md:col-span-6">
             <x-jet-form-section submit="">
                 <x-slot name="title">
@@ -21,7 +21,9 @@
                         @foreach ($registration->fees as $index => $fee)
                             <div class="col-span-6 flex items-center justify-between">
                                 <p class="text-gray-600 text-base">{{ $fee->category->name ?? 'N/A' }}</p>
-                                <p class="text-black font-semibold">{{ $fee->getFormattedPriceAttribute($fee->formatTwoDecimalPlaces($fee->pivot->total_fee)) ?? 'N/A' }}</p>
+                                <p class="text-black font-semibold">
+                                    {{ $fee->getFormattedPriceAttribute($fee->formatTwoDecimalPlaces($fee->pivot->total_fee)) ?? 'N/A' }}
+                                </p>
                             </div>
                         @endforeach
                         <div class="col-span-6 flex items-center justify-between">
@@ -48,7 +50,7 @@
                         </div>
                         @if ($assessment->isUnifastBeneficiary)
                             <div class="col-span-6 flex items-center justify-between">
-                                <p class="text-gray-600 text-base">Unifast Scholarship</p>
+                                <p class="text-gray-600 text-base">UniFAST Scholarship</p>
                                 <p class="text-black font-semibold uppercase">{{ $assessment->isUnifastRecepient ?? 'N/A' }}</p>
                             </div>
                         @else
@@ -149,7 +151,7 @@
                                     <x-jet-input-error for="assessment.remarks" class="mt-2"/>
                                 </div>
                                 <div class="col-span-6">
-                                    <x-jet-label value="{{ __('Unifast Scholarship') }}"/>
+                                    <x-jet-label value="{{ __('UniFAST Scholarship') }}"/>
                                     <fieldset name="type" class="w-100 flex items-center gap-6 mt-2">
                                         <label for="yes" class="w-1/2 border border-gray-300 hover:border-indigo-400 rounded-md p-2 flex items-center cursor-pointer">
                                             <input wire:model.defer="isUnifastBeneficiary" wire:loading.attr="disabled" id="yes" type="radio" value="1" name="type" class="mr-2 outline-none">
@@ -195,7 +197,7 @@
                                 </div>
                                 @if ($isUnifastBeneficiary)
                                     <div class="col-span-6 flex items-center justify-between">
-                                        <p class="text-gray-600 text-base">Unifast Scholarship</p>
+                                        <p class="text-gray-600 text-base">UniFAST Scholarship</p>
                                         <p class="text-black font-semibold uppercase">{{ $isUnifastBeneficiary == true ? 'Yes' : 'No' }}</p>
                                     </div>
                                 @endif
@@ -294,59 +296,61 @@
         </div>
     @endif
 
-    <div class="col-span-12 md:col-span-6">
-        <div class="w-full rounded-md mt-12 shadow-xl bg-white p-6">
-            <div class="flex flex-col items-center">
-                <img src="{{ $school_profile_photo_path }}" class="w-32 h-32" alt="logo"/>
-                <h1 class="font-bold">{{ $school_name ?? 'N/A' }}</h1>
-                <h5 class="italic">{{$registration->prospectus->term->term ?? 'N/A'}} / {{$registration->school_year ?? 'N/A'}}</h5>
+    @canany(['submitted', 'confirm', 'finalize', 'reject'], $registration)
+        <div class="col-span-12 md:col-span-6">
+            <div class="w-full rounded-md mt-12 shadow-xl bg-white p-6">
+                <div class="flex flex-col items-center">
+                    <img src="{{ $school_profile_photo_path }}" class="w-32 h-32" alt="logo"/>
+                    <h1 class="font-bold">{{ $school_name ?? 'N/A' }}</h1>
+                    <h5 class="italic">{{$registration->prospectus->term->term ?? 'N/A'}} / {{$registration->school_year ?? 'N/A'}}</h5>
+                </div>
+
+                <ul class="text-indigo-500 text-sm mt-6 list-disc px-2">
+                    <li class="mb-2">
+                <span class="text-black">The submission / uploading of <span class="font-semibold">document requirements</span>
+                    are done prior to the enrollment. Go to the
+                    <a href="{{ route('user.personal.profile.view', $registration->student->user_id) }}"
+                       class="underline text-indigo-500 hover:text-indigo-700" target="_blank">profile page</a>
+                    to view / upload the files.
+                </span>
+                    </li>
+                    <li class="mb-2">
+                <span class="text-black">
+                    After the advising and assessment, please proceed to the payment of fees, student will be automatically enrolled
+                    once a successful transaction for the downpayment is done.
+                </span>
+                    </li>
+                    <li class="mb-2">
+                <span class="text-black">
+                    Notification will be sent for the enrolled status, along with the link for downloadable <span class="font-semibold">Certification of Registration</span>.
+                </span>
+                    </li>
+                    <li class="mb-2">
+                <span class="text-black">
+                    About late enrollees, the <span class="font-semibold">{{$school_name}}</span> has the right to refuse or accept late enrollments.
+                    However, penalty will be charged for the late enrollment.
+                </span>
+                    </li>
+                    <li class="mb-2">
+                <span class="text-black">
+                    Please visit our <a href="#" class="underline text-indigo-500">contact page</a> to ask for more info.
+                </span>
+                    </li>
+                </ul>
             </div>
 
-            <ul class="text-indigo-500 text-sm mt-6 list-disc px-2">
-                <li class="mb-2">
-                    <span class="text-black">The submission / uploading of <span class="font-semibold">document requirements</span>
-                        are done prior to the enrollment. Go to the
-                        <a href="{{ route('user.personal.profile.view', $registration->student->user_id) }}"
-                           class="underline text-indigo-500 hover:text-indigo-700" target="_blank">profile page</a>
-                        to view / upload the files.
-                    </span>
-                </li>
-                <li class="mb-2">
-                    <span class="text-black">
-                        After the advising and assessment, please proceed to the payment of fees, student will be automatically enrolled
-                        once a successful transaction for the downpayment is done.
-                    </span>
-                </li>
-                <li class="mb-2">
-                    <span class="text-black">
-                        Notification will be sent for the enrolled status, along with the link for downloadable <span class="font-semibold">Certification of Registration</span>.
-                    </span>
-                </li>
-                <li class="mb-2">
-                    <span class="text-black">
-                        About late enrollees, the <span class="font-semibold">{{$school_name}}</span> has the right to refuse or accept late enrollments.
-                        However, penalty will be charged for the late enrollment.
-                    </span>
-                </li>
-                <li class="mb-2">
-                    <span class="text-black">
-                        Please visit our <a href="#" class="underline text-indigo-500">contact page</a> to ask for more info.
-                    </span>
-                </li>
-            </ul>
+            <div class="w-full mt-12">
+                @if (isset($registration->assessment) && ! is_null($registration->assessment->approver_id))
+                    <x-form.unflashed-alert type="info">
+                        This registration was assessed by
+                        <a target="_blank" href="{{ route('user.personal.profile.view', $registration->assessment->approver_id) }}"
+                           class="underline text-black">{{ $registration->assessment->approver->person->shortFullName ?? 'N/A' }}</a> on
+                        {{\Carbon\Carbon::parse($registration->assessment->created_at)->format('F j, Y')}}
+                    </x-form.unflashed-alert>
+                @endif
+            </div>
         </div>
 
-        <div class="w-full mt-12">
-            @if (isset($registration->assessment) && ! is_null($registration->assessment->approver_id))
-                <x-form.unflashed-alert type="info">
-                    This registration was assessed by
-                    <a target="_blank" href="{{ route('user.personal.profile.view', $registration->assessment->approver_id) }}"
-                       class="underline text-black">{{ $registration->assessment->approver->person->shortFullName ?? 'N/A' }}</a> on
-                    {{\Carbon\Carbon::parse($registration->assessment->created_at)->format('F j, Y')}}
-                </x-form.unflashed-alert>
-            @endif
-        </div>
-    </div>
-
-    <x-jet-section-border/>
+        <x-jet-section-border/>
+    @endcanany
 </div>

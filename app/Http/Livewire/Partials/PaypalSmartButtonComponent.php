@@ -2,8 +2,7 @@
 
 namespace App\Http\Livewire\Partials;
 
-use App\Models\Registration;
-use App\Models\Transaction;
+use App\Models;
 use App\Services\PaymentService;
 use App\Traits\WithSweetAlert;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -11,22 +10,14 @@ use Livewire\Component;
 
 class PaypalSmartButtonComponent extends Component
 {
-    use AuthorizesRequests;
-    use WithSweetAlert;
+    use AuthorizesRequests, WithSweetAlert;
 
-    public Registration $registration;
+    public Models\Registration $registration;
+    public ?Models\Transaction $transaction = null;
     public string $clientId = '', $currencyCode = '', $shippingPreference = '', $locale = '';
-    public int $totalAmount = 0, $totalBalance = 0;
+    public bool $disableButton = true;
 
-    protected $listeners = ['pay', 'cash'];
-
-    public function rules()
-    {
-        return [
-            'totalAmount' => ['required', 'numeric', 'min:1', 'lte:totalBalance'],
-            'totalBalance' => ['required', 'numeric', 'min:1'],
-        ];
-    }
+    protected $listeners = ['pay'];
 
     public function mount()
     {
@@ -36,48 +27,38 @@ class PaypalSmartButtonComponent extends Component
             'clientId' => $paypalConfiguration['client_id'],
             'currencyCode' => $paypalConfiguration['currency_code'],
             'shippingPreference' => $paypalConfiguration['shipping_preference'],
-            'locale' => $paypalConfiguration['locale']
+            'locale' => $paypalConfiguration['locale'],
         ]);
     }
 
-    public function render()
-    {
-        return view('livewire.partials.paypal-smart-button-component');
+    public function render() { return
+        view('livewire.partials.paypal-smart-button-component', [
+            'value' => is_null($this->transaction) ? $this->registration->assessment->amountToPay
+                : $this->transaction->charge,
+        ]);
     }
 
-    public function cash()
+    public function pay(string $name = '', string $email = '', string $status = '')
     {
-        return $this->pay($this->registration->student->user->person->shortFullName, $this->registration->student->user->email,
-            'COMPLETED', auth()->user()->id);
-    }
-
-    public function payConfirm()
-    {
-        try {
-            $this->authorize('cash', Transaction::class);
-
-            $this->confirm('cash', 'Are you sure? The student will be notified once the transaction is done.');
-        } catch (\Exception $e) {
-            $this->emitUp('sessionFlashAlert', 'alert', $this->errorType, $e->getMessage());
-        }
-    }
-
-    public function pay(string $name = '', string $email = '', string $status = '', string $notificationSenderId = '')
-    {
-        $paymentService = new PaymentService($this->registration, $this->totalAmount, $name, $email, $notificationSenderId);
+        $paymentService = new PaymentService($this->registration, $name, $email);
 
         try {
-            $this->registration = $paymentService->store($status);
+            if (is_null($this->transaction)) {
+                $paymentService->store($status);
+            } else {
+                $paymentService->update($this->transaction, $status);
+            }
 
-            $this->emitUp('sessionFlashAlert', 'alert', $this->successType, 'Payment Successful!');
+            session()->flash('swal:modal', [
+                'title' => $this->successTitle,
+                'type' => $this->successType,
+                'text' => 'PAYMENT '.$status,
+            ]);
+
+            return redirect(route('user.payment.index', $this->registration));
         } catch (\Exception $e) {
-            $paymentService->createTransaction('FAILED');
+            $paymentService->createTransaction((new Models\Transaction())->failed);
             $this->emitUp('sessionFlashAlert', 'alert', $this->errorType, $e->getMessage());
         }
-    }
-
-    public function enterAmount()
-    {
-        $this->validate();
     }
 }
