@@ -110,6 +110,10 @@
         @stack('scripts')
 
         <script>
+            window.addEventListener('refresh-page', event => {
+                alert(event.detail.message) ? "" : location.reload();
+            });
+
             window.addEventListener('DOMContentLoaded', function() {
                 const userId = '{{auth()->user()->id}}';
 
@@ -121,6 +125,7 @@
                 Echo.private('notification-updated-count.'+userId)
                     .listen('NotificationUpdatedCount', (e) => {
                         refreshNotificationComponents();
+                        window.livewire.emit('form-payment-index-component:'+userId);
                     });
 
                 Echo.private('notification.'+userId)

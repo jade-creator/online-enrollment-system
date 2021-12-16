@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Forms\Payment;
 
+use App\Events\NotificationUpdatedCount;
 use App\Models;
 use App\Services\PaymentService;
 use App\Traits\WithSweetAlert;
@@ -15,22 +16,21 @@ class PaymentIndexComponent extends Component
     public ?Models\Transaction $transactionPenalty = null;
     public Models\Setting $setting;
 
-    protected $listeners = [
-        'sessionFlashAlert',
-        'save',
-    ];
+    public function getListeners() : array
+    {
+        return [
+            'sessionFlashAlert',
+            'save',
+            'form-payment-index-component:'.auth()->user()->id => 'refreshPage',
+        ];
+    }
 
     public function mount()
     {
-        $this->transactionPenalty = new Models\Transaction();
-
         $this->fill([
-            'transactionPenalty' => $this->registration->transactions()
-                ->where('status', 'LIKE', '%'.$this->transactionPenalty->pending.'%')
-                ->where('penalty', '!=', 0)
-                ->first(),
+            'transactionPenalty' => $this->registration->penalty(),
             'setting' => Models\Setting::get()->first(),
-        ]);
+        ]); 
     }
 
     public function render()
@@ -76,6 +76,9 @@ class PaymentIndexComponent extends Component
                 'text' => 'Penalty has been issued.',
             ]);
 
+            //dispatch event
+            NotificationUpdatedCount::dispatch($this->registration->student->user->id);
+
             return redirect(route('user.payment.index', $this->registration));
         } catch (\Exception $e) {
             $this->error($e->getMessage());
@@ -89,5 +92,12 @@ class PaymentIndexComponent extends Component
         return $this->confirm('save', 'Penalty: '.$this->setting->penalty
             .' of the amount to pay will be added. A total of '
             .$this->registration->assessment->getFormattedPriceAttribute($this->computePenalty()));
+    }
+
+    public function refreshPage()
+    {
+        return $this->dispatchBrowserEvent('refresh-page', [
+                'message' => (new \App\Http\Livewire\Partials\CashPaymentButtonComponent())->payable
+            ]);
     }
 }

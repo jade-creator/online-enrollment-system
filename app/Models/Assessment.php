@@ -73,12 +73,7 @@ class Assessment extends BaseModel
 
             case $this->first_due_date:
                 if ($now > $this->downpayment_due_date
-                    && $now <= $this->first_due_date) {
-
-                    if (! $this->isFullPayment) return true;
-
-                    return $this->paidAmount == $this->amountDue;
-                }
+                    && $now <= $this->first_due_date) return true;
 
                 return false;
             break;

@@ -190,6 +190,13 @@ class Registration extends BaseModel
         $this->hasMany(Transaction::class);
     }
 
+    public function penalty() 
+    { 
+        return $this->transactions()->where('status', 'LIKE', '%'.(new Transaction())->pending.'%')
+            ->where('penalty', '!=', 0)
+            ->first();
+    }
+
     public function assessment() { return
         $this->hasOne(Assessment::class);
     }
