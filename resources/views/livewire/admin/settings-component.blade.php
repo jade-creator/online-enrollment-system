@@ -86,7 +86,7 @@
 
                     <div class="col-span-6">
                         <x-jet-label for="max-slots" value="{{ __('Maximum slots per section') }}" />
-                        <x-jet-input id="max-slots" type="number" min="1" class="mt-1 block w-full" wire:model.defer="setting.max_slots" />
+                        <x-jet-input id="max-slots" type="number" min="1" max="100" class="mt-1 block w-full" wire:model.defer="setting.max_slots" />
                         <x-jet-input-error for="setting.max_slots" class="mt-2" />
                     </div>
                 </x-slot>
@@ -101,6 +101,37 @@
             <x-form.unflashed-alert class="my-4" type="info">
                 Note: Changes can take effect in the system for about 10 minutes after updating it successfully. Click "update" when selecting a new logo.
             </x-form.unflashed-alert>
+            <x-jet-section-border/>
+
+            <x-jet-form-section submit="updatePayments">
+                <x-slot name="title">
+                    {{ __('Payments') }}
+                </x-slot>
+
+                <x-slot name="description">
+                    {{ __('') }}
+                </x-slot>
+
+                <x-slot name="form">
+                    <div class="col-span-6">
+                        <x-jet-label for="downpayment_minimum_percentage" value="{{ __('Downpayment Percentage %') }}" />
+                        <x-jet-input id="downpayment_minimum_percentage" type="number" min="1" max="100" class="mt-1 block w-full" wire:model.defer="setting.downpayment_minimum_percentage" />
+                        <x-jet-input-error for="setting.downpayment_minimum_percentage" class="mt-2" />
+                    </div>
+
+                    <div class="col-span-6">
+                        <x-jet-label for="penalty_percentage" value="{{ __('Penalty Percentage %') }}" />
+                        <x-jet-input id="penalty_percentage" type="number" min="1" max="100" class="mt-1 block w-full" wire:model.defer="setting.penalty_percentage" />
+                        <x-jet-input-error for="setting.penalty_percentage" class="mt-2" />
+                    </div>
+                </x-slot>
+
+                <x-slot name="actions">
+                    <x-jet-button class="bg-indigo-700 hover:bg-indigo-800" wire:target="updatePayments">
+                        {{ __('Update') }}
+                    </x-jet-button>
+                </x-slot>
+            </x-jet-form-section>
             <x-jet-section-border/>
 
             <x-jet-form-section submit="updateProcess">
@@ -133,28 +164,6 @@
                             </div>
                         </div>
                         <x-jet-input-error for="setting.auto_account_approval" class="mt-2" />
-                    </div>
-
-                    <div class="col-span-6 border-b border-gray-200 py-4">
-                        <div x-data="{ toggle: {{ $setting->allow_irregular_student_to_enroll ? '1' : '0' }} }"
-                             class="w-full flex items-center justify-between">
-
-                            <div>Allow irregular students to enroll</div>
-
-                            <div class="relative rounded-full w-12 h-6 transition duration-200 ease-linear"
-                                 :class="[toggle === 1 ? 'bg-green-400' : 'bg-red-400']">
-
-                                <label for="toggle-allow_irregular_student_to_enroll"
-                                       class="absolute left-0 bg-white border-2 mb-2 w-6 h-6 rounded-full transition transform duration-100 ease-linear cursor-pointer"
-                                       :class="[toggle === 1 ? 'translate-x-full border-green-400' : 'translate-x-0 border-red-400']"></label>
-
-                                <input wire:model.defer="setting.allow_irregular_student_to_enroll"
-                                       type="checkbox" id="toggle-allow_irregular_student_to_enroll" name="toggle-allow_irregular_student_to_enroll"
-                                       class="appearance-none w-full h-full active:outline-none focus:outline-none invisible"
-                                       @click="toggle === 0 ? toggle = 1 : toggle = 0">
-                            </div>
-                        </div>
-                        <x-jet-input-error for="setting.allow_irregular_student_to_enroll" class="mt-2" />
                     </div>
                 </x-slot>
 

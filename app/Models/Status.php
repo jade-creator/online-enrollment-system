@@ -13,29 +13,32 @@ class Status extends Model
         'name',
     ];
 
+    public string $pending = 'pending', $confirming = 'confirming', $finalized = 'finalized', $enrolled = 'enrolled',
+        $denied = 'denied';
+
     public function getNameElementAttribute()
     {
         $classes = 'px-2 py-1 rounded text-white capitalize';
         $bgColor = '';
 
         switch ($this->attributes['name']) {
-            case 'pending':
+            case $this->pending:
                 $bgColor = 'bg-yellow-500';
                 break;
 
-            case 'confirming':
+            case $this->confirming:
                 $bgColor = 'bg-green-500';
                 break;
 
-            case 'finalized':
+            case $this->finalized:
                 $bgColor = 'bg-blue-500';
                 break;
 
-            case 'enrolled':
+            case $this->enrolled:
                 $bgColor = 'bg-indigo-500';
                 break;
 
-            case 'denied':
+            case $this->denied:
                 $bgColor = 'bg-red-500';
                 break;
 

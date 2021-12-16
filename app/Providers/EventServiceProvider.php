@@ -6,9 +6,11 @@ use App\Events\CreateNotification;
 use App\Listeners\SendNewNotification;
 use App\Models\Assessment;
 use App\Models\Registration;
+use App\Models\Transaction;
 use App\Models\User;
 use App\Observers\AssessmentObserver;
 use App\Observers\RegistrationObserver;
+use App\Observers\TransactionObserver;
 use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -41,5 +43,6 @@ class EventServiceProvider extends ServiceProvider
         Assessment::observe(AssessmentObserver::class);
         Registration::observe(RegistrationObserver::class);
         User::observe(UserObserver::class);
+        Transaction::observe(TransactionObserver::class);
     }
 }

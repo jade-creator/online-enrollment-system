@@ -4,7 +4,6 @@ namespace App\Http\Livewire\Partials;
 
 use App\Models;
 use App\Services\Registration\RegistrationStatusService;
-use App\Services\SendNotification;
 use App\Traits\WithSweetAlert;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
@@ -63,14 +62,6 @@ class RegistrationFormButtons extends Component
     {
         try {
             $this->authorizeAction('enroll', $this->registration->student->user->person->full_name.' has been enrolled');
-
-            //dispatch event
-            (new SendNotification())->dispatch(
-                 auth()->user()->id,
-                 $this->registration->student->user_id,
-                'Hi '.$this->registration->student->user->person->firstname."! Registration ID ".$this->registration->custom_id."'s status: ".$this->registration->status->name,
-                '<a class="underline text-blue-500" href="'.route('stream.registration.pdf', ['id' => $this->registration->id]).'">Please click here to print your certification.</a>',
-            );
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }
@@ -116,13 +107,6 @@ class RegistrationFormButtons extends Component
     {
         try {
             $this->authorizeAction('reject', $this->registration->student->user->person->full_name."'s registration was rejected.");
-
-            //dispatch event
-            (new SendNotification())->dispatch(
-                auth()->user()->id,
-                $this->registration->student->user_id,
-                'Hi '.$this->registration->student->user->person->firstname."! Registration ID ".$this->registration->custom_id."'s status: ".$this->registration->status->name
-            );
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }

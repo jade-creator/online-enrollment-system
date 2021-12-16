@@ -5,6 +5,7 @@ namespace App\Services\Registration;
 use App\Models;
 use App\Services\Schedule\ScheduleMergeabilityService;
 use App\Services\Section\SectionAvailabilityService;
+use App\Services\SendNotification;
 
 class RegistrationStatusService
 {
@@ -88,7 +89,16 @@ class RegistrationStatusService
 
         if ($registration->transactions->isNotEmpty()) $registration->transactions()->delete();
 
-        return $this->setStatus($registration, $status);
+        $registration = $this->setStatus($registration, $status);
+
+        //dispatch event
+        (new SendNotification())->dispatch(
+            auth()->user()->id,
+            $registration->student->user_id,
+            'Hi '.$registration->student->user->person->firstname."! Registration ID ".$registration->custom_id."'s status: ".$registration->status->name
+        );
+
+        return $registration;
     }
 
     /**
@@ -130,6 +140,17 @@ class RegistrationStatusService
         $registration->student->isNew = $registration->isNew;
         $registration->update();
 
-        return $this->setStatus($registration, $status);
+        $registration = $this->setStatus($registration, $status);
+        $registration->refresh();
+
+        //dispatch event
+        (new SendNotification())->dispatch(
+            auth()->user()->id,
+            $registration->student->user_id,
+            'Hi '.$registration->student->user->person->firstname."! Registration ID ".$registration->custom_id."'s status: ".$registration->status->name,
+            '<a class="underline text-blue-500" target="_blank" href="'.route('stream.registration.pdf', ['id' => $registration->id]).'">Please click here to print your certification.</a>',
+        );
+
+        return $registration;
     }
 }

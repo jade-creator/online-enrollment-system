@@ -22,9 +22,10 @@ class SettingSeeder extends Seeder
             'school_email' => 'olcollegeenrollmentsystem@gmail.com',
             'school_address' => 'Alcalde St., Kapisagan Pasig City',
             'auto_account_approval' => 1,
-            'allow_irregular_student_to_enroll' => 1,
+            'allow_irregular_student_to_enroll' => 0,
             'max_slots' => 40,
             'downpayment_minimum_percentage' => 30,
+            'penalty_percentage' => 5,
             'created_at' => now(),
             'updated_at' => now()
         ];

@@ -71,12 +71,12 @@ class AssessmentIndexComponent extends Component
             $this->validate([
                 'isUnifastBeneficiary' => ['required'],
                 'isFullPayment' => 'required_if:isUnifastBeneficiary,==,false|boolean',
-                'downpayment_due_date' => 'required_if:isUnifastBeneficiary,==,false|date|after:today',
+                'downpayment_due_date' => 'required_if:isUnifastBeneficiary,==,false|date|after_or_equal:today',
                 'first_due_date' => 'required_if:isUnifastBeneficiary,==,false|date|after:downpayment_due_date',
                 'second_due_date' => 'required_if:isFullPayment,==,false|date|after:first_due_date',
             ], [
                 'downpayment_due_date.required_if' => 'This field is required.',
-                'downpayment_due_date.after' => 'This field must be a date after today.',
+                'downpayment_due_date.after_or_equal' => 'This field must be a date today or after.',
                 'first_due_date.required_if' => 'This field is required.',
                 'first_due_date.after' => 'This field must be a date after downpayment due date.',
                 'second_due_date.required_if' => 'This field is required.',

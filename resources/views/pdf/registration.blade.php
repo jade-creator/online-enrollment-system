@@ -190,7 +190,7 @@
                 @if ($registration->assessment->isUnifastBeneficiary)
                     <tr>
                         <td class="bold">UniFAST Scholarship</td>
-                        <td class="right">{{ $assessment->isUnifastRecepient ?? 'N/A' }}</td>
+                        <td class="right">{{ $registration->assessment->isUnifastRecepient ?? 'N/A' }}</td>
                     </tr>
                 @else
                     <tr>

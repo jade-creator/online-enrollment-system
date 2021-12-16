@@ -36,7 +36,14 @@
                                         <div class="font-bold text-gray-400 text-xs pt-0.5">{{ $transaction->email ?? 'N/A' }}</div>
                                     </div>
                                 </x-table.cell>
-                                <x-table.cell headerLabel="Amount" class="justify-start md:col-span-2">{{ $transaction->getFormattedPriceAttribute($transaction->amount) ?? 'N/A' }}</x-table.cell>
+                                <x-table.cell headerLabel="Amount" class="justify-start md:col-span-2">
+                                    <div class="flex flex-col my-2 md:my-0">
+                                        <div>{{ $transaction->getFormattedPriceAttribute($transaction->amount) ?? 'N/A' }}</div>
+                                        <div class="font-bold text-red-500 text-xs pt-0.5">
+                                            {{ $transaction->penalty == 0 ? '' : '+ '.$transaction->getFormattedPriceAttribute($transaction->penalty) }}
+                                        </div>
+                                    </div>
+                                </x-table.cell>
                                 <x-table.cell headerLabel="Balance" class="justify-start md:col-span-2">{{ $transaction->getFormattedPriceAttribute($transaction->running_balance) ?? 'N/A' }}</x-table.cell>
                                 <x-table.cell headerLabel="Payment" class="justify-start md:col-span-3">{!! $transaction->payment_element ?? 'N/A' !!}</x-table.cell>
                                 <x-table.cell-action>
