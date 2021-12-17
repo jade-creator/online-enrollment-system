@@ -133,7 +133,8 @@ class AssessmentIndexComponent extends Component
         $this->redirect(route('pre.registration.view', ['regId' => $this->registration->id]));
     }
 
-    public function updatedAssessmentIsPercentage($value) {
+    public function updatedAssessmentIsPercentage($value)
+    {
         if (empty($value)) {
             $this->assessment->discount_amount = 0;
         } {
@@ -143,5 +144,9 @@ class AssessmentIndexComponent extends Component
 
     public function updatedIsFullPayment() {
         $this->amountDue = (new AssessmentComputationService())->computeAmountDue($this->grandTotal, $this->downpayment, $this->isFullPayment);
+    }
+
+    public function updatedIsUnifastBeneficiary($value) {
+        $this->showPaymentBreakdown = ! $value;
     }
 }
