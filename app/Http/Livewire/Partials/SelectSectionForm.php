@@ -98,6 +98,9 @@ class SelectSectionForm extends Component
         $this->days = Models\Day::with([
                 'schedules' => function ($query) {
                     $results = $query->where('section_id', $this->sectionId)
+                        ->whereHas('prospectusSubject', function ($query) {
+                            $query->whereIn('subject_id', $this->registration->grades->pluck('prospectus_subject.subject_id')->toArray());
+                        })
                         ->orderBy('start_time', 'asc')
                         ->get();
 
