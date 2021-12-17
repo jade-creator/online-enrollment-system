@@ -14,6 +14,9 @@ module.exports = {
             keyframes: true,
         },
         safelist: [
+            'line-through',
+            'text-green-500',
+            'text-red-500',
             'text-sm',
             'text-indigo-600',
             'hover:text-indigo-900',
