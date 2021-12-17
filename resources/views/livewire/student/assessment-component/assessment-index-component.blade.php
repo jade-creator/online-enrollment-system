@@ -240,13 +240,13 @@
                                                 <p wire:target="isFullPayment" wire:loading.class.remove="hidden" class="hidden"><x-icons.loading-icon/></p>
                                             </div>
 
-                                            <div :class="{'col-span-6': open, '': ! open }" class="col-span-3">
-                                                <x-jet-label x-show="! open" style="display: none;" for="first_due_date" value="{{ __('Midterm') }}" />
+                                            <div class="{{ $isFullPayment ? 'col-span-6' : 'col-span-3' }}">
+                                                <x-jet-label class="{{ $isFullPayment ? 'hidden' : 'block' }}" for="first_due_date" value="{{ __('Midterm') }}" />
                                                 <x-jet-input wire:model.defer="first_due_date" wire:loading.attr="disabled" id="first_due_date" type="date" autocomplete="first_due_date"/>
                                                 <x-jet-input-error for="first_due_date" class="mt-2"/>
                                             </div>
 
-                                            <div x-show="! open" style="display: none;" class="col-span-3">
+                                            <div class="{{ $isFullPayment ? 'hidden' : 'block col-span-3' }}">
                                                 <x-jet-label for="first_due_date" value="{{ __('Finals') }}" />
                                                 <x-jet-input wire:model.defer="second_due_date" wire:loading.attr="disabled" id="first_due_date" type="date" autocomplete="first_due_date"/>
                                                 <x-jet-input-error for="second_due_date" class="mt-2"/>
